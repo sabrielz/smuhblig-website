@@ -1,0 +1,180 @@
+# .cursorrules — SMK Muhammadiyah Bligo Website
+# File ini dibaca oleh Cursor AI Agent di setiap sesi.
+# WAJIB diikuti tanpa pengecualian kecuali ada instruksi eksplisit dari developer.
+
+---
+
+## IDENTITAS PROYEK
+
+Proyek ini adalah website utama (wajah digital) SMK Muhammadiyah Bligo.
+Domain: smkmuhbligo.sch.id
+Karakter visual: Modern internasional, minimalis elegan, dengan sentuhan identitas Islam Muhammadiyah yang subtle.
+Dokumen referensi: PRD.md, DESIGN_SYSTEM.md, TECH_STACK.md, DATABASE_ERD.md, AI_EDITOR_SPEC.md, I18N_AND_CMS_SPEC.md
+
+---
+
+## TECH STACK — WAJIB
+
+Backend  : Laravel 12
+Bridge   : Inertia.js v2
+Frontend : React 19 + TypeScript
+Styling  : Tailwind CSS v4
+Animasi  : Framer Motion
+Editor   : TipTap v2
+Icons    : Lucide React (stroke-width: 1.5)
+Database : PostgreSQL
+Queue    : Redis
+Build    : Vite 6
+
+---
+
+## LARANGAN KERAS
+
+- JANGAN gunakan jQuery atau library berbasis jQuery
+- JANGAN gunakan Bootstrap atau Material UI
+- JANGAN gunakan moment.js (gunakan date-fns atau Intl API native)
+- JANGAN gunakan axios (gunakan fetch native atau Inertia built-in)
+- JANGAN gunakan react-router (routing via Inertia + Laravel)
+- JANGAN hardcode warna hex di JSX className — selalu gunakan Tailwind class atau CSS variable
+- JANGAN buat REST API terpisah untuk kebutuhan frontend — gunakan Inertia shared props
+- JANGAN panggil AI API langsung dari frontend — selalu melalui Laravel controller + Queue
+- JANGAN gunakan 'any' TypeScript kecuali truly unavoidable
+- JANGAN buat inline style kecuali untuk nilai dinamis yang tidak bisa di-handle Tailwind
+- JANGAN skip TypeScript types — semua props komponen harus typed dengan interface
+
+---
+
+## KONVENSI KODE
+
+### PHP / Laravel
+- PSR-12 coding standard
+- Method controller: index, show, create, store, edit, update, destroy
+- Selalu gunakan Form Request class untuk validasi (JANGAN validate di controller langsung)
+- Selalu gunakan Resource class untuk data yang dikembalikan ke Inertia
+- Selalu gunakan typed properties di Model
+- Return type hinting wajib untuk semua method
+
+### React / TypeScript
+- Functional components only, JANGAN class components
+- Naming: PascalCase untuk komponen, camelCase untuk fungsi & variabel
+- File komponen: PascalCase.tsx
+- File hooks: useNamaHook.ts (selalu prefix 'use')
+- Selalu gunakan `cn()` helper dari @/lib/utils untuk conditional className
+- Gunakan `React.FC` atau typed props interface — jangan biarkan untyped
+
+### Tailwind
+- Mobile-first: mulai dari base, tambahkan sm: md: lg: xl: untuk responsif
+- Urutan class: layout → spacing → typography → color → animation → state
+- Gunakan @apply hanya di app.css untuk utility global, BUKAN di komponen
+
+---
+
+## PALET WARNA
+
+Primary navy   : #003f87 (brand utama)
+Primary dark   : #001f4d (section gelap)
+Gold accent    : #c9a84c (aksen prestisius)
+Text utama     : #111111
+Text sekunder  : #636366
+Background     : #ffffff / #f8f9fa
+Border         : #e5e5ea
+
+---
+
+## TIPOGRAFI
+
+Font utama : Plus Jakarta Sans (300, 400, 500, 600, 700, 800)
+Font serif  : Playfair Display 700, 800 — HANYA untuk headline besar / editorial
+Import via Google Fonts di app.css
+
+---
+
+## ANIMASI — FRAMER MOTION
+
+Selalu gunakan variants yang sudah didefinisikan di @/lib/motion.ts:
+- fadeInUp, fadeIn, staggerContainer, scaleIn, slideFromLeft
+- Semua reveal: whileInView + viewport={{ once: true }}
+- Duration UI: 150-300ms | Duration reveal: 500-700ms
+- Easing: easeOut atau easeInOut, JANGAN linear untuk UI
+
+---
+
+## STRUKTUR FOLDER REACT
+
+Komponen baru:
+- UI primitif → resources/js/Components/UI/
+- Layout       → resources/js/Components/Layout/
+- Admin/CMS    → resources/js/Components/Admin/
+- Editor/AI    → resources/js/Components/Editor/
+- Halaman publik → resources/js/Pages/Public/
+- Halaman admin  → resources/js/Pages/Admin/
+
+---
+
+## INERTIA CONVENTIONS
+
+- Selalu return Inertia::render() dari controller, BUKAN response()->json()
+- Data shared (user, locale, pengaturan, flash) didefinisikan di HandleInertiaRequests middleware
+- Gunakan usePage() hook untuk akses shared data
+- Gunakan router dari @inertiajs/react untuk navigasi (BUKAN <a> tag biasa untuk SPA navigation)
+- Link component dari Inertia untuk anchor tags internal
+
+---
+
+## AI FEATURES
+
+- Semua request ke AI API → wajib via Laravel Queue (queue: 'ai')
+- Frontend menggunakan polling setiap 2 detik via GET /admin/ai/jobs/{id}/status
+- AI output SELALU ditampilkan sebagai preview — user harus accept sebelum diterapkan
+- Catat semua AI usage ke tabel ai_jobs
+- Rate limit AI endpoints: 20 request/menit per user
+
+---
+
+## DATABASE
+
+- Selalu buat migration, jangan edit langsung
+- Gunakan BIGSERIAL untuk primary key (PostgreSQL)
+- Konten multibahasa disimpan di tabel *_translations terpisah
+- Selalu buat index untuk kolom yang sering di-query (status, published_at, dll)
+- JANGAN gunakan timestamps()->nullable() — timestamps wajib ada di semua tabel utama
+
+---
+
+## KEAMANAN
+
+- Semua route admin: middleware auth + spatie permission
+- CSRF protection aktif (default Laravel)
+- Sanitasi semua HTML input dari editor sebelum disimpan (HTMLPurifier atau DOMPurify)
+- File upload: validasi MIME type, ukuran maksimal, rename ke UUID
+- AI API key JANGAN pernah expose ke frontend
+
+---
+
+## PERFORMA
+
+- Semua gambar dikonversi ke WebP via Spatie Media Library
+- Gunakan lazy loading untuk gambar di bawah fold
+- Gunakan Cache::remember() untuk data publik yang jarang berubah
+- Eager load relasi di controller untuk hindari N+1 query
+- Gunakan React.lazy() + Suspense untuk komponen berat jika diperlukan
+
+---
+
+## KETIKA MENULIS KOMPONEN BARU
+
+1. Mulai dengan TypeScript interface untuk props
+2. Gunakan design system (warna, typography, spacing) dari DESIGN_SYSTEM.md
+3. Tambahkan Framer Motion animation untuk reveal jika komponen di halaman publik
+4. Pastikan responsif: mobile → tablet → desktop
+5. Export sebagai named export DAN default export
+
+---
+
+## FORMAT RESPONSE YANG DIHARAPKAN
+
+Ketika membuat file baru:
+- Sertakan semua import yang diperlukan di bagian atas
+- Tambahkan komentar singkat di atas setiap function/component yang kompleks
+- Jangan tambahkan TODO comments kecuali diminta
+- Kode harus langsung bisa dijalankan tanpa perlu modifikasi manual
