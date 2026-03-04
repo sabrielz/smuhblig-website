@@ -3,9 +3,15 @@ export interface User {
     name: string;
     email: string;
     avatar: string | null;
+    avatar_url: string;
     is_active: boolean;
     last_login_at: string | null;
-    role?: string;
+    role?: string | null;
+    roles: string[];
+    permissions: string[];
+    is_admin: boolean;
+    is_editor: boolean;
+    is_author: boolean;
     created_at: string;
     updated_at: string;
 }

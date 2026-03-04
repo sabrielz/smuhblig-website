@@ -34,11 +34,17 @@ class HandleInertiaRequests extends Middleware
 
             'auth' => fn () => [
                 'user' => $request->user() ? [
-                    'id' => $request->user()->id,
-                    'name' => $request->user()->name,
-                    'email' => $request->user()->email,
-                    'avatar' => $request->user()->avatar ?? null,
-                    'role' => $request->user()->roles?->first()?->name ?? null,
+                    'id'           => $request->user()->id,
+                    'name'         => $request->user()->name,
+                    'email'        => $request->user()->email,
+                    'avatar'       => $request->user()->avatar ?? null,
+                    'avatar_url'   => $request->user()->avatar_url,
+                    'role'         => $request->user()->roles?->first()?->name ?? null,
+                    'roles'        => $request->user()->roles?->pluck('name')->toArray() ?? [],
+                    'permissions'  => $request->user()->getAllPermissions()->pluck('name')->toArray(),
+                    'is_admin'     => $request->user()->isAdmin(),
+                    'is_editor'    => $request->user()->isEditor(),
+                    'is_author'    => $request->user()->isAuthor(),
                 ] : null,
             ],
 

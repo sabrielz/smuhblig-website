@@ -84,4 +84,40 @@ class User extends Authenticatable
     {
         return $this->hasMany(Article::class, 'user_id');
     }
+
+    // -------------------------------------------------------------------------
+    // Role Helper Methods
+    // -------------------------------------------------------------------------
+
+    /**
+     * Determine if the user has the admin role.
+     */
+    public function isAdmin(): bool
+    {
+        return $this->hasRole('admin');
+    }
+
+    /**
+     * Determine if the user has the editor role.
+     */
+    public function isEditor(): bool
+    {
+        return $this->hasRole('editor');
+    }
+
+    /**
+     * Determine if the user has the author role.
+     */
+    public function isAuthor(): bool
+    {
+        return $this->hasRole('author');
+    }
+
+    /**
+     * Determine if the user has any CMS staff role.
+     */
+    public function isStaff(): bool
+    {
+        return $this->hasAnyRole(['admin', 'editor', 'author']);
+    }
 }

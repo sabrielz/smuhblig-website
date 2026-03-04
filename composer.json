@@ -21,7 +21,8 @@
         "spatie/laravel-sitemap": "^7.4",
         "spatie/laravel-sluggable": "^3.8",
         "spatie/laravel-tags": "^4.11",
-        "spatie/laravel-translatable": "^6.13"
+        "spatie/laravel-translatable": "^6.13",
+        "tightenco/ziggy": "^2.6"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^4.0",
