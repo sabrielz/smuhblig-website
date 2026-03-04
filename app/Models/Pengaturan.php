@@ -65,4 +65,12 @@ class Pengaturan extends Model
         $settings = self::where('group', $group)->get();
         return $settings->pluck('value', 'key')->toArray();
     }
+
+    /**
+     * Get all settings as a flat key => value array.
+     */
+    public static function getAllSettings(): array
+    {
+        return self::all()->pluck('value', 'key')->toArray();
+    }
 }

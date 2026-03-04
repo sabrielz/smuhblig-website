@@ -2,6 +2,7 @@ import { Head } from '@inertiajs/react';
 import React from 'react';
 import AdminSidebar from '@/Components/Admin/AdminSidebar';
 import AdminTopbar from '@/Components/Admin/AdminTopbar';
+import { GlobalToast } from '@/Components/UI/GlobalToast';
 
 interface AdminLayoutProps {
     children: React.ReactNode;
@@ -12,6 +13,7 @@ export default function AdminLayout({ children, title }: AdminLayoutProps) {
     return (
         <div className="min-h-screen bg-neutral-50 flex font-sans text-neutral-900">
             <Head title={`${title} - CMS Admin SMK Muh Bligo`} />
+            <GlobalToast />
 
             <AdminSidebar />
 

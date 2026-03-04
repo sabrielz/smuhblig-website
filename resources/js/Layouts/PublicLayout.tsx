@@ -1,6 +1,7 @@
 import { Head } from '@inertiajs/react';
 import Navbar from '@/Components/Layout/Navbar';
 import Footer from '@/Components/Layout/Footer';
+import { GlobalToast } from '@/Components/UI/GlobalToast';
 
 // ---------------------------------------------------------------------------
 // Props
@@ -54,6 +55,7 @@ export default function PublicLayout({
 
             {/* ── Layout shell ── */}
             <div className="flex min-h-screen flex-col">
+                <GlobalToast />
                 <Navbar />
                 <main className="flex-1">{children}</main>
                 <Footer />

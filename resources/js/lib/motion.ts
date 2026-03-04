@@ -1,4 +1,4 @@
-import type { Variants } from 'framer-motion';
+import type { Variants, TargetAndTransition, Easing } from 'framer-motion';
 
 /**
  * Standard Framer Motion variants for the entire project.
@@ -79,7 +79,7 @@ export const heroStagger: Variants = {
 /**
  * Card hover animation — use with whileHover.
  */
-export const cardHover = {
+export const cardHover: TargetAndTransition = {
     y: -6,
-    transition: { duration: 0.25, ease: 'easeOut' },
+    transition: { duration: 0.25, ease: 'easeOut' as Easing },
 };

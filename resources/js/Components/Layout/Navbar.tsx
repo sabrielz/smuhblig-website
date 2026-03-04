@@ -48,7 +48,10 @@ function LanguageToggle({ locale, isScrolled, isDark = false }: LanguageTogglePr
     };
 
     return (
-        <div className="flex items-center gap-0.5 rounded-lg border border-current/20 p-0.5">
+        <div className={cn(
+            'flex items-center gap-0.5 rounded-lg border p-0.5',
+            isDark || !isScrolled ? 'border-white/20' : 'border-[#e5e5ea]',
+        )}>
             {(['id', 'en'] as const).map((lang) => (
                 <button
                     key={lang}
@@ -300,7 +303,7 @@ export default function Navbar() {
                 }}
                 transition={{ duration: 0.3, ease: 'easeInOut' }}
                 className={cn(
-                    'sticky top-0 z-50 w-full',
+                    'fixed top-0 left-0 z-50 w-full',
                     isScrolled && 'border-b border-neutral-100',
                 )}
             >
@@ -321,10 +324,7 @@ export default function Navbar() {
                             )}
                         >
                             <GraduationCap
-                                className={cn(
-                                    'h-5 w-5 transition-colors duration-300',
-                                    isScrolled ? 'text-white' : 'text-white',
-                                )}
+                                className="h-5 w-5 text-white transition-colors duration-300"
                                 strokeWidth={1.5}
                             />
                         </div>
@@ -337,12 +337,7 @@ export default function Navbar() {
                             >
                                 SMK Muhammadiyah
                             </p>
-                            <p
-                                className={cn(
-                                    'text-xs font-medium leading-none mt-0.5 transition-colors duration-300',
-                                    isScrolled ? 'text-[#c9a84c]' : 'text-[#c9a84c]',
-                                )}
-                            >
+                            <p className="text-xs font-medium leading-none mt-0.5 text-[#c9a84c] transition-colors duration-300">
                                 Bligo
                             </p>
                         </div>
