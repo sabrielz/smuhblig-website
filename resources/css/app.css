@@ -140,6 +140,17 @@ body {
 }
 
 /* ============================================
+   Font Utilities
+   ============================================ */
+.font-playfair {
+    font-family: var(--font-serif);
+}
+
+.font-jakarta {
+    font-family: var(--font-sans);
+}
+
+/* ============================================
    Section Divider (Islamic Geometric)
    ============================================ */
 .section-divider {
