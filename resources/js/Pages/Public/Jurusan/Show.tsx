@@ -76,12 +76,18 @@ interface HeroProps {
 }
 
 function HeroJurusan({ jurusan }: HeroProps) {
+    const hasCustomColor = jurusan.color_start && jurusan.color_end;
+
     return (
         <section
-            className="relative min-h-[70vh] flex items-center overflow-hidden"
-            style={{
-                background: `linear-gradient(135deg, ${jurusan.color_start} 0%, ${jurusan.color_end} 100%)`,
-            }}
+            className="relative min-h-[70vh] flex items-center overflow-hidden bg-[#001f4d]"
+            style={
+                hasCustomColor
+                    ? {
+                          backgroundImage: `linear-gradient(135deg, ${jurusan.color_start} 0%, ${jurusan.color_end} 100%)`,
+                      }
+                    : undefined
+            }
         >
             <GeometricPattern opacity="0.05" />
 
@@ -223,10 +229,12 @@ function DeskripsiSection({ jurusan }: DeskripsiProps) {
                             /* Placeholder dengan warna jurusan */
                             <div
                                 className="relative rounded-2xl aspect-[4/3] flex flex-col items-center
-                                           justify-center shadow-2xl overflow-hidden"
-                                style={{
-                                    background: `linear-gradient(135deg, ${jurusan.color_start} 0%, ${jurusan.color_end} 100%)`,
-                                }}
+                                           justify-center shadow-2xl overflow-hidden bg-[#001f4d]"
+                                style={
+                                    jurusan.color_start && jurusan.color_end
+                                        ? { backgroundImage: `linear-gradient(135deg, ${jurusan.color_start} 0%, ${jurusan.color_end} 100%)` }
+                                        : undefined
+                                }
                             >
                                 <GeometricPattern opacity="0.06" />
                                 <span className="text-white/20 relative z-10">
@@ -405,15 +413,17 @@ function FasilitasSection({ fasilitas, colorStart, colorEnd }: FasilitasProps) {
                         >
                             <div
                                 className="w-12 h-12 rounded-xl flex items-center justify-center
-                                           transition-colors duration-300"
-                                style={{
-                                    background: `linear-gradient(135deg, ${colorStart}20 0%, ${colorEnd}30 100%)`,
-                                }}
+                                           transition-colors duration-300 bg-[#003f87]/10"
+                                style={
+                                    colorStart && colorEnd
+                                        ? { backgroundImage: `linear-gradient(135deg, ${colorStart}20 0%, ${colorEnd}30 100%)` }
+                                        : undefined
+                                }
                             >
                                 <Monitor
                                     className="w-6 h-6 transition-colors duration-300"
                                     strokeWidth={1.5}
-                                    style={{ color: colorStart }}
+                                    style={colorStart ? { color: colorStart } : { color: '#003f87' }}
                                 />
                             </div>
                             <p className="text-[#111111] text-sm font-semibold leading-tight">

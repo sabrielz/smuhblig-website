@@ -20,7 +20,7 @@ class PengaturanController extends Controller
             'total_jobs' => \App\Models\AiJob::whereMonth('created_at', now()->month)
                                              ->whereYear('created_at', now()->year)
                                              ->count(),
-            'completed' => \App\Models\AiJob::where('status', 'completed')
+            'completed' => \App\Models\AiJob::where('status', 'done')
                                              ->whereMonth('created_at', now()->month)
                                              ->whereYear('created_at', now()->year)
                                              ->count(),
@@ -28,10 +28,10 @@ class PengaturanController extends Controller
                                           ->whereMonth('created_at', now()->month)
                                           ->whereYear('created_at', now()->year)
                                           ->count(),
-            'cost_estimate' => \App\Models\AiJob::where('status', 'completed')
+            'cost_estimate' => \App\Models\AiJob::where('status', 'done')
                                                 ->whereMonth('created_at', now()->month)
                                                 ->whereYear('created_at', now()->year)
-                                                ->sum('cost_estimate'),
+                                                ->sum('tokens_used') * 15, // Estimasi Rp15 / token
         ];
 
         return Inertia::render('Admin/Pengaturan/Index', [

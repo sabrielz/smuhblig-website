@@ -25,12 +25,14 @@ export function JurusanCard({ jurusan, className }: JurusanCardProps) {
         <motion.div
             whileHover={{ y: -6, transition: { duration: 0.25, ease: 'easeOut' } }}
             className={cn(
-                "relative group overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-shadow duration-300",
+                "relative group overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-shadow duration-300 bg-[#001f4d]",
                 className
             )}
-            style={{
-                background: `linear-gradient(135deg, ${jurusan.color_start} 0%, ${jurusan.color_end} 100%)`
-            }}
+            style={
+                jurusan.color_start && jurusan.color_end
+                    ? { backgroundImage: `linear-gradient(135deg, ${jurusan.color_start} 0%, ${jurusan.color_end} 100%)` }
+                    : undefined
+            }
         >
             <Link href={`/jurusan/${jurusan.slug}`} className="block p-8 h-full">
                 {/* Background Pattern / Glow (Optional) */}
