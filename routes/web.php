@@ -81,4 +81,44 @@ Route::middleware(['auth', \App\Http\Middleware\EnsureHasCmsRole::class])
         Route::get('/', fn () => redirect()->route('admin.dashboard'));
 
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+        // Artikel
+        Route::post('/artikel/{artikel}/publish', [\App\Http\Controllers\Admin\ArtikelController::class, 'publish'])->name('artikel.publish');
+        Route::resource('artikel', \App\Http\Controllers\Admin\ArtikelController::class)->except(['show']);
+
+        // Galeri
+        Route::get('/galeri', [\App\Http\Controllers\Admin\GaleriController::class, 'index'])->name('galeri.index');
+        Route::get('/galeri/buat', [\App\Http\Controllers\Admin\GaleriController::class, 'create'])->name('galeri.create');
+        Route::post('/galeri', [\App\Http\Controllers\Admin\GaleriController::class, 'store'])->name('galeri.store');
+        Route::get('/galeri/{galeri}', [\App\Http\Controllers\Admin\GaleriController::class, 'show'])->name('galeri.show');
+        Route::get('/galeri/{galeri}/edit', [\App\Http\Controllers\Admin\GaleriController::class, 'edit'])->name('galeri.edit');
+        Route::put('/galeri/{galeri}', [\App\Http\Controllers\Admin\GaleriController::class, 'update'])->name('galeri.update');
+        Route::delete('/galeri/{galeri}', [\App\Http\Controllers\Admin\GaleriController::class, 'destroy'])->name('galeri.destroy');
+        Route::post('/galeri/{galeri}/foto', [\App\Http\Controllers\Admin\GaleriController::class, 'uploadFoto'])->name('galeri.uploadFoto');
+        Route::delete('/galeri/foto/{mediaId}', [\App\Http\Controllers\Admin\GaleriController::class, 'deleteFoto'])->name('galeri.deleteFoto');
+
+        // Pengumuman
+        Route::get('/pengumuman', [\App\Http\Controllers\Admin\PengumumanController::class, 'index'])->name('pengumuman.index');
+        Route::get('/pengumuman/buat', [\App\Http\Controllers\Admin\PengumumanController::class, 'create'])->name('pengumuman.create');
+        Route::post('/pengumuman', [\App\Http\Controllers\Admin\PengumumanController::class, 'store'])->name('pengumuman.store');
+        Route::get('/pengumuman/{pengumuman}/edit', [\App\Http\Controllers\Admin\PengumumanController::class, 'edit'])->name('pengumuman.edit');
+        Route::put('/pengumuman/{pengumuman}', [\App\Http\Controllers\Admin\PengumumanController::class, 'update'])->name('pengumuman.update');
+        Route::delete('/pengumuman/{pengumuman}', [\App\Http\Controllers\Admin\PengumumanController::class, 'destroy'])->name('pengumuman.destroy');
+
+        // Jurusan (Edit 5 existing only)
+        Route::get('/jurusan', [\App\Http\Controllers\Admin\JurusanController::class, 'index'])->name('jurusan.index');
+        Route::get('/jurusan/{jurusan}/edit', [\App\Http\Controllers\Admin\JurusanController::class, 'edit'])->name('jurusan.edit');
+        Route::put('/jurusan/{jurusan}', [\App\Http\Controllers\Admin\JurusanController::class, 'update'])->name('jurusan.update');
+
+        // Tautan CRUD
+        Route::resource('tautan', \App\Http\Controllers\Admin\TautanController::class);
+
+        // Pengaturan
+        Route::get('/pengaturan', [\App\Http\Controllers\Admin\PengaturanController::class, 'index'])->name('pengaturan.index');
+        Route::post('/pengaturan', [\App\Http\Controllers\Admin\PengaturanController::class, 'store'])->name('pengaturan.store');
+
+        // Pengguna CRUD - Hanya Admin
+        Route::middleware(['role:admin'])->group(function () {
+            Route::resource('pengguna', \App\Http\Controllers\Admin\PenggunaController::class);
+        });
     });
