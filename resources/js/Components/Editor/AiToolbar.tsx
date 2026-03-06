@@ -251,8 +251,8 @@ export function AiToolbar({
     return (
         <>
             {/* Toolbar Strip */}
-            <div className="relative flex items-center gap-1.5 bg-gradient-to-r from-[#001f4d] to-[#003f87] px-4 py-2.5 border-b border-white/10">
-                <span className="text-white/40 text-xs font-medium mr-1.5 tracking-widest uppercase">AI</span>
+            <div className="relative flex items-center gap-1.5 bg-gradient-to-r from-[#001f4d] to-[#003f87] px-4 py-2.5 border-b border-white/10 overflow-x-auto custom-scrollbar flex-nowrap shrink-0">
+                <span className="text-white/40 text-xs font-medium mr-1.5 tracking-widest uppercase shrink-0">AI</span>
 
                 {/* ── Generate Draft ── visible only when editor empty */}
                 {editorEmpty && (
@@ -341,19 +341,19 @@ function AiButton({ icon, label, onClick, disabled, isLoading, title }: AiButton
             type="button"
             onClick={onClick}
             disabled={disabled}
-            title={title}
+            title={title || label}
             className={cn(
-                'flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 select-none whitespace-nowrap',
+                'flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 select-none whitespace-nowrap min-h-[44px] sm:min-h-0',
                 'text-white/80 hover:text-white hover:bg-white/12 active:scale-95',
                 disabled && 'opacity-40 cursor-not-allowed pointer-events-none',
             )}
         >
             {isLoading ? (
-                <Loader2 className="w-3.5 h-3.5 animate-spin shrink-0" strokeWidth={1.5} />
+                <Loader2 className="w-4 h-4 sm:w-3.5 sm:h-3.5 animate-spin shrink-0" strokeWidth={1.5} />
             ) : (
-                <span className="shrink-0">{icon}</span>
+                <span className="shrink-0 scale-125 sm:scale-100">{icon}</span>
             )}
-            <span>✦ {label}</span>
+            <span className="hidden sm:inline">✦ {label}</span>
         </button>
     );
 }

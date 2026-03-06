@@ -32,7 +32,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
                         ref={ref}
                         rows={rows}
                         className={cn(
-                            'block w-full rounded-lg border-neutral-300 shadow-sm transition-colors duration-200 resize-y min-h-[80px]',
+                            'block w-full rounded-lg border-neutral-300 shadow-sm transition-colors duration-200 min-h-[44px]',
                             'focus:border-[#003f87] focus:ring focus:ring-[#003f87] focus:ring-opacity-20',
                             'disabled:bg-neutral-100 disabled:text-neutral-500 disabled:cursor-not-allowed',
                             error ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : '',

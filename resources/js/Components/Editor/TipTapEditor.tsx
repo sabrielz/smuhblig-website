@@ -47,6 +47,7 @@ interface ToolbarButtonProps {
     disabled?: boolean;
     title: string;
     children: React.ReactNode;
+    className?: string;
 }
 
 function ToolbarButton({
@@ -55,6 +56,7 @@ function ToolbarButton({
     disabled = false,
     title,
     children,
+    className,
 }: ToolbarButtonProps) {
     return (
         <button
@@ -67,11 +69,12 @@ function ToolbarButton({
             disabled={disabled}
             title={title}
             className={cn(
-                "flex items-center justify-center w-8 h-8 rounded-md transition-all duration-150 select-none",
+                "flex items-center justify-center w-10 h-10 md:w-8 md:h-8 rounded-md transition-all duration-150 select-none",
                 isActive
                     ? "bg-[#003f87] text-white shadow-sm"
                     : "text-neutral-600 hover:bg-neutral-200 hover:text-neutral-900",
                 disabled && "opacity-40 cursor-not-allowed pointer-events-none",
+                className
             )}
         >
             {children}
@@ -303,26 +306,28 @@ export function TipTapEditor({
                         <Heading3 className="w-4 h-4" strokeWidth={1.5} />
                     </ToolbarButton>
 
-                    {/* Blockquote */}
+                    {/* Blockquote - hidden on mobile */}
                     <ToolbarButton
                         title="Blockquote"
                         onClick={() =>
                             editor.chain().focus().toggleBlockquote().run()
                         }
                         isActive={editor.isActive("blockquote")}
+                        className="hidden sm:flex"
                     >
-                        <Quote className="w-4 h-4" strokeWidth={1.5} />
+                        <Quote className="w-5 h-5 md:w-4 md:h-4" strokeWidth={1.5} />
                     </ToolbarButton>
 
-                    {/* Inline Code */}
+                    {/* Inline Code - hidden on mobile */}
                     <ToolbarButton
                         title="Inline Code"
                         onClick={() =>
                             editor.chain().focus().toggleCode().run()
                         }
                         isActive={editor.isActive("code")}
+                        className="hidden sm:flex"
                     >
-                        <Code2 className="w-4 h-4" strokeWidth={1.5} />
+                        <Code2 className="w-5 h-5 md:w-4 md:h-4" strokeWidth={1.5} />
                     </ToolbarButton>
 
                     <ToolbarDivider />

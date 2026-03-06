@@ -110,24 +110,32 @@ export default function Footer() {
                     >
                         {/* Logo mark */}
                         <div className="flex items-center gap-3">
-                            <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl bg-[#c9a84c]">
-                                <svg
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="white"
-                                    strokeWidth="1.5"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    className="h-6 w-6"
-                                    aria-hidden="true"
-                                >
-                                    <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
-                                    <path d="M6 12v5c3 3 9 3 12 0v-5" />
-                                </svg>
-                            </div>
+                            {pengaturan?.site_logo ? (
+                                <img
+                                    src={`/${pengaturan.site_logo}`}
+                                    alt={`Logo ${siteName}`}
+                                    className="h-12 w-auto max-w-[48px] object-contain flex-shrink-0 bg-white rounded-lg p-1"
+                                />
+                            ) : (
+                                <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl bg-[#c9a84c]">
+                                    <svg
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="white"
+                                        strokeWidth="1.5"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        className="h-6 w-6"
+                                        aria-hidden="true"
+                                    >
+                                        <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+                                        <path d="M6 12v5c3 3 9 3 12 0v-5" />
+                                    </svg>
+                                </div>
+                            )}
                             <div>
                                 <p className="text-base font-bold text-white leading-tight">{siteName}</p>
-                                <p className="text-xs text-[#c9a84c] font-medium mt-0.5">Bligo, Pati, Jawa Tengah</p>
+                                <p className="text-xs text-[#c9a84c] font-medium mt-0.5">Sapugarut Gg. 7, Kab. Pekalongan, Jawa Tengah</p>
                             </div>
                         </div>
 

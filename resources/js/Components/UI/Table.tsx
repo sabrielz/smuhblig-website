@@ -24,12 +24,13 @@ export function Table<T = any>({
     className,
 }: TableProps<T>) {
     return (
-        <div
-            className={cn(
-                'bg-white rounded-xl border border-neutral-200 overflow-hidden',
-                className
-            )}
-        >
+        <div className={className}>
+            {/* Desktop View */}
+            <div
+                className={cn(
+                    'hidden md:block bg-white rounded-xl border border-neutral-200 overflow-hidden'
+                )}
+            >
             <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse">
                     <thead>
@@ -85,7 +86,71 @@ export function Table<T = any>({
                     </tbody>
                 </table>
             </div>
+            </div>
+
+            {/* Mobile View */}
+            <div className="block md:hidden space-y-4">
+                {isLoading ? (
+                    <SkeletonCards rows={5} />
+                ) : data.length > 0 ? (
+                    data.map((item, rowIndex) => (
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 0.2, delay: rowIndex * 0.05 }}
+                            key={rowIndex}
+                            className="bg-white rounded-xl border border-neutral-200 p-4 shadow-sm flex flex-col gap-3"
+                        >
+                            {columns.map((col) => {
+                                const isAction = col.label.toLowerCase().includes('aksi');
+                                if (isAction) {
+                                    return (
+                                        <div key={col.key} className="pt-3 mt-1 border-t border-neutral-100 flex justify-end">
+                                            {col.render ? col.render(item) : (item as any)[col.key]}
+                                        </div>
+                                    );
+                                }
+
+                                return (
+                                    <div key={col.key} className="flex flex-col gap-1">
+                                        <span className="text-xs font-semibold text-neutral-500 uppercase tracking-wider">{col.label}</span>
+                                        <div className="text-sm text-neutral-900 break-words">
+                                            {col.render ? col.render(item) : (item as any)[col.key]}
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </motion.div>
+                    ))
+                ) : (
+                    <div className="bg-white rounded-xl border border-neutral-200 p-8 text-center text-sm text-neutral-500">
+                        Tidak ada data.
+                    </div>
+                )}
+            </div>
         </div>
+    );
+}
+
+function SkeletonCards({ rows }: { rows: number }) {
+    return (
+        <>
+            {Array.from({ length: rows }).map((_, rowIndex) => (
+                <div key={rowIndex} className="bg-white rounded-xl border border-neutral-200 p-4 shadow-sm flex flex-col gap-3 animate-pulse">
+                    <div className="flex flex-col gap-1">
+                        <div className="h-3 w-20 bg-neutral-200 rounded"></div>
+                        <div className="h-4 w-full bg-neutral-200 rounded"></div>
+                    </div>
+                    <div className="flex flex-col gap-1">
+                        <div className="h-3 w-16 bg-neutral-200 rounded"></div>
+                        <div className="h-4 w-3/4 bg-neutral-200 rounded"></div>
+                    </div>
+                    <div className="pt-3 mt-1 border-t border-neutral-100 flex justify-end">
+                        <div className="h-8 w-16 bg-neutral-200 rounded"></div>
+                    </div>
+                </div>
+            ))}
+        </>
     );
 }
 
