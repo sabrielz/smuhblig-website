@@ -50,16 +50,17 @@ class PengaturanController extends Controller
 
         if ($request->hasFile('site_logo_file')) {
             $path = $request->file('site_logo_file')->store('settings', 'public');
-            Pengaturan::set('site_logo', 'storage/' . $path);
+            Pengaturan::set('app_logo', 'storage/' . $path);
         }
 
         if ($request->hasFile('site_favicon_file')) {
             $path = $request->file('site_favicon_file')->store('settings', 'public');
-            Pengaturan::set('site_favicon', 'storage/' . $path);
+            Pengaturan::set('app_favicon', 'storage/' . $path);
         }
 
         // Clear application cache if settings are changed
         Cache::flush();
+        // dd(Pengaturan::get('app_logo'));
 
         return redirect()->back()->with('success', 'Pengaturan berhasil diperbarui');
     }

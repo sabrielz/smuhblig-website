@@ -54,7 +54,7 @@ class HandleInertiaRequests extends Middleware
                 }
 
                 try {
-                    $settings = \App\Models\Pengaturan::pluck('value', 'key')->toArray();
+                    $settings = \App\Models\Pengaturan::getAllSettings();
                     return array_merge($this->defaultPengaturan(), $settings);
                 } catch (\Exception $e) {
                     return $this->defaultPengaturan();

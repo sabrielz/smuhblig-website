@@ -23,6 +23,7 @@ export interface Pengaturan {
     site_phone: string;
     site_address: string;
     site_logo: string | null;
+    site_favicon: string | null;
     artikel_approval: boolean;
     artikel_ai_enabled: boolean;
     multibahasa_enabled: boolean;
@@ -34,6 +35,7 @@ export interface Pengaturan {
     seo_google_analytics: string;
     ai_provider: string;
     ai_translate_auto: boolean;
+    spmb_url: string;
 }
 
 export interface FlashMessages {

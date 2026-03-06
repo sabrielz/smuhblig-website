@@ -73,17 +73,16 @@ class BerandaController extends Controller
                 });
 
             // ── Pengaturan ─────────────────────────────────────────────────────
-            $settings = Pengaturan::whereIn('key', ['site_name', 'tagline', 'spmb_url'])
-                ->pluck('value', 'key')
-                ->toArray();
+            $settings = Pengaturan::getAllSettings();
 
             return [
                 'jurusan'       => $jurusan,
                 'beritaTerbaru' => $beritaTerbaru,
                 'pengaturan'    => [
                     'site_name' => $settings['site_name'] ?? 'SMK Muhammadiyah Bligo',
-                    'tagline'   => $settings['tagline'] ?? 'Mencetak Generasi Unggul dan Berakhlak Mulia',
+                    'tagline'   => $settings['site_tagline'] ?? 'Mencetak Generasi Unggul dan Berakhlak Mulia',
                     'spmb_url'  => $settings['spmb_url'] ?? '#',
+                    ...$settings
                 ],
             ];
         });
