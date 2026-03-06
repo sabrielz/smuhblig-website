@@ -1,4 +1,5 @@
-import { Head } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
+import parse from 'html-react-parser';
 import Navbar from '@/Components/Layout/Navbar';
 import Footer from '@/Components/Layout/Footer';
 import { GlobalToast } from '@/Components/UI/GlobalToast';
@@ -8,49 +9,44 @@ import { GlobalToast } from '@/Components/UI/GlobalToast';
 // ---------------------------------------------------------------------------
 interface PublicLayoutProps {
     children: React.ReactNode;
-    seoTitle?: string;
-    seoDescription?: string;
-    seoImage?: string;
 }
 
 // ---------------------------------------------------------------------------
 // PublicLayout
 // ---------------------------------------------------------------------------
-export default function PublicLayout({
-    children,
-    seoTitle,
-    seoDescription,
-    seoImage,
-}: PublicLayoutProps) {
-    const appName = 'SMK Muhammadiyah Bligo';
-    const pageTitle = seoTitle ? `${seoTitle} — ${appName}` : appName;
+export default function PublicLayout({ children }: PublicLayoutProps) {
+    const { seo, pengaturan, url } = usePage<any>().props;
+    const { url: currentUrl } = usePage();
+    const currentPath = currentUrl.split('?')[0];
+
+    // Structured Data (JSON-LD)
+    const baseUrl = 'https://smkmuhbligo.sch.id';
+    const jsonLd = {
+        '@context': 'https://schema.org',
+        '@type': 'EducationalOrganization',
+        name: pengaturan?.site_name || 'SMK Muhammadiyah Bligo',
+        url: baseUrl,
+        description: pengaturan?.site_tagline || 'Mencetak Generasi Unggul dan Berakhlak',
+        address: {
+            '@type': 'PostalAddress',
+            streetAddress: pengaturan?.site_address || 'Jl. Raya Bligo',
+            addressLocality: 'Pekalongan',
+            addressRegion: 'Jawa Tengah',
+            addressCountry: 'ID',
+        },
+    };
 
     return (
         <>
             {/* ── SEO Head tags ── */}
             <Head>
-                {seoTitle && <title>{pageTitle}</title>}
-
-                {seoDescription && (
-                    <meta name="description" content={seoDescription} />
-                )}
-
-                {/* Open Graph */}
-                <meta property="og:site_name" content={appName} />
-                {seoTitle && <meta property="og:title" content={pageTitle} />}
-                {seoDescription && (
-                    <meta property="og:description" content={seoDescription} />
-                )}
-                {seoImage && <meta property="og:image" content={seoImage} />}
-                <meta property="og:type" content="website" />
-
-                {/* Twitter Card */}
-                <meta name="twitter:card" content="summary_large_image" />
-                {seoTitle && <meta name="twitter:title" content={pageTitle} />}
-                {seoDescription && (
-                    <meta name="twitter:description" content={seoDescription} />
-                )}
-                {seoImage && <meta name="twitter:image" content={seoImage} />}
+                {/* Parse SEO tags dynamically from Artesaos SEOTools */}
+                {seo ? parse(seo) : <title>{pengaturan?.site_name || 'SMK Muhammadiyah Bligo'}</title>}
+                <link rel="alternate" hrefLang="id" href={`${baseUrl}${currentPath}?lang=id`} />
+                <link rel="alternate" hrefLang="en" href={`${baseUrl}${currentPath}?lang=en`} />
+                <script type="application/ld+json">
+                    {JSON.stringify(jsonLd)}
+                </script>
             </Head>
 
             {/* ── Layout shell ── */}
