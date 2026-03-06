@@ -2,8 +2,7 @@ import { Link, usePage } from '@inertiajs/react';
 import { LayoutDashboard, FileText, Image as ImageIcon, Bell, BookOpen, Link as LinkIcon, Users, Settings, LogOut, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { SharedProps } from '@/types';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 interface SidebarProps {
     isOpen: boolean;
@@ -13,20 +12,23 @@ interface SidebarProps {
 export default function AdminSidebar({ isOpen, setIsOpen }: SidebarProps) {
     const { url, props } = usePage<SharedProps>();
     const user = props.auth.user;
-    const [isDesktop, setIsDesktop] = useState(true);
 
+    // Tutup sidebar di mobile setiap kali url berubah
     useEffect(() => {
-        const handleResize = () => setIsDesktop(window.innerWidth >= 1024);
-        handleResize(); // Set initial value
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
+        setIsOpen(false);
+    }, [url, setIsOpen]);
 
+    // Mencegah scroll body saat menu mobile terbuka
     useEffect(() => {
-        if (!isDesktop) {
-            setIsOpen(false);
+        if (isOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
         }
-    }, [url, isDesktop, setIsOpen]);
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, [isOpen]);
 
     const navGroups = [
         {
@@ -66,24 +68,21 @@ export default function AdminSidebar({ isOpen, setIsOpen }: SidebarProps) {
 
     return (
         <>
-            {/* Backdrop for mobile */}
-            <AnimatePresence>
-                {isOpen && !isDesktop && (
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        onClick={() => setIsOpen(false)}
-                        className="fixed inset-0 bg-black/50 z-40 lg:hidden"
-                    />
+            {/* Backdrop untuk mobile dengan CSS murni agar tidak ada hydration error */}
+            <div
+                className={cn(
+                    "fixed inset-0 bg-black/50 z-40 lg:hidden transition-opacity duration-300 ease-in-out",
+                    isOpen ? "opacity-100 visible" : "opacity-0 invisible"
                 )}
-            </AnimatePresence>
+                onClick={() => setIsOpen(false)}
+                aria-hidden="true"
+            />
 
-            <motion.aside
-                className="w-[240px] fixed inset-y-0 left-0 bg-primary-900 flex flex-col pt-6 pb-4 z-50 lg:!transform-none"
-                initial={false}
-                animate={{ x: isDesktop || isOpen ? 0 : -240 }}
-                transition={{ type: 'spring', bounce: 0, duration: 0.3 }}
+            <aside
+                className={cn(
+                    "w-[240px] fixed inset-y-0 left-0 bg-primary-900 flex flex-col pt-6 pb-4 z-50 transition-transform duration-300 ease-in-out will-change-transform",
+                    isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+                )}
             >
                 <div className="px-6 mb-6 flex items-center justify-between">
                     <Link href="/admin/dashboard" className="flex items-center gap-3">
@@ -100,7 +99,8 @@ export default function AdminSidebar({ isOpen, setIsOpen }: SidebarProps) {
                     <button
                         type="button"
                         onClick={() => setIsOpen(false)}
-                        className="lg:hidden text-white/50 hover:text-white p-2 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-md hover:bg-white/10"
+                        className="lg:hidden text-white/50 hover:text-white p-2 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-md hover:bg-white/10 transition-colors"
+                        aria-label="Tutup menu"
                     >
                         <X className="w-5 h-5" />
                     </button>
@@ -173,7 +173,7 @@ export default function AdminSidebar({ isOpen, setIsOpen }: SidebarProps) {
                         </Link>
                     </div>
                 </div>
-            </motion.aside>
+            </aside>
         </>
     );
 }
