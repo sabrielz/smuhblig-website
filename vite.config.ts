@@ -7,7 +7,7 @@ export default defineConfig({
     plugins: [
         laravel({
             input: ['resources/css/app.css', 'resources/js/app.tsx'],
-            buildDirectory: 'public/build',
+            buildDirectory: 'build',
             refresh: true,
         }),
         tailwindcss(),
