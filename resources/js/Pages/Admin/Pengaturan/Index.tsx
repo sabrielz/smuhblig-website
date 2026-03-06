@@ -78,8 +78,8 @@ export default function Index({ settings, aiStats }: { settings: Record<string, 
                 </Button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 items-start">
-                <div className="md:col-span-1 space-y-1">
+            <div className="flex flex-col md:flex-row gap-6 items-start">
+                <div className="w-full md:w-64 flex-shrink-0 flex overflow-x-auto md:flex-col gap-2 md:gap-1 pb-2 md:pb-0 custom-scrollbar snap-x">
                     {tabs.map(tab => {
                         const Icon = tab.icon;
                         const isActive = activeTab === tab.id;
@@ -88,9 +88,9 @@ export default function Index({ settings, aiStats }: { settings: Record<string, 
                                 key={tab.id}
                                 type="button"
                                 onClick={() => setActiveTab(tab.id)}
-                                className={`w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg transition-colors text-left ${
+                                className={`flex-shrink-0 snap-start flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg transition-colors text-left ${
                                     isActive
-                                    ? 'bg-primary-navy text-white shadow-sm'
+                                    ? 'bg-[#003f87] text-white shadow-sm'
                                     : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
                                 }`}
                             >
@@ -101,8 +101,8 @@ export default function Index({ settings, aiStats }: { settings: Record<string, 
                     })}
                 </div>
 
-                <div className="md:col-span-3 bg-white shadow-sm border border-gray-100 rounded-xl overflow-hidden">
-                    <form onSubmit={submit} className="p-6">
+                <div className="flex-1 w-full bg-white shadow-sm border border-gray-100 rounded-xl overflow-hidden">
+                    <form onSubmit={submit} className="p-4 md:p-6">
                         {activeTab === 'umum' && (
                             <div className="space-y-6 animate-in fade-in duration-300">
                                 <h2 className="text-lg font-bold text-gray-900 mb-4 border-b pb-2">Identitas Sekolah</h2>
@@ -204,7 +204,7 @@ export default function Index({ settings, aiStats }: { settings: Record<string, 
                                 <h2 className="text-lg font-bold text-gray-900 mb-4 border-b pb-2">Pengaturan Kecerdasan Buatan (AI)</h2>
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                                    <div className="bg-primary-navy/5 border border-primary-navy/10 rounded-xl p-4">
+                                    <div className="bg-[#003f87]/5 border border-primary-navy/10 rounded-xl p-4">
                                         <span className="text-xs font-bold text-primary-navy uppercase">Total Job & Status</span>
                                         <div className="mt-2 text-2xl font-bold">{aiStats.total_jobs} <span className="text-sm font-normal text-gray-500">jobs bulan ini</span></div>
                                         <div className="flex gap-4 mt-2 text-sm text-gray-600">

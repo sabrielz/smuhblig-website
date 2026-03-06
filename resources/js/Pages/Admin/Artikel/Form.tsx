@@ -458,12 +458,12 @@ export default function Form({ article, categories }: Props) {
             </div>
 
             {/* ── Two-column Layout ── */}
-            <div className="flex flex-col lg:flex-row gap-6">
+            <div className="flex flex-col md:flex-row gap-6">
 
                 {/* ══════════════════════════════════════
-                    Main Content Area (65%)
+                    Main Content Area (60% tablet, 65% desktop)
                    ══════════════════════════════════════ */}
-                <div className="w-full lg:w-[65%] flex flex-col gap-6">
+                <div className="w-full md:w-[60%] lg:w-[65%] flex flex-col gap-6">
 
                     {/* Language Tab Switcher */}
                     <div className="bg-white rounded-2xl shadow-sm border border-neutral-100 p-1 flex items-center gap-1 w-max">
@@ -613,9 +613,9 @@ export default function Form({ article, categories }: Props) {
                 </div>
 
                 {/* ══════════════════════════════════════
-                    Sidebar (35%)
+                    Sidebar (40% tablet, 35% desktop)
                    ══════════════════════════════════════ */}
-                <div className="w-full lg:w-[35%] flex flex-col gap-6">
+                <div className="w-full md:w-[40%] lg:w-[35%] flex flex-col gap-6">
 
                     {/* Publikasi */}
                     <div className="bg-white rounded-2xl shadow-sm border border-neutral-100 p-5 gap-4 flex flex-col">

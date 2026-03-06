@@ -124,8 +124,8 @@ export default function Dashboard({
                                 <tr className="border-b border-neutral-200 text-xs text-neutral-500 bg-white uppercase tracking-wider">
                                     <th className="px-6 py-3 font-medium">Judul</th>
                                     <th className="px-6 py-3 font-medium">Status</th>
-                                    <th className="px-6 py-3 font-medium">Penulis</th>
-                                    <th className="px-6 py-3 font-medium">Tanggal</th>
+                                    <th className="hidden md:table-cell px-6 py-3 font-medium">Penulis</th>
+                                    <th className="hidden md:table-cell px-6 py-3 font-medium">Tanggal</th>
                                     <th className="px-6 py-3 font-medium text-right">Aksi</th>
                                 </tr>
                             </thead>
@@ -141,10 +141,10 @@ export default function Dashboard({
                                                     {artikel.status.charAt(0).toUpperCase() + artikel.status.slice(1)}
                                                 </Badge>
                                             </td>
-                                            <td className="px-6 py-4 text-sm text-neutral-500">
+                                            <td className="hidden md:table-cell px-6 py-4 text-sm text-neutral-500">
                                                 {artikel.author}
                                             </td>
-                                            <td className="px-6 py-4 text-sm text-neutral-500 whitespace-nowrap">
+                                            <td className="hidden md:table-cell px-6 py-4 text-sm text-neutral-500 whitespace-nowrap">
                                                 {artikel.created_at}
                                             </td>
                                             <td className="px-6 py-4 text-right">
@@ -204,17 +204,17 @@ export default function Dashboard({
             </div>
 
             {/* Row 3: Shortcut CTA */}
-            <div className="flex flex-wrap items-center gap-4">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                 <Link
                     href="/admin/artikel/buat"
-                    className="inline-flex items-center justify-center font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed bg-[#003f87] text-white hover:bg-[#002d6b] focus:ring-[#003f87]/50 border border-transparent px-6 py-3 text-base rounded-xl"
+                    className="w-full sm:w-auto inline-flex items-center justify-center font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed bg-[#003f87] text-white hover:bg-[#002d6b] focus:ring-[#003f87]/50 border border-transparent px-6 py-3 min-h-[44px] text-base rounded-xl"
                 >
                     <Plus className="w-5 h-5 mr-2" />
                     Tulis Artikel Baru
                 </Link>
                 <Link
                     href="/admin/galeri/buat"
-                    className="inline-flex items-center justify-center font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed border-2 border-[#003f87] text-[#003f87] hover:bg-[#eef5fc] focus:ring-[#003f87]/50 px-6 py-3 text-base rounded-xl"
+                    className="w-full sm:w-auto inline-flex items-center justify-center font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed border-2 border-[#003f87] text-[#003f87] hover:bg-[#eef5fc] focus:ring-[#003f87]/50 px-6 py-3 min-h-[44px] text-base rounded-xl"
                 >
                     <Images className="w-5 h-5 mr-2" />
                     Upload Galeri

@@ -14,46 +14,26 @@ interface Props {
     };
 }
 
-// ─── Geometric SVG Pattern ────────────────────────────────────────────────────
-function GeometricPattern() {
-    return (
-        <svg
-            aria-hidden="true"
-            className="absolute inset-0 w-full h-full opacity-[0.04] pointer-events-none"
-            xmlns="http://www.w3.org/2000/svg"
-        >
-            <defs>
-                <pattern
-                    id="star-pattern"
-                    x="0"
-                    y="0"
-                    width="60"
-                    height="60"
-                    patternUnits="userSpaceOnUse"
-                >
-                    {/* Bintang 8 sudut — Islamic geometric motif */}
-                    <polygon
-                        points="30,2 35,22 55,22 40,34 46,54 30,42 14,54 20,34 5,22 25,22"
-                        fill="none"
-                        stroke="white"
-                        strokeWidth="0.8"
-                    />
-                    <rect
-                        x="20"
-                        y="20"
-                        width="20"
-                        height="20"
-                        transform="rotate(45 30 30)"
-                        fill="none"
-                        stroke="white"
-                        strokeWidth="0.6"
-                    />
-                </pattern>
-            </defs>
-            <rect width="100%" height="100%" fill="url(#star-pattern)" />
-        </svg>
-    );
-}
+// ---------------------------------------------------------------------------
+// Geometric Pattern SVG (Islamic-inspired, very subtle)
+// ---------------------------------------------------------------------------
+const GeometricPattern = () => (
+    <svg
+        className="absolute inset-0 w-full h-full opacity-[0.04]"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+    >
+        <defs>
+            <pattern id="geo-pattern-tentang" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
+                <polygon points="40,4 76,22 76,58 40,76 4,58 4,22" fill="none" stroke="white" strokeWidth="1" />
+                <polygon points="40,16 64,28 64,52 40,64 16,52 16,28" fill="none" stroke="white" strokeWidth="0.5" />
+                <line x1="40" y1="4" x2="40" y2="76" stroke="white" strokeWidth="0.3" />
+                <line x1="4" y1="40" x2="76" y2="40" stroke="white" strokeWidth="0.3" />
+            </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#geo-pattern-tentang)" />
+    </svg>
+);
 
 // ─── Hero Section ─────────────────────────────────────────────────────────────
 function HeroSection() {

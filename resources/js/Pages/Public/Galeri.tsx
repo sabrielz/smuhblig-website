@@ -268,10 +268,7 @@ export default function Galeri({ pengaturan, galleries }: GaleriProps) {
     const { locale } = usePage<SharedProps>().props;
 
     return (
-        <PublicLayout
-            seoTitle="Galeri"
-            seoDescription={`Momen dan kegiatan berkesan di ${pengaturan.site_name}`}
-        >
+        <PublicLayout>
             <PageHero />
             <GaleriSection galleries={galleries} />
         </PublicLayout>

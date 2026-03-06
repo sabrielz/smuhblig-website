@@ -109,10 +109,7 @@ export default function Tautan({ pengaturan, groupedLinks }: TautanProps) {
     const { locale } = usePage<SharedProps>().props;
 
     return (
-        <PublicLayout
-            seoTitle="Tautan Penting"
-            seoDescription={`Direktori tautan dan layanan penting ${pengaturan.site_name}`}
-        >
+        <PublicLayout>
             <PageHero />
 
             <section className="py-16 lg:py-24 bg-white min-h-[50vh]">

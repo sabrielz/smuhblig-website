@@ -31,6 +31,27 @@ interface IndexProps {
     };
 }
 
+// ---------------------------------------------------------------------------
+// Geometric Pattern SVG (Islamic-inspired, very subtle)
+// ---------------------------------------------------------------------------
+const GeometricPattern = () => (
+    <svg
+        className="absolute inset-0 w-full h-full opacity-[0.04]"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+    >
+        <defs>
+            <pattern id="geo-pattern-tentang" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
+                <polygon points="40,4 76,22 76,58 40,76 4,58 4,22" fill="none" stroke="white" strokeWidth="1" />
+                <polygon points="40,16 64,28 64,52 40,64 16,52 16,28" fill="none" stroke="white" strokeWidth="0.5" />
+                <line x1="40" y1="4" x2="40" y2="76" stroke="white" strokeWidth="0.3" />
+                <line x1="4" y1="40" x2="76" y2="40" stroke="white" strokeWidth="0.3" />
+            </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#geo-pattern-tentang)" />
+    </svg>
+);
+
 export default function BeritaIndex({ articles, categories, filters }: IndexProps) {
     const [searchQuery, setSearchQuery] = useState(filters?.q || '');
 
@@ -65,6 +86,7 @@ export default function BeritaIndex({ articles, categories, filters }: IndexProp
             {/* SECTION 1: Page Hero */}
             <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 overflow-hidden bg-primary-dark text-white">
                 <div className="absolute inset-0 bg-gradient-to-br from-primary-900 via-primary-dark to-primary-900" />
+                <GeometricPattern />
 
                 {/* Decorative Elements */}
                 <div className="absolute inset-0 opacity-10 bg-[url('/images/pattern-islamic.png')] bg-repeat" />
@@ -110,7 +132,7 @@ export default function BeritaIndex({ articles, categories, filters }: IndexProp
                             className={cn(
                                 "whitespace-nowrap px-6 py-2.5 rounded-full text-sm font-medium transition-colors border",
                                 !filters.category
-                                    ? "bg-primary-navy text-white border-primary-navy shadow-sm"
+                                    ? "bg-[#003f87] text-white border-primary-navy shadow-sm"
                                     : "bg-white text-neutral-600 border-neutral-200 hover:border-primary-navy hover:text-primary-navy"
                             )}
                         >
@@ -124,7 +146,7 @@ export default function BeritaIndex({ articles, categories, filters }: IndexProp
                                 className={cn(
                                     "whitespace-nowrap px-6 py-2.5 rounded-full text-sm font-medium transition-colors border",
                                     filters.category == category.id.toString()
-                                        ? "bg-primary-navy text-white border-primary-navy shadow-sm"
+                                        ? "bg-[#003f87] text-white border-primary-navy shadow-sm"
                                         : "bg-white text-neutral-600 border-neutral-200 hover:border-primary-navy hover:text-primary-navy"
                                 )}
                             >

@@ -1,15 +1,13 @@
 import React, { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Table, TableColumn } from '@/Components/UI/Table';
+import { Table, Column } from '@/Components/UI/Table';
 import { Badge } from '@/Components/UI/Badge';
 import { Button } from '@/Components/UI/Button';
 import { Input } from '@/Components/UI/Input';
 import { Select } from '@/Components/UI/Select';
 import { Pagination } from '@/Components/UI/Pagination';
 import { ConfirmDialog } from '@/Components/UI/ConfirmDialog';
-import { format } from 'date-fns';
-import { id } from 'date-fns/locale';
 import { Search, Plus, Edit, Trash2, CheckCircle } from 'lucide-react';
 
 interface Article {
@@ -67,14 +65,14 @@ export default function Index({ articles, categories, filters }: Props) {
 
     const handleDelete = () => {
         if (articleToDelete) {
-            router.delete(route('admin.artikel.destroy', articleToDelete), {
+            router.delete(route('admin.artikel.destroy', articleToDelete as any), {
                 onSuccess: () => setIsDeleteDialogOpen(false),
             });
         }
     };
 
     const handlePublish = (id: number) => {
-        router.post(route('admin.artikel.publish', id), {}, { preserveScroll: true });
+        router.post(route('admin.artikel.publish', id as any), {}, { preserveScroll: true });
     };
 
     const getStatusBadge = (status: string) => {
@@ -86,14 +84,14 @@ export default function Index({ articles, categories, filters }: Props) {
             case 'archived':
                 return <Badge variant="danger">Archived</Badge>;
             default:
-                return <Badge variant="secondary">Draft</Badge>;
+                return <Badge variant="neutral">Draft</Badge>;
         }
     };
 
-    const columns: TableColumn<Article>[] = [
+    const columns: Column<Article>[] = [
         {
             key: 'thumbnail_url',
-            header: 'Thumbnail',
+            label: 'Thumbnail',
             render: (article) => (
                 <div className="w-12 h-12 rounded-lg bg-neutral-100 flex items-center justify-center overflow-hidden border border-neutral-200">
                     {article.thumbnail_url ? (
@@ -106,7 +104,7 @@ export default function Index({ articles, categories, filters }: Props) {
         },
         {
             key: 'title_id',
-            header: 'Judul',
+            label: 'Judul',
             render: (article) => (
                 <div className="max-w-xs truncate font-medium text-neutral-900">
                     {article.title_id || 'Tanpa Judul'}
@@ -115,7 +113,7 @@ export default function Index({ articles, categories, filters }: Props) {
         },
         {
             key: 'category',
-            header: 'Kategori',
+            label: 'Kategori',
             render: (article) => (
                 article.category ? (
                     <span
@@ -129,17 +127,17 @@ export default function Index({ articles, categories, filters }: Props) {
         },
         {
             key: 'user',
-            header: 'Penulis',
+            label: 'Penulis',
             render: (article) => article.user?.name || '-'
         },
         {
             key: 'status',
-            header: 'Status',
+            label: 'Status',
             render: (article) => getStatusBadge(article.status)
         },
         {
             key: 'published_at',
-            header: 'Tgl Publish',
+            label: 'Tgl Publish',
             render: (article) => (
                 <span className="text-sm text-neutral-600">
                     {article.status === 'published' ? article.formatted_published_at : '-'}
@@ -148,8 +146,7 @@ export default function Index({ articles, categories, filters }: Props) {
         },
         {
             key: 'id',
-            header: 'Aksi',
-            align: 'right',
+            label: 'Aksi',
             render: (article) => (
                 <div className="flex items-center justify-end gap-2">
                     {(article.status === 'draft' || article.status === 'pending_review') && (
@@ -163,7 +160,7 @@ export default function Index({ articles, categories, filters }: Props) {
                             <CheckCircle className="w-4 h-4" />
                         </Button>
                     )}
-                    <Link href={route('admin.artikel.edit', article.id)}>
+                    <Link href={route('admin.artikel.edit', article.id as any)}>
                         <Button variant="ghost" size="sm" className="text-info hover:text-info hover:bg-info/10">
                             <Edit className="w-4 h-4" />
                         </Button>
@@ -182,7 +179,7 @@ export default function Index({ articles, categories, filters }: Props) {
     ];
 
     return (
-        <AdminLayout title="Manajemen Artikel" breadcrumbs={[{ label: 'Artikel', url: route('admin.artikel.index') }]}>
+        <AdminLayout title="Manajemen Artikel">
             <Head title="Manajemen Artikel" />
 
             <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -206,7 +203,7 @@ export default function Index({ articles, categories, filters }: Props) {
                                 placeholder="Cari judul artikel..."
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
-                                icon={<Search className="w-4 h-4" />}
+                                leftIcon={<Search className="w-4 h-4" />}
                                 className="bg-white"
                             />
                         </div>
@@ -243,15 +240,23 @@ export default function Index({ articles, categories, filters }: Props) {
                     <Table
                         columns={columns}
                         data={articles.data}
-                        keyExtractor={(item) => item.id.toString()}
-                        emptyMessage="Belum ada artikel yang ditambahkan."
                     />
                 </div>
             </div>
 
             {articles.meta && articles.meta.last_page > 1 && (
                 <div className="mt-6 flex justify-center">
-                    <Pagination meta={articles.meta} />
+                    <Pagination
+                        currentPage={articles.meta.current_page}
+                        totalPages={articles.meta.last_page}
+                        onPageChange={(page) => {
+                            router.get(
+                                route('admin.artikel.index'),
+                                { search, status, category_id: categoryId, page },
+                                { preserveState: true }
+                            );
+                        }}
+                    />
                 </div>
             )}
 
@@ -260,9 +265,9 @@ export default function Index({ articles, categories, filters }: Props) {
                 onClose={() => setIsDeleteDialogOpen(false)}
                 onConfirm={handleDelete}
                 title="Hapus Artikel"
-                description="Apakah Anda yakin ingin menghapus artikel ini? Tindakan ini tidak dapat dibatalkan dan semua data termasuk foto akan dihapus."
-                confirmText="Hapus Artikel"
-                cancelText="Batal"
+                message="Apakah Anda yakin ingin menghapus artikel ini? Tindakan ini tidak dapat dibatalkan dan semua data termasuk foto akan dihapus."
+                confirmLabel="Hapus Artikel"
+                cancelLabel="Batal"
                 variant="danger"
             />
         </AdminLayout>

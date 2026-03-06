@@ -92,8 +92,8 @@ export default function Edit({ jurusan }: { jurusan: any }) {
                 </Button>
             </div>
 
-            <form onSubmit={submit} className="grid grid-cols-1 xl:grid-cols-3 gap-8 items-start">
-                <div className="xl:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+            <form onSubmit={submit} className="flex flex-col md:flex-row gap-6 lg:gap-8 items-start">
+                <div className="w-full md:w-[60%] lg:w-[65%] bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden flex-shrink-0">
                     <div className="border-b border-gray-100 flex p-4 pb-0 space-x-4">
                         <button
                             type="button"
@@ -167,7 +167,7 @@ export default function Edit({ jurusan }: { jurusan: any }) {
                     </div>
                 </div>
 
-                <div className="space-y-6">
+                <div className="w-full md:w-[40%] lg:w-[35%] space-y-6 flex-shrink-0">
                     <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                         <h3 className="font-semibold text-gray-900 mb-4">Preview Kartu</h3>
                         <div className="rounded-xl shadow-sm border border-gray-100 overflow-hidden">

@@ -64,8 +64,8 @@ export default function Form({ galeri }: Props) {
                 </div>
             </div>
 
-            <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <div className="lg:col-span-2 space-y-6">
+            <form onSubmit={handleSubmit} className="flex flex-col md:flex-row gap-6 lg:gap-8 items-start">
+                <div className="w-full md:w-[60%] lg:w-[65%] space-y-6 flex-shrink-0">
                     <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-6 space-y-6">
                         <h2 className="text-lg font-bold text-gray-900 border-b pb-2">Informasi Konten</h2>
 
@@ -104,7 +104,7 @@ export default function Form({ galeri }: Props) {
                     </div>
                 </div>
 
-                <div className="space-y-6">
+                <div className="w-full md:w-[40%] lg:w-[35%] space-y-6 flex-shrink-0">
                     <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-6 space-y-6">
                         <h2 className="text-lg font-bold text-gray-900 border-b pb-2">Pengaturan Album</h2>
 

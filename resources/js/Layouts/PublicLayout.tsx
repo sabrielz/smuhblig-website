@@ -1,3 +1,4 @@
+import React from 'react';
 import { Head, usePage } from '@inertiajs/react';
 import parse from 'html-react-parser';
 import Navbar from '@/Components/Layout/Navbar';
@@ -40,8 +41,16 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
         <>
             {/* ── SEO Head tags ── */}
             <Head>
-                {/* Parse SEO tags dynamically from Artesaos SEOTools */}
-                {seo ? parse(seo) : <title>{pengaturan?.site_name || 'SMK Muhammadiyah Bligo'}</title>}
+                {/* Parse SEO tags dynamically from Artesaos SEOTools, filtering out raw text nodes like newlines */}
+                {seo ? (
+                    (() => {
+                        const parsed = parse(seo);
+                        const elements = Array.isArray(parsed) ? parsed : [parsed];
+                        return elements.filter(React.isValidElement);
+                    })()
+                ) : (
+                    <title>{pengaturan?.site_name || 'SMK Muhammadiyah Bligo'}</title>
+                )}
                 <link rel="alternate" hrefLang="id" href={`${baseUrl}${currentPath}?lang=id`} />
                 <link rel="alternate" hrefLang="en" href={`${baseUrl}${currentPath}?lang=en`} />
                 <script type="application/ld+json">

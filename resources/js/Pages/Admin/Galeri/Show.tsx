@@ -139,9 +139,9 @@ export default function Show({ galeri, photos: initialPhotos }: Props) {
                 </Link>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <div className="space-y-6 lg:space-y-8">
                 {/* UPOLAD ZONE */}
-                <div className="lg:col-span-1">
+                <div>
                     <div
                         onClick={() => fileInputRef.current?.click()}
                         onDragOver={(e) => { e.preventDefault(); setIsDraggingUpload(true); }}
@@ -152,7 +152,7 @@ export default function Show({ galeri, photos: initialPhotos }: Props) {
                             if (e.dataTransfer.files) handleUploadFiles(Array.from(e.dataTransfer.files));
                         }}
                         className={cn(
-                            "w-full h-48 border-2 border-dashed rounded-xl flex flex-col items-center justify-center p-6 text-center transition-all cursor-pointer group sticky top-24",
+                            "w-full h-32 md:h-48 border-2 border-dashed rounded-xl flex flex-col items-center justify-center p-6 text-center transition-all cursor-pointer group",
                             isDraggingUpload ? "border-blue-500 bg-blue-50" : "border-neutral-300 hover:border-blue-400 hover:bg-neutral-50"
                         )}
                     >
@@ -183,7 +183,7 @@ export default function Show({ galeri, photos: initialPhotos }: Props) {
                 </div>
 
                 {/* PHOTOS GRID */}
-                <div className="lg:col-span-3">
+                <div>
                     {photos.length === 0 ? (
                         <div className="bg-white rounded-xl border border-neutral-100 p-16 text-center flex flex-col items-center justify-center">
                             <div className="w-16 h-16 bg-neutral-100 rounded-full flex items-center justify-center mb-4 text-neutral-400">

@@ -98,7 +98,7 @@ const PageHero = () => (
 // Section 2 — Profil Singkat
 // ---------------------------------------------------------------------------
 const highlights = [
-    'Berdiri sejak 1982, kami telah mendidik ribuan generasi muda berdedikasi.',
+    'Berdiri sejak 2003, kami telah mendidik ribuan generasi muda berdedikasi.',
     'Terakreditasi A oleh BAN-SM dengan standar mutu pendidikan nasional.',
     'Didukung 5 jurusan keahlian yang relevan dengan kebutuhan industri modern.',
 ];
@@ -485,10 +485,7 @@ export default function Tentang({ pengaturan }: TentangProps) {
     const { locale } = usePage<SharedProps>().props;
 
     return (
-        <PublicLayout
-            seoTitle="Tentang Kami"
-            seoDescription={`Profil, Visi, Misi, dan Struktur Organisasi ${pengaturan.site_name}. Sekolah kejuruan unggulan di Batang, Jawa Tengah.`}
-        >
+        <PublicLayout>
             <PageHero />
             <ProfilSection />
             <VisiMisiSection />

@@ -194,7 +194,7 @@ export default function BeritaShow({ article, relatedArticles, categories }: Sho
                             {/* Box: Kategori */}
                             <div className="bg-white rounded-3xl p-6 lg:p-8 shadow-sm border border-neutral-100 sticky top-28">
                                 <h3 className="font-serif text-2xl font-bold text-neutral-900 mb-6 flex items-center">
-                                    <div className="w-1.5 h-6 bg-primary-navy rounded-full mr-3"></div>
+                                    <div className="w-1.5 h-6 bg-[#003f87] rounded-full mr-3"></div>
                                     Kategori
                                 </h3>
                                 <ul className="space-y-3">
@@ -207,7 +207,7 @@ export default function BeritaShow({ article, relatedArticles, categories }: Sho
                                                 <span className="font-medium text-neutral-700 group-hover:text-primary-navy">
                                                     {category.name}
                                                 </span>
-                                                <span className="bg-neutral-100 group-hover:bg-primary-navy group-hover:text-white text-neutral-600 text-xs font-bold px-2.5 py-1 rounded-full transition-colors">
+                                                <span className="bg-neutral-100 group-hover:bg-[#003f87] group-hover:text-white text-neutral-600 text-xs font-bold px-2.5 py-1 rounded-full transition-colors">
                                                     {category.articles_count}
                                                 </span>
                                             </Link>

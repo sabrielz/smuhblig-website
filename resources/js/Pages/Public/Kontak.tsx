@@ -384,10 +384,7 @@ export default function Kontak({ pengaturan, tautan }: KontakProps) {
     const displayTautan = tautan && tautan.length > 0 ? tautan : FallbackTautan;
 
     return (
-        <PublicLayout
-            seoTitle="Kontak"
-            seoDescription={`Hubungi ${pengaturan.site_name}. Alamat, telepon, email, dan lokasi sekolah di Batang, Jawa Tengah.`}
-        >
+        <PublicLayout>
             <PageHero />
             <InfoDanPeta pengaturan={pengaturan} />
             <TautanSection tautan={displayTautan} />

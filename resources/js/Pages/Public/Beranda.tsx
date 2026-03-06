@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import { motion, useScroll, useTransform, useInView } from 'framer-motion';
 import { ChevronDown, ArrowRight, Users, GraduationCap, BookOpen, Calendar } from 'lucide-react';
 import PublicLayout from '@/Layouts/PublicLayout';
@@ -7,6 +7,7 @@ import { JurusanCard } from '@/Components/UI/JurusanCard';
 import { ArticleCard } from '@/Components/UI/ArticleCard';
 import { Button } from '@/Components/UI/Button';
 import { fadeInUp, staggerContainer, heroStagger, scaleIn, fadeIn } from '@/lib/motion';
+import { SharedProps } from '@/types';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -115,6 +116,26 @@ function IslamicPattern({ className }: { className?: string }) {
     );
 }
 
+// ─── Geometric Pattern SVG (Islamic-inspired, very subtle) ───────────────────
+
+const GeometricPattern = () => (
+    <svg
+        className="absolute inset-0 w-full h-full opacity-[0.04] pointer-events-none"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+    >
+        <defs>
+            <pattern id="geo-pattern-beranda" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
+                <polygon points="40,4 76,22 76,58 40,76 4,58 4,22" fill="none" stroke="white" strokeWidth="1" />
+                <polygon points="40,16 64,28 64,52 40,64 16,52 16,28" fill="none" stroke="white" strokeWidth="0.5" />
+                <line x1="40" y1="4" x2="40" y2="76" stroke="white" strokeWidth="0.3" />
+                <line x1="4" y1="40" x2="76" y2="40" stroke="white" strokeWidth="0.3" />
+            </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#geo-pattern-beranda)" />
+    </svg>
+);
+
 // ─── Stat Item ────────────────────────────────────────────────────────────────
 
 interface StatItemProps {
@@ -204,20 +225,17 @@ function SectionDivider() {
 export default function Beranda({
     jurusan = [],
     beritaTerbaru = [],
-    statistik = { totalSiswa: 0, totalLulusan: 0, pengajar: 0, tahunBerdiri: 1985 },
-    pengaturan = { site_name: 'SMK Muhammadiyah Bligo', tagline: '', spmb_url: '#' },
+    statistik = { totalSiswa: 0, totalLulusan: 0, pengajar: 0, tahunBerdiri: 2003 },
 }: BerandaProps) {
+    const { pengaturan } = usePage<SharedProps>().props;
+
     const heroRef = useRef<HTMLDivElement>(null);
     const { scrollY } = useScroll();
     const heroImageY = useTransform(scrollY, [0, 600], [0, -120]);
-
-    const tahunPengabdian = 2025 - statistik.tahunBerdiri;
+    const tahunPengabdian = new Date().getFullYear() - statistik.tahunBerdiri;
 
     return (
-        <PublicLayout
-            seoTitle="Beranda"
-            seoDescription={`${pengaturan.site_name} — Sekolah Menengah Kejuruan berbasis nilai Islam, menyiapkan lulusan siap kerja, berkarakter, dan berdaya saing global.`}
-        >
+        <PublicLayout>
             <Head title="Beranda — SMK Muhammadiyah Bligo" />
 
             {/* ══════════════════════════════════════════════════════════════
@@ -354,7 +372,9 @@ export default function Beranda({
             {/* ══════════════════════════════════════════════════════════════
                 SECTION 2 — STATISTIK
             ══════════════════════════════════════════════════════════════ */}
-            <section id="beranda-statistik" aria-label="Statistik sekolah" style={{ background: '#003f87' }}>
+            <section id="beranda-statistik" aria-label="Statistik sekolah" className="relative" style={{ background: '#003f87' }}>
+                {/* Fullsize Subtle pattern overlay */}
+                <GeometricPattern />
                 {/* Top separator */}
                 <div className="relative h-16 overflow-hidden">
                     <svg viewBox="0 0 1440 64" preserveAspectRatio="none" className="absolute bottom-0 w-full h-full" style={{ fill: '#003f87' }}>
@@ -363,12 +383,7 @@ export default function Beranda({
                 </div>
 
                 <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-16 pb-20">
-                    {/* Subtle pattern overlay */}
                     <div className="relative">
-                        <div className="absolute inset-0 opacity-[0.04] pointer-events-none">
-                            <IslamicPattern className="w-full h-full text-white" />
-                        </div>
-
                         <motion.div
                             variants={staggerContainer}
                             initial="hidden"
@@ -555,10 +570,8 @@ export default function Beranda({
                     }}
                 />
 
-                {/* Islamic pattern overlay */}
-                <div className="absolute inset-0 z-10 pointer-events-none">
-                    <IslamicPattern className="w-full h-full text-white opacity-[0.04]" />
-                </div>
+                {/* Geometric pattern overlay */}
+                <GeometricPattern />
 
                 {/* Decorative orbs */}
                 <div

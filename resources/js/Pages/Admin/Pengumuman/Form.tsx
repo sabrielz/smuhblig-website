@@ -76,9 +76,9 @@ export default function Form({ pengumuman }: Props) {
                 </div>
             </div>
 
-            <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <form onSubmit={handleSubmit} className="flex flex-col md:flex-row gap-6 lg:gap-8 items-start">
                 {/* KONTEN */}
-                <div className="lg:col-span-2 space-y-6">
+                <div className="w-full md:w-[60%] lg:w-[65%] space-y-6 flex-shrink-0">
                     <div className="bg-white rounded-xl shadow-sm border border-neutral-200 overflow-hidden">
                         <div className="flex items-center border-b border-neutral-100 bg-neutral-50 px-4 gap-4">
                             <button
@@ -156,7 +156,7 @@ export default function Form({ pengumuman }: Props) {
                 </div>
 
                 {/* SETTINGS */}
-                <div className="space-y-6">
+                <div className="w-full md:w-[40%] lg:w-[35%] space-y-6 flex-shrink-0">
                     <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-6 space-y-6">
                         <h2 className="text-lg font-bold text-gray-900 border-b pb-2 flex gap-2 items-center">
                             <Bell className="w-5 h-5 text-gray-500" /> Pengaturan
