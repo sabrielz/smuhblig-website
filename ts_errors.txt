@@ -1,0 +1,34 @@
+resources/js/Pages/Admin/Artikel/Index.tsx(4,17): error TS2305: Module '"@/Components/UI/Table"' has no exported member 'TableColumn'.
+resources/js/Pages/Admin/Artikel/Index.tsx(11,24): error TS2307: Cannot find module 'date-fns' or its corresponding type declarations.
+resources/js/Pages/Admin/Artikel/Index.tsx(12,20): error TS2307: Cannot find module 'date-fns/locale' or its corresponding type declarations.
+resources/js/Pages/Admin/Artikel/Index.tsx(70,58): error TS2345: Argument of type 'number' is not assignable to parameter of type 'Record<string, unknown>'.
+resources/js/Pages/Admin/Artikel/Index.tsx(77,52): error TS2345: Argument of type 'number' is not assignable to parameter of type 'Record<string, unknown>'.
+resources/js/Pages/Admin/Artikel/Index.tsx(89,31): error TS2322: Type '"secondary"' is not assignable to type '"info" | "warning" | "success" | "gold" | "primary" | "danger" | "neutral" | undefined'.
+resources/js/Pages/Admin/Artikel/Index.tsx(97,22): error TS7006: Parameter 'article' implicitly has an 'any' type.
+resources/js/Pages/Admin/Artikel/Index.tsx(110,22): error TS7006: Parameter 'article' implicitly has an 'any' type.
+resources/js/Pages/Admin/Artikel/Index.tsx(119,22): error TS7006: Parameter 'article' implicitly has an 'any' type.
+resources/js/Pages/Admin/Artikel/Index.tsx(133,22): error TS7006: Parameter 'article' implicitly has an 'any' type.
+resources/js/Pages/Admin/Artikel/Index.tsx(138,22): error TS7006: Parameter 'article' implicitly has an 'any' type.
+resources/js/Pages/Admin/Artikel/Index.tsx(143,22): error TS7006: Parameter 'article' implicitly has an 'any' type.
+resources/js/Pages/Admin/Artikel/Index.tsx(153,22): error TS7006: Parameter 'article' implicitly has an 'any' type.
+resources/js/Pages/Admin/Artikel/Index.tsx(185,48): error TS2322: Type '{ children: any[]; title: string; breadcrumbs: { label: string; url: string; }[]; }' is not assignable to type 'IntrinsicAttributes & AdminLayoutProps'.
+  Property 'breadcrumbs' does not exist on type 'IntrinsicAttributes & AdminLayoutProps'.
+resources/js/Pages/Admin/Artikel/Index.tsx(209,33): error TS2322: Type '{ placeholder: string; value: string; onChange: (e: ChangeEvent<HTMLInputElement, HTMLInputElement>) => void; icon: Element; className: string; }' is not assignable to type 'IntrinsicAttributes & InputProps & RefAttributes<HTMLInputElement>'.
+  Property 'icon' does not exist on type 'IntrinsicAttributes & InputProps & RefAttributes<HTMLInputElement>'.
+resources/js/Pages/Admin/Artikel/Index.tsx(246,25): error TS2322: Type '{ columns: TableColumn<Article>[]; data: Article[]; keyExtractor: (item: any) => any; emptyMessage: string; }' is not assignable to type 'IntrinsicAttributes & TableProps<Article>'.
+  Property 'keyExtractor' does not exist on type 'IntrinsicAttributes & TableProps<Article>'.
+resources/js/Pages/Admin/Artikel/Index.tsx(246,40): error TS7006: Parameter 'item' implicitly has an 'any' type.
+resources/js/Pages/Admin/Artikel/Index.tsx(254,33): error TS2322: Type '{ meta: any; }' is not assignable to type 'IntrinsicAttributes & PaginationProps'.
+  Property 'meta' does not exist on type 'IntrinsicAttributes & PaginationProps'.
+resources/js/Pages/Admin/Artikel/Index.tsx(263,17): error TS2322: Type '{ isOpen: boolean; onClose: () => void; onConfirm: () => void; title: string; description: string; confirmText: string; cancelText: string; variant: "danger"; }' is not assignable to type 'IntrinsicAttributes & ConfirmDialogProps'.
+  Property 'description' does not exist on type 'IntrinsicAttributes & ConfirmDialogProps'.
+resources/js/Pages/Public/Beranda.tsx(218,13): error TS2322: Type '{ children: Element[]; seoTitle: string; seoDescription: string; }' is not assignable to type 'IntrinsicAttributes & PublicLayoutProps'.
+  Property 'seoTitle' does not exist on type 'IntrinsicAttributes & PublicLayoutProps'.
+resources/js/Pages/Public/Galeri.tsx(272,13): error TS2322: Type '{ children: Element[]; seoTitle: string; seoDescription: string; }' is not assignable to type 'IntrinsicAttributes & PublicLayoutProps'.
+  Property 'seoTitle' does not exist on type 'IntrinsicAttributes & PublicLayoutProps'.
+resources/js/Pages/Public/Kontak.tsx(388,13): error TS2322: Type '{ children: Element[]; seoTitle: string; seoDescription: string; }' is not assignable to type 'IntrinsicAttributes & PublicLayoutProps'.
+  Property 'seoTitle' does not exist on type 'IntrinsicAttributes & PublicLayoutProps'.
+resources/js/Pages/Public/Tautan.tsx(113,13): error TS2322: Type '{ children: Element[]; seoTitle: string; seoDescription: string; }' is not assignable to type 'IntrinsicAttributes & PublicLayoutProps'.
+  Property 'seoTitle' does not exist on type 'IntrinsicAttributes & PublicLayoutProps'.
+resources/js/Pages/Public/Tentang.tsx(489,13): error TS2322: Type '{ children: Element[]; seoTitle: string; seoDescription: string; }' is not assignable to type 'IntrinsicAttributes & PublicLayoutProps'.
+  Property 'seoTitle' does not exist on type 'IntrinsicAttributes & PublicLayoutProps'.
