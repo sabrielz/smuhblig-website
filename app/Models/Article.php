@@ -46,7 +46,7 @@ class Article extends Model implements HasMedia
                 if (request()->has('title')) {
                     return request()->input('title');
                 }
-                
+
                 $translation = $model->translation(app()->getLocale());
                 return $translation ? $translation->title : 'untitled';
             })
@@ -76,7 +76,9 @@ class Article extends Model implements HasMedia
     public function translation(?string $locale = null)
     {
         $locale = $locale ?? app()->getLocale();
-        return $this->translations->where('locale', $locale)->first() 
+        return $this->translations->first(function ($t) use ($locale) {
+            return $t->locale === $locale && ($locale === 'id' || $t->reviewed);
+        })
             ?? $this->translations->where('locale', 'id')->first()
             ?? $this->translations->first();
     }
@@ -98,6 +100,9 @@ class Article extends Model implements HasMedia
         $locale = $locale ?? app()->getLocale();
         return $query->whereHas('translations', function ($q) use ($locale) {
             $q->where('locale', $locale);
+            if ($locale !== 'id') {
+                $q->where('reviewed', true);
+            }
         });
     }
 }

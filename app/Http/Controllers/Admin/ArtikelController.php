@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Http\Requests\Admin\StoreArtikelRequest;
 use App\Http\Requests\Admin\UpdateArtikelRequest;
 use App\Http\Resources\Admin\ArtikelResource;
+use App\Services\HtmlSanitizer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -101,12 +102,12 @@ class ArtikelController extends Controller
                 'meta_description' => $validated['meta_description'],
             ]);
 
-            // Save ID translation
+            // Save ID translation (sanitise HTML from TipTap)
             $article->translations()->create([
                 'locale' => 'id',
                 'title' => $validated['title_id'],
                 'excerpt' => $validated['excerpt_id'] ?? null,
-                'content' => $validated['content_id'],
+                'content' => HtmlSanitizer::clean($validated['content_id']),
                 'ai_translated' => false,
                 'reviewed' => true,
             ]);
@@ -117,7 +118,7 @@ class ArtikelController extends Controller
                     'locale' => 'en',
                     'title' => $validated['title_en'],
                     'excerpt' => $validated['excerpt_en'] ?? null,
-                    'content' => $validated['content_en'] ?? '',
+                    'content' => HtmlSanitizer::clean($validated['content_en'] ?? ''),
                     'ai_translated' => false,
                     'reviewed' => true,
                 ]);
@@ -172,13 +173,13 @@ class ArtikelController extends Controller
                 'meta_description' => $validated['meta_description'],
             ]);
 
-            // Update or Create ID translation
+            // Update or Create ID translation (sanitise HTML from TipTap)
             $artikel->translations()->updateOrCreate(
                 ['locale' => 'id'],
                 [
                     'title' => $validated['title_id'],
                     'excerpt' => $validated['excerpt_id'] ?? null,
-                    'content' => $validated['content_id'],
+                    'content' => HtmlSanitizer::clean($validated['content_id']),
                     'reviewed' => true,
                 ]
             );
@@ -190,7 +191,7 @@ class ArtikelController extends Controller
                     [
                         'title' => $validated['title_en'],
                         'excerpt' => $validated['excerpt_en'] ?? null,
-                        'content' => $validated['content_en'] ?? '',
+                        'content' => HtmlSanitizer::clean($validated['content_en'] ?? ''),
                         'reviewed' => true,
                     ]
                 );
@@ -244,4 +245,23 @@ class ArtikelController extends Controller
             return back()->with('error', 'Gagal mempublish artikel: ' . $e->getMessage());
         }
     }
+
+    /**
+     * Mark the EN translation as reviewed by an editor.
+     * Called by frontend via PATCH /admin/artikel/{artikel}/translation/reviewed
+     */
+    public function markTranslationReviewed(Article $artikel)
+    {
+        /** @var \App\Models\ArticleTranslation|null $enTranslation */
+        $enTranslation = $artikel->translations()->where('locale', 'en')->first();
+
+        if (!$enTranslation) {
+            return response()->json(['message' => 'Terjemahan EN tidak ditemukan.'], 404);
+        }
+
+        $enTranslation->update(['reviewed' => true]);
+
+        return back()->with('success', 'Terjemahan ditandai sudah direview.');
+    }
 }
+

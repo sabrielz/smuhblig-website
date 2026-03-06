@@ -46,6 +46,10 @@ class ArtikelResource extends JsonResource
             'title_en' => $translationEn ? $translationEn->title : '',
             'excerpt_en' => $translationEn ? $translationEn->excerpt : '',
             'content_en' => $translationEn ? $translationEn->content : '',
+
+            // EN translation status flags (for AI badge in editor)
+            'en_ai_translated' => $translationEn ? (bool) $translationEn->ai_translated : false,
+            'en_reviewed'      => $translationEn ? (bool) $translationEn->reviewed : false,
         ];
     }
 }
