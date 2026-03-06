@@ -35,6 +35,11 @@ Route::get('/portal', function () {
     return Inertia::render('Portal');
 })->name('portal');
 
+Route::get('/sitemap.xml', function () {
+    \Illuminate\Support\Facades\Artisan::call('sitemap:generate');
+    return response()->file(public_path('sitemap.xml'));
+});
+
 /*
 |--------------------------------------------------------------------------
 | Locale Switcher
@@ -84,6 +89,7 @@ Route::middleware(['auth', \App\Http\Middleware\EnsureHasCmsRole::class])
 
         // Artikel
         Route::post('/artikel/{artikel}/publish', [\App\Http\Controllers\Admin\ArtikelController::class, 'publish'])->name('artikel.publish');
+        Route::patch('/artikel/{artikel}/translation/reviewed', [\App\Http\Controllers\Admin\ArtikelController::class, 'markTranslationReviewed'])->name('artikel.translation.reviewed');
         Route::resource('artikel', \App\Http\Controllers\Admin\ArtikelController::class)->except(['show']);
 
         // Galeri
@@ -121,4 +127,17 @@ Route::middleware(['auth', \App\Http\Middleware\EnsureHasCmsRole::class])
         Route::middleware(['role:admin'])->group(function () {
             Route::resource('pengguna', \App\Http\Controllers\Admin\PenggunaController::class);
         });
+
+        // AI Features (async via queue)
+        Route::middleware(['throttle:ai'])->prefix('ai')->name('ai.')->group(function () {
+            Route::post('/generate',  [\App\Http\Controllers\Admin\AiController::class, 'generate'])->name('generate');
+            Route::post('/revise',    [\App\Http\Controllers\Admin\AiController::class, 'revise'])->name('revise');
+            Route::post('/correct',   [\App\Http\Controllers\Admin\AiController::class, 'correct'])->name('correct');
+            Route::post('/translate', [\App\Http\Controllers\Admin\AiController::class, 'translate'])->name('translate');
+            Route::post('/seo',       [\App\Http\Controllers\Admin\AiController::class, 'analyzeSeo'])->name('seo');
+            Route::get('/jobs/{aiJob}/status', [\App\Http\Controllers\Admin\AiController::class, 'jobStatus'])->name('job.status');
+        });
+
+        // Media Upload (TipTap inline images)
+        Route::post('/media/upload', [\App\Http\Controllers\Admin\MediaUploadController::class, 'upload'])->name('media.upload');
     });

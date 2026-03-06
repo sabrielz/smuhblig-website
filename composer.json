@@ -11,6 +11,7 @@
     "require": {
         "php": "^8.2",
         "artesaos/seotools": "^1.3",
+        "ezyang/htmlpurifier": "^4.17",
         "inertiajs/inertia-laravel": "2.0.1",
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
@@ -41,7 +42,13 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "psr-0": {
+            "HTMLPurifier": "vendor/ezyang/htmlpurifier/library/"
+        },
+        "files": [
+            "vendor/ezyang/htmlpurifier/library/HTMLPurifier.composer.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
@@ -84,6 +91,15 @@
             "Illuminate\\Foundation\\ComposerScripts::prePackageUninstall"
         ]
     },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "vendor/ezyang/htmlpurifier",
+            "options": {
+                "symlink": false
+            }
+        }
+    ],
     "extra": {
         "laravel": {
             "dont-discover": []
