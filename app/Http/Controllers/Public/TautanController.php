@@ -42,6 +42,11 @@ class TautanController extends Controller
             })->values()->toArray();
         });
 
+        \Artesaos\SEOTools\Facades\SEOMeta::setTitle('Tautan | SMK Muhammadiyah Bligo');
+        \Artesaos\SEOTools\Facades\SEOMeta::setDescription('Kumpulan tautan penting, aplikasi belajar, dan portal informasi SMK Muhammadiyah Bligo.');
+        \Artesaos\SEOTools\Facades\OpenGraph::setUrl(request()->url());
+        \Artesaos\SEOTools\Facades\OpenGraph::addProperty('type', 'website');
+
         return Inertia::render('Public/Tautan', [
             'groupedLinks' => $groupedLinks,
         ]);

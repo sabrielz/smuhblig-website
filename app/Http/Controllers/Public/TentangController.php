@@ -18,6 +18,11 @@ class TentangController extends Controller
             ];
         });
 
+        \Artesaos\SEOTools\Facades\SEOMeta::setTitle('Tentang Kami | SMK Muhammadiyah Bligo');
+        \Artesaos\SEOTools\Facades\SEOMeta::setDescription('Mengenal lebih dekat visi, misi, dan profil SMK Muhammadiyah Bligo, lembaga pendidikan menengah kejuruan unggul dan berakhlak.');
+        \Artesaos\SEOTools\Facades\OpenGraph::setUrl(request()->url());
+        \Artesaos\SEOTools\Facades\OpenGraph::addProperty('type', 'website');
+
         return Inertia::render('Public/Tentang', [
             'pengaturan' => $data['pengaturan'],
         ]);

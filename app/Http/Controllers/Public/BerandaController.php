@@ -23,18 +23,21 @@ class BerandaController extends Controller
             $jurusan = Jurusan::query()
                 ->where('is_active', true)
                 ->orderBy('sort_order')
-                ->with(['translations' => fn ($q) => $q->where('locale', $locale)])
+                ->with(['translations' => fn ($q) => $q->whereIn('locale', [$locale, 'id'])])
                 ->get()
-                ->map(fn (Jurusan $j) => [
-                    'kode'        => $j->kode,
-                    'slug'        => $j->slug,
-                    'nama'        => optional($j->translations->first())->nama ?? $j->kode,
-                    'tagline'     => optional($j->translations->first())->tagline ?? '',
-                    'deskripsi'   => optional($j->translations->first())->deskripsi ?? '',
-                    'color_start' => $j->color_start,
-                    'color_end'   => $j->color_end,
-                    'icon_name'   => $j->icon_name,
-                ]);
+                ->map(function (Jurusan $j) use ($locale) {
+                    $translation = $j->translation($locale);
+                    return [
+                        'kode'        => $j->kode,
+                        'slug'        => $j->slug,
+                        'nama'        => $translation?->nama ?? $j->kode,
+                        'tagline'     => $translation?->tagline ?? '',
+                        'deskripsi'   => $translation?->deskripsi ?? '',
+                        'color_start' => $j->color_start,
+                        'color_end'   => $j->color_end,
+                        'icon_name'   => $j->icon_name,
+                    ];
+                });
 
             // ── 3 Artikel published terbaru ────────────────────────────────────
             $beritaTerbaru = Article::query()
@@ -43,27 +46,31 @@ class BerandaController extends Controller
                 ->limit(3)
                 ->with([
                     'category',
-                    'category.translations' => fn ($q) => $q->where('locale', $locale),
-                    'translations'          => fn ($q) => $q->where('locale', $locale),
+                    'category.translations' => fn ($q) => $q->whereIn('locale', [$locale, 'id']),
+                    'translations'          => fn ($q) => $q->whereIn('locale', [$locale, 'id']),
                     'user:id,name',
                 ])
                 ->get()
-                ->map(fn (Article $a) => [
-                    'id'           => $a->id,
-                    'title'        => optional($a->translations->first())->title ?? $a->slug,
-                    'excerpt'      => optional($a->translations->first())->excerpt ?? '',
-                    'slug'         => $a->slug,
-                    'thumbnail'    => $a->getFirstMediaUrl('thumbnail') ?: 'https://picsum.photos/seed/' . $a->id . 'news/800/450',
-                    'published_at' => optional($a->published_at)->translatedFormat('d M Y') ?? '',
-                    'category'     => [
-                        'name'  => optional($a->category)->name ?? '',
-                        'color' => optional($a->category)->color ?? '#003f87',
-                    ],
-                    'author' => [
-                        'name'   => optional($a->user)->name ?? 'Admin',
-                        'avatar' => 'https://ui-avatars.com/api/?name=' . urlencode(optional($a->user)->name ?? 'A') . '&background=003f87&color=fff&size=64',
-                    ],
-                ]);
+                ->map(function (Article $a) use ($locale) {
+                    $translation = $a->translation($locale);
+                    $catTranslation = $a->category ? $a->category->translation($locale) : null;
+                    return [
+                        'id'           => $a->id,
+                        'title'        => $translation?->title ?? $a->slug,
+                        'excerpt'      => $translation?->excerpt ?? '',
+                        'slug'         => $a->slug,
+                        'thumbnail'    => $a->getFirstMediaUrl('thumbnail') ?: 'https://picsum.photos/seed/' . $a->id . 'news/800/450',
+                        'published_at' => optional($a->published_at)->translatedFormat('d M Y') ?? '',
+                        'category'     => [
+                            'name'  => $catTranslation?->name ?? optional($a->category)->name ?? '',
+                            'color' => optional($a->category)->color ?? '#003f87',
+                        ],
+                        'author' => [
+                            'name'   => optional($a->user)->name ?? 'Admin',
+                            'avatar' => 'https://ui-avatars.com/api/?name=' . urlencode(optional($a->user)->name ?? 'A') . '&background=003f87&color=fff&size=64',
+                        ],
+                    ];
+                });
 
             // ── Pengaturan ─────────────────────────────────────────────────────
             $settings = Pengaturan::whereIn('key', ['site_name', 'tagline', 'spmb_url'])
@@ -88,6 +95,13 @@ class BerandaController extends Controller
             'pengajar'     => 60,
             'tahunBerdiri' => 1985,
         ];
+
+        $siteName = $data['pengaturan']['site_name'];
+        $tagline = $data['pengaturan']['tagline'];
+        \Artesaos\SEOTools\Facades\SEOMeta::setTitle('Beranda | ' . $siteName);
+        \Artesaos\SEOTools\Facades\SEOMeta::setDescription($tagline);
+        \Artesaos\SEOTools\Facades\OpenGraph::setUrl(request()->url());
+        \Artesaos\SEOTools\Facades\OpenGraph::addProperty('type', 'website');
 
         return Inertia::render('Public/Beranda', array_merge($data, [
             'statistik' => $statistik,

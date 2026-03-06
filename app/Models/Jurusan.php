@@ -47,7 +47,9 @@ class Jurusan extends Model implements HasMedia
         $locale = $locale ?: app()->getLocale();
 
         // Coba cari bahasa yang diminta
-        $translation = $this->translations->firstWhere('locale', $locale);
+        $translation = $this->translations->first(function ($t) use ($locale) {
+            return $t->locale === $locale && ($locale === 'id' || $t->reviewed);
+        });
 
         // Jika tidak ada, fallback ke 'id'
         if (!$translation && $locale !== 'id') {

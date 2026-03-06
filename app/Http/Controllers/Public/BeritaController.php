@@ -58,6 +58,11 @@ class BeritaController extends Controller
             ];
         });
 
+        \Artesaos\SEOTools\Facades\SEOMeta::setTitle('Berita | SMK Muhammadiyah Bligo');
+        \Artesaos\SEOTools\Facades\SEOMeta::setDescription('Kumpulan berita dan informasi terbaru dari SMK Muhammadiyah Bligo.');
+        \Artesaos\SEOTools\Facades\OpenGraph::setUrl(request()->url());
+        \Artesaos\SEOTools\Facades\OpenGraph::addProperty('type', 'website');
+
         return Inertia::render('Public/Berita/Index', [
             'articles' => $articles,
             'categories' => $categories,
@@ -134,6 +139,13 @@ class BeritaController extends Controller
             ],
             'thumbnail' => $article->getFirstMediaUrl('thumbnail') ?: 'https://placehold.co/1200x600',
         ];
+
+        \Artesaos\SEOTools\Facades\SEOMeta::setTitle(($formattedArticle['title'] ?? 'Berita') . ' | SMK Muhammadiyah Bligo');
+        \Artesaos\SEOTools\Facades\SEOMeta::setDescription($formattedArticle['excerpt'] ?? '');
+        \Artesaos\SEOTools\Facades\OpenGraph::setUrl(request()->url());
+        \Artesaos\SEOTools\Facades\OpenGraph::addProperty('type', 'article');
+        \Artesaos\SEOTools\Facades\OpenGraph::addImage($formattedArticle['thumbnail']);
+        \Artesaos\SEOTools\Facades\TwitterCard::setImage($formattedArticle['thumbnail']);
 
         return Inertia::render('Public/Berita/Show', [
             'article' => $formattedArticle,

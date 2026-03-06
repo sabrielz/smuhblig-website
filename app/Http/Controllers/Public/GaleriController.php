@@ -21,7 +21,7 @@ class GaleriController extends Controller
                 ->active()
                 ->with([
                     'translations' => function ($query) use ($locale) {
-                        $query->where('locale', $locale);
+                        $query->whereIn('locale', [$locale, 'id']);
                     },
                     'media' => function ($query) {
                         $query->where('collection_name', 'photos');
@@ -30,7 +30,7 @@ class GaleriController extends Controller
                 ->orderBy('sort_order', 'asc')
                 ->get()
                 ->map(function ($galeri) use ($locale) {
-                    $translation = $galeri->translations->first();
+                    $translation = call_user_func([$galeri, 'translation'], $locale) ?? $galeri->translations->first();
                     $photos = $galeri->getMedia('photos');
 
                     return [
@@ -51,6 +51,11 @@ class GaleriController extends Controller
                     ];
                 });
         });
+
+        \Artesaos\SEOTools\Facades\SEOMeta::setTitle('Galeri | SMK Muhammadiyah Bligo');
+        \Artesaos\SEOTools\Facades\SEOMeta::setDescription('Koleksi foto dan galeri kegiatan di SMK Muhammadiyah Bligo.');
+        \Artesaos\SEOTools\Facades\OpenGraph::setUrl(request()->url());
+        \Artesaos\SEOTools\Facades\OpenGraph::addProperty('type', 'website');
 
         return Inertia::render('Public/Galeri', [
             'galleries' => $galleries,

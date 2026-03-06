@@ -34,9 +34,14 @@ class Galeri extends Model implements HasMedia
         return $this->hasMany(GaleriTranslation::class);
     }
 
-    public function translation(string $locale)
+    public function translation(?string $locale = null)
     {
-        return $this->translations()->where('locale', $locale)->first();
+        $locale = $locale ?? app()->getLocale();
+        return $this->translations->first(function ($t) use ($locale) {
+            return $t->locale === $locale && ($locale === 'id' || $t->reviewed);
+        })
+            ?? $this->translations->where('locale', 'id')->first()
+            ?? $this->translations->first();
     }
 
     public function scopeActive(Builder $query): Builder

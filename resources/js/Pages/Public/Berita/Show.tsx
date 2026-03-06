@@ -62,7 +62,10 @@ export default function BeritaShow({ article, relatedArticles, categories }: Sho
                 <meta property="og:image" content={article.thumbnail} />
             </Head>
 
-            <div className="pt-24 pb-20 bg-neutral-50 min-h-screen lg:pt-32">
+            <section className="relative min-h-[50vh] flex items-center overflow-hidden bg-[#001f4d]">
+            </section>
+
+            <div className="pt-24 pb-20 bg-neutral-50 min-h-screen lg:pt-32 -mt-[150px]">
                 <div className="container mx-auto px-4 max-w-[1280px]">
                     <div className="flex flex-col lg:flex-row gap-10">
                         {/* Kiri: Konten Artikel (65%) */}
@@ -216,6 +219,7 @@ export default function BeritaShow({ article, relatedArticles, categories }: Sho
                     </div>
                 </div>
             </div>
+
         </PublicLayout>
     );
 }

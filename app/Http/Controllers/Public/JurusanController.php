@@ -27,12 +27,13 @@ class JurusanController extends Controller
                 ->get();
         });
 
+        \Artesaos\SEOTools\Facades\SEOMeta::setTitle('Program Keahlian | SMK Muhammadiyah Bligo');
+        \Artesaos\SEOTools\Facades\SEOMeta::setDescription('Lima program keahlian unggulan SMK Muhammadiyah Bligo: AKL, FKK, TKJ, TKR, TSM. Pilih jurusan terbaik untuk masa depan Anda.');
+        \Artesaos\SEOTools\Facades\OpenGraph::setUrl(request()->url());
+        \Artesaos\SEOTools\Facades\OpenGraph::addProperty('type', 'website');
+
         return Inertia::render('Public/Jurusan/Index', [
             'jurusan' => JurusanResource::collection($jurusan)->resolve(),
-            'seo'     => [
-                'title'       => 'Program Keahlian — SMK Muhammadiyah Bligo',
-                'description' => 'Lima program keahlian unggulan SMK Muhammadiyah Bligo: AKL, FKK, TKJ, TKR, TSM. Pilih jurusan terbaik untuk masa depan Anda.',
-            ],
         ]);
     }
 
@@ -53,12 +54,16 @@ class JurusanController extends Controller
             return $jurusan;
         });
 
+        $translationTitle = $data->translation()?->nama ?? $data->kode;
+        $translationDesc = $data->translation()?->deskripsi_singkat ?? '';
+
+        \Artesaos\SEOTools\Facades\SEOMeta::setTitle($translationTitle . ' | SMK Muhammadiyah Bligo');
+        \Artesaos\SEOTools\Facades\SEOMeta::setDescription($translationDesc);
+        \Artesaos\SEOTools\Facades\OpenGraph::setUrl(request()->url());
+        \Artesaos\SEOTools\Facades\OpenGraph::addProperty('type', 'website');
+
         return Inertia::render('Public/Jurusan/Show', [
             'jurusan' => new JurusanResource($data),
-            'seo'     => [
-                'title'       => ($data->translation()?->nama ?? $data->kode) . ' — SMK Muhammadiyah Bligo',
-                'description' => $data->translation()?->deskripsi_singkat ?? '',
-            ],
         ]);
     }
 }
