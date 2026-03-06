@@ -5,21 +5,32 @@
 
     RewriteEngine On
 
-    # Handle Authorization Header
+    # Teruskan Authorization header ke PHP (dibutuhkan Laravel Sanctum/API token)
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
-    # Handle X-XSRF-Token Header
-    RewriteCond %{HTTP:x-xsrf-token} .
-    RewriteRule .* - [E=HTTP_X_XSRF_TOKEN:%{HTTP:X-XSRF-Token}]
+    # Redirect index.php ke root (canonical URL)
+    RewriteCond %{THE_REQUEST} \s/+index\.php[?\s] [NC]
+    RewriteRule ^index\.php(/?)(.*)$ /$2 [R=301,L,NE]
 
-    # Redirect Trailing Slashes If Not A Folder...
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteCond %{REQUEST_URI} (.+)/$
-    RewriteRule ^ %1 [L,R=301]
-
-    # Send Requests To Front Controller...
+    # Arahkan semua request ke index.php (Laravel routing)
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
+</IfModule>
+
+# ─── Security: blok akses file berbahaya ─────────────────────────────────────
+<FilesMatch "(\.env|\.git|\.htpasswd|composer\.(json|lock)|package(-lock)?\.json)$">
+    Require all denied
+</FilesMatch>
+
+# ─── Charset default ────────────────────────────────────────────────────────
+AddDefaultCharset utf-8
+
+# ─── MIME types tambahan ─────────────────────────────────────────────────────
+<IfModule mod_mime.c>
+    AddType application/manifest+json   .webmanifest
+    AddType image/webp                  .webp
+    AddType image/avif                  .avif
+    AddType font/woff2                  .woff2
 </IfModule>
