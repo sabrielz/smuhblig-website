@@ -50,6 +50,8 @@ class BeritaController extends Controller
                 ];
             });
 
+            dd($articles);
+
         $categories = Category::with('translations')->get()->map(function ($category) {
             return [
                 'id' => $category->id,

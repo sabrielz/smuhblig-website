@@ -253,7 +253,7 @@ export default function Beranda({
                     style={{ y: heroImageY }}
                 >
                     <img
-                        src="https://picsum.photos/seed/smkmuhbligo/1920/1080"
+                        src="/smuhblig/smk.jpg"
                         alt="SMK Muhammadiyah Bligo"
                         className="w-full h-full object-cover scale-110"
                         loading="eager"

@@ -309,38 +309,27 @@ export default function Navbar() {
             >
                 <div className="container mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
 
-                    {/* ── Logo ── */}
+                    {/* ── Logo Image Placeholder ── */}
                     <Link
                         href="/"
                         id="navbar-logo"
-                        className="flex items-center gap-3 flex-shrink-0 group"
+                        className="flex items-center flex-shrink-0 group"
                     >
-                        <div
+                        {/*
+                          Container gambar logo responsif
+                          - h-9 (36px) s/d md:h-12 (48px)
+                          - width dijaga proporsional melalui 'w-auto' atau 'object-contain'
+                          Ganti value src di bawah dengan path gambar asli: misal '/images/logo-smk.png'
+                        */}
+                        <img
+                            src="/smuhblig/logo-smk.png"
+                            alt="Logo SMK Muhammadiyah Bligo"
                             className={cn(
-                                'flex h-9 w-9 items-center justify-center rounded-xl transition-all duration-300',
-                                isScrolled
-                                    ? 'bg-[#003f87]'
-                                    : 'bg-white/20 backdrop-blur-sm group-hover:bg-white/30',
+                                'h-9 w-auto md:h-11 object-contain transition-all duration-300',
+                                // Jika butuh efek cerah di navigasi gelap vs terang:
+                                // !isScrolled ? 'brightness-0 invert' : ''
                             )}
-                        >
-                            <GraduationCap
-                                className="h-5 w-5 text-white transition-colors duration-300"
-                                strokeWidth={1.5}
-                            />
-                        </div>
-                        <div className="hidden sm:block">
-                            <p
-                                className={cn(
-                                    'text-sm font-bold leading-none transition-colors duration-300',
-                                    isScrolled ? 'text-[#003f87]' : 'text-white',
-                                )}
-                            >
-                                SMK Muhammadiyah
-                            </p>
-                            <p className="text-xs font-medium leading-none mt-0.5 text-[#c9a84c] transition-colors duration-300">
-                                Bligo
-                            </p>
-                        </div>
+                        />
                     </Link>
 
                     {/* ── Desktop Nav Links ── */}
