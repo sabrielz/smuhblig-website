@@ -87,13 +87,12 @@ class BerandaController extends Controller
             ];
         });
 
-        // ── Statistik (hardcode, nanti dari pengaturan) ──────────────────────
-        $statistik = [
-            'totalSiswa'   => 800,
-            'totalLulusan' => 5000,
-            'pengajar'     => 60,
-            'tahunBerdiri' => 1985,
-        ];
+        $kontenHero = \App\Models\HalamanKonten::getSection('beranda', 'hero', $locale);
+        $kontenStatistik = \App\Models\HalamanKonten::getSection('beranda', 'statistik', $locale);
+        $kontenJurusan = \App\Models\HalamanKonten::getSection('beranda', 'jurusan', $locale);
+        $kontenBerita = \App\Models\HalamanKonten::getSection('beranda', 'berita', $locale);
+        $kontenCtaAkhir = \App\Models\HalamanKonten::getSection('beranda', 'cta_akhir', $locale);
+        $statistik = \App\Models\Statistik::active()->ordered()->get();
 
         $siteName = $data['pengaturan']['site_name'];
         $tagline = $data['pengaturan']['tagline'];
@@ -104,6 +103,11 @@ class BerandaController extends Controller
 
         return Inertia::render('Public/Beranda', array_merge($data, [
             'statistik' => $statistik,
+            'kontenHero' => $kontenHero,
+            'kontenStatistik' => $kontenStatistik,
+            'kontenJurusan' => $kontenJurusan,
+            'kontenBerita' => $kontenBerita,
+            'kontenCtaAkhir' => $kontenCtaAkhir,
         ]));
     }
 }

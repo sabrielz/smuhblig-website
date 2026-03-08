@@ -29,6 +29,8 @@ class KontakController extends Controller
             return Pengaturan::getAllSettings();
         });
 
+        $kontenInfo = \App\Models\HalamanKonten::getSection('kontak', 'info', app()->getLocale());
+
         \Artesaos\SEOTools\Facades\SEOMeta::setTitle('Kontak | SMK Muhammadiyah Bligo');
         \Artesaos\SEOTools\Facades\SEOMeta::setDescription('Hubungi SMK Muhammadiyah Bligo. Kami siap membantu pertanyaan Anda terkait PPDB, informasi sekolah, atau kerjasama.');
         \Artesaos\SEOTools\Facades\OpenGraph::setUrl(request()->url());
@@ -37,6 +39,7 @@ class KontakController extends Controller
         return Inertia::render('Public/Kontak', [
             'pengaturan' => $pengaturan,
             'tautan'     => $tautan,
+            'kontenInfo' => $kontenInfo,
         ]);
     }
 }

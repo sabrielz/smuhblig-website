@@ -23,8 +23,8 @@ class BeritaController extends Controller
             })
             ->when($request->filled('q'), function ($query) use ($request) {
                 // simple search by translation title
-                $query->whereHas('translation', function ($q) use ($request) {
-                    $q->where('title', 'ilike', '%' . $request->q . '%');
+                $query->whereHas('translations', function ($q) use ($request) {
+                    $q->where('title', 'like', '%' . $request->q . '%');
                 });
             })
             ->orderByDesc('published_at')
