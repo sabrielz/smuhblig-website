@@ -35,6 +35,10 @@ Route::get('/portal', function () {
     return Inertia::render('Portal');
 })->name('portal');
 
+use App\Http\Controllers\Public\AgendaPublikController;
+Route::get('/agenda', [AgendaPublikController::class, 'index'])->name('agenda.index');
+Route::get('/agenda/{agenda:slug}', [AgendaPublikController::class, 'show'])->name('agenda.show');
+
 Route::get('/sitemap.xml', function () {
     \Illuminate\Support\Facades\Artisan::call('sitemap:generate');
     return response()->file(public_path('sitemap.xml'));
@@ -112,6 +116,9 @@ Route::middleware(['auth', \App\Http\Middleware\EnsureHasCmsRole::class])
         Route::put('/pengumuman/{pengumuman}', [\App\Http\Controllers\Admin\PengumumanController::class, 'update'])->name('pengumuman.update');
         Route::delete('/pengumuman/{pengumuman}', [\App\Http\Controllers\Admin\PengumumanController::class, 'destroy'])->name('pengumuman.destroy');
 
+        // Agenda
+        Route::resource('agenda', \App\Http\Controllers\Admin\AgendaController::class)->except(['show']);
+
         // Jurusan (Edit 5 existing only)
         Route::get('/jurusan', [\App\Http\Controllers\Admin\JurusanController::class, 'index'])->name('jurusan.index');
         Route::get('/jurusan/{jurusan}/edit', [\App\Http\Controllers\Admin\JurusanController::class, 'edit'])->name('jurusan.edit');
@@ -123,6 +130,15 @@ Route::middleware(['auth', \App\Http\Middleware\EnsureHasCmsRole::class])
         // Pengaturan
         Route::get('/pengaturan', [\App\Http\Controllers\Admin\PengaturanController::class, 'index'])->name('pengaturan.index');
         Route::post('/pengaturan', [\App\Http\Controllers\Admin\PengaturanController::class, 'store'])->name('pengaturan.store');
+
+        // Statistik
+        Route::get('/statistik', [\App\Http\Controllers\Admin\StatistikController::class, 'index'])->name('statistik.index');
+        Route::put('/statistik/{statistik}', [\App\Http\Controllers\Admin\StatistikController::class, 'update'])->name('statistik.update');
+        Route::post('/statistik/reorder', [\App\Http\Controllers\Admin\StatistikController::class, 'reorder'])->name('statistik.reorder');
+
+        // Struktur Organisasi
+        Route::post('/struktur-organisasi/reorder', [\App\Http\Controllers\Admin\StrukturOrganisasiController::class, 'reorder'])->name('struktur-organisasi.reorder');
+        Route::resource('struktur-organisasi', \App\Http\Controllers\Admin\StrukturOrganisasiController::class)->except(['show']);
 
         // Pengguna CRUD - Hanya Admin
         Route::middleware(['role:admin'])->group(function () {
@@ -138,6 +154,12 @@ Route::middleware(['auth', \App\Http\Middleware\EnsureHasCmsRole::class])
             Route::post('/seo',       [\App\Http\Controllers\Admin\AiController::class, 'analyzeSeo'])->name('seo');
             Route::get('/jobs/{aiJob}/status', [\App\Http\Controllers\Admin\AiController::class, 'jobStatus'])->name('job.status');
         });
+
+        // Konten Halaman Publik (CMS teks dinamis)
+        Route::get('/konten/{halaman}/data', [\App\Http\Controllers\Admin\KontenHalamanController::class, 'show'])->name('konten.show');
+        Route::get('/konten/{halaman}', [\App\Http\Controllers\Admin\KontenHalamanController::class, 'edit'])->name('konten.edit');
+        Route::post('/konten/{halaman}', [\App\Http\Controllers\Admin\KontenHalamanController::class, 'update'])->name('konten.update');
+        Route::post('/konten/{halaman}/translate', [\App\Http\Controllers\Admin\KontenHalamanController::class, 'translateAll'])->name('konten.translate');
 
         // Media Upload (TipTap inline images)
         Route::post('/media/upload', [\App\Http\Controllers\Admin\MediaUploadController::class, 'upload'])->name('media.upload');

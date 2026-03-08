@@ -48,6 +48,10 @@ class HandleInertiaRequests extends Middleware
                 ] : null,
             ],
 
+            'notifikasi_count' => fn () => $request->user()
+                ? \App\Models\NotifikasiAdmin::untukUser($request->user()->id)->belumDibaca()->count()
+                : 0,
+
             'pengaturan' => fn () => Cache::remember('pengaturan.shared', 3600, function () {
                 if (!\Illuminate\Support\Facades\Schema::hasTable('pengaturan')) {
                     return $this->defaultPengaturan();

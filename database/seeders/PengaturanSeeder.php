@@ -44,6 +44,17 @@ class PengaturanSeeder extends Seeder
             ['key' => 'ai_provider', 'value' => 'anthropic', 'type' => 'string', 'label' => 'Provider AI', 'group' => 'ai'],
             ['key' => 'ai_translate_auto', 'value' => 'false', 'type' => 'boolean', 'label' => 'Auto Translate via AI', 'group' => 'ai'],
             ['key' => 'ai_monthly_budget', 'value' => '500000', 'type' => 'string', 'label' => 'Budget AI Bulanan (Rp)', 'group' => 'ai'],
+            // Group 'email'
+            ['key' => 'email_driver', 'value' => 'smtp', 'type' => 'string', 'label' => 'Email Driver', 'group' => 'email'],
+            ['key' => 'email_host', 'value' => '', 'type' => 'string', 'label' => 'SMTP Host', 'group' => 'email'],
+            ['key' => 'email_port', 'value' => '587', 'type' => 'string', 'label' => 'SMTP Port', 'group' => 'email'],
+            ['key' => 'email_username', 'value' => '', 'type' => 'string', 'label' => 'SMTP Username', 'group' => 'email'],
+            ['key' => 'email_password', 'value' => '', 'type' => 'string', 'label' => 'SMTP Password', 'group' => 'email'], // note: simpan encrypted
+            ['key' => 'email_from_name', 'value' => 'SMK Muhammadiyah Bligo', 'type' => 'string', 'label' => 'Nama Pengirim', 'group' => 'email'],
+            ['key' => 'email_from_address', 'value' => 'noreply@smkmuhbligo.sch.id', 'type' => 'string', 'label' => 'Email Pengirim', 'group' => 'email'],
+            ['key' => 'email_notif_artikel_pending', 'value' => 'true', 'type' => 'boolean', 'label' => 'Notif Email Artikel Pending', 'group' => 'email'],
+            ['key' => 'email_notif_pesan_baru', 'value' => 'true', 'type' => 'boolean', 'label' => 'Notif Email Pesan Kontak Baru', 'group' => 'email'],
+            ['key' => 'email_admin_address', 'value' => '', 'type' => 'string', 'label' => 'Email Tujuan Notifikasi Admin', 'group' => 'email'],
         ];
 
         foreach ($settings as $setting) {
