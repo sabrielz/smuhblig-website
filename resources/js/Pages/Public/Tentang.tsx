@@ -17,6 +17,11 @@ import {
 // ---------------------------------------------------------------------------
 interface TentangProps {
     pengaturan: Pengaturan;
+    kontenHero?: Record<string, string>;
+    kontenProfil?: Record<string, string>;
+    kontenVisiMisi?: Record<string, string>;
+    kontenNilai?: Record<string, string>;
+    strukturOrganisasi?: any;
 }
 
 // ---------------------------------------------------------------------------
@@ -43,7 +48,7 @@ const GeometricPattern = () => (
 // ---------------------------------------------------------------------------
 // Section 1 — Page Hero
 // ---------------------------------------------------------------------------
-const PageHero = () => (
+const PageHero = ({ kontenHero }: { kontenHero?: Record<string, string> }) => (
     <section className="relative bg-[#001f4d] overflow-hidden min-h-[360px] flex items-center">
         <GeometricPattern />
 
@@ -69,10 +74,8 @@ const PageHero = () => (
                 <motion.h1
                     variants={fadeInUp}
                     className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6"
-                >
-                    Sejarah, Visi,{' '}
-                    <span className="text-[#c9a84c]">dan Misi</span> Kami
-                </motion.h1>
+                    dangerouslySetInnerHTML={{ __html: kontenHero?.headline || 'Sejarah, Visi, <span className="text-[#c9a84c]">dan Misi</span> Kami' }}
+                />
 
                 {/* Breadcrumb */}
                 <motion.nav
@@ -103,7 +106,7 @@ const highlights = [
     'Didukung 5 jurusan keahlian yang relevan dengan kebutuhan industri modern.',
 ];
 
-const ProfilSection = () => (
+const ProfilSection = ({ kontenProfil }: { kontenProfil?: Record<string, string> }) => (
     <section className="py-20 lg:py-28 bg-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
@@ -118,20 +121,12 @@ const ProfilSection = () => (
                         PROFIL SEKOLAH
                     </p>
                     <h2 className="font-serif text-3xl lg:text-4xl font-bold text-[#003f87] mb-6 leading-tight">
-                        Mendidik Generasi Kompeten dan Berakhlak Mulia
+                        {kontenProfil?.headline || 'Mendidik Generasi Kompeten dan Berakhlak Mulia'}
                     </h2>
-                    <p className="text-[#636366] text-lg leading-relaxed mb-6">
-                        SMK Muhammadiyah Bligo adalah sekolah menengah kejuruan yang berada di bawah naungan
-                        Pimpinan Daerah Muhammadiyah Kabupaten Batang, Jawa Tengah. Didirikan dengan semangat
-                        amal usaha Muhammadiyah, kami berkomitmen menghadirkan pendidikan vokasional berkualitas
-                        yang memadukan kecakapan teknis dengan pembentukan karakter Islami.
-                    </p>
-                    <p className="text-[#636366] text-base leading-relaxed mb-8">
-                        Selama lebih dari empat dekade, SMK Muhammadiyah Bligo terus berkembang menjadi lembaga
-                        pendidikan yang dipercaya oleh masyarakat. Lulusan kami tersebar di berbagai perusahaan
-                        nasional dan mandiri dalam berwirausaha, membuktikan diri sebagai tenaga kerja yang
-                        adaptif, produktif, dan berintegritas tinggi.
-                    </p>
+                    <div
+                        className="prose prose-lg prose-p:text-[#636366] prose-p:leading-relaxed max-w-none mb-8"
+                        dangerouslySetInnerHTML={{ __html: kontenProfil?.konten || '' }}
+                    />
 
                     {/* Highlight 3 poin */}
                     <ul className="space-y-4">
@@ -209,7 +204,7 @@ const misiList = [
     'Menciptakan lingkungan belajar yang kondusif dan inovatif',
 ];
 
-const VisiMisiSection = () => (
+const VisiMisiSection = ({ kontenVisiMisi }: { kontenVisiMisi?: Record<string, string> }) => (
     <section className="py-20 lg:py-28 bg-[#f8f9fa]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
             {/* Header */}
@@ -255,9 +250,10 @@ const VisiMisiSection = () => (
                             <Star size={14} strokeWidth={1.5} className="text-[#c9a84c]" />
                             <span className="text-xs font-bold tracking-widest uppercase text-[#c9a84c]">VISI</span>
                         </div>
-                        <blockquote className="font-serif text-xl lg:text-2xl font-bold text-white leading-relaxed">
-                            "Menjadi SMK unggulan yang menghasilkan lulusan berakhlak mulia, kompeten, dan berdaya saing."
-                        </blockquote>
+                        <blockquote
+                            className="font-serif text-xl lg:text-2xl font-bold text-white leading-relaxed"
+                            dangerouslySetInnerHTML={{ __html: kontenVisiMisi?.visi || '"Menjadi SMK unggulan yang menghasilkan lulusan berakhlak mulia, kompeten, dan berdaya saing."' }}
+                        />
 
                         {/* Decorative gold line */}
                         <div className="mt-8 w-16 h-0.5 bg-[#c9a84c]" />
@@ -277,26 +273,14 @@ const VisiMisiSection = () => (
                         <span className="text-xs font-bold tracking-widest uppercase text-[#003f87]">MISI</span>
                     </div>
 
-                    <motion.ul
+                    <motion.div
                         variants={staggerContainer}
                         initial="hidden"
                         whileInView="visible"
                         viewport={{ once: true }}
-                        className="space-y-4"
-                    >
-                        {misiList.map((misi, i) => (
-                            <motion.li
-                                key={i}
-                                variants={fadeInUp}
-                                className="flex items-start gap-3"
-                            >
-                                <span className="flex-shrink-0 mt-0.5 w-6 h-6 rounded-full border-2 border-[#c9a84c] bg-[#c9a84c]/10 flex items-center justify-center">
-                                    <Check size={12} strokeWidth={2.5} className="text-[#c9a84c]" />
-                                </span>
-                                <span className="text-[#48484a] text-base leading-relaxed">{misi}</span>
-                            </motion.li>
-                        ))}
-                    </motion.ul>
+                        className="prose prose-p:text-[#48484a] prose-li:text-[#48484a] prose-ul:list-disc prose-ul:pl-5 space-y-2 max-w-none"
+                        dangerouslySetInnerHTML={{ __html: kontenVisiMisi?.misi || '' }}
+                    />
                 </motion.div>
             </div>
         </div>
@@ -324,7 +308,7 @@ const nilaiList = [
     },
 ];
 
-const NilaiSection = () => (
+const NilaiSection = ({ kontenNilai }: { kontenNilai?: Record<string, string> }) => (
     <section className="py-20 lg:py-28 bg-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
             <motion.div
@@ -338,7 +322,7 @@ const NilaiSection = () => (
                     LANDASAN GERAK
                 </p>
                 <h2 className="font-serif text-3xl lg:text-4xl font-bold text-[#003f87] mb-4">
-                    Nilai-Nilai Muhammadiyah
+                    {kontenNilai?.headline || 'Nilai-Nilai Muhammadiyah'}
                 </h2>
                 <p className="text-[#636366] text-lg max-w-2xl mx-auto">
                     Setiap langkah kami dilandasi oleh tiga pilar utama yang menjadi DNA gerakan Muhammadiyah.
@@ -374,42 +358,76 @@ const NilaiSection = () => (
     </section>
 );
 
-// ---------------------------------------------------------------------------
-// Section 5 — Struktur Organisasi
-// ---------------------------------------------------------------------------
-const strukturData = {
-    kepalaSekolah: { nama: 'Nama Kepala Sekolah, S.Pd., M.M.', jabatan: 'Kepala Sekolah' },
-    wakasek: [
-        { nama: 'Nama Wakasek', jabatan: 'Wakasek Kurikulum' },
-        { nama: 'Nama Wakasek', jabatan: 'Wakasek Kesiswaan' },
-        { nama: 'Nama Wakasek', jabatan: 'Wakasek Sarana' },
-        { nama: 'Nama Wakasek', jabatan: 'Wakasek Humas' },
-    ],
-    jurusan: [
-        { kode: 'AKL', nama: 'Akuntansi & Keuangan Lembaga' },
-        { kode: 'FKK', nama: 'Farmasetika & Klinis Komunitas' },
-        { kode: 'TKJ', nama: 'Teknik Komputer & Jaringan' },
-        { kode: 'TKR', nama: 'Teknik Kendaraan Ringan' },
-        { kode: 'TSM', nama: 'Teknik Sepeda Motor' },
-    ],
+const OrgNodeDesktop = ({ node, isRoot = false }: { node: any; isRoot?: boolean }) => {
+    if (!node) return null;
+
+    // Untuk tablet (md-lg), sembunyikan level >= 2
+    // Class names diatur dengan tailwind: block di lg, hidden di md jika level >= 2
+    const isLevel2Plus = parseInt(node.level) >= 2;
+    const hideOnTabletClass = isLevel2Plus ? 'md:hidden lg:flex' : 'md:flex';
+
+    return (
+        <div className={`flex flex-col items-center ${!isRoot ? 'pt-6 relative' : ''} ${hideOnTabletClass}`}>
+            {!isRoot && (
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-6 bg-[#c9a84c]/40 hidden md:block" />
+            )}
+
+            <div className={`rounded-2xl px-5 py-4 w-60 xl:w-64 text-center border transition-all duration-200 relative z-10 ${
+                node.level === 0 || node.level === '0'
+                    ? 'bg-[#003f87] border-[#003f87] text-white shadow-lg shadow-[#003f87]/20'
+                    : 'bg-white border-[#e5e5ea] text-[#111111] hover:border-[#c9a84c]/50 hover:shadow-md'
+            }`}>
+                {node.foto_url && (
+                    <img src={node.foto_url} alt={node.nama} className="w-16 h-16 rounded-full mx-auto mb-3 object-cover border-2 border-white/20 shadow-sm" />
+                )}
+                <p className={`text-[11px] font-semibold tracking-wide uppercase mb-1 ${node.level === 0 || node.level === '0' ? 'text-[#c9a84c]' : 'text-[#c9a84c]'}`}>
+                    {node.jabatan}
+                </p>
+                <p className={`text-sm font-medium leading-snug ${node.level === 0 || node.level === '0' ? 'text-white' : 'text-[#48484a]'}`}>
+                    {node.nama}
+                </p>
+            </div>
+
+            {node.children && node.children.length > 0 && (
+                <div className={`hidden justify-center flex-wrap gap-4 relative pt-2 ${hideOnTabletClass}`}>
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-6 bg-[#c9a84c]/40 hidden md:block" />
+                    <div className="flex gap-4 lg:gap-6 w-full justify-center relative pt-6">
+                        {node.children.length > 1 && (
+                            <div className="absolute top-6 h-px bg-[#c9a84c]/30 z-0 hidden md:block" style={{ left: '10%', right: '10%' }} />
+                        )}
+                        {node.children.map((child: any) => (
+                            <OrgNodeDesktop key={child.id || child.jabatan} node={child} />
+                        ))}
+                    </div>
+                </div>
+            )}
+        </div>
+    );
 };
 
-const OrgCard = ({ nama, jabatan, accent = false }: { nama: string; jabatan: string; accent?: boolean }) => (
-    <div
-        className={`rounded-2xl px-5 py-4 text-center border transition-all duration-200 ${
-            accent
-                ? 'bg-[#003f87] border-[#003f87] text-white shadow-lg shadow-[#003f87]/20'
-                : 'bg-white border-[#e5e5ea] text-[#111111] hover:border-[#c9a84c]/50 hover:shadow-md'
-        }`}
-    >
-        <p className={`text-xs font-semibold tracking-wide uppercase mb-1 ${accent ? 'text-[#c9a84c]' : 'text-[#c9a84c]'}`}>
-            {jabatan}
-        </p>
-        <p className={`text-sm font-medium leading-snug ${accent ? 'text-white' : 'text-[#48484a]'}`}>{nama}</p>
-    </div>
-);
+const OrgNodeMobile = ({ node }: { node: any }) => {
+    if (!node) return null;
+    const levelInt = parseInt(node.level || 0);
+    return (
+        <div className={`flex flex-col text-left py-2 ${levelInt > 0 ? 'border-l-2 border-[#c9a84c]/30 pl-4 mt-2' : ''} w-full`}>
+            {node.foto_url && (
+                <img src={node.foto_url} alt={node.nama} className="w-10 h-10 rounded-full mb-2 object-cover" />
+            )}
+            <p className="text-[10px] font-semibold tracking-wider uppercase text-[#c9a84c] mb-0.5">{node.jabatan}</p>
+            <p className="text-sm font-medium leading-snug text-[#48484a]">{node.nama}</p>
 
-const StrukturSection = () => (
+            {node.children && node.children.length > 0 && (
+                <div className="mt-1 flex flex-col gap-1 w-full pl-2">
+                    {node.children.map((child: any) => (
+                        <OrgNodeMobile key={child.id || child.jabatan} node={child} />
+                    ))}
+                </div>
+            )}
+        </div>
+    );
+};
+
+const StrukturSection = ({ strukturOrganisasi }: { strukturOrganisasi?: any }) => (
     <section className="py-20 lg:py-28 bg-[#f8f9fa]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
             <motion.div
@@ -432,47 +450,22 @@ const StrukturSection = () => (
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
-                className="flex flex-col items-center gap-0"
+                className="w-full overflow-x-auto pb-8 flex justify-center"
             >
-                {/* Level 1 — Kepala Sekolah */}
-                <div className="w-full max-w-xs">
-                    <OrgCard
-                        nama={strukturData.kepalaSekolah.nama}
-                        jabatan={strukturData.kepalaSekolah.jabatan}
-                        accent
-                    />
-                </div>
-
-                {/* Connector */}
-                <div className="w-px h-8 bg-[#c9a84c]/40" />
-
-                {/* Level 2 — Wakasek */}
-                <div className="relative w-full">
-                    {/* Horizontal connector line */}
-                    <div className="hidden md:block absolute top-[50%] left-[12.5%] right-[12.5%] h-px bg-[#c9a84c]/30 -translate-y-1/2" />
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 relative z-10">
-                        {strukturData.wakasek.map((w, i) => (
-                            <OrgCard key={i} nama={w.nama} jabatan={w.jabatan} />
-                        ))}
+                {strukturOrganisasi ? (
+                    <>
+                        <div className="hidden md:flex flex-col items-center min-w-max">
+                            <OrgNodeDesktop node={strukturOrganisasi} isRoot />
+                        </div>
+                        <div className="flex md:hidden flex-col items-start w-full bg-white rounded-2xl p-6 shadow-sm border border-[#e5e5ea]">
+                            <OrgNodeMobile node={strukturOrganisasi} />
+                        </div>
+                    </>
+                ) : (
+                    <div className="text-center py-10 text-[#636366]">
+                        <p>Struktur organisasi belum dikonfigurasi.</p>
                     </div>
-                </div>
-
-                {/* Connector */}
-                <div className="w-px h-8 bg-[#c9a84c]/40" />
-
-                {/* Level 3 — Ketua Jurusan */}
-                <div className="relative w-full">
-                    <div className="hidden md:block absolute top-[50%] left-[10%] right-[10%] h-px bg-[#c9a84c]/20 -translate-y-1/2" />
-                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 relative z-10">
-                        {strukturData.jurusan.map((j, i) => (
-                            <OrgCard
-                                key={i}
-                                jabatan={`Ketua Jurusan ${j.kode}`}
-                                nama={j.nama}
-                            />
-                        ))}
-                    </div>
-                </div>
+                )}
             </motion.div>
         </div>
     </section>
@@ -481,16 +474,23 @@ const StrukturSection = () => (
 // ---------------------------------------------------------------------------
 // Page Component
 // ---------------------------------------------------------------------------
-export default function Tentang({ pengaturan }: TentangProps) {
+export default function Tentang({
+    pengaturan,
+    kontenHero,
+    kontenProfil,
+    kontenVisiMisi,
+    kontenNilai,
+    strukturOrganisasi
+}: TentangProps) {
     const { locale } = usePage<SharedProps>().props;
 
     return (
         <PublicLayout>
-            <PageHero />
-            <ProfilSection />
-            <VisiMisiSection />
-            <NilaiSection />
-            <StrukturSection />
+            <PageHero kontenHero={kontenHero} />
+            <ProfilSection kontenProfil={kontenProfil} />
+            <VisiMisiSection kontenVisiMisi={kontenVisiMisi} />
+            <NilaiSection kontenNilai={kontenNilai} />
+            <StrukturSection strukturOrganisasi={strukturOrganisasi} />
         </PublicLayout>
     );
 }

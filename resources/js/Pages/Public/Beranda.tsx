@@ -33,11 +33,12 @@ interface ArticleItem {
     author: { name: string; avatar: string };
 }
 
-interface Statistik {
-    totalSiswa: number;
-    totalLulusan: number;
-    pengajar: number;
-    tahunBerdiri: number;
+interface StatItemDB {
+    key: string;
+    label: string;
+    nilai: number;
+    suffix: string | null;
+    icon_name: string;
 }
 
 interface Pengaturan {
@@ -49,8 +50,13 @@ interface Pengaturan {
 interface BerandaProps {
     jurusan?: JurusanItem[];
     beritaTerbaru?: ArticleItem[];
-    statistik?: Statistik;
+    statistik?: StatItemDB[];
     pengaturan?: Pengaturan;
+    kontenHero?: Record<string, string>;
+    kontenStatistik?: Record<string, string>;
+    kontenJurusan?: Record<string, string>;
+    kontenBerita?: Record<string, string>;
+    kontenCtaAkhir?: Record<string, string>;
 }
 
 // ─── Animated Counter ─────────────────────────────────────────────────────────
@@ -136,26 +142,28 @@ const GeometricPattern = () => (
     </svg>
 );
 
-// ─── Stat Item ────────────────────────────────────────────────────────────────
-
 interface StatItemProps {
     value: number;
-    suffix?: string;
+    suffix?: string | null;
     label: string;
-    icon: React.ReactNode;
+    icon_name?: string;
 }
 
-function StatItem({ value, suffix = '+', label, icon }: StatItemProps) {
+import * as icons from 'lucide-react';
+
+function StatItem({ value, suffix = '+', label, icon_name = 'Circle' }: StatItemProps) {
+    const Icon = (icons as any)[icon_name] || icons.Circle;
+
     return (
         <motion.div
             variants={scaleIn}
             className="flex flex-col items-center text-center px-6 py-8"
         >
             <div className="mb-4 w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center border border-white/20">
-                {icon}
+                <Icon className="w-6 h-6 text-[#c9a84c]" strokeWidth={1.5} />
             </div>
             <div className="font-serif text-5xl lg:text-6xl font-bold text-white tracking-tight mb-2" style={{ fontFamily: 'Playfair Display, Georgia, serif' }}>
-                <AnimatedCounter value={value} suffix={suffix} />
+                <AnimatedCounter value={value} suffix={suffix || ''} />
             </div>
             <p className="text-white/70 text-sm font-medium uppercase tracking-widest">
                 {label}
@@ -225,14 +233,18 @@ function SectionDivider() {
 export default function Beranda({
     jurusan = [],
     beritaTerbaru = [],
-    statistik = { totalSiswa: 0, totalLulusan: 0, pengajar: 0, tahunBerdiri: 2003 },
+    statistik = [],
+    kontenHero = {},
+    kontenStatistik = {},
+    kontenJurusan = {},
+    kontenBerita = {},
+    kontenCtaAkhir = {},
 }: BerandaProps) {
     const { pengaturan } = usePage<SharedProps>().props;
 
     const heroRef = useRef<HTMLDivElement>(null);
     const { scrollY } = useScroll();
     const heroImageY = useTransform(scrollY, [0, 600], [0, -120]);
-    const tahunPengabdian = new Date().getFullYear() - statistik.tahunBerdiri;
 
     return (
         <PublicLayout>
@@ -287,7 +299,7 @@ export default function Beranda({
                                 className="font-mono text-xs tracking-[0.3em] uppercase"
                                 style={{ color: '#c9a84c' }}
                             >
-                                SMK MUHAMMADIYAH BLIGO
+                                {kontenHero?.label || ''}
                             </span>
                         </motion.div>
 
@@ -301,33 +313,28 @@ export default function Beranda({
                                 lineHeight: '1.1',
                                 letterSpacing: '-0.02em',
                             }}
-                        >
-                            Mencetak Generasi<br />
-                            <span style={{ color: '#c9a84c' }}>Unggul</span> dan<br />
-                            Berakhlak Mulia
-                        </motion.h1>
+                            dangerouslySetInnerHTML={{ __html: kontenHero?.headline || '' }}
+                        />
 
                         {/* Subheadline */}
                         <motion.p
                             variants={fadeInUp}
                             className="text-lg max-w-lg mb-10 leading-relaxed"
                             style={{ color: 'rgba(255,255,255,0.80)' }}
-                        >
-                            Sekolah Menengah Kejuruan berbasis nilai Islam, menyiapkan lulusan siap
-                            kerja, berkarakter, dan berdaya saing global.
-                        </motion.p>
+                            dangerouslySetInnerHTML={{ __html: kontenHero?.subheadline || '' }}
+                        />
 
                         {/* CTA Row */}
                         <motion.div variants={fadeInUp} className="flex flex-wrap items-center gap-4">
                             <a
-                                href={pengaturan.spmb_url || '#'}
+                                href={pengaturan?.spmb_url || '#'}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 id="hero-cta-daftar"
                                 className="inline-flex items-center gap-2 font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 px-8 py-4 text-lg rounded-xl text-white hover:opacity-90 focus:ring-[#c9a84c]/50 shadow-lg hover:shadow-xl"
                                 style={{ background: 'linear-gradient(135deg, #c9a84c 0%, #a8821f 100%)' }}
                             >
-                                Daftar Sekarang
+                                {kontenHero?.cta_primary || ''}
                                 <ArrowRight className="w-5 h-5" strokeWidth={1.5} />
                             </a>
 
@@ -336,7 +343,7 @@ export default function Beranda({
                                 id="hero-cta-jurusan"
                                 className="inline-flex items-center gap-2 font-semibold transition-all duration-200 px-8 py-4 text-lg rounded-xl text-white border-2 border-white/60 hover:bg-white/10 hover:border-white focus:outline-none focus:ring-2 focus:ring-white/50"
                             >
-                                Lihat Jurusan
+                                {kontenHero?.cta_secondary || ''}
                             </Link>
                         </motion.div>
 
@@ -346,7 +353,7 @@ export default function Beranda({
                             className="mt-12 flex items-center gap-4"
                         >
                             <div className="h-px w-12 bg-[#c9a84c]/60" />
-                            <span className="text-xs text-white/40 tracking-widest uppercase">Berdiri sejak {statistik.tahunBerdiri}</span>
+                            <span className="text-xs text-white/40 tracking-widest uppercase" dangerouslySetInnerHTML={{ __html: kontenHero?.footnote || '' }} />
                         </motion.div>
                     </motion.div>
                 </div>
@@ -391,30 +398,15 @@ export default function Beranda({
                             viewport={{ once: true, margin: '-80px' }}
                             className="relative grid grid-cols-2 lg:grid-cols-4 gap-0 divide-x divide-white/10"
                         >
-                            <StatItem
-                                value={statistik.totalSiswa}
-                                suffix="+"
-                                label="Siswa Aktif"
-                                icon={<Users className="w-6 h-6 text-[#c9a84c]" strokeWidth={1.5} />}
-                            />
-                            <StatItem
-                                value={statistik.totalLulusan}
-                                suffix="+"
-                                label="Alumni Berprestasi"
-                                icon={<GraduationCap className="w-6 h-6 text-[#c9a84c]" strokeWidth={1.5} />}
-                            />
-                            <StatItem
-                                value={statistik.pengajar}
-                                suffix="+"
-                                label="Tenaga Pengajar"
-                                icon={<BookOpen className="w-6 h-6 text-[#c9a84c]" strokeWidth={1.5} />}
-                            />
-                            <StatItem
-                                value={tahunPengabdian}
-                                suffix=""
-                                label="Tahun Pengabdian"
-                                icon={<Calendar className="w-6 h-6 text-[#c9a84c]" strokeWidth={1.5} />}
-                            />
+                            {statistik.map(stat => (
+                                <StatItem
+                                    key={stat.key}
+                                    value={stat.nilai}
+                                    suffix={stat.suffix}
+                                    label={stat.label}
+                                    icon_name={stat.icon_name}
+                                />
+                            ))}
                         </motion.div>
                     </div>
                 </div>
@@ -438,9 +430,9 @@ export default function Beranda({
             >
                 <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-16">
                     <SectionHeader
-                        label="PROGRAM KEAHLIAN"
-                        title="Lima Jurusan, Satu Visi"
-                        subtitle="Temukan program keahlian yang sesuai dengan bakat dan passion Anda. Setiap jurusan dirancang untuk menghasilkan lulusan yang kompeten dan siap bersaing."
+                        label={kontenJurusan?.label || ''}
+                        title={kontenJurusan?.headline || ''}
+                        subtitle={kontenJurusan?.subheadline || ''}
                     />
 
                     {/* Grid 3+2 layout */}
@@ -512,9 +504,9 @@ export default function Beranda({
             >
                 <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-16">
                     <SectionHeader
-                        label="BERITA & INFORMASI"
-                        title="Kabar Terkini dari SMK Muhammadiyah Bligo"
-                        subtitle="Ikuti perkembangan terbaru, prestasi, dan kegiatan sekolah kami."
+                        label={kontenBerita?.label || ''}
+                        title={kontenBerita?.headline || ''}
+                        subtitle={kontenBerita?.subheadline || ''}
                     />
 
                     {beritaTerbaru.length > 0 ? (
@@ -599,7 +591,7 @@ export default function Beranda({
                             className="inline-block font-mono text-xs tracking-[0.3em] uppercase mb-6"
                             style={{ color: '#c9a84c' }}
                         >
-                            PENERIMAAN PESERTA DIDIK BARU
+                            {kontenCtaAkhir?.label || ''}
                         </motion.span>
 
                         {/* Headline */}
@@ -612,32 +604,28 @@ export default function Beranda({
                                 lineHeight: '1.15',
                                 letterSpacing: '-0.01em',
                             }}
-                        >
-                            Siap Bergabung<br />
-                            <span style={{ color: '#c9a84c' }}>Bersama Kami?</span>
-                        </motion.h2>
+                            dangerouslySetInnerHTML={{ __html: kontenCtaAkhir?.headline || '' }}
+                        />
 
                         {/* Subheadline */}
                         <motion.p
                             variants={fadeInUp}
                             className="text-lg max-w-2xl mx-auto mb-12 leading-relaxed"
                             style={{ color: 'rgba(255,255,255,0.75)' }}
-                        >
-                            Daftarkan putra-putri Anda sekarang dan jadilah bagian dari keluarga besar
-                            SMK Muhammadiyah Bligo. Masa depan gemilang dimulai dari sini.
-                        </motion.p>
+                            dangerouslySetInnerHTML={{ __html: kontenCtaAkhir?.subheadline || '' }}
+                        />
 
                         {/* CTA Buttons */}
                         <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row items-center justify-center gap-4">
                             <a
-                                href={pengaturan.spmb_url || '#'}
+                                href={pengaturan?.spmb_url || '#'}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 id="cta-mulai-pendaftaran"
                                 className="inline-flex items-center gap-3 font-semibold transition-all duration-200 px-10 py-5 text-xl rounded-2xl text-white shadow-2xl hover:shadow-[#c9a84c]/30 hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-[#c9a84c]/50 focus:ring-offset-2 focus:ring-offset-transparent"
                                 style={{ background: 'linear-gradient(135deg, #c9a84c 0%, #a8821f 100%)' }}
                             >
-                                Mulai Pendaftaran
+                                {kontenCtaAkhir?.cta_primary || 'Mulai Pendaftaran'}
                                 <ArrowRight className="w-6 h-6" strokeWidth={1.5} />
                             </a>
 
@@ -647,7 +635,7 @@ export default function Beranda({
                                 className="inline-flex items-center gap-2 font-semibold transition-all duration-200 px-10 py-5 text-xl rounded-2xl text-white border-2 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/50"
                                 style={{ borderColor: 'rgba(255,255,255,0.45)' }}
                             >
-                                Pelajari Lebih Lanjut
+                                {kontenCtaAkhir?.cta_secondary || 'Pelajari Lebih Lanjut'}
                             </Link>
                         </motion.div>
 

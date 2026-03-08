@@ -32,6 +32,7 @@ import {
 interface KontakProps {
     pengaturan: Pengaturan;
     tautan: Tautan[];
+    kontenInfo?: Record<string, string>;
 }
 
 // ---------------------------------------------------------------------------
@@ -143,7 +144,7 @@ const SosmedLink = ({ href, icon, label }: SosmedLinkProps) => {
     );
 };
 
-const InfoDanPeta = ({ pengaturan }: { pengaturan: Pengaturan }) => (
+const InfoDanPeta = ({ pengaturan, kontenInfo }: { pengaturan: Pengaturan; kontenInfo?: Record<string, string> }) => (
     <section className="py-20 lg:py-28 bg-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-start">
@@ -199,11 +200,17 @@ const InfoDanPeta = ({ pengaturan }: { pengaturan: Pengaturan }) => (
                             icon={<Clock size={18} strokeWidth={1.5} className="text-[#003f87]" />}
                             label="Jam Operasional"
                             value={
-                                <div className="space-y-0.5">
-                                    <p>Senin – Jumat: 07.00 – 15.30 WIB</p>
-                                    <p>Sabtu: 07.00 – 12.00 WIB</p>
-                                    <p className="text-[#8e8e93]">Minggu & Hari Libur: Tutup</p>
-                                </div>
+                                kontenInfo?.jam_operasional ? (
+                                    <div className="whitespace-pre-line text-[#48484a] text-sm leading-relaxed">
+                                        {kontenInfo.jam_operasional}
+                                    </div>
+                                ) : (
+                                    <div className="space-y-0.5">
+                                        <p>Senin – Jumat: 07.00 – 15.30 WIB</p>
+                                        <p>Sabtu: 07.00 – 12.00 WIB</p>
+                                        <p className="text-[#8e8e93]">Minggu & Hari Libur: Tutup</p>
+                                    </div>
+                                )
                             }
                         />
                     </div>
@@ -246,23 +253,34 @@ const InfoDanPeta = ({ pengaturan }: { pengaturan: Pengaturan }) => (
                     viewport={{ once: true }}
                     className="relative rounded-3xl overflow-hidden shadow-2xl aspect-[4/3] bg-[#f8f9fa] border border-[#e5e5ea]"
                 >
-                    {/*
-                        Koordinat SMK Muhammadiyah Bligo — Batang, Jawa Tengah
-                        Approximately: -6.9342° S, 109.9003° E
-                        Placeholder iframe — ganti src dengan embed Google Maps asli saat production
-                    */}
-                    <iframe
-                        id="google-maps-embed"
-                        title="Lokasi SMK Muhammadiyah Bligo"
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7926.231!2d109.9003!3d-6.9342!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6fe6e6e6e6e6e7%3A0x0!2sSMK+Muhammadiyah+Bligo!5e0!3m2!1sid!2sid!4v1709000000000!5m2!1sid!2sid"
-                        width="100%"
-                        height="100%"
-                        style={{ border: 0 }}
-                        allowFullScreen
-                        loading="lazy"
-                        referrerPolicy="no-referrer-when-downgrade"
-                        className="w-full h-full"
-                    />
+                    {kontenInfo?.maps_embed_url ? (
+                        <iframe
+                            id="google-maps-embed"
+                            title="Lokasi SMK Muhammadiyah Bligo"
+                            src={kontenInfo.maps_embed_url}
+                            width="100%"
+                            height="100%"
+                            style={{ border: 0 }}
+                            allowFullScreen
+                            loading="lazy"
+                            referrerPolicy="no-referrer-when-downgrade"
+                            className="w-full h-full"
+                        />
+                    ) : (
+                        <div className="w-full h-full flex flex-col items-center justify-center bg-[#f8f9fa] border border-[#e5e5ea] min-h-[300px]">
+                            <MapPin size={48} strokeWidth={1.5} className="text-[#003f87] mb-4 opacity-50" />
+                            <p className="text-[#636366] text-center px-4 mb-4">Peta belum dikonfigurasi</p>
+                            <a
+                                href={`https://maps.google.com/?q=${encodeURIComponent(pengaturan?.site_address || 'SMK Muhammadiyah Bligo')}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-2 text-sm font-semibold text-[#003f87] hover:underline"
+                            >
+                                Buka di Google Maps
+                                <ExternalLink size={14} />
+                            </a>
+                        </div>
+                    )}
 
                     {/* Overlay badge */}
                     <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm rounded-xl px-4 py-2 shadow-md flex items-center gap-2">
@@ -380,13 +398,13 @@ const FallbackTautan: Tautan[] = [
 // ---------------------------------------------------------------------------
 // Page Component
 // ---------------------------------------------------------------------------
-export default function Kontak({ pengaturan, tautan }: KontakProps) {
+export default function Kontak({ pengaturan, tautan, kontenInfo }: KontakProps) {
     const displayTautan = tautan && tautan.length > 0 ? tautan : FallbackTautan;
 
     return (
         <PublicLayout>
             <PageHero />
-            <InfoDanPeta pengaturan={pengaturan} />
+            <InfoDanPeta pengaturan={pengaturan} kontenInfo={kontenInfo} />
             <TautanSection tautan={displayTautan} />
         </PublicLayout>
     );

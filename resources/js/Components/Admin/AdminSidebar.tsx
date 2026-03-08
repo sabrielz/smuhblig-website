@@ -1,8 +1,23 @@
-import { Link, usePage } from '@inertiajs/react';
-import { LayoutDashboard, FileText, Image as ImageIcon, Bell, BookOpen, Link as LinkIcon, Users, Settings, LogOut, X } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { SharedProps } from '@/types';
-import { useEffect } from 'react';
+import { Link, usePage } from "@inertiajs/react";
+import {
+    LayoutDashboard,
+    FileText,
+    Image as ImageIcon,
+    Bell,
+    BookOpen,
+    Link as LinkIcon,
+    Users,
+    Settings,
+    LogOut,
+    X,
+    Network,
+    BarChart3,
+    CalendarDays,
+    PencilLine,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+import { SharedProps } from "@/types";
+import { useEffect } from "react";
 
 interface SidebarProps {
     isOpen: boolean;
@@ -21,12 +36,12 @@ export default function AdminSidebar({ isOpen, setIsOpen }: SidebarProps) {
     // Mencegah scroll body saat menu mobile terbuka
     useEffect(() => {
         if (isOpen) {
-            document.body.style.overflow = 'hidden';
+            document.body.style.overflow = "hidden";
         } else {
-            document.body.style.overflow = '';
+            document.body.style.overflow = "";
         }
         return () => {
-            document.body.style.overflow = '';
+            document.body.style.overflow = "";
         };
     }, [isOpen]);
 
@@ -34,8 +49,12 @@ export default function AdminSidebar({ isOpen, setIsOpen }: SidebarProps) {
         {
             label: null,
             items: [
-                { label: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
-            ]
+                {
+                    label: "Dashboard",
+                    href: "/admin/dashboard",
+                    icon: LayoutDashboard,
+                },
+            ],
         },
         {
             label: 'Konten',
@@ -43,26 +62,50 @@ export default function AdminSidebar({ isOpen, setIsOpen }: SidebarProps) {
                 { label: 'Artikel', href: '/admin/artikel', icon: FileText },
                 { label: 'Galeri', href: '/admin/galeri', icon: ImageIcon },
                 { label: 'Pengumuman', href: '/admin/pengumuman', icon: Bell },
-            ]
+                { label: 'Konten Halaman', href: '/admin/konten/beranda', icon: PencilLine },
+            ],
         },
         {
-            label: 'Sekolah',
+            label: "Sekolah",
             items: [
-                { label: 'Jurusan', href: '/admin/jurusan', icon: BookOpen },
-                { label: 'Tautan', href: '/admin/tautan', icon: LinkIcon },
-            ]
+                { label: "Jurusan", href: "/admin/jurusan", icon: BookOpen },
+                { label: "Struktur Organisasi", href: "/admin/struktur-organisasi", icon: Network },
+                { label: "Statistik Beranda", href: "/admin/statistik", icon: BarChart3 },
+                { label: "Agenda", href: "/admin/agenda", icon: CalendarDays },
+                { label: "Tautan", href: "/admin/tautan", icon: LinkIcon },
+            ],
         },
-        ...(user?.is_admin ? [{
-            label: 'Sistem',
-            items: [
-                { label: 'Pengguna', href: '/admin/pengguna', icon: Users },
-                { label: 'Pengaturan', href: '/admin/pengaturan', icon: Settings },
-            ]
-        }] : []),
+        ...(user?.is_admin
+            ? [
+                  {
+                      label: "Sistem",
+                      items: [
+                          {
+                              label: "Pengguna",
+                              href: "/admin/pengguna",
+                              icon: Users,
+                          },
+                          {
+                              label: "Pengaturan",
+                              href: "/admin/pengaturan",
+                              icon: Settings,
+                          },
+                      ],
+                  },
+              ]
+            : []),
     ];
 
     const isActive = (href: string) => {
-        if (href === '/admin/dashboard' && (url === '/admin' || url === '/admin/dashboard')) return true;
+        if (
+            href === '/admin/dashboard' &&
+            (url === '/admin' || url === '/admin/dashboard')
+        )
+            return true;
+        // Khusus: Konten Halaman — semua /admin/konten/* dianggap aktif
+        if (href === '/admin/konten/beranda' && url.startsWith('/admin/konten/')) {
+            return true;
+        }
         return url.startsWith(href);
     };
 
@@ -72,7 +115,7 @@ export default function AdminSidebar({ isOpen, setIsOpen }: SidebarProps) {
             <div
                 className={cn(
                     "fixed inset-0 bg-black/50 z-40 lg:hidden transition-opacity duration-300 ease-in-out",
-                    isOpen ? "opacity-100 visible" : "opacity-0 invisible"
+                    isOpen ? "opacity-100 visible" : "opacity-0 invisible",
                 )}
                 onClick={() => setIsOpen(false)}
                 aria-hidden="true"
@@ -81,17 +124,28 @@ export default function AdminSidebar({ isOpen, setIsOpen }: SidebarProps) {
             <aside
                 className={cn(
                     "w-[240px] fixed inset-y-0 left-0 bg-primary-900 flex flex-col pt-6 pb-4 z-50 transition-transform duration-300 ease-in-out will-change-transform",
-                    isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+                    isOpen
+                        ? "translate-x-0"
+                        : "-translate-x-full lg:translate-x-0",
                 )}
             >
                 <div className="px-6 mb-6 flex items-center justify-between">
-                    <Link href="/admin/dashboard" className="flex items-center gap-3">
+                    <Link
+                        href="/admin/dashboard"
+                        className="flex items-center gap-3"
+                    >
                         <div className="w-8 h-8 rounded-md bg-white/10 flex items-center justify-center shrink-0">
-                            <span className="text-white font-bold text-lg leading-none">M</span>
+                            <span className="text-white font-bold text-lg leading-none">
+                                M
+                            </span>
                         </div>
                         <div className="flex flex-col">
-                            <span className="text-white font-bold text-sm leading-tight tracking-wide">CMS Admin</span>
-                            <span className="text-white/60 text-xs">SMK Muh Bligo</span>
+                            <span className="text-white font-bold text-sm leading-tight tracking-wide">
+                                CMS Admin
+                            </span>
+                            <span className="text-white/60 text-xs">
+                                SMK Muh Bligo
+                            </span>
                         </div>
                     </Link>
 
@@ -130,10 +184,18 @@ export default function AdminSidebar({ isOpen, setIsOpen }: SidebarProps) {
                                                 "text-sm font-medium",
                                                 active
                                                     ? "text-white bg-white/20 border-l-[3px] border-gold-500"
-                                                    : "text-white/70 hover:text-white hover:bg-white/10 border-l-[3px] border-transparent"
+                                                    : "text-white/70 hover:text-white hover:bg-white/10 border-l-[3px] border-transparent",
                                             )}
                                         >
-                                            <Icon className={cn("w-4 h-4", active ? "text-gold-500" : "opacity-70")} strokeWidth={1.5} />
+                                            <Icon
+                                                className={cn(
+                                                    "w-4 h-4",
+                                                    active
+                                                        ? "text-gold-500"
+                                                        : "opacity-70",
+                                                )}
+                                                strokeWidth={1.5}
+                                            />
                                             {item.label}
                                         </Link>
                                     );
@@ -148,17 +210,25 @@ export default function AdminSidebar({ isOpen, setIsOpen }: SidebarProps) {
                     <div className="flex items-center justify-between px-2 py-2">
                         <div className="flex items-center gap-3 overflow-hidden">
                             {user?.avatar_url ? (
-                                <img src={user.avatar_url} alt={user.name} className="w-8 h-8 rounded-full object-cover shrink-0" />
+                                <img
+                                    src={user.avatar_url}
+                                    alt={user.name}
+                                    className="w-8 h-8 rounded-full object-cover shrink-0"
+                                />
                             ) : (
                                 <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center shrink-0">
                                     <span className="text-white text-xs font-medium">
-                                        {user?.name?.charAt(0) || 'U'}
+                                        {user?.name?.charAt(0) || "U"}
                                     </span>
                                 </div>
                             )}
                             <div className="flex flex-col overflow-hidden">
-                                <span className="text-white text-sm font-medium truncate max-w-[120px]">{user?.name || 'Administrator'}</span>
-                                <span className="text-white/50 text-xs truncate max-w-[120px]">{user?.role || 'Admin'}</span>
+                                <span className="text-white text-sm font-medium truncate max-w-[120px]">
+                                    {user?.name || "Administrator"}
+                                </span>
+                                <span className="text-white/50 text-xs truncate max-w-[120px]">
+                                    {user?.role || "Admin"}
+                                </span>
                             </div>
                         </div>
 

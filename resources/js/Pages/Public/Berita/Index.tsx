@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Head, router } from '@inertiajs/react';
+import { Head, router, Link } from '@inertiajs/react';
 import PublicLayout from '@/Layouts/PublicLayout';
 import { ArticleCard } from '@/Components/UI/ArticleCard';
 import { EmptyState } from '@/Components/UI/EmptyState';
@@ -9,7 +9,7 @@ import { Input } from '@/Components/UI/Input';
 import { motion } from 'framer-motion';
 import { fadeInUp, staggerContainer } from '@/lib/motion';
 import { cn } from '@/lib/utils';
-import { Search, Newspaper } from 'lucide-react';
+import { Search, Newspaper, ChevronRight } from 'lucide-react';
 
 interface Category {
     id: number;
@@ -84,43 +84,65 @@ export default function BeritaIndex({ articles, categories, filters }: IndexProp
             <Head title="Berita & Informasi" />
 
             {/* SECTION 1: Page Hero */}
-            <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 overflow-hidden bg-primary-dark text-white">
+            <section className="relative bg-[#001f4d] overflow-hidden min-h-[360px] flex items-center">
                 <div className="absolute inset-0 bg-gradient-to-br from-primary-900 via-primary-dark to-primary-900" />
                 <GeometricPattern />
+                <div className="absolute inset-0 bg-gradient-to-br from-[#003f87]/60 via-transparent to-[#001f4d]" />
 
                 {/* Decorative Elements */}
-                <div className="absolute inset-0 opacity-10 bg-[url('/images/pattern-islamic.png')] bg-repeat" />
                 <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary-gold/20 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2" />
 
-                <div className="container relative z-10 px-4 mx-auto max-w-7xl">
+                <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-24 lg:py-32">
                     <motion.div
                         variants={staggerContainer}
-                        initial="initial"
-                        animate="animate"
-                        className="max-w-3xl mx-auto text-center"
+                        initial="hidden"
+                        animate="visible"
+                        className="w-full max-w-4xl mx-auto text-center flex flex-col items-center"
                     >
-                        <motion.h1 variants={fadeInUp} className="font-serif text-4xl lg:text-6xl font-bold mb-6">
-                            Berita & Informasi
+                        <motion.p
+                            variants={fadeInUp}
+                            className="text-xs font-bold tracking-[0.25em] uppercase text-[#c9a84c] mb-4"
+                        >
+                            INFO KAMPUS
+                        </motion.p>
+                        <motion.h1
+                            variants={fadeInUp}
+                            className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6"
+                        >
+                            Berita &amp; <span className="text-[#c9a84c]">Informasi</span>
                         </motion.h1>
-                        <motion.p variants={fadeInUp} className="text-lg text-white/80 mb-10">
+                        <motion.nav
+                            variants={fadeInUp}
+                            aria-label="Breadcrumb"
+                            className="flex items-center justify-center gap-2 text-sm text-white/60 mb-8"
+                        >
+                            <Link href="/" className="hover:text-white transition-colors duration-200">
+                                Beranda
+                            </Link>
+                            <ChevronRight size={14} className="text-white/40" />
+                            <span className="text-white/90">Berita</span>
+                        </motion.nav>
+                        <motion.p variants={fadeInUp} className="text-lg sm:text-xl text-white/80 mb-12 max-w-2xl mx-auto leading-relaxed">
                             Ikuti perkembangan terbaru, kegiatan sekolah, dan prestasi siswa-siswi SMK Muhammadiyah Bligo.
                         </motion.p>
 
-                        <motion.form variants={fadeInUp} onSubmit={handleSearch} className="max-w-xl mx-auto relative flex items-center">
+                        <motion.form variants={fadeInUp} onSubmit={handleSearch} className="w-full max-w-2xl relative flex items-center mx-auto shadow-2xl">
                             <Input
                                 type="text"
                                 placeholder="Cari berita..."
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                className="w-full pl-12 pr-4 py-4 rounded-full bg-white/10 border-white/20 text-white placeholder:text-white/50 focus:bg-white focus:text-neutral-900 focus:border-white transition-all backdrop-blur-sm"
+                                className="w-full pl-14 pr-32 py-5 rounded-full bg-white/10 border-white/20 text-white placeholder:text-white/50 focus:bg-white focus:text-neutral-900 focus:border-white transition-all backdrop-blur-md text-base"
                             />
-                            <Search className={cn("absolute left-4 w-5 h-5", searchQuery ? 'text-primary-600' : 'text-white/50')} />
-                            <Button type="submit" variant="primary" className="absolute right-2 rounded-full px-6 bg-primary-gold hover:bg-primary-gold/90 text-primary-dark border-none">
+                            <Search className={cn("absolute left-5 w-6 h-6", searchQuery ? 'text-primary-600' : 'text-white/50')} />
+                            <Button type="submit" variant="primary" className="absolute right-2 rounded-full px-8 py-3 bg-[#c9a84c] hover:bg-[#a8821f] text-white border-none font-semibold transition-all">
                                 Cari
                             </Button>
                         </motion.form>
                     </motion.div>
                 </div>
+
+                <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white to-transparent" />
             </section>
 
             <div className="py-16 lg:py-24 bg-neutral-50 min-h-screen">

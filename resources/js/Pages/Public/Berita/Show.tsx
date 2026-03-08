@@ -3,8 +3,9 @@ import { Head, Link } from '@inertiajs/react';
 import PublicLayout from '@/Layouts/PublicLayout';
 import { ArticleCard } from '@/Components/UI/ArticleCard';
 import { Badge } from '@/Components/UI/Badge';
-import { CalendarIcon, Share2, Facebook, Twitter, MessageCircle, Link as LinkIcon } from 'lucide-react';
-
+import { CalendarIcon, Share2, Facebook, Twitter, MessageCircle, Link as LinkIcon, ChevronRight } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { fadeInUp, staggerContainer } from '@/lib/motion';
 interface ShowProps {
     article: {
         id: number;
@@ -34,6 +35,27 @@ interface ShowProps {
     }[];
 }
 
+// ---------------------------------------------------------------------------
+// Geometric Pattern SVG (Islamic-inspired, very subtle)
+// ---------------------------------------------------------------------------
+const GeometricPattern = () => (
+    <svg
+        className="absolute inset-0 w-full h-full opacity-[0.04]"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+    >
+        <defs>
+            <pattern id="geo-pattern-tentang" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
+                <polygon points="40,4 76,22 76,58 40,76 4,58 4,22" fill="none" stroke="white" strokeWidth="1" />
+                <polygon points="40,16 64,28 64,52 40,64 16,52 16,28" fill="none" stroke="white" strokeWidth="0.5" />
+                <line x1="40" y1="4" x2="40" y2="76" stroke="white" strokeWidth="0.3" />
+                <line x1="4" y1="40" x2="76" y2="40" stroke="white" strokeWidth="0.3" />
+            </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#geo-pattern-tentang)" />
+    </svg>
+);
+
 export default function BeritaShow({ article, relatedArticles, categories }: ShowProps) {
     // Estimasi waktu baca dari jumlah kata konten (asumsi 200 kata/menit)
     const getReadingTime = (content: string) => {
@@ -62,10 +84,57 @@ export default function BeritaShow({ article, relatedArticles, categories }: Sho
                 <meta property="og:image" content={article.thumbnail} />
             </Head>
 
-            <section className="relative min-h-[50vh] flex items-center overflow-hidden bg-[#001f4d]">
+            <section className="relative min-h-[60vh] flex flex-col justify-center overflow-hidden bg-primary-dark">
+                <div className="absolute inset-0 bg-gradient-to-br from-primary-900 via-primary-dark to-primary-900" />
+                <GeometricPattern />
+                <div className="absolute inset-0 bg-gradient-to-br from-[#003f87]/60 via-transparent to-[#001f4d]" />
+
+                {/* Decorative Elements */}
+                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary-gold/20 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2" />
+
+                <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl pt-24 pb-32">
+                    <motion.div
+                        variants={staggerContainer}
+                        initial="hidden"
+                        animate="visible"
+                        className="w-full max-w-4xl mx-auto text-center flex flex-col items-center mt-10"
+                    >
+                        <motion.p
+                            variants={fadeInUp}
+                            className="text-xs font-bold tracking-[0.25em] uppercase text-[#c9a84c] mb-4"
+                        >
+                            JENDELA INFORMASI
+                        </motion.p>
+                        <motion.h1
+                            variants={fadeInUp}
+                            className="font-serif text-4xl sm:text-5xl lg:text-5xl font-bold text-white leading-tight mb-6"
+                        >
+                            Dinamika &amp; <span className="text-[#c9a84c]">Wawasan</span>
+                        </motion.h1>
+                        <motion.nav
+                            variants={fadeInUp}
+                            aria-label="Breadcrumb"
+                            className="flex items-center justify-center gap-2 text-sm text-white/60 mb-8"
+                        >
+                            <Link href={route('beranda')} className="hover:text-white transition-colors duration-200">
+                                Beranda
+                            </Link>
+                            <ChevronRight size={14} className="text-white/40" />
+                            <Link href={route('berita.index')} className="hover:text-white transition-colors duration-200">
+                                Berita
+                            </Link>
+                            <ChevronRight size={14} className="text-white/40" />
+                            <span className="text-white/90 truncate max-w-[200px]" title={article.title}>
+                                {article.title}
+                            </span>
+                        </motion.nav>
+                    </motion.div>
+                </div>
+
+                <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white to-transparent" />
             </section>
 
-            <div className="pt-24 pb-20 bg-neutral-50 min-h-screen lg:pt-32 -mt-[150px]">
+            <div className="pt-24 pb-20 bg-neutral-50 min-h-screen z-2">
                 <div className="container mx-auto px-4 max-w-[1280px]">
                     <div className="flex flex-col lg:flex-row gap-10">
                         {/* Kiri: Konten Artikel (65%) */}
@@ -219,6 +288,7 @@ export default function BeritaShow({ article, relatedArticles, categories }: Sho
                     </div>
                 </div>
             </div>
+
 
         </PublicLayout>
     );

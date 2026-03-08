@@ -14,6 +14,7 @@ const NAV_LINKS = [
     { label: { id: 'Jurusan', en: 'Programs' }, href: '/jurusan' },
     { label: { id: 'Berita', en: 'News' }, href: '/berita' },
     { label: { id: 'Galeri', en: 'Gallery' }, href: '/galeri' },
+    { label: { id: 'Agenda', en: 'Events' }, href: '/agenda' },
     { label: { id: 'Kontak', en: 'Contact' }, href: '/kontak' },
 ];
 
