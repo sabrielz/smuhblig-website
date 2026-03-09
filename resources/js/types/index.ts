@@ -53,6 +53,8 @@ export interface SharedProps {
     };
     pengaturan: Pengaturan;
     flash: FlashMessages;
+    notifikasi_count: number;
+    pesan_baru_count: number;
     [key: string]: unknown;
 }
 
@@ -179,5 +181,31 @@ export interface AiJob {
     error_message: string | null;
     tokens_used: number | null;
     duration_ms: number | null;
+    created_at: string;
+}
+
+export interface NotifikasiAdmin {
+    id: number;
+    tipe: 'artikel_pending' | 'pesan_kontak' | 'ai_selesai' | string;
+    judul: string;
+    pesan: string | null;
+    url: string | null;
+    dibaca: boolean;
+    dibaca_at: string | null;
+    created_at: string;
+}
+
+export interface PesanKontak {
+    id: number;
+    nama: string;
+    email: string;
+    nomor_telepon: string | null;
+    subjek: string;
+    pesan: string;
+    status: 'baru' | 'dibaca' | 'dibalas' | 'diarsip';
+    ip_address: string | null;
+    user_agent: string | null;
+    dibaca_at: string | null;
+    dibaca_oleh: string | null;
     created_at: string;
 }

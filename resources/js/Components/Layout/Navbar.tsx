@@ -1,8 +1,8 @@
 import type { Variants, Easing } from 'framer-motion';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, router, usePage } from '@inertiajs/react';
 import { motion, AnimatePresence, useScroll } from 'framer-motion';
-import { Menu, X, GraduationCap, ChevronRight } from 'lucide-react';
+import { Menu, X, GraduationCap, ChevronRight, Search, Loader2, ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { SharedProps } from '@/types';
 
@@ -258,12 +258,209 @@ function MobileMenu({ isOpen, onClose, locale, navLinks, currentPath, pengaturan
 }
 
 // ---------------------------------------------------------------------------
+// Search Overlay
+// ---------------------------------------------------------------------------
+interface SearchOverlayProps {
+    isOpen: boolean;
+    onClose: () => void;
+    locale: string;
+}
+
+function SearchOverlay({ isOpen, onClose, locale }: SearchOverlayProps) {
+    const [keyword, setKeyword] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [results, setResults] = useState<{ artikel: any[]; jurusan: any[] }>({ artikel: [], jurusan: [] });
+    const inputRef = useRef<HTMLInputElement>(null);
+    const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
+
+    // Focus on open
+    useEffect(() => {
+        if (isOpen) {
+            setTimeout(() => inputRef.current?.focus(), 100);
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+            setKeyword('');
+            setResults({ artikel: [], jurusan: [] });
+        }
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, [isOpen]);
+
+    // Handle escape key
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape' && isOpen) onClose();
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [isOpen, onClose]);
+
+    // Perform quick search
+    const performSearch = async (val: string) => {
+        if (val.length < 2) {
+            setResults({ artikel: [], jurusan: [] });
+            setLoading(false);
+            return;
+        }
+        try {
+            const res = await fetch(`/api/pencarian/cepat?q=${encodeURIComponent(val)}`);
+            if (res.ok) {
+                const data = await res.json();
+                setResults(data);
+            }
+        } catch (error) {
+            console.error('Search error', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const val = e.target.value;
+        setKeyword(val);
+        setLoading(true);
+
+        if (debounceTimeout.current) clearTimeout(debounceTimeout.current);
+        
+        debounceTimeout.current = setTimeout(() => {
+            performSearch(val);
+        }, 400);
+    };
+
+    const handleSubmit = (e?: React.FormEvent) => {
+        e?.preventDefault();
+        if (keyword.length >= 2) {
+            onClose();
+            router.get('/pencarian', { q: keyword });
+        }
+    };
+
+    const hasResults = results.artikel.length > 0 || results.jurusan.length > 0;
+
+    return (
+        <AnimatePresence>
+            {isOpen && (
+                <div className="fixed inset-0 z-[60] flex items-start justify-center pt-0 md:pt-20">
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="absolute inset-0 bg-[#001f4d]/80 backdrop-blur-md"
+                        onClick={onClose}
+                    />
+
+                    <motion.div
+                        initial={{ opacity: 0, y: -20, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                        transition={{ duration: 0.3, ease: 'easeOut' }}
+                        className="relative z-10 w-full max-w-2xl bg-white shadow-2xl md:rounded-2xl"
+                    >
+                        {/* Header & Input */}
+                        <div className="flex items-center border-b p-4">
+                            <Search className="h-5 w-5 text-gray-400 mr-3" />
+                            <form onSubmit={handleSubmit} className="flex-1">
+                                <input
+                                    ref={inputRef}
+                                    type="text"
+                                    placeholder={locale === 'id' ? "Cari informasi, artikel, atau jurusan..." : "Search info, articles, or programs..."}
+                                    className="w-full bg-transparent border-none text-lg text-gray-800 focus:outline-none focus:ring-0 p-0 placeholder-gray-400"
+                                    value={keyword}
+                                    onChange={handleInput}
+                                />
+                            </form>
+                            {loading ? (
+                                <Loader2 className="h-5 w-5 text-[#003f87] animate-spin ml-3" />
+                            ) : (
+                                <button onClick={onClose} className="p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100 transition-colors ml-1">
+                                    <X className="h-5 w-5" />
+                                </button>
+                            )}
+                        </div>
+
+                        {/* Results Body */}
+                        {keyword.length >= 2 && (
+                            <div className="max-h-[60vh] overflow-y-auto p-4">
+                                {!loading && !hasResults && (
+                                    <div className="text-center py-8 text-gray-500">
+                                        <div className="inline-flex items-center justify-center p-3 rounded-full bg-gray-100 mb-3">
+                                            <Search className="h-6 w-6 text-gray-400" />
+                                        </div>
+                                        <p>{locale === 'id' ? 'Tidak ada hasil yang ditemukan untuk' : 'No results found for'} "{keyword}"</p>
+                                    </div>
+                                )}
+
+                                {results.jurusan.length > 0 && (
+                                    <div className="mb-6">
+                                        <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3 px-2">Jurusan</h3>
+                                        <div className="space-y-1">
+                                            {results.jurusan.map((j) => (
+                                                <Link
+                                                    key={j.id}
+                                                    href={j.url}
+                                                    onClick={onClose}
+                                                    className="block p-3 rounded-xl hover:bg-gray-50 transition-colors group"
+                                                >
+                                                    <div className="flex items-center justify-between">
+                                                        <span dangerouslySetInnerHTML={{ __html: j.title }} className="text-[#003f87] font-semibold text-sm" />
+                                                        <ArrowRight className="h-4 w-4 text-gray-300 group-hover:text-[#c9a84c] transition-colors" />
+                                                    </div>
+                                                </Link>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+
+                                {results.artikel.length > 0 && (
+                                    <div className="mb-2">
+                                        <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3 px-2">Artikel</h3>
+                                        <div className="space-y-1">
+                                            {results.artikel.map((a) => (
+                                                <Link
+                                                    key={a.id}
+                                                    href={a.url}
+                                                    onClick={onClose}
+                                                    className="flex items-center justify-between p-3 rounded-xl hover:bg-gray-50 transition-colors group"
+                                                >
+                                                    <span dangerouslySetInnerHTML={{ __html: a.title }} className="text-gray-700 text-sm line-clamp-1 group-hover:text-[#003f87] transition-colors" />
+                                                    <ArrowRight className="h-4 w-4 text-gray-300 group-hover:text-[#c9a84c] transition-colors ml-4 flex-shrink-0" />
+                                                </Link>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+
+                                {hasResults && (
+                                    <div className="mt-4 pt-4 border-t text-center">
+                                        <button
+                                            onClick={handleSubmit}
+                                            className="text-sm font-medium text-[#003f87] hover:text-[#001f4d] inline-flex items-center gap-1"
+                                        >
+                                            {locale === 'id' ? 'Lihat semua hasil pencarian' : 'See all search results'}
+                                            <ArrowRight className="h-4 w-4" />
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                    </motion.div>
+                </div>
+            )}
+        </AnimatePresence>
+    );
+}
+
+// ---------------------------------------------------------------------------
 // Navbar (main export)
 // ---------------------------------------------------------------------------
 export default function Navbar() {
     const { locale, pengaturan } = usePage<SharedProps>().props;
     const [isScrolled, setIsScrolled] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
+    const [searchOpen, setSearchOpen] = useState(false);
     const { scrollY } = useScroll();
 
     // Detect scroll position
@@ -365,6 +562,20 @@ export default function Navbar() {
                             <LanguageToggle locale={locale} isScrolled={isScrolled} />
                         </div>
 
+                        {/* Search Action */}
+                        <button
+                            onClick={() => setSearchOpen(true)}
+                            aria-label="Pencarian"
+                            className={cn(
+                                'flex h-10 w-10 items-center justify-center rounded-xl transition-all duration-200 border bg-transparent hover:scale-105 active:scale-95',
+                                isScrolled
+                                    ? 'border-gray-200 text-[#111111] hover:bg-neutral-50 hover:border-gray-300'
+                                    : 'border-white/20 text-white hover:bg-white/10 hover:border-white/40'
+                            )}
+                        >
+                            <Search className="h-[18px] w-[18px]" strokeWidth={1.5} />
+                        </button>
+
                         {/* CTA Button */}
                         <Link
                             href="/daftar"
@@ -392,6 +603,9 @@ export default function Navbar() {
                     </div>
                 </div>
             </motion.header>
+
+            {/* Content Overlays */}
+            <SearchOverlay isOpen={searchOpen} onClose={() => setSearchOpen(false)} locale={locale} />
 
             {/* Mobile overlay */}
             <MobileMenu

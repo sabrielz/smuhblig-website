@@ -92,32 +92,41 @@ function AnimatedCounter({ value, suffix = '' }: { value: number; suffix?: strin
     );
 }
 
-// ─── Islamic Geometric Pattern SVG ───────────────────────────────────────────
+// ─── Hero Dynamic Mesh Pattern SVG ─────────────────────────────────────────
 
-function IslamicPattern({ className }: { className?: string }) {
+function HeroMeshPattern({ className }: { className?: string }) {
     return (
         <svg
             className={className}
-            viewBox="0 0 200 200"
+            viewBox="0 0 1440 800"
+            preserveAspectRatio="xMidYMid slice"
             xmlns="http://www.w3.org/2000/svg"
             aria-hidden="true"
         >
             <defs>
-                <pattern id="islamic-star" x="0" y="0" width="50" height="50" patternUnits="userSpaceOnUse">
-                    {/* 8-pointed star */}
-                    <polygon
-                        points="25,5 30,18 43,13 38,26 51,31 38,36 43,49 30,44 25,57 20,44 7,49 12,36 -1,31 12,26 7,13 20,18"
-                        fill="currentColor"
-                        transform="translate(0,-6)"
-                    />
-                    <polygon
-                        points="25,5 30,18 43,13 38,26 51,31 38,36 43,49 30,44 25,57 20,44 7,49 12,36 -1,31 12,26 7,13 20,18"
-                        fill="currentColor"
-                        transform="translate(50,0) rotate(22.5, 25, 25)"
-                    />
-                </pattern>
+                <linearGradient id="mesh-grad-1" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#c9a84c" stopOpacity="0.3" />
+                    <stop offset="100%" stopColor="transparent" stopOpacity="0" />
+                </linearGradient>
+                <linearGradient id="mesh-grad-2" x1="100%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#ffffff" stopOpacity="0.15" />
+                    <stop offset="100%" stopColor="transparent" stopOpacity="0" />
+                </linearGradient>
             </defs>
-            <rect width="100%" height="100%" fill="url(#islamic-star)" />
+            {/* Wavy subtle background shapes for light/shadow interplay */}
+            <path
+                d="M-200,0 C300,400 800,-100 1600,300 L1600,1000 L-200,1000 Z"
+                fill="url(#mesh-grad-1)"
+            />
+            <path
+                d="M-200,800 C400,200 1000,900 1600,100 L1600,-200 L-200,-200 Z"
+                fill="url(#mesh-grad-2)"
+            />
+            {/* Elegant floating lines */}
+            <path d="M0,200 C400,350 800,50 1440,250" fill="none" stroke="#c9a84c" strokeWidth="1" strokeOpacity="0.2" />
+            <path d="M0,220 C400,370 800,70 1440,270" fill="none" stroke="#c9a84c" strokeWidth="1" strokeOpacity="0.1" />
+            <path d="M0,500 C500,300 900,600 1440,400" fill="none" stroke="#ffffff" strokeWidth="1" strokeOpacity="0.15" />
+            <path d="M0,520 C500,320 900,620 1440,420" fill="none" stroke="#ffffff" strokeWidth="1" strokeOpacity="0.05" />
         </svg>
     );
 }
@@ -163,7 +172,7 @@ function StatItem({ value, suffix = '+', label, icon_name = 'Circle' }: StatItem
                 <Icon className="w-6 h-6 text-[#c9a84c]" strokeWidth={1.5} />
             </div>
             <div className="font-serif text-5xl lg:text-6xl font-bold text-white tracking-tight mb-2" style={{ fontFamily: 'Playfair Display, Georgia, serif' }}>
-                <AnimatedCounter value={value} suffix={suffix || ''} />
+                <AnimatedCounter value={value} suffix={suffix || '-'} />
             </div>
             <p className="text-white/70 text-sm font-medium uppercase tracking-widest">
                 {label}
@@ -246,6 +255,9 @@ export default function Beranda({
     const { scrollY } = useScroll();
     const heroImageY = useTransform(scrollY, [0, 600], [0, -120]);
 
+    console.log(kontenHero);
+
+
     return (
         <PublicLayout>
             <Head title="Beranda — SMK Muhammadiyah Bligo" />
@@ -280,9 +292,9 @@ export default function Beranda({
                     }}
                 />
 
-                {/* Islamic Geometric Pattern - Right Side */}
-                <div className="absolute right-0 top-0 bottom-0 w-1/2 z-10 pointer-events-none overflow-hidden">
-                    <IslamicPattern className="w-full h-full text-white opacity-[0.04]" />
+                {/* Dynamic Mesh Overlays - Full Size */}
+                <div className="absolute inset-0 z-10 pointer-events-none">
+                    <HeroMeshPattern className="w-full h-full opacity-80 mix-blend-screen" />
                 </div>
 
                 {/* Hero Content */}
@@ -299,7 +311,7 @@ export default function Beranda({
                                 className="font-mono text-xs tracking-[0.3em] uppercase"
                                 style={{ color: '#c9a84c' }}
                             >
-                                {kontenHero?.label || ''}
+                                {kontenHero?.eyebrow || '-'}
                             </span>
                         </motion.div>
 
@@ -334,7 +346,7 @@ export default function Beranda({
                                 className="inline-flex items-center gap-2 font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 px-8 py-4 text-lg rounded-xl text-white hover:opacity-90 focus:ring-[#c9a84c]/50 shadow-lg hover:shadow-xl"
                                 style={{ background: 'linear-gradient(135deg, #c9a84c 0%, #a8821f 100%)' }}
                             >
-                                {kontenHero?.cta_primary || ''}
+                                {kontenHero?.cta_primer_label || '-'}
                                 <ArrowRight className="w-5 h-5" strokeWidth={1.5} />
                             </a>
 
@@ -343,7 +355,7 @@ export default function Beranda({
                                 id="hero-cta-jurusan"
                                 className="inline-flex items-center gap-2 font-semibold transition-all duration-200 px-8 py-4 text-lg rounded-xl text-white border-2 border-white/60 hover:bg-white/10 hover:border-white focus:outline-none focus:ring-2 focus:ring-white/50"
                             >
-                                {kontenHero?.cta_secondary || ''}
+                                {kontenHero?.cta_sekunder_label || '-'}
                             </Link>
                         </motion.div>
 
@@ -430,9 +442,9 @@ export default function Beranda({
             >
                 <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-16">
                     <SectionHeader
-                        label={kontenJurusan?.label || ''}
-                        title={kontenJurusan?.headline || ''}
-                        subtitle={kontenJurusan?.subheadline || ''}
+                        label={kontenJurusan?.label || '-'}
+                        title={kontenJurusan?.headline || '-'}
+                        subtitle={kontenJurusan?.subheadline || '-'}
                     />
 
                     {/* Grid 3+2 layout */}
@@ -504,9 +516,9 @@ export default function Beranda({
             >
                 <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-16">
                     <SectionHeader
-                        label={kontenBerita?.label || ''}
-                        title={kontenBerita?.headline || ''}
-                        subtitle={kontenBerita?.subheadline || ''}
+                        label={kontenBerita?.label || '-'}
+                        title={kontenBerita?.headline || '-'}
+                        subtitle={kontenBerita?.subheadline || '-'}
                     />
 
                     {beritaTerbaru.length > 0 ? (
@@ -591,7 +603,7 @@ export default function Beranda({
                             className="inline-block font-mono text-xs tracking-[0.3em] uppercase mb-6"
                             style={{ color: '#c9a84c' }}
                         >
-                            {kontenCtaAkhir?.label || ''}
+                            {kontenCtaAkhir?.label || '-'}
                         </motion.span>
 
                         {/* Headline */}

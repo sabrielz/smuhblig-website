@@ -14,6 +14,7 @@ import {
     BarChart3,
     CalendarDays,
     PencilLine,
+    Mail,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SharedProps } from "@/types";
@@ -45,6 +46,8 @@ export default function AdminSidebar({ isOpen, setIsOpen }: SidebarProps) {
         };
     }, [isOpen]);
 
+    const pesanBaruCount = props.pesan_baru_count ?? 0;
+
     const navGroups = [
         {
             label: null,
@@ -53,26 +56,33 @@ export default function AdminSidebar({ isOpen, setIsOpen }: SidebarProps) {
                     label: "Dashboard",
                     href: "/admin/dashboard",
                     icon: LayoutDashboard,
+                    badge: null,
                 },
             ],
         },
         {
             label: 'Konten',
             items: [
-                { label: 'Artikel', href: '/admin/artikel', icon: FileText },
-                { label: 'Galeri', href: '/admin/galeri', icon: ImageIcon },
-                { label: 'Pengumuman', href: '/admin/pengumuman', icon: Bell },
-                { label: 'Konten Halaman', href: '/admin/konten/beranda', icon: PencilLine },
+                { label: 'Artikel', href: '/admin/artikel', icon: FileText, badge: null },
+                { label: 'Galeri', href: '/admin/galeri', icon: ImageIcon, badge: null },
+                { label: 'Pengumuman', href: '/admin/pengumuman', icon: Bell, badge: null },
+                { label: 'Konten Halaman', href: '/admin/konten/beranda', icon: PencilLine, badge: null },
+                {
+                    label: 'Pesan Masuk',
+                    href: '/admin/pesan',
+                    icon: Mail,
+                    badge: pesanBaruCount > 0 ? pesanBaruCount : null,
+                },
             ],
         },
         {
             label: "Sekolah",
             items: [
-                { label: "Jurusan", href: "/admin/jurusan", icon: BookOpen },
-                { label: "Struktur Organisasi", href: "/admin/struktur-organisasi", icon: Network },
-                { label: "Statistik Beranda", href: "/admin/statistik", icon: BarChart3 },
-                { label: "Agenda", href: "/admin/agenda", icon: CalendarDays },
-                { label: "Tautan", href: "/admin/tautan", icon: LinkIcon },
+                { label: "Jurusan", href: "/admin/jurusan", icon: BookOpen, badge: null },
+                { label: "Struktur Organisasi", href: "/admin/struktur-organisasi", icon: Network, badge: null },
+                { label: "Statistik Beranda", href: "/admin/statistik", icon: BarChart3, badge: null },
+                { label: "Agenda", href: "/admin/agenda", icon: CalendarDays, badge: null },
+                { label: "Tautan", href: "/admin/tautan", icon: LinkIcon, badge: null },
             ],
         },
         ...(user?.is_admin
@@ -84,11 +94,13 @@ export default function AdminSidebar({ isOpen, setIsOpen }: SidebarProps) {
                               label: "Pengguna",
                               href: "/admin/pengguna",
                               icon: Users,
+                              badge: null,
                           },
                           {
                               label: "Pengaturan",
                               href: "/admin/pengaturan",
                               icon: Settings,
+                              badge: null,
                           },
                       ],
                   },
@@ -189,14 +201,19 @@ export default function AdminSidebar({ isOpen, setIsOpen }: SidebarProps) {
                                         >
                                             <Icon
                                                 className={cn(
-                                                    "w-4 h-4",
+                                                    "w-4 h-4 shrink-0",
                                                     active
                                                         ? "text-gold-500"
                                                         : "opacity-70",
                                                 )}
                                                 strokeWidth={1.5}
                                             />
-                                            {item.label}
+                                            <span className="flex-1 truncate">{item.label}</span>
+                                            {item.badge != null && item.badge > 0 && (
+                                                <span className="ml-auto inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full bg-blue-500 text-white text-[10px] font-bold leading-none">
+                                                    {item.badge > 99 ? '99+' : item.badge}
+                                                </span>
+                                            )}
                                         </Link>
                                     );
                                 })}

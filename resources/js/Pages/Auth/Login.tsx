@@ -396,6 +396,17 @@ export default function Login() {
                                 )}
                             </button>
                         </motion.div>
+
+                        {/* Forgot Password */}
+                        <motion.div variants={fadeInUp} className="text-center">
+                            <a
+                                href={route('password.request')}
+                                className="text-sm font-medium transition-colors duration-150 hover:underline"
+                                style={{ color: '#003f87', fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+                            >
+                                Lupa password?
+                            </a>
+                        </motion.div>
                     </motion.form>
 
                     {/* Back to website */}
