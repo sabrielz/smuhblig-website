@@ -1,10 +1,19 @@
+# Logs
 *.log
-.DS_Store
+storage/logs/*.log
+
+# Environment files — JANGAN COMMIT NILAI SENSITIF
 .env
 .env.backup
 .env.production
+.env.*.local
+
+# IDE & OS
+.DS_Store
 .phpactor.json
 .phpunit.result.cache
+
+# IDE Directories
 /.fleet
 /.idea
 /.nova
@@ -12,14 +21,25 @@
 /.vscode
 /.agents
 /.zed
+
+# Auth
 /auth.json
-/node_modules
+
+# Build artifacts
 #/public/build
 /public/hot
 /public/storage
+
+# Storage keys
 /storage/*.key
 /storage/pail
+
+# Dependencies
+/node_modules
 /vendor
+
+# Development files
 Homestead.json
 Homestead.yaml
 Thumbs.db
+

@@ -13,7 +13,11 @@
     {{-- SEO defaults --}}
     {!! SEO::generate() !!}
 
-    @routes
+    @php
+        $cspNonce = request()->attributes->get('csp_nonce', '');
+    @endphp
+
+    @routes(null, $cspNonce)
     @viteReactRefresh
     @vite(['resources/css/app.css', 'resources/js/app.tsx'])
     @inertiaHead
