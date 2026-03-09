@@ -6,6 +6,7 @@ use App\Http\Controllers\Public\BerandaController;
 use App\Http\Controllers\Public\JurusanController;
 use App\Http\Controllers\Public\TentangController;
 use App\Http\Controllers\Public\KontakController;
+use App\Http\Controllers\Public\PesanKontakController as PublicPesanKontakController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -14,6 +15,11 @@ use Inertia\Inertia;
 | Public Routes
 |--------------------------------------------------------------------------
 */
+
+Route::get('/health', [\App\Http\Controllers\HealthController::class, 'check'])
+    ->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class])
+    ->middleware('throttle:60,1')
+    ->name('health');
 
 Route::get('/', BerandaController::class)->name('beranda');
 
@@ -24,6 +30,7 @@ Route::get('/jurusan/{jurusan:slug}', [JurusanController::class, 'show'])->name(
 // Halaman statis publik
 Route::get('/tentang', [TentangController::class, 'index'])->name('tentang');
 Route::get('/kontak', [KontakController::class, 'index'])->name('kontak');
+Route::post('/kontak/kirim', [PublicPesanKontakController::class, 'store'])->middleware('throttle:form-kontak')->name('kontak.kirim');
 
 // Berita & Informasi
 use App\Http\Controllers\Public\BeritaController;
@@ -34,6 +41,10 @@ Route::get('/tautan', [\App\Http\Controllers\Public\TautanController::class, 'in
 Route::get('/portal', function () {
     return Inertia::render('Portal');
 })->name('portal');
+
+use App\Http\Controllers\Public\PencarianController;
+Route::get('/pencarian', [PencarianController::class, 'index'])->middleware('throttle:pencarian-cepat')->name('pencarian.index');
+Route::get('/api/pencarian/cepat', [PencarianController::class, 'cepat'])->middleware('throttle:pencarian-cepat')->name('pencarian.cepat');
 
 use App\Http\Controllers\Public\AgendaPublikController;
 Route::get('/agenda', [AgendaPublikController::class, 'index'])->name('agenda.index');
@@ -69,7 +80,13 @@ Route::post('/locale', function (\Illuminate\Http\Request $request) {
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'show'])->name('login');
-    Route::post('/login', [LoginController::class, 'store'])->name('login.store');
+    Route::post('/login', [LoginController::class, 'store'])->middleware('throttle:login')->name('login.store');
+
+    // Password Reset
+    Route::get('/lupa-password', [LoginController::class, 'showForgotForm'])->name('password.request');
+    Route::post('/lupa-password', [LoginController::class, 'sendResetLink'])->middleware('throttle:password-reset')->name('password.email');
+    Route::get('/reset-password/{token}', [LoginController::class, 'showResetForm'])->name('password.reset');
+    Route::post('/reset-password', [LoginController::class, 'resetPassword'])->middleware('throttle:password-reset')->name('password.update');
 });
 
 Route::post('/logout', [LoginController::class, 'destroy'])
@@ -124,24 +141,41 @@ Route::middleware(['auth', \App\Http\Middleware\EnsureHasCmsRole::class])
         Route::get('/jurusan/{jurusan}/edit', [\App\Http\Controllers\Admin\JurusanController::class, 'edit'])->name('jurusan.edit');
         Route::put('/jurusan/{jurusan}', [\App\Http\Controllers\Admin\JurusanController::class, 'update'])->name('jurusan.update');
 
-        // Tautan CRUD
-        Route::resource('tautan', \App\Http\Controllers\Admin\TautanController::class);
-
-        // Pengaturan
-        Route::get('/pengaturan', [\App\Http\Controllers\Admin\PengaturanController::class, 'index'])->name('pengaturan.index');
-        Route::post('/pengaturan', [\App\Http\Controllers\Admin\PengaturanController::class, 'store'])->name('pengaturan.store');
-
-        // Statistik
-        Route::get('/statistik', [\App\Http\Controllers\Admin\StatistikController::class, 'index'])->name('statistik.index');
-        Route::put('/statistik/{statistik}', [\App\Http\Controllers\Admin\StatistikController::class, 'update'])->name('statistik.update');
-        Route::post('/statistik/reorder', [\App\Http\Controllers\Admin\StatistikController::class, 'reorder'])->name('statistik.reorder');
-
-        // Struktur Organisasi
-        Route::post('/struktur-organisasi/reorder', [\App\Http\Controllers\Admin\StrukturOrganisasiController::class, 'reorder'])->name('struktur-organisasi.reorder');
-        Route::resource('struktur-organisasi', \App\Http\Controllers\Admin\StrukturOrganisasiController::class)->except(['show']);
-
-        // Pengguna CRUD - Hanya Admin
+        // Tautan CRUD — admin only (pengaturan link penting)
         Route::middleware(['role:admin'])->group(function () {
+            Route::resource('tautan', \App\Http\Controllers\Admin\TautanController::class);
+        });
+
+        // Pengaturan — admin only (konfigurasi sensitif: SMTP, API keys, dll)
+        Route::middleware(['role:admin'])->group(function () {
+            Route::get('/pengaturan', [\App\Http\Controllers\Admin\PengaturanController::class, 'index'])->name('pengaturan.index');
+            Route::post('/pengaturan', [\App\Http\Controllers\Admin\PengaturanController::class, 'store'])->name('pengaturan.store');
+            Route::post('/pengaturan/test-email', [\App\Http\Controllers\Admin\PengaturanController::class, 'testEmail'])->name('pengaturan.test-email');
+        });
+
+        // Notifikasi Admin — semua role CMS bisa akses notifikasi mereka sendiri
+        Route::prefix('notifikasi')->name('notifikasi.')->group(function () {
+            Route::get('/',                [\App\Http\Controllers\Admin\NotifikasiController::class, 'index'])->name('index');
+            Route::post('/baca-semua',     [\App\Http\Controllers\Admin\NotifikasiController::class, 'bacaSemua'])->name('baca-semua');
+            Route::post('/{notifikasi}/baca', [\App\Http\Controllers\Admin\NotifikasiController::class, 'baca'])->name('baca');
+            Route::delete('/{notifikasi}', [\App\Http\Controllers\Admin\NotifikasiController::class, 'hapus'])->name('hapus');
+            // AJAX endpoints
+            Route::get('/recent',              [\App\Http\Controllers\Admin\NotifikasiController::class, 'recent'])->name('recent');
+            Route::post('/ajax/baca-semua',    [\App\Http\Controllers\Admin\NotifikasiController::class, 'bacaSemuaAjax'])->name('ajax.baca-semua');
+            Route::post('/ajax/{notifikasi}/baca', [\App\Http\Controllers\Admin\NotifikasiController::class, 'bacaAjax'])->name('ajax.baca');
+        });
+
+        // Statistik — admin only
+        Route::middleware(['role:admin'])->group(function () {
+            Route::get('/statistik', [\App\Http\Controllers\Admin\StatistikController::class, 'index'])->name('statistik.index');
+            Route::put('/statistik/{statistik}', [\App\Http\Controllers\Admin\StatistikController::class, 'update'])->name('statistik.update');
+            Route::post('/statistik/reorder', [\App\Http\Controllers\Admin\StatistikController::class, 'reorder'])->name('statistik.reorder');
+
+            // Struktur Organisasi — admin only
+            Route::post('/struktur-organisasi/reorder', [\App\Http\Controllers\Admin\StrukturOrganisasiController::class, 'reorder'])->name('struktur-organisasi.reorder');
+            Route::resource('struktur-organisasi', \App\Http\Controllers\Admin\StrukturOrganisasiController::class)->except(['show']);
+
+            // Pengguna CRUD — hanya admin
             Route::resource('pengguna', \App\Http\Controllers\Admin\PenggunaController::class);
         });
 
@@ -155,12 +189,25 @@ Route::middleware(['auth', \App\Http\Middleware\EnsureHasCmsRole::class])
             Route::get('/jobs/{aiJob}/status', [\App\Http\Controllers\Admin\AiController::class, 'jobStatus'])->name('job.status');
         });
 
-        // Konten Halaman Publik (CMS teks dinamis)
+        // Konten Halaman Publik (CMS teks dinamis) — admin only untuk update
         Route::get('/konten/{halaman}/data', [\App\Http\Controllers\Admin\KontenHalamanController::class, 'show'])->name('konten.show');
         Route::get('/konten/{halaman}', [\App\Http\Controllers\Admin\KontenHalamanController::class, 'edit'])->name('konten.edit');
-        Route::post('/konten/{halaman}', [\App\Http\Controllers\Admin\KontenHalamanController::class, 'update'])->name('konten.update');
-        Route::post('/konten/{halaman}/translate', [\App\Http\Controllers\Admin\KontenHalamanController::class, 'translateAll'])->name('konten.translate');
+        Route::middleware(['role:admin'])->group(function () {
+            Route::post('/konten/{halaman}', [\App\Http\Controllers\Admin\KontenHalamanController::class, 'update'])->name('konten.update');
+            Route::post('/konten/{halaman}/translate', [\App\Http\Controllers\Admin\KontenHalamanController::class, 'translateAll'])->name('konten.translate');
+        });
 
-        // Media Upload (TipTap inline images)
+        // Media Upload (TipTap inline images) — semua role CMS bisa upload
         Route::post('/media/upload', [\App\Http\Controllers\Admin\MediaUploadController::class, 'upload'])->name('media.upload');
+
+        // Pesan Kontak (CMS Inbox)
+        Route::get('/pesan', [\App\Http\Controllers\Admin\PesanKontakController::class, 'index'])->name('pesan.index');
+        Route::post('/pesan/bulk-arsip', [\App\Http\Controllers\Admin\PesanKontakController::class, 'bulkArsip'])->name('pesan.bulk-arsip');
+        Route::get('/pesan/{pesanKontak}', [\App\Http\Controllers\Admin\PesanKontakController::class, 'show'])->name('pesan.show');
+        Route::patch('/pesan/{pesanKontak}/arsip', [\App\Http\Controllers\Admin\PesanKontakController::class, 'arsip'])->name('pesan.arsip');
+        // Hapus pesan — admin only
+        Route::middleware(['role:admin'])->group(function () {
+            Route::delete('/pesan/{pesanKontak}', [\App\Http\Controllers\Admin\PesanKontakController::class, 'destroy'])->name('pesan.destroy');
+        });
     });
+

@@ -7,6 +7,7 @@ use App\Jobs\TranslateHalamanKonten;
 use App\Models\AiJob;
 use App\Models\HalamanKonten;
 use App\Models\HalamanKontenTranslation;
+use App\Services\HtmlSanitizer;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -124,6 +125,11 @@ class KontenHalamanController extends Controller
                 foreach ($locales as $locale => $value) {
                     if (!in_array($locale, ['id', 'en'], true)) {
                         continue;
+                    }
+
+                    // Sanitasi HTML untuk konten richtext (dari TipTap editor)
+                    if ($konten->type === 'richtext' && !empty($value)) {
+                        $value = HtmlSanitizer::clean($value);
                     }
 
                     $existingTranslation = $konten->translations->firstWhere('locale', $locale);

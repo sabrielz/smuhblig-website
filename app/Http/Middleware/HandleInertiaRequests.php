@@ -29,6 +29,8 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         return array_merge(parent::share($request), [
+            'csp_nonce' => fn () => $request->attributes->get('csp_nonce', ''),
+
             'locale' => fn () => app()->getLocale(),
             'availableLocales' => fn () => config('app.available_locales', ['id', 'en']),
 
@@ -50,6 +52,10 @@ class HandleInertiaRequests extends Middleware
 
             'notifikasi_count' => fn () => $request->user()
                 ? \App\Models\NotifikasiAdmin::untukUser($request->user()->id)->belumDibaca()->count()
+                : 0,
+
+            'pesan_baru_count' => fn () => $request->user()
+                ? \App\Models\PesanKontak::baru()->count()
                 : 0,
 
             'pengaturan' => fn () => Cache::remember('pengaturan.shared', 3600, function () {

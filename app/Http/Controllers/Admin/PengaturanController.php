@@ -3,11 +3,15 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\TestEmailMail;
 use App\Models\Pengaturan;
+use App\Services\EmailConfigService;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
+use Inertia\Inertia;
 
 class PengaturanController extends Controller
 {
@@ -60,8 +64,41 @@ class PengaturanController extends Controller
 
         // Clear application cache if settings are changed
         Cache::flush();
-        // dd(Pengaturan::get('app_logo'));
+        EmailConfigService::flushCache();
 
         return redirect()->back()->with('success', 'Pengaturan berhasil diperbarui');
+    }
+
+    public function testEmail(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => ['required', 'email'],
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Alamat email tidak valid.',
+            ], 422);
+        }
+
+        try {
+            // Re-apply dynamic config sebelum kirim
+            EmailConfigService::configure();
+
+            $siteName = Pengaturan::get('site_name', 'SMK Muhammadiyah Bligo');
+
+            Mail::to($request->email)->send(new TestEmailMail($siteName));
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Email test berhasil dikirim ke ' . $request->email,
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal mengirim email: ' . $e->getMessage(),
+            ], 500);
+        }
     }
 }
