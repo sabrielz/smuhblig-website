@@ -193,7 +193,7 @@ export default function BeritaShow({ article, relatedArticles, categories }: Sho
 
                                 {/* Konten TipTap Render */}
                                 <div
-                                    className="prose prose-lg max-w-none prose-img:rounded-2xl prose-headings:font-serif prose-headings:text-neutral-900 prose-a:text-primary-navy hover:prose-a:text-primary-600 focus:outline-none"
+                                    className="prose prose-base sm:prose-lg max-w-none prose-img:rounded-2xl prose-headings:font-serif prose-headings:text-neutral-900 prose-a:text-primary-navy hover:prose-a:text-primary-600 focus:outline-none"
                                     dangerouslySetInnerHTML={{ __html: article.content || '' }}
                                 />
 
@@ -203,37 +203,37 @@ export default function BeritaShow({ article, relatedArticles, categories }: Sho
                                         <Share2 className="w-5 h-5 mr-2 text-primary-navy" />
                                         Bagikan Artikel
                                     </h3>
-                                    <div className="flex flex-wrap gap-3">
+                                    <div className="flex flex-wrap gap-2 sm:gap-3">
                                         <button
                                             onClick={handleCopyLink}
-                                            className="inline-flex items-center px-4 py-2 bg-neutral-100 hover:bg-neutral-200 text-neutral-700 rounded-full text-sm font-medium transition-colors"
+                                            className="flex-1 sm:flex-none justify-center inline-flex items-center px-4 py-2.5 bg-neutral-100 hover:bg-neutral-200 text-neutral-700 rounded-full text-xs sm:text-sm font-medium transition-colors min-h-11"
                                         >
-                                            <LinkIcon className="w-4 h-4 mr-2" />
-                                            Salin Tautan
+                                            <LinkIcon className="w-4 h-4 mr-1 sm:mr-2" />
+                                            Salin <span className="hidden sm:inline">&nbsp;Tautan</span>
                                         </button>
                                         <button
                                             onClick={handleShareWA}
-                                            className="inline-flex items-center px-4 py-2 bg-[#25D366]/10 hover:bg-[#25D366]/20 text-[#25D366] rounded-full text-sm font-medium transition-colors"
+                                            className="flex-1 sm:flex-none justify-center inline-flex items-center px-4 py-2.5 bg-[#25D366]/10 hover:bg-[#25D366]/20 text-[#25D366] rounded-full text-xs sm:text-sm font-medium transition-colors min-h-11"
                                         >
-                                            <MessageCircle className="w-4 h-4 mr-2" />
+                                            <MessageCircle className="w-4 h-4 mr-1 sm:mr-2" />
                                             WhatsApp
                                         </button>
                                         <a
                                             href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="inline-flex items-center px-4 py-2 bg-[#1877F2]/10 hover:bg-[#1877F2]/20 text-[#1877F2] rounded-full text-sm font-medium transition-colors"
+                                            className="flex-1 sm:flex-none justify-center inline-flex items-center px-4 py-2.5 bg-[#1877F2]/10 hover:bg-[#1877F2]/20 text-[#1877F2] rounded-full text-xs sm:text-sm font-medium transition-colors min-h-11"
                                         >
-                                            <Facebook className="w-4 h-4 mr-2" />
+                                            <Facebook className="w-4 h-4 mr-1 sm:mr-2" />
                                             Facebook
                                         </a>
                                         <a
                                             href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(article.title)}`}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="inline-flex items-center px-4 py-2 bg-[#1DA1F2]/10 hover:bg-[#1DA1F2]/20 text-[#1DA1F2] rounded-full text-sm font-medium transition-colors"
+                                            className="flex-1 sm:flex-none justify-center inline-flex items-center px-4 py-2.5 bg-[#1DA1F2]/10 hover:bg-[#1DA1F2]/20 text-[#1DA1F2] rounded-full text-xs sm:text-sm font-medium transition-colors min-h-11"
                                         >
-                                            <Twitter className="w-4 h-4 mr-2" />
+                                            <Twitter className="w-4 h-4 mr-1 sm:mr-2" />
                                             Twitter
                                         </a>
                                     </div>

@@ -237,9 +237,9 @@ function CTASection() {
                         <Link
                             href="/kontak"
                             id="cta-hubungi-kami"
-                            className="inline-flex items-center gap-2 px-8 py-4 bg-[#c9a84c] text-white
+                            className="inline-flex justify-center items-center w-full sm:w-auto gap-2 px-8 py-4 bg-[#c9a84c] text-white
                                        font-semibold rounded-xl hover:bg-[#a8821f] transition-all duration-200
-                                       shadow-lg shadow-[#c9a84c]/20 hover:shadow-[#c9a84c]/30 hover:-translate-y-0.5"
+                                       shadow-lg shadow-[#c9a84c]/20 hover:shadow-[#c9a84c]/30 hover:-translate-y-0.5 min-h-11"
                         >
                             Hubungi Kami
                             <ArrowRight className="w-5 h-5" strokeWidth={1.5} />

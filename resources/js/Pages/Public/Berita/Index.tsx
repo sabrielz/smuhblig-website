@@ -148,11 +148,11 @@ export default function BeritaIndex({ articles, categories, filters }: IndexProp
             <div className="py-16 lg:py-24 bg-neutral-50 min-h-screen">
                 <div className="container px-4 mx-auto max-w-7xl">
                     {/* SECTION 2: Filter Kategori */}
-                    <div className="flex overflow-x-auto pb-4 mb-10 space-x-2 scrollbar-hide no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
+                    <div className="flex flex-nowrap overflow-x-auto pb-4 mb-10 gap-2 scrollbar-hide no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
                         <button
                             onClick={() => handleCategoryClick()}
                             className={cn(
-                                "whitespace-nowrap px-6 py-2.5 rounded-full text-sm font-medium transition-colors border",
+                                "whitespace-nowrap flex-shrink-0 px-6 py-2.5 rounded-full text-sm font-medium transition-colors border",
                                 !filters.category
                                     ? "bg-[#003f87] text-white border-primary-navy shadow-sm"
                                     : "bg-white text-neutral-600 border-neutral-200 hover:border-primary-navy hover:text-primary-navy"
@@ -166,7 +166,7 @@ export default function BeritaIndex({ articles, categories, filters }: IndexProp
                                 key={category.id}
                                 onClick={() => handleCategoryClick(category.id)}
                                 className={cn(
-                                    "whitespace-nowrap px-6 py-2.5 rounded-full text-sm font-medium transition-colors border",
+                                    "whitespace-nowrap flex-shrink-0 px-6 py-2.5 rounded-full text-sm font-medium transition-colors border",
                                     filters.category == category.id.toString()
                                         ? "bg-[#003f87] text-white border-primary-navy shadow-sm"
                                         : "bg-white text-neutral-600 border-neutral-200 hover:border-primary-navy hover:text-primary-navy"

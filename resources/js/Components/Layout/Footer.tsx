@@ -102,15 +102,15 @@ export default function Footer() {
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true, margin: '-60px' }}
-                    className="grid grid-cols-1 gap-12 py-16 lg:grid-cols-12 lg:gap-8 lg:py-20"
+                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8 py-16 lg:py-20"
                 >
                     {/* ── Column 1: Brand (40%) ── */}
                     <motion.div
                         variants={fadeInUp}
-                        className="lg:col-span-5 space-y-5"
+                        className="col-span-1 md:col-span-2 lg:col-span-5 flex flex-col items-center md:items-start text-center md:text-left space-y-5"
                     >
                         {/* Logo mark */}
-                        <div className="flex items-center gap-3">
+                        <div className="flex flex-col md:flex-row items-center md:items-start gap-3">
                             {pengaturan?.site_logo ? (
                                 <img
                                     src={`/${pengaturan.site_logo}`}
@@ -159,7 +159,7 @@ export default function Footer() {
                     {/* ── Column 2: Navigation (30%) ── */}
                     <motion.div
                         variants={fadeInUp}
-                        className="lg:col-span-3 space-y-5"
+                        className="col-span-1 md:col-span-1 lg:col-span-3 space-y-5 flex flex-col items-center md:items-start text-center md:text-left"
                     >
                         <h3 className="text-xs font-bold tracking-widest uppercase text-[#c9a84c]">
                             {locale === 'id' ? 'Navigasi' : 'Navigation'}
@@ -185,7 +185,7 @@ export default function Footer() {
                     {/* ── Column 3: Important Links + Social (30%) ── */}
                     <motion.div
                         variants={fadeInUp}
-                        className="lg:col-span-4 space-y-5"
+                        className="col-span-1 md:col-span-1 lg:col-span-4 space-y-5 flex flex-col items-center md:items-start text-center md:text-left"
                     >
                         <h3 className="text-xs font-bold tracking-widest uppercase text-[#c9a84c]">
                             {locale === 'id' ? 'Tautan Penting' : 'Important Links'}
@@ -248,10 +248,10 @@ export default function Footer() {
                         {/* Social media */}
                         {hasSocial && (
                             <div className="pt-2 space-y-3">
-                                <p className="text-xs font-medium text-white/40 uppercase tracking-widest">
+                                <p className="text-xs font-medium text-white/40 uppercase tracking-widest text-center md:text-left">
                                     {locale === 'id' ? 'Ikuti Kami' : 'Follow Us'}
                                 </p>
-                                <div className="flex items-center gap-2.5">
+                                <div className="flex items-center justify-center md:justify-start gap-2.5">
                                     {instagram && (
                                         <SocialButton
                                             href={instagram}

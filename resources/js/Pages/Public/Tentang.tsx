@@ -116,6 +116,7 @@ const ProfilSection = ({ kontenProfil }: { kontenProfil?: Record<string, string>
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true }}
+                    className="order-2 lg:order-1"
                 >
                     <p className="text-xs font-bold tracking-[0.2em] uppercase text-[#c9a84c] mb-3">
                         PROFIL SEKOLAH
@@ -154,7 +155,7 @@ const ProfilSection = ({ kontenProfil }: { kontenProfil?: Record<string, string>
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true }}
-                    className="relative"
+                    className="relative order-1 lg:order-2"
                 >
                     <div className="relative rounded-3xl overflow-hidden aspect-[4/3] bg-gradient-to-br from-[#003f87] to-[#001f4d] flex items-center justify-center shadow-2xl">
                         {/* Placeholder ilustrasi */}
@@ -450,11 +451,11 @@ const StrukturSection = ({ strukturOrganisasi }: { strukturOrganisasi?: any }) =
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
-                className="w-full overflow-x-auto pb-8 flex justify-center"
+                className="w-full overflow-x-auto pb-8"
             >
                 {strukturOrganisasi ? (
                     <>
-                        <div className="hidden md:flex flex-col items-center min-w-max">
+                        <div className="hidden md:flex flex-col items-center min-w-max mx-auto px-4">
                             <OrgNodeDesktop node={strukturOrganisasi} isRoot />
                         </div>
                         <div className="flex md:hidden flex-col items-start w-full bg-white rounded-2xl p-6 shadow-sm border border-[#e5e5ea]">

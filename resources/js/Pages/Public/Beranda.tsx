@@ -1,13 +1,26 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Head, Link, usePage } from '@inertiajs/react';
-import { motion, useScroll, useTransform, useInView } from 'framer-motion';
-import { ChevronDown, ArrowRight, Users, GraduationCap, BookOpen, Calendar } from 'lucide-react';
-import PublicLayout from '@/Layouts/PublicLayout';
-import { JurusanCard } from '@/Components/UI/JurusanCard';
-import { ArticleCard } from '@/Components/UI/ArticleCard';
-import { Button } from '@/Components/UI/Button';
-import { fadeInUp, staggerContainer, heroStagger, scaleIn, fadeIn } from '@/lib/motion';
-import { SharedProps } from '@/types';
+import React, { useEffect, useRef, useState } from "react";
+import { Head, Link, usePage } from "@inertiajs/react";
+import { motion, useScroll, useTransform, useInView } from "framer-motion";
+import {
+    ChevronDown,
+    ArrowRight,
+    Users,
+    GraduationCap,
+    BookOpen,
+    Calendar,
+} from "lucide-react";
+import PublicLayout from "@/Layouts/PublicLayout";
+import { JurusanCard } from "@/Components/UI/JurusanCard";
+import { ArticleCard } from "@/Components/UI/ArticleCard";
+import { Button } from "@/Components/UI/Button";
+import {
+    fadeInUp,
+    staggerContainer,
+    heroStagger,
+    scaleIn,
+    fadeIn,
+} from "@/lib/motion";
+import { SharedProps } from "@/types";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -61,10 +74,16 @@ interface BerandaProps {
 
 // ─── Animated Counter ─────────────────────────────────────────────────────────
 
-function AnimatedCounter({ value, suffix = '' }: { value: number; suffix?: string }) {
+function AnimatedCounter({
+    value,
+    suffix = "",
+}: {
+    value: number;
+    suffix?: string;
+}) {
     const [count, setCount] = useState(0);
     const ref = useRef<HTMLSpanElement>(null);
-    const inView = useInView(ref, { once: true, margin: '-80px' });
+    const inView = useInView(ref, { once: true, margin: "-80px" });
 
     useEffect(() => {
         if (!inView) return;
@@ -87,7 +106,8 @@ function AnimatedCounter({ value, suffix = '' }: { value: number; suffix?: strin
 
     return (
         <span ref={ref}>
-            {count.toLocaleString('id-ID')}{suffix}
+            {count.toLocaleString("id-ID")}
+            {suffix}
         </span>
     );
 }
@@ -104,13 +124,33 @@ function HeroMeshPattern({ className }: { className?: string }) {
             aria-hidden="true"
         >
             <defs>
-                <linearGradient id="mesh-grad-1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <linearGradient
+                    id="mesh-grad-1"
+                    x1="0%"
+                    y1="0%"
+                    x2="100%"
+                    y2="100%"
+                >
                     <stop offset="0%" stopColor="#c9a84c" stopOpacity="0.3" />
-                    <stop offset="100%" stopColor="transparent" stopOpacity="0" />
+                    <stop
+                        offset="100%"
+                        stopColor="transparent"
+                        stopOpacity="0"
+                    />
                 </linearGradient>
-                <linearGradient id="mesh-grad-2" x1="100%" y1="0%" x2="0%" y2="100%">
+                <linearGradient
+                    id="mesh-grad-2"
+                    x1="100%"
+                    y1="0%"
+                    x2="0%"
+                    y2="100%"
+                >
                     <stop offset="0%" stopColor="#ffffff" stopOpacity="0.15" />
-                    <stop offset="100%" stopColor="transparent" stopOpacity="0" />
+                    <stop
+                        offset="100%"
+                        stopColor="transparent"
+                        stopOpacity="0"
+                    />
                 </linearGradient>
             </defs>
             {/* Wavy subtle background shapes for light/shadow interplay */}
@@ -123,10 +163,34 @@ function HeroMeshPattern({ className }: { className?: string }) {
                 fill="url(#mesh-grad-2)"
             />
             {/* Elegant floating lines */}
-            <path d="M0,200 C400,350 800,50 1440,250" fill="none" stroke="#c9a84c" strokeWidth="1" strokeOpacity="0.2" />
-            <path d="M0,220 C400,370 800,70 1440,270" fill="none" stroke="#c9a84c" strokeWidth="1" strokeOpacity="0.1" />
-            <path d="M0,500 C500,300 900,600 1440,400" fill="none" stroke="#ffffff" strokeWidth="1" strokeOpacity="0.15" />
-            <path d="M0,520 C500,320 900,620 1440,420" fill="none" stroke="#ffffff" strokeWidth="1" strokeOpacity="0.05" />
+            <path
+                d="M0,200 C400,350 800,50 1440,250"
+                fill="none"
+                stroke="#c9a84c"
+                strokeWidth="1"
+                strokeOpacity="0.2"
+            />
+            <path
+                d="M0,220 C400,370 800,70 1440,270"
+                fill="none"
+                stroke="#c9a84c"
+                strokeWidth="1"
+                strokeOpacity="0.1"
+            />
+            <path
+                d="M0,500 C500,300 900,600 1440,400"
+                fill="none"
+                stroke="#ffffff"
+                strokeWidth="1"
+                strokeOpacity="0.15"
+            />
+            <path
+                d="M0,520 C500,320 900,620 1440,420"
+                fill="none"
+                stroke="#ffffff"
+                strokeWidth="1"
+                strokeOpacity="0.05"
+            />
         </svg>
     );
 }
@@ -135,16 +199,47 @@ function HeroMeshPattern({ className }: { className?: string }) {
 
 const GeometricPattern = () => (
     <svg
-        className="absolute inset-0 w-full h-full opacity-[0.04] pointer-events-none"
+        className="hidden md:block absolute inset-0 w-full h-full opacity-[0.04] pointer-events-none"
         xmlns="http://www.w3.org/2000/svg"
         aria-hidden="true"
     >
         <defs>
-            <pattern id="geo-pattern-beranda" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
-                <polygon points="40,4 76,22 76,58 40,76 4,58 4,22" fill="none" stroke="white" strokeWidth="1" />
-                <polygon points="40,16 64,28 64,52 40,64 16,52 16,28" fill="none" stroke="white" strokeWidth="0.5" />
-                <line x1="40" y1="4" x2="40" y2="76" stroke="white" strokeWidth="0.3" />
-                <line x1="4" y1="40" x2="76" y2="40" stroke="white" strokeWidth="0.3" />
+            <pattern
+                id="geo-pattern-beranda"
+                x="0"
+                y="0"
+                width="80"
+                height="80"
+                patternUnits="userSpaceOnUse"
+            >
+                <polygon
+                    points="40,4 76,22 76,58 40,76 4,58 4,22"
+                    fill="none"
+                    stroke="white"
+                    strokeWidth="1"
+                />
+                <polygon
+                    points="40,16 64,28 64,52 40,64 16,52 16,28"
+                    fill="none"
+                    stroke="white"
+                    strokeWidth="0.5"
+                />
+                <line
+                    x1="40"
+                    y1="4"
+                    x2="40"
+                    y2="76"
+                    stroke="white"
+                    strokeWidth="0.3"
+                />
+                <line
+                    x1="4"
+                    y1="40"
+                    x2="76"
+                    y2="40"
+                    stroke="white"
+                    strokeWidth="0.3"
+                />
             </pattern>
         </defs>
         <rect width="100%" height="100%" fill="url(#geo-pattern-beranda)" />
@@ -158,9 +253,14 @@ interface StatItemProps {
     icon_name?: string;
 }
 
-import * as icons from 'lucide-react';
+import * as icons from "lucide-react";
 
-function StatItem({ value, suffix = '+', label, icon_name = 'Circle' }: StatItemProps) {
+function StatItem({
+    value,
+    suffix = "+",
+    label,
+    icon_name = "Circle",
+}: StatItemProps) {
     const Icon = (icons as any)[icon_name] || icons.Circle;
 
     return (
@@ -171,8 +271,11 @@ function StatItem({ value, suffix = '+', label, icon_name = 'Circle' }: StatItem
             <div className="mb-4 w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center border border-white/20">
                 <Icon className="w-6 h-6 text-[#c9a84c]" strokeWidth={1.5} />
             </div>
-            <div className="font-serif text-5xl lg:text-6xl font-bold text-white tracking-tight mb-2" style={{ fontFamily: 'Playfair Display, Georgia, serif' }}>
-                <AnimatedCounter value={value} suffix={suffix || '-'} />
+            <div
+                className="font-serif text-5xl lg:text-6xl font-bold text-white tracking-tight mb-2"
+                style={{ fontFamily: "Playfair Display, Georgia, serif" }}
+            >
+                <AnimatedCounter value={value} suffix={suffix || "-"} />
             </div>
             <p className="text-white/70 text-sm font-medium uppercase tracking-widest">
                 {label}
@@ -183,7 +286,12 @@ function StatItem({ value, suffix = '+', label, icon_name = 'Circle' }: StatItem
 
 // ─── Section Header ───────────────────────────────────────────────────────────
 
-function SectionHeader({ label, title, subtitle, light = false }: {
+function SectionHeader({
+    label,
+    title,
+    subtitle,
+    light = false,
+}: {
     label: string;
     title: string;
     subtitle?: string;
@@ -194,26 +302,26 @@ function SectionHeader({ label, title, subtitle, light = false }: {
             variants={staggerContainer}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: '-80px' }}
+            viewport={{ once: true, margin: "-80px" }}
             className="text-center mb-16"
         >
             <motion.span
                 variants={fadeInUp}
-                className={`inline-block font-mono text-xs tracking-[0.3em] uppercase mb-4 ${light ? 'text-[#c9a84c]' : 'text-[#003f87]'}`}
+                className={`inline-block font-mono text-xs tracking-[0.3em] uppercase mb-4 ${light ? "text-[#c9a84c]" : "text-[#003f87]"}`}
             >
                 {label}
             </motion.span>
             <motion.h2
                 variants={fadeInUp}
-                className={`font-serif text-4xl lg:text-5xl font-bold tracking-tight ${light ? 'text-white' : 'text-[#111111]'}`}
-                style={{ fontFamily: 'Playfair Display, Georgia, serif' }}
+                className={`font-serif text-4xl lg:text-5xl font-bold tracking-tight ${light ? "text-white" : "text-[#111111]"}`}
+                style={{ fontFamily: "Playfair Display, Georgia, serif" }}
             >
                 {title}
             </motion.h2>
             {subtitle && (
                 <motion.p
                     variants={fadeInUp}
-                    className={`mt-4 text-lg max-w-2xl mx-auto ${light ? 'text-white/70' : 'text-[#636366]'}`}
+                    className={`mt-4 text-lg max-w-2xl mx-auto ${light ? "text-white/70" : "text-[#636366]"}`}
                 >
                     {subtitle}
                 </motion.p>
@@ -229,8 +337,17 @@ function SectionDivider() {
         <div className="relative flex items-center justify-center py-0">
             <div className="absolute inset-x-0 top-1/2 border-t border-[#c9a84c]/20" />
             <div className="relative z-10 bg-inherit px-3">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="text-[#c9a84c]/40">
-                    <path d="M8 0L9.5 5.5H16L10.8 8.9L12.7 14.5L8 11.1L3.3 14.5L5.2 8.9L0 5.5H6.5L8 0Z" fill="currentColor" />
+                <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    className="text-[#c9a84c]/40"
+                >
+                    <path
+                        d="M8 0L9.5 5.5H16L10.8 8.9L12.7 14.5L8 11.1L3.3 14.5L5.2 8.9L0 5.5H6.5L8 0Z"
+                        fill="currentColor"
+                    />
                 </svg>
             </div>
         </div>
@@ -256,7 +373,6 @@ export default function Beranda({
     const heroImageY = useTransform(scrollY, [0, 600], [0, -120]);
 
     console.log(kontenHero);
-
 
     return (
         <PublicLayout>
@@ -288,7 +404,8 @@ export default function Beranda({
                 <div
                     className="absolute inset-0 z-10"
                     style={{
-                        background: 'linear-gradient(to right, rgba(0,31,77,0.92) 0%, rgba(0,63,135,0.72) 55%, transparent 100%)'
+                        background:
+                            "linear-gradient(to right, rgba(0,31,77,0.92) 0%, rgba(0,63,135,0.72) 55%, transparent 100%)",
                     }}
                 />
 
@@ -309,9 +426,9 @@ export default function Beranda({
                         <motion.div variants={fadeInUp} className="mb-6">
                             <span
                                 className="font-mono text-xs tracking-[0.3em] uppercase"
-                                style={{ color: '#c9a84c' }}
+                                style={{ color: "#c9a84c" }}
                             >
-                                {kontenHero?.eyebrow || '-'}
+                                {kontenHero?.eyebrow || "-"}
                             </span>
                         </motion.div>
 
@@ -320,42 +437,55 @@ export default function Beranda({
                             variants={fadeInUp}
                             className="font-serif font-bold text-white leading-tight mb-6"
                             style={{
-                                fontFamily: 'Playfair Display, Georgia, serif',
-                                fontSize: 'clamp(2.5rem, 5vw, 4.25rem)',
-                                lineHeight: '1.1',
-                                letterSpacing: '-0.02em',
+                                fontFamily: "Playfair Display, Georgia, serif",
+                                fontSize: "clamp(2.25rem, 5vw, 4.25rem)",
+                                lineHeight: "1.1",
+                                letterSpacing: "-0.02em",
                             }}
-                            dangerouslySetInnerHTML={{ __html: kontenHero?.headline || '' }}
+                            dangerouslySetInnerHTML={{
+                                __html: kontenHero?.headline || "",
+                            }}
                         />
 
                         {/* Subheadline */}
                         <motion.p
                             variants={fadeInUp}
                             className="text-lg max-w-lg mb-10 leading-relaxed"
-                            style={{ color: 'rgba(255,255,255,0.80)' }}
-                            dangerouslySetInnerHTML={{ __html: kontenHero?.subheadline || '' }}
+                            style={{ color: "rgba(255,255,255,0.80)" }}
+                            dangerouslySetInnerHTML={{
+                                __html: kontenHero?.subheadline || "",
+                            }}
                         />
 
                         {/* CTA Row */}
-                        <motion.div variants={fadeInUp} className="flex flex-wrap items-center gap-4">
+                        <motion.div
+                            variants={fadeInUp}
+                            className="flex flex-col sm:flex-row items-center gap-4"
+                        >
                             <a
-                                href={pengaturan?.spmb_url || '#'}
+                                href={pengaturan?.spmb_url || "#"}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 id="hero-cta-daftar"
-                                className="inline-flex items-center gap-2 font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 px-8 py-4 text-lg rounded-xl text-white hover:opacity-90 focus:ring-[#c9a84c]/50 shadow-lg hover:shadow-xl"
-                                style={{ background: 'linear-gradient(135deg, #c9a84c 0%, #a8821f 100%)' }}
+                                className="inline-flex flex-1 sm:flex-none justify-center w-full sm:w-auto items-center gap-2 font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 px-8 py-4 text-lg rounded-xl text-white hover:opacity-90 focus:ring-[#c9a84c]/50 shadow-lg hover:shadow-xl min-h-11"
+                                style={{
+                                    background:
+                                        "linear-gradient(135deg, #c9a84c 0%, #a8821f 100%)",
+                                }}
                             >
-                                {kontenHero?.cta_primer_label || '-'}
-                                <ArrowRight className="w-5 h-5" strokeWidth={1.5} />
+                                {kontenHero?.cta_primer_label || "-"}
+                                <ArrowRight
+                                    className="w-5 h-5"
+                                    strokeWidth={1.5}
+                                />
                             </a>
 
                             <Link
                                 href="/jurusan"
                                 id="hero-cta-jurusan"
-                                className="inline-flex items-center gap-2 font-semibold transition-all duration-200 px-8 py-4 text-lg rounded-xl text-white border-2 border-white/60 hover:bg-white/10 hover:border-white focus:outline-none focus:ring-2 focus:ring-white/50"
+                                className="inline-flex flex-1 sm:flex-none justify-center w-full sm:w-auto items-center gap-2 font-semibold transition-all duration-200 px-8 py-4 text-lg rounded-xl text-white border-2 border-white/60 hover:bg-white/10 hover:border-white focus:outline-none focus:ring-2 focus:ring-white/50 min-h-11"
                             >
-                                {kontenHero?.cta_sekunder_label || '-'}
+                                {kontenHero?.cta_sekunder_label || "-"}
                             </Link>
                         </motion.div>
 
@@ -365,7 +495,12 @@ export default function Beranda({
                             className="mt-12 flex items-center gap-4"
                         >
                             <div className="h-px w-12 bg-[#c9a84c]/60" />
-                            <span className="text-xs text-white/40 tracking-widest uppercase" dangerouslySetInnerHTML={{ __html: kontenHero?.footnote || '' }} />
+                            <span
+                                className="text-xs text-white/40 tracking-widest uppercase"
+                                dangerouslySetInnerHTML={{
+                                    __html: kontenHero?.footnote || "",
+                                }}
+                            />
                         </motion.div>
                     </motion.div>
                 </div>
@@ -378,12 +513,21 @@ export default function Beranda({
                     className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2"
                     aria-hidden="true"
                 >
-                    <span className="text-white/40 text-xs tracking-widest uppercase font-mono">Scroll</span>
+                    <span className="text-white/40 text-xs tracking-widest uppercase font-mono">
+                        Scroll
+                    </span>
                     <motion.div
                         animate={{ y: [0, 8, 0] }}
-                        transition={{ repeat: Infinity, duration: 1.5, ease: 'easeInOut' }}
+                        transition={{
+                            repeat: Infinity,
+                            duration: 1.5,
+                            ease: "easeInOut",
+                        }}
                     >
-                        <ChevronDown className="w-6 h-6 text-white/50" strokeWidth={1.5} />
+                        <ChevronDown
+                            className="w-6 h-6 text-white/50"
+                            strokeWidth={1.5}
+                        />
                     </motion.div>
                 </motion.div>
             </section>
@@ -391,12 +535,22 @@ export default function Beranda({
             {/* ══════════════════════════════════════════════════════════════
                 SECTION 2 — STATISTIK
             ══════════════════════════════════════════════════════════════ */}
-            <section id="beranda-statistik" aria-label="Statistik sekolah" className="relative" style={{ background: '#003f87' }}>
+            <section
+                id="beranda-statistik"
+                aria-label="Statistik sekolah"
+                className="relative"
+                style={{ background: "#003f87" }}
+            >
                 {/* Fullsize Subtle pattern overlay */}
                 <GeometricPattern />
                 {/* Top separator */}
                 <div className="relative h-16 overflow-hidden">
-                    <svg viewBox="0 0 1440 64" preserveAspectRatio="none" className="absolute bottom-0 w-full h-full" style={{ fill: '#003f87' }}>
+                    <svg
+                        viewBox="0 0 1440 64"
+                        preserveAspectRatio="none"
+                        className="absolute bottom-0 w-full h-full"
+                        style={{ fill: "#003f87" }}
+                    >
                         <path d="M0,64 L0,32 Q360,0 720,32 Q1080,64 1440,32 L1440,64 Z" />
                     </svg>
                 </div>
@@ -407,10 +561,10 @@ export default function Beranda({
                             variants={staggerContainer}
                             initial="hidden"
                             whileInView="visible"
-                            viewport={{ once: true, margin: '-80px' }}
-                            className="relative grid grid-cols-2 lg:grid-cols-4 gap-0 divide-x divide-white/10"
+                            viewport={{ once: true, margin: "-80px" }}
+                            className="relative grid grid-cols-2 lg:grid-cols-4 gap-y-10 gap-x-2 lg:gap-0 lg:divide-x lg:divide-white/10"
                         >
-                            {statistik.map(stat => (
+                            {statistik.map((stat) => (
                                 <StatItem
                                     key={stat.key}
                                     value={stat.nilai}
@@ -424,8 +578,16 @@ export default function Beranda({
                 </div>
 
                 {/* Bottom separator */}
-                <div className="relative h-16 overflow-hidden" style={{ background: '#f8f9fa' }}>
-                    <svg viewBox="0 0 1440 64" preserveAspectRatio="none" className="absolute top-0 w-full h-full" style={{ fill: '#003f87' }}>
+                <div
+                    className="relative h-16 overflow-hidden"
+                    style={{ background: "#f8f9fa" }}
+                >
+                    <svg
+                        viewBox="0 0 1440 64"
+                        preserveAspectRatio="none"
+                        className="absolute top-0 w-full h-full"
+                        style={{ fill: "#003f87" }}
+                    >
                         <path d="M0,0 L0,32 Q360,64 720,32 Q1080,0 1440,32 L1440,0 Z" />
                     </svg>
                 </div>
@@ -437,14 +599,14 @@ export default function Beranda({
             <section
                 id="beranda-jurusan"
                 className="py-20 lg:py-28"
-                style={{ background: '#f8f9fa' }}
+                style={{ background: "#f8f9fa" }}
                 aria-label="Program keahlian"
             >
                 <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-16">
                     <SectionHeader
-                        label={kontenJurusan?.label || '-'}
-                        title={kontenJurusan?.headline || '-'}
-                        subtitle={kontenJurusan?.subheadline || '-'}
+                        label={kontenJurusan?.label || "-"}
+                        title={kontenJurusan?.headline || "-"}
+                        subtitle={kontenJurusan?.subheadline || "-"}
                     />
 
                     {/* Grid 3+2 layout */}
@@ -453,13 +615,19 @@ export default function Beranda({
                             variants={staggerContainer}
                             initial="hidden"
                             whileInView="visible"
-                            viewport={{ once: true, margin: '-80px' }}
+                            viewport={{ once: true, margin: "-80px" }}
                         >
                             {/* Row 1: max 3 cards */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
                                 {jurusan.slice(0, 3).map((j) => (
-                                    <motion.div key={j.kode} variants={fadeInUp}>
-                                        <JurusanCard jurusan={j} className="h-64 lg:h-72" />
+                                    <motion.div
+                                        key={j.kode}
+                                        variants={fadeInUp}
+                                    >
+                                        <JurusanCard
+                                            jurusan={j}
+                                            className="h-64 lg:h-72"
+                                        />
                                     </motion.div>
                                 ))}
                             </div>
@@ -467,10 +635,16 @@ export default function Beranda({
                             {/* Row 2: remaining cards centered */}
                             {jurusan.length > 3 && (
                                 <div className="flex justify-center">
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full lg:w-2/3">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full lg:w-2/3">
                                         {jurusan.slice(3).map((j) => (
-                                            <motion.div key={j.kode} variants={fadeInUp}>
-                                                <JurusanCard jurusan={j} className="h-64 lg:h-72" />
+                                            <motion.div
+                                                key={j.kode}
+                                                variants={fadeInUp}
+                                            >
+                                                <JurusanCard
+                                                    jurusan={j}
+                                                    className="h-64 lg:h-72"
+                                                />
                                             </motion.div>
                                         ))}
                                     </div>
@@ -498,7 +672,10 @@ export default function Beranda({
                             className="inline-flex items-center gap-2 font-semibold text-[#003f87] hover:text-[#001f4d] transition-colors group"
                         >
                             Lihat Semua Program Keahlian
-                            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" strokeWidth={1.5} />
+                            <ArrowRight
+                                className="w-4 h-4 transition-transform group-hover:translate-x-1"
+                                strokeWidth={1.5}
+                            />
                         </Link>
                     </motion.div>
                 </div>
@@ -516,9 +693,9 @@ export default function Beranda({
             >
                 <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-16">
                     <SectionHeader
-                        label={kontenBerita?.label || '-'}
-                        title={kontenBerita?.headline || '-'}
-                        subtitle={kontenBerita?.subheadline || '-'}
+                        label={kontenBerita?.label || "-"}
+                        title={kontenBerita?.headline || "-"}
+                        subtitle={kontenBerita?.subheadline || "-"}
                     />
 
                     {beritaTerbaru.length > 0 ? (
@@ -526,12 +703,18 @@ export default function Beranda({
                             variants={staggerContainer}
                             initial="hidden"
                             whileInView="visible"
-                            viewport={{ once: true, margin: '-80px' }}
+                            viewport={{ once: true, margin: "-80px" }}
                             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
                         >
                             {beritaTerbaru.map((article) => (
-                                <motion.div key={article.id} variants={fadeInUp}>
-                                    <ArticleCard article={article} className="h-full" />
+                                <motion.div
+                                    key={article.id}
+                                    variants={fadeInUp}
+                                >
+                                    <ArticleCard
+                                        article={article}
+                                        className="h-full"
+                                    />
                                 </motion.div>
                             ))}
                         </motion.div>
@@ -550,7 +733,16 @@ export default function Beranda({
                         className="text-center mt-14"
                     >
                         <Link href="/berita" id="berita-lihat-semua">
-                            <Button variant="outline" size="lg" rightIcon={<ArrowRight className="w-5 h-5" strokeWidth={1.5} />}>
+                            <Button
+                                variant="outline"
+                                size="lg"
+                                rightIcon={
+                                    <ArrowRight
+                                        className="w-5 h-5"
+                                        strokeWidth={1.5}
+                                    />
+                                }
+                            >
                                 Lihat Semua Berita
                             </Button>
                         </Link>
@@ -570,7 +762,8 @@ export default function Beranda({
                 <div
                     className="absolute inset-0 z-0"
                     style={{
-                        background: 'linear-gradient(135deg, #001f4d 0%, #003f87 50%, #002d6b 100%)'
+                        background:
+                            "linear-gradient(135deg, #001f4d 0%, #003f87 50%, #002d6b 100%)",
                     }}
                 />
 
@@ -580,30 +773,36 @@ export default function Beranda({
                 {/* Decorative orbs */}
                 <div
                     className="absolute -top-24 -right-24 w-96 h-96 rounded-full blur-3xl z-10 pointer-events-none"
-                    style={{ background: 'rgba(201,168,76,0.12)' }}
+                    style={{ background: "rgba(201,168,76,0.12)" }}
                 />
                 <div
                     className="absolute -bottom-24 -left-24 w-96 h-96 rounded-full blur-3xl z-10 pointer-events-none"
-                    style={{ background: 'rgba(0,80,168,0.25)' }}
+                    style={{ background: "rgba(0,80,168,0.25)" }}
                 />
 
                 {/* Gold top line */}
-                <div className="absolute top-0 left-0 right-0 h-1 z-20" style={{ background: 'linear-gradient(to right, transparent, #c9a84c, transparent)' }} />
+                <div
+                    className="absolute top-0 left-0 right-0 h-1 z-20"
+                    style={{
+                        background:
+                            "linear-gradient(to right, transparent, #c9a84c, transparent)",
+                    }}
+                />
 
                 <div className="relative z-20 max-w-4xl mx-auto px-6 sm:px-8 lg:px-16 text-center">
                     <motion.div
                         variants={staggerContainer}
                         initial="hidden"
                         whileInView="visible"
-                        viewport={{ once: true, margin: '-80px' }}
+                        viewport={{ once: true, margin: "-80px" }}
                     >
                         {/* Label */}
                         <motion.span
                             variants={fadeInUp}
                             className="inline-block font-mono text-xs tracking-[0.3em] uppercase mb-6"
-                            style={{ color: '#c9a84c' }}
+                            style={{ color: "#c9a84c" }}
                         >
-                            {kontenCtaAkhir?.label || '-'}
+                            {kontenCtaAkhir?.label || "-"}
                         </motion.span>
 
                         {/* Headline */}
@@ -611,43 +810,60 @@ export default function Beranda({
                             variants={fadeInUp}
                             className="font-serif font-bold text-white mb-6"
                             style={{
-                                fontFamily: 'Playfair Display, Georgia, serif',
-                                fontSize: 'clamp(2rem, 4vw, 3.25rem)',
-                                lineHeight: '1.15',
-                                letterSpacing: '-0.01em',
+                                fontFamily: "Playfair Display, Georgia, serif",
+                                fontSize: "clamp(2rem, 4vw, 3.25rem)",
+                                lineHeight: "1.15",
+                                letterSpacing: "-0.01em",
                             }}
-                            dangerouslySetInnerHTML={{ __html: kontenCtaAkhir?.headline || '' }}
+                            dangerouslySetInnerHTML={{
+                                __html: kontenCtaAkhir?.headline || "",
+                            }}
                         />
 
                         {/* Subheadline */}
                         <motion.p
                             variants={fadeInUp}
                             className="text-lg max-w-2xl mx-auto mb-12 leading-relaxed"
-                            style={{ color: 'rgba(255,255,255,0.75)' }}
-                            dangerouslySetInnerHTML={{ __html: kontenCtaAkhir?.subheadline || '' }}
+                            style={{ color: "rgba(255,255,255,0.75)" }}
+                            dangerouslySetInnerHTML={{
+                                __html: kontenCtaAkhir?.subheadline || "",
+                            }}
                         />
 
                         {/* CTA Buttons */}
-                        <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                        <motion.div
+                            variants={fadeInUp}
+                            className="flex flex-col sm:flex-row items-center justify-center gap-4"
+                        >
                             <a
-                                href={pengaturan?.spmb_url || '#'}
+                                href={pengaturan?.spmb_url || "#"}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 id="cta-mulai-pendaftaran"
-                                className="inline-flex items-center gap-3 font-semibold transition-all duration-200 px-10 py-5 text-xl rounded-2xl text-white shadow-2xl hover:shadow-[#c9a84c]/30 hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-[#c9a84c]/50 focus:ring-offset-2 focus:ring-offset-transparent"
-                                style={{ background: 'linear-gradient(135deg, #c9a84c 0%, #a8821f 100%)' }}
+                                className="inline-flex items-center justify-center w-full sm:w-auto gap-3 font-semibold transition-all duration-200 px-10 py-5 text-xl rounded-2xl text-white shadow-2xl hover:shadow-[#c9a84c]/30 hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-[#c9a84c]/50 focus:ring-offset-2 focus:ring-offset-transparent min-h-11"
+                                style={{
+                                    background:
+                                        "linear-gradient(135deg, #c9a84c 0%, #a8821f 100%)",
+                                }}
                             >
-                                {kontenCtaAkhir?.cta_primary || 'Mulai Pendaftaran'}
-                                <ArrowRight className="w-6 h-6" strokeWidth={1.5} />
+                                {kontenCtaAkhir?.cta_primary ||
+                                    "Mulai Pendaftaran"}
+                                <ArrowRight
+                                    className="w-6 h-6"
+                                    strokeWidth={1.5}
+                                />
                             </a>
 
                             <Link
                                 href="/tentang"
                                 id="cta-pelajari-lebih"
-                                className="inline-flex items-center gap-2 font-semibold transition-all duration-200 px-10 py-5 text-xl rounded-2xl text-white border-2 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/50"
-                                style={{ borderColor: 'rgba(255,255,255,0.45)' }}
+                                className="inline-flex items-center justify-center w-full sm:w-auto gap-2 font-semibold transition-all duration-200 px-10 py-5 text-xl rounded-2xl text-white border-2 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/50 min-h-11"
+                                style={{
+                                    borderColor: "rgba(255,255,255,0.45)",
+                                }}
                             >
-                                {kontenCtaAkhir?.cta_secondary || 'Pelajari Lebih Lanjut'}
+                                {kontenCtaAkhir?.cta_secondary ||
+                                    "Pelajari Lebih Lanjut"}
                             </Link>
                         </motion.div>
 
@@ -657,14 +873,21 @@ export default function Beranda({
                             className="mt-14 flex flex-wrap items-center justify-center gap-8"
                         >
                             {[
-                                { value: 'Terakreditasi', label: 'Nasional' },
-                                { value: 'ISO', label: 'Bersertifikat' },
-                                { value: '100%', label: 'Lulusan Terserap' },
+                                { value: "Terakreditasi", label: "Nasional" },
+                                { value: "ISO", label: "Bersertifikat" },
+                                { value: "100%", label: "Lulusan Terserap" },
                             ].map(({ value, label }) => (
-                                <div key={value} className="flex items-center gap-3">
+                                <div
+                                    key={value}
+                                    className="flex items-center gap-3"
+                                >
                                     <div className="w-2 h-2 rounded-full bg-[#c9a84c]" />
-                                    <span className="text-white font-semibold">{value}</span>
-                                    <span className="text-white/50 text-sm">{label}</span>
+                                    <span className="text-white font-semibold">
+                                        {value}
+                                    </span>
+                                    <span className="text-white/50 text-sm">
+                                        {label}
+                                    </span>
                                 </div>
                             ))}
                         </motion.div>
@@ -672,7 +895,13 @@ export default function Beranda({
                 </div>
 
                 {/* Gold bottom line */}
-                <div className="absolute bottom-0 left-0 right-0 h-1 z-20" style={{ background: 'linear-gradient(to right, transparent, #c9a84c, transparent)' }} />
+                <div
+                    className="absolute bottom-0 left-0 right-0 h-1 z-20"
+                    style={{
+                        background:
+                            "linear-gradient(to right, transparent, #c9a84c, transparent)",
+                    }}
+                />
             </section>
         </PublicLayout>
     );

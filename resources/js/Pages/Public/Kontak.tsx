@@ -162,6 +162,7 @@ const InfoDanPeta = ({ pengaturan, kontenInfo }: { pengaturan: Pengaturan; konte
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true }}
+                    className="order-2 lg:order-1"
                 >
                     <p className="text-xs font-bold tracking-[0.2em] uppercase text-[#c9a84c] mb-3">
                         INFORMASI KONTAK
@@ -259,7 +260,7 @@ const InfoDanPeta = ({ pengaturan, kontenInfo }: { pengaturan: Pengaturan; konte
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true }}
-                    className="relative rounded-3xl overflow-hidden shadow-2xl aspect-[4/3] bg-[#f8f9fa] border border-[#e5e5ea]"
+                    className="relative order-1 lg:order-2 rounded-3xl overflow-hidden shadow-2xl aspect-video bg-[#f8f9fa] border border-[#e5e5ea]"
                 >
                     {kontenInfo?.maps_embed_url ? (
                         <iframe
