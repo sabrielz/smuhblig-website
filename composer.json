@@ -42,13 +42,7 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        },
-        "psr-0": {
-            "HTMLPurifier": "vendor/ezyang/htmlpurifier/library/"
-        },
-        "files": [
-            "vendor/ezyang/htmlpurifier/library/HTMLPurifier.composer.php"
-        ]
+        }
     },
     "autoload-dev": {
         "psr-4": {
@@ -91,15 +85,6 @@
             "Illuminate\\Foundation\\ComposerScripts::prePackageUninstall"
         ]
     },
-    "repositories": [
-        {
-            "type": "path",
-            "url": "vendor/ezyang/htmlpurifier",
-            "options": {
-                "symlink": false
-            }
-        }
-    ],
     "extra": {
         "laravel": {
             "dont-discover": []

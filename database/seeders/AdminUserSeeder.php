@@ -13,7 +13,7 @@ class AdminUserSeeder extends Seeder
      */
     public function run(): void
     {
-        $password = Str::random(16);
+        $password = 'Go!ForIt@2003';
 
         $admin = User::firstOrCreate(
             ['email' => 'admin@smkmuhbligo.sch.id'],

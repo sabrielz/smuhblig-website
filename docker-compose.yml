@@ -1,0 +1,113 @@
+services:
+    smkmuhbligo-laravel:
+        build:
+            context: ./docker/8.3
+            dockerfile: Dockerfile
+            args:
+                WWWGROUP: '${WWWGROUP:-1000}'
+        image: smkmuhbligo-app
+        container_name: smkmuhbligo-app
+        extra_hosts:
+            - 'host.docker.internal:host-gateway'
+        ports:
+            - '${APP_PORT:-8001}:80'
+            - '${VITE_PORT:-5174}:${VITE_PORT:-5173}'
+        env_file:
+            - .env.docker
+        environment:
+            WWWUSER: '${WWWUSER:-1337}'
+            LARAVEL_SAIL: 1
+            XDEBUG_MODE: '${SAIL_XDEBUG_MODE:-off}'
+            XDEBUG_CONFIG: '${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}'
+            IGNITION_LOCAL_SITES_PATH: '${PWD}'
+            APP_SERVICE: 'smkmuhbligo-laravel'
+
+        volumes:
+            - '.:/var/www/html'
+        networks:
+            - smkmuhbligo-network
+        depends_on:
+            smkmuhbligo-mysql:
+                condition: service_healthy
+            smkmuhbligo-redis:
+                condition: service_healthy
+
+    smkmuhbligo-mysql:
+        image: 'mysql/mysql-server:8.0'
+        container_name: smkmuhbligo-mysql
+        ports:
+            - '${FORWARD_DB_PORT:-3307}:3306'
+        env_file:
+            - .env.docker
+        environment:
+            MYSQL_ROOT_PASSWORD: '${DB_PASSWORD:-password}'
+            MYSQL_ROOT_HOST: '%'
+            MYSQL_DATABASE: '${DB_DATABASE:-smkmuhbligo}'
+            MYSQL_USER: '${DB_USERNAME:-sail}'
+            MYSQL_PASSWORD: '${DB_PASSWORD:-password}'
+            MYSQL_ALLOW_EMPTY_PASSWORD: 1
+        volumes:
+            - 'smkmuhbligo-mysql-data:/var/lib/mysql'
+            - './docker/mysql/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh'
+        networks:
+            - smkmuhbligo-network
+        healthcheck:
+            test: [ "CMD", "mysqladmin", "ping", "-p${DB_PASSWORD:-password}" ]
+            retries: 3
+            timeout: 5s
+
+    smkmuhbligo-phpmyadmin:
+        image: 'phpmyadmin:latest'
+        container_name: smkmuhbligo-phpmyadmin
+        ports:
+            - '${FORWARD_PHPMYADMIN_PORT:-8080}:80'
+        env_file:
+            - .env.docker
+        environment:
+            PMA_HOST: smkmuhbligo-mysql
+            PMA_PORT: 3306
+            PMA_USER: '${DB_USERNAME:-sail}'
+            PMA_PASSWORD: '${DB_PASSWORD:-password}'
+            MYSQL_ROOT_PASSWORD: '${DB_PASSWORD:-password}'
+            UPLOAD_LIMIT: 64M
+        networks:
+            - smkmuhbligo-network
+        depends_on:
+            smkmuhbligo-mysql:
+                condition: service_healthy
+
+    smkmuhbligo-redis:
+        image: 'redis:alpine'
+        container_name: smkmuhbligo-redis
+        ports:
+            - '${FORWARD_REDIS_PORT:-6379}:6379'
+        volumes:
+            - 'smkmuhbligo-redis-data:/data'
+        networks:
+            - smkmuhbligo-network
+        healthcheck:
+            test: [ "CMD", "redis-cli", "ping" ]
+            retries: 3
+            timeout: 5s
+
+    smkmuhbligo-mailpit:
+        image: 'axllent/mailpit:latest'
+        container_name: smkmuhbligo-mailpit
+        ports:
+            - '${FORWARD_MAILPIT_PORT:-1025}:1025'
+            - '${FORWARD_MAILPIT_DASHBOARD_PORT:-8025}:8025'
+        networks:
+            - smkmuhbligo-network
+
+networks:
+    smkmuhbligo-network:
+        driver: bridge
+        name: smkmuhbligo-network
+
+volumes:
+    smkmuhbligo-mysql-data:
+        driver: local
+        name: smkmuhbligo-mysql-data
+    smkmuhbligo-redis-data:
+        driver: local
+        name: smkmuhbligo-redis-data
