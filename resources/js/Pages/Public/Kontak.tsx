@@ -308,12 +308,12 @@ const InfoDanPeta = ({ pengaturan, kontenInfo }: { pengaturan: Pengaturan; konte
 
 // Map icon_name string → Lucide component
 const iconMap: Record<string, React.ReactNode> = {
-    Globe:      <Globe size={20} strokeWidth={1.5} />,
+    Globe: <Globe size={20} strokeWidth={1.5} />,
     ExternalLink: <ExternalLink size={20} strokeWidth={1.5} />,
-    Link:       <LinkIcon size={20} strokeWidth={1.5} />,
-    Youtube:    <Youtube size={20} strokeWidth={1.5} />,
-    Instagram:  <Instagram size={20} strokeWidth={1.5} />,
-    Facebook:   <Facebook size={20} strokeWidth={1.5} />,
+    Link: <LinkIcon size={20} strokeWidth={1.5} />,
+    Youtube: <Youtube size={20} strokeWidth={1.5} />,
+    Instagram: <Instagram size={20} strokeWidth={1.5} />,
+    Facebook: <Facebook size={20} strokeWidth={1.5} />,
 };
 
 const TautanCard = ({ tautan }: { tautan: Tautan }) => {
@@ -399,9 +399,9 @@ const TautanSection = ({ tautan }: { tautan: Tautan[] }) => {
 // Fallback Tautan (jika DB kosong)
 // ---------------------------------------------------------------------------
 const FallbackTautan: Tautan[] = [
-    { id: 1, label: 'PPDB Online', url: '#', deskripsi: 'Penerimaan Peserta Didik Baru', icon_name: 'Globe', kategori: null, is_active: true, buka_tab_baru: true },
-    { id: 2, label: 'E-Learning', url: '#', deskripsi: 'Platform pembelajaran digital sekolah', icon_name: 'ExternalLink', kategori: null, is_active: true, buka_tab_baru: true },
-    { id: 3, label: 'Portal Siswa', url: '#', deskripsi: 'Akses nilai, absensi, dan informasi akademik', icon_name: 'Link', kategori: null, is_active: true, buka_tab_baru: true },
+    { id: 1, label: 'Pendaftaran Online', url: 'https://spmb.smkmuhbligo.sch.id/', deskripsi: 'Penerimaan Peserta Didik Baru', icon_name: 'Globe', kategori: null, is_active: true, buka_tab_baru: true },
+    { id: 2, label: 'LMS', url: 'https://lms.smkmuhbligo.sch.id/', deskripsi: 'Platform pembelajaran digital sekolah', icon_name: 'ExternalLink', kategori: null, is_active: true, buka_tab_baru: true },
+    { id: 3, label: 'Portal', url: 'https://portal.smkmuhbligo.sch.id/', deskripsi: 'Akses nilai, absensi, dan informasi akademik', icon_name: 'Link', kategori: null, is_active: true, buka_tab_baru: true },
 ];
 
 // ---------------------------------------------------------------------------

@@ -65,8 +65,8 @@ function LanguageToggle({ locale, isScrolled, isDark = false }: LanguageTogglePr
                                 ? 'bg-white text-[#003f87]'
                                 : 'bg-[#003f87] text-white'
                             : isDark || !isScrolled
-                              ? 'text-white/60 hover:text-white'
-                              : 'text-[#636366] hover:text-[#111111]',
+                                ? 'text-white/60 hover:text-white'
+                                : 'text-[#636366] hover:text-[#111111]',
                     )}
                 >
                     {lang.toUpperCase()}
@@ -97,8 +97,8 @@ function DesktopNavLink({ href, label, isScrolled, isActive }: DesktopNavLinkPro
                         ? 'text-[#003f87]'
                         : 'text-[#111111] hover:text-[#003f87]'
                     : isActive
-                      ? 'text-white'
-                      : 'text-white/80 hover:text-white',
+                        ? 'text-white'
+                        : 'text-white/80 hover:text-white',
             )}
         >
             {label}
@@ -323,7 +323,7 @@ function SearchOverlay({ isOpen, onClose, locale }: SearchOverlayProps) {
         setLoading(true);
 
         if (debounceTimeout.current) clearTimeout(debounceTimeout.current);
-        
+
         debounceTimeout.current = setTimeout(() => {
             performSearch(val);
         }, 400);
@@ -578,11 +578,11 @@ export default function Navbar() {
 
                         {/* CTA Button */}
                         <Link
-                            href="/daftar"
+                            href="https://portal.smkmuhbligo.sch.id/"
                             id="navbar-cta-daftar"
-                            className="hidden lg:inline-flex items-center gap-2 rounded-xl bg-[#c9a84c] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-[#a8821f] hover:shadow-md active:scale-[0.97]"
+                            className="hidden lg:inline-flex items-center gap-2 rounded-xl bg-white px-5 py-2.5 text-sm font-semibold text-[#003f87] shadow-sm transition-all duration-200 hover:bg-[#003f87]/80 hover:shadow-md active:scale-[0.97]"
                         >
-                            {locale === 'id' ? 'Daftar Sekarang' : 'Register Now'}
+                            {locale === 'id' ? 'Portal' : 'Portal'}
                         </Link>
 
                         {/* Hamburger — mobile */}

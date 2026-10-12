@@ -206,7 +206,7 @@ export default function Footer() {
                             </li>
                             <li>
                                 <Link
-                                    href="/portal"
+                                    href="https://portal.smkmuhbligo.sch.id/"
                                     id="footer-link-portal"
                                     className="group flex items-center gap-2 text-sm text-white/55 transition-colors duration-200 hover:text-white"
                                 >
@@ -214,7 +214,7 @@ export default function Footer() {
                                         className="inline-block h-px w-4 bg-white/25 transition-all duration-200 group-hover:w-6 group-hover:bg-[#c9a84c]"
                                         aria-hidden="true"
                                     />
-                                    {locale === 'id' ? 'Portal Siswa' : 'Student Portal'}
+                                    {locale === 'id' ? 'Portal' : 'Portal'}
                                 </Link>
                             </li>
                             <li>
