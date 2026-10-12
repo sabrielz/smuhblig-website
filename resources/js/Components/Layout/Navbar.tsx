@@ -580,7 +580,7 @@ export default function Navbar() {
                         <Link
                             href="https://portal.smkmuhbligo.sch.id/"
                             id="navbar-cta-daftar"
-                            className="hidden lg:inline-flex items-center gap-2 rounded-xl bg-white px-5 py-2.5 text-sm font-semibold text-[#003f87] shadow-sm transition-all duration-200 hover:bg-[#003f87]/80 hover:shadow-md active:scale-[0.97]"
+                            className="hidden lg:inline-flex items-center gap-2 rounded-xl bg-white px-5 py-2.5 text-sm font-semibold text-[#003f87] shadow-sm transition-all duration-200 hover:bg-[#cccccc] hover:shadow-md active:scale-[0.97]"
                         >
                             {locale === 'id' ? 'Portal' : 'Portal'}
                         </Link>
