@@ -2,8 +2,10 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Agenda;
 use App\Models\Article;
 use App\Models\Jurusan;
+use App\Models\Pengaturan;
 use Illuminate\Console\Command;
 use Spatie\Sitemap\Sitemap;
 use Spatie\Sitemap\Tags\Url;
@@ -31,44 +33,54 @@ class GenerateSitemap extends Command
     {
         $this->info('Generating sitemap...');
 
+        $multibahasa = Pengaturan::bool('multibahasa_enabled', true);
+        $baseUrl = config('app.url', 'https://smkmuhbligo.sch.id');
+
+        $makeUrl = function (string $path, float $priority, string $changeFreq) use ($baseUrl, $multibahasa): Url {
+            $tag = Url::create($path)
+                ->setPriority($priority)
+                ->setChangeFrequency($changeFreq);
+
+            if ($multibahasa) {
+                $tag->addAlternate("{$baseUrl}{$path}?lang=id", 'id');
+                $tag->addAlternate("{$baseUrl}{$path}?lang=en", 'en');
+            }
+
+            return $tag;
+        };
+
         $sitemap = Sitemap::create()
             // Home page
-            ->add(Url::create('/')
-                ->setPriority(1.0)
-                ->setChangeFrequency(Url::CHANGE_FREQUENCY_DAILY))
+            ->add($makeUrl('/', 1.0, Url::CHANGE_FREQUENCY_DAILY))
             // Static pages
-            ->add(Url::create('/tentang')
-                ->setPriority(0.8)
-                ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY))
-            ->add(Url::create('/jurusan')
-                ->setPriority(0.8)
-                ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY))
-            ->add(Url::create('/galeri')
-                ->setPriority(0.8)
-                ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY))
-            ->add(Url::create('/kontak')
-                ->setPriority(0.8)
-                ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY))
-            ->add(Url::create('/tautan')
-                ->setPriority(0.8)
-                ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY));
+            ->add($makeUrl('/tentang', 0.8, Url::CHANGE_FREQUENCY_WEEKLY))
+            ->add($makeUrl('/jurusan', 0.8, Url::CHANGE_FREQUENCY_WEEKLY))
+            ->add($makeUrl('/berita', 0.8, Url::CHANGE_FREQUENCY_DAILY))
+            ->add($makeUrl('/agenda', 0.8, Url::CHANGE_FREQUENCY_WEEKLY))
+            ->add($makeUrl('/galeri', 0.8, Url::CHANGE_FREQUENCY_WEEKLY))
+            ->add($makeUrl('/kontak', 0.8, Url::CHANGE_FREQUENCY_MONTHLY))
+            ->add($makeUrl('/tautan', 0.8, Url::CHANGE_FREQUENCY_MONTHLY));
 
         // Jurusan pages
-        Jurusan::active()->get()->each(function (Jurusan $jurusan) use ($sitemap) {
+        Jurusan::active()->get()->each(function (Jurusan $jurusan) use ($sitemap, $makeUrl) {
             $sitemap->add(
-                Url::create("/jurusan/{$jurusan->slug}")
-                    ->setPriority(0.9)
-                    ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY)
+                $makeUrl("/jurusan/{$jurusan->slug}", 0.9, Url::CHANGE_FREQUENCY_WEEKLY)
             );
         });
 
-        // Article pages
-        Article::published()->get()->each(function (Article $article) use ($sitemap) {
+        // Agenda pages
+        Agenda::active()->get()->each(function (Agenda $agenda) use ($sitemap, $makeUrl) {
             $sitemap->add(
-                Url::create("/berita/{$article->slug}")
-                    ->setPriority(0.7)
+                $makeUrl("/agenda/{$agenda->slug}", 0.7, Url::CHANGE_FREQUENCY_WEEKLY)
+                    ->setLastModificationDate($agenda->updated_at)
+            );
+        });
+
+        // Article pages (only published and published_at <= now())
+        Article::published()->get()->each(function (Article $article) use ($sitemap, $makeUrl) {
+            $sitemap->add(
+                $makeUrl("/berita/{$article->slug}", 0.7, Url::CHANGE_FREQUENCY_MONTHLY)
                     ->setLastModificationDate($article->updated_at)
-                    ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY)
             );
         });
 
