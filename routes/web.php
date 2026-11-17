@@ -38,6 +38,7 @@ use App\Http\Controllers\Public\BeritaController;
 Route::get('/berita', [BeritaController::class, 'index'])->name('berita.index');
 Route::get('/berita/{article:slug}', [BeritaController::class, 'show'])->name('berita.show');
 Route::get('/galeri', [GaleriController::class, 'index'])->name('galeri');
+Route::get('/galeri/{galeri:slug}', [GaleriController::class, 'show'])->name('galeri.show');
 Route::get('/tautan', [TautanController::class, 'index'])->name('tautan');
 Route::get('/portal', function () {
     return Inertia::render('Portal');

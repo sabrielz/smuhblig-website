@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\Agenda;
 use App\Models\Article;
+use App\Models\Galeri;
 use App\Models\Jurusan;
 use App\Models\Pengaturan;
 use App\Models\Pengumuman;
@@ -74,6 +75,14 @@ class GenerateSitemap extends Command
             $sitemap->add(
                 $makeUrl("/pengumuman/{$pengumuman->slug}", 0.7, Url::CHANGE_FREQUENCY_WEEKLY)
                     ->setLastModificationDate($pengumuman->updated_at)
+            );
+        });
+
+        // Galeri Album pages
+        Galeri::active()->get()->each(function (Galeri $galeri) use ($sitemap, $makeUrl) {
+            $sitemap->add(
+                $makeUrl("/galeri/{$galeri->slug}", 0.7, Url::CHANGE_FREQUENCY_MONTHLY)
+                    ->setLastModificationDate($galeri->updated_at)
             );
         });
 

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Galeri;
 use Artesaos\SEOTools\Facades\OpenGraph;
 use Artesaos\SEOTools\Facades\SEOMeta;
+use Artesaos\SEOTools\Facades\TwitterCard;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
@@ -56,6 +57,51 @@ class GaleriController extends Controller
 
         return Inertia::render('Public/Galeri', [
             'galleries' => $galleries,
+        ]);
+    }
+
+    public function show(Galeri $galeri): Response
+    {
+        if (! $galeri->is_active) {
+            abort(404);
+        }
+
+        $locale = app()->getLocale();
+        $galeri->load([
+            'translations' => function ($query) use ($locale) {
+                $query->whereIn('locale', [$locale, 'id']);
+            },
+            'media' => function ($query) {
+                $query->where('collection_name', 'photos');
+            },
+        ]);
+
+        $translation = call_user_func([$galeri, 'translation'], $locale) ?? $galeri->translations->first();
+        $photos = $galeri->getMedia('photos');
+        $photoUrls = $photos->map(fn ($media) => $media->getUrl())->toArray();
+        $thumbnailUrl = $photoUrls[0] ?? asset('images/placeholder-artikel.svg');
+
+        $album = [
+            'id' => $galeri->id,
+            'slug' => $galeri->slug,
+            'title' => $translation ? $translation->title : 'Album Foto',
+            'description' => $translation ? $translation->description : '',
+            'event_date' => $galeri->event_date ? $galeri->event_date->format('Y-m-d') : null,
+            'formatted_date' => $galeri->event_date ? $galeri->event_date->translatedFormat('d F Y') : null,
+            'photo_count' => count($photoUrls),
+            'thumbnail_url' => $thumbnailUrl,
+            'photos' => $photoUrls,
+        ];
+
+        SEOMeta::setTitle($album['title'].' | Galeri SMK Muhammadiyah Bligo');
+        SEOMeta::setDescription($album['description'] ?: 'Dokumentasi foto kegiatan '.$album['title']);
+        OpenGraph::setUrl(request()->url());
+        OpenGraph::addProperty('type', 'article');
+        OpenGraph::addImage($thumbnailUrl);
+        TwitterCard::setImage($thumbnailUrl);
+
+        return Inertia::render('Public/GaleriDetail', [
+            'album' => $album,
         ]);
     }
 }
