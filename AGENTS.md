@@ -6,6 +6,21 @@
 
 ---
 
+## 0. Override Aktif — Baca Dulu
+
+Sejak 11 Nov 2026, aturan berikut berlaku di atas segalanya, termasuk di atas bagian lain file ini. Bila ada pertentangan, aturan di bagian ini yang menang.
+
+1. Fokus membangun kode dan dokumen, bukan menguji. Tugas Anda adalah membuat/mengubah kode sampai tidak ada error dan tidak ada kesalahan syntax. Review mendalam dan pengujian menyeluruh bukan tugas Anda sekarang.
+2. Dilarang keras menulis atau menjalankan test PHP/Laravel apa pun: Pest, PHPUnit, mutation testing, `composer test`, `composer test:fast`, `composer test:quick`, `composer test:module`, `composer test:phase`, `composer test:mutate`, dan semacamnya.
+3. Yang boleh dijalankan hanya: linter dan formatter (`vendor/bin/pint`, `vendor/bin/phpstan`, ESLint, Prettier), dan test Frontend saja (`npx vitest run`). Tidak ada yang lain.
+4. Jangan memakai git worktree. Kerjakan di branch kerja yang aktif (checkout biasa).
+5. Jangan memakai tools web atau tools lain yang menguras token kecuali benar-benar diperlukan tugas. Kerjakan cepat, efisien, dan fokus pada hasil.
+6. Definition of Done efektif selama mode ini aktif: berkas yang diubah lulus format + lint, tidak ada syntax error, dan lulus `vitest` bila menyentuh frontend.
+7. Commit rapi di akhir setiap pengerjaan. Jangan push, jangan membuka PR — itu dilakukan manusia.
+8. Jangan menebak atau mengarang. Bila dokumen tidak menjawab atau kode berbeda dari ekspektasi, berhenti dan laporkan apa adanya.
+
+---
+
 ## 1. Project Identity
 
 This is the **official website and CMS** for SMK Muhammadiyah Bligo, a vocational high school in Pekalongan, Central Java.
