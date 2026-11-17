@@ -167,6 +167,7 @@ Route::middleware(['auth', EnsureHasCmsRole::class])
         Route::get('/artikel/{artikel}/preview', [ArtikelController::class, 'preview'])->name('artikel.preview');
         Route::post('/artikel/{artikel}/publish', [ArtikelController::class, 'publish'])->name('artikel.publish');
         Route::patch('/artikel/{artikel}/translation/reviewed', [ArtikelController::class, 'markTranslationReviewed'])->name('artikel.translation.reviewed');
+        Route::post('/artikel/{artikel}/revisi/{revision}/restore', [ArtikelController::class, 'restoreRevision'])->name('artikel.revisi.restore');
         Route::resource('artikel', ArtikelController::class)->except(['show']);
 
         // Kategori Artikel

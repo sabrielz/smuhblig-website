@@ -77,6 +77,11 @@ class Article extends Model implements HasMedia
         return $this->hasMany(ArticleTranslation::class);
     }
 
+    public function revisions(): HasMany
+    {
+        return $this->hasMany(ArticleRevision::class)->latest();
+    }
+
     public function translation(?string $locale = null)
     {
         $locale = $locale ?? app()->getLocale();

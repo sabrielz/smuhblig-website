@@ -54,6 +54,20 @@ class ArtikelResource extends JsonResource
 
             // Tags
             'tags' => $this->resource->tags ? $this->resource->tags->pluck('name')->toArray() : [],
+
+            // Riwayat Revisi (Sesi 6-06)
+            'revisions' => $this->resource->relationLoaded('revisions') && $this->resource->revisions ? $this->resource->revisions->map(function ($rev) {
+                return [
+                    'id' => $rev->id,
+                    'user' => $rev->user ? [
+                        'id' => $rev->user->id,
+                        'name' => $rev->user->name,
+                    ] : null,
+                    'snapshot' => $rev->snapshot,
+                    'created_at' => $rev->created_at?->format('Y-m-d H:i:s'),
+                    'human_time' => $rev->created_at?->diffForHumans(),
+                ];
+            }) : [],
         ];
     }
 }

@@ -10,6 +10,7 @@ use App\Http\Resources\Admin\ArtikelResource;
 use App\Http\Resources\Public\BeritaDetailResource;
 use App\Jobs\TranslateArticle;
 use App\Models\Article;
+use App\Models\ArticleRevision;
 use App\Models\ArticleTranslation;
 use App\Models\Category;
 use App\Models\Pengaturan;
@@ -181,7 +182,7 @@ class ArtikelController extends Controller
     {
         Gate::authorize('update', $artikel);
 
-        $artikel->load(['translations', 'category', 'media', 'tags']);
+        $artikel->load(['translations', 'category', 'media', 'tags', 'revisions.user']);
 
         $categories = Category::with(['translations' => function ($q) {
             $q->where('locale', 'id');
@@ -210,6 +211,43 @@ class ArtikelController extends Controller
         DB::beginTransaction();
 
         try {
+            // Simpan snapshot revisi sebelum perubahan (Sesi 6-06)
+            /** @var ArticleTranslation|null $oldTransId */
+            $oldTransId = $artikel->translations->where('locale', 'id')->first();
+            /** @var ArticleTranslation|null $oldTransEn */
+            $oldTransEn = $artikel->translations->where('locale', 'en')->first();
+            $tags = $artikel->tags;
+            $snapshot = [
+                'status' => $artikel->status->value,
+                'category_id' => $artikel->category_id,
+                'meta_title' => $artikel->meta_title,
+                'meta_description' => $artikel->meta_description,
+                'translations' => [
+                    'id' => [
+                        'title' => $oldTransId ? $oldTransId->title : '',
+                        'excerpt' => $oldTransId ? ($oldTransId->excerpt ?? '') : '',
+                        'content' => $oldTransId ? $oldTransId->content : '',
+                    ],
+                    'en' => [
+                        'title' => $oldTransEn ? $oldTransEn->title : '',
+                        'excerpt' => $oldTransEn ? ($oldTransEn->excerpt ?? '') : '',
+                        'content' => $oldTransEn ? $oldTransEn->content : '',
+                    ],
+                ],
+                'tags' => $tags->pluck('name')->toArray(),
+            ];
+
+            $artikel->revisions()->create([
+                'user_id' => $request->user()?->id,
+                'snapshot' => $snapshot,
+            ]);
+
+            // Batasi maks 30 revisi per artikel (hapus revisi tertua bila > 30)
+            $excessRevisions = $artikel->revisions()->skip(30)->take(100)->pluck('id');
+            if ($excessRevisions->isNotEmpty()) {
+                ArticleRevision::whereIn('id', $excessRevisions)->delete();
+            }
+
             $artikel->update([
                 'category_id' => $validated['category_id'],
                 'status' => $validated['status'],
@@ -410,5 +448,113 @@ class ArtikelController extends Controller
             'categories' => $categories,
             'isPreview' => true,
         ]);
+    }
+
+    /**
+     * Pulihkan snapshot revisi artikel (Sesi 6-06).
+     */
+    public function restoreRevision(Request $request, Article $artikel, ArticleRevision $revision)
+    {
+        Gate::authorize('update', $artikel);
+
+        if ($revision->article_id !== $artikel->id) {
+            abort(404);
+        }
+
+        $snapshot = (array) $revision->snapshot;
+
+        DB::beginTransaction();
+
+        try {
+            // 1. Simpan snapshot kondisi saat ini sebelum restore
+            /** @var ArticleTranslation|null $curTransId */
+            $curTransId = $artikel->translations->where('locale', 'id')->first();
+            /** @var ArticleTranslation|null $curTransEn */
+            $curTransEn = $artikel->translations->where('locale', 'en')->first();
+            $curTags = $artikel->tags;
+            $preRestoreSnapshot = [
+                'status' => $artikel->status->value,
+                'category_id' => $artikel->category_id,
+                'meta_title' => $artikel->meta_title,
+                'meta_description' => $artikel->meta_description,
+                'translations' => [
+                    'id' => [
+                        'title' => $curTransId ? $curTransId->title : '',
+                        'excerpt' => $curTransId ? ($curTransId->excerpt ?? '') : '',
+                        'content' => $curTransId ? $curTransId->content : '',
+                    ],
+                    'en' => [
+                        'title' => $curTransEn ? $curTransEn->title : '',
+                        'excerpt' => $curTransEn ? ($curTransEn->excerpt ?? '') : '',
+                        'content' => $curTransEn ? $curTransEn->content : '',
+                    ],
+                ],
+                'tags' => $curTags->pluck('name')->toArray(),
+            ];
+
+            $artikel->revisions()->create([
+                'user_id' => $request->user()?->id,
+                'snapshot' => $preRestoreSnapshot,
+            ]);
+
+            // Batasi maks 30 revisi
+            $excessRevisions = $artikel->revisions()->skip(30)->take(100)->pluck('id');
+            if ($excessRevisions->isNotEmpty()) {
+                ArticleRevision::whereIn('id', $excessRevisions)->delete();
+            }
+
+            // 2. Pulihkan data artikel dari snapshot
+            $artikel->update([
+                'category_id' => $snapshot['category_id'] ?? $artikel->category_id,
+                'status' => $snapshot['status'] ?? $artikel->status,
+                'meta_title' => $snapshot['meta_title'] ?? null,
+                'meta_description' => $snapshot['meta_description'] ?? null,
+            ]);
+
+            // 3. Pulihkan translasi ID (sanitasi HTML)
+            $transId = $snapshot['translations']['id'] ?? [];
+            if (! empty($transId['title'])) {
+                $artikel->translations()->updateOrCreate(
+                    ['locale' => 'id'],
+                    [
+                        'title' => $transId['title'],
+                        'excerpt' => $transId['excerpt'] ?? null,
+                        'content' => HtmlSanitizer::clean($transId['content'] ?? ''),
+                        'reviewed' => true,
+                    ]
+                );
+            }
+
+            // 4. Pulihkan translasi EN (sanitasi HTML)
+            $transEn = $snapshot['translations']['en'] ?? [];
+            if (! empty($transEn['title'])) {
+                $artikel->translations()->updateOrCreate(
+                    ['locale' => 'en'],
+                    [
+                        'title' => $transEn['title'],
+                        'excerpt' => $transEn['excerpt'] ?? null,
+                        'content' => HtmlSanitizer::clean($transEn['content'] ?? ''),
+                        'reviewed' => true,
+                    ]
+                );
+            } else {
+                $artikel->translations()->where('locale', 'en')->delete();
+            }
+
+            // 5. Pulihkan tags
+            if (isset($snapshot['tags']) && is_array($snapshot['tags'])) {
+                $artikel->syncTags($snapshot['tags']);
+            }
+
+            DB::commit();
+
+            return redirect()->route('admin.artikel.edit', $artikel)
+                ->with('success', 'Revisi artikel berhasil dipulihkan.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Gagal memulihkan revisi artikel', ['exception' => $e]);
+
+            return back()->with('error', 'Terjadi kesalahan saat memulihkan revisi.');
+        }
     }
 }
