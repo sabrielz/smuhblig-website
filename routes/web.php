@@ -74,6 +74,7 @@ Route::get('/agenda', [AgendaPublikController::class, 'index'])->name('agenda.in
 Route::get('/agenda/{agenda:slug}', [AgendaPublikController::class, 'show'])->name('agenda.show');
 
 use App\Http\Controllers\Admin\KategoriController;
+use App\Http\Controllers\Admin\ProfilController;
 use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Public\PengumumanController as PublicPengumumanController;
 
@@ -237,6 +238,14 @@ Route::middleware(['auth', EnsureHasCmsRole::class])
 
         // Media Upload (TipTap inline images) — semua role CMS bisa upload
         Route::post('/media/upload', [MediaUploadController::class, 'upload'])->name('media.upload');
+
+        // Profil Saya — semua peran CMS
+        Route::prefix('profil')->name('profil.')->group(function () {
+            Route::get('/', [ProfilController::class, 'edit'])->name('edit');
+            Route::put('/', [ProfilController::class, 'update'])->name('update');
+            Route::put('/password', [ProfilController::class, 'updatePassword'])->name('password');
+            Route::post('/logout-others', [ProfilController::class, 'logoutOtherDevices'])->name('logout-others');
+        });
 
         // Pesan Kontak (CMS Inbox)
         Route::get('/pesan', [PesanKontakController::class, 'index'])->name('pesan.index');
