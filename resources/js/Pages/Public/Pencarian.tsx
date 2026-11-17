@@ -1,7 +1,7 @@
 import { useState, FormEvent } from 'react';
 import { Head, router } from '@inertiajs/react';
 import { motion } from 'framer-motion';
-import { Search, SearchX, ArrowRight, BookOpen, Layers } from 'lucide-react';
+import { Search, SearchX, ArrowRight, BookOpen, Layers, Bell, Calendar } from 'lucide-react';
 import PublicLayout from '@/Layouts/PublicLayout';
 import { cn } from '@/lib/utils';
 import { fadeInUp, staggerContainer, slideFromLeft } from '@/lib/motion';
@@ -30,6 +30,27 @@ interface ArtikelResult {
     thumbnail: string;
 }
 
+interface PengumumanResult {
+    id: number;
+    slug: string;
+    tipe: string;
+    judul: string;
+    konten: string;
+    tanggal_mulai: string | null;
+}
+
+interface AgendaResult {
+    id: number;
+    slug: string;
+    tipe: string;
+    warna: string;
+    judul: string;
+    deskripsi: string;
+    lokasi: string;
+    tanggal_mulai: string | null;
+    tanggal_selesai: string | null;
+}
+
 interface PaginatedArtikel {
     data: ArtikelResult[];
     current_page: number;
@@ -39,10 +60,12 @@ interface PaginatedArtikel {
 
 interface PencarianProps extends SharedProps {
     keyword: string;
-    type: 'semua' | 'artikel' | 'jurusan';
+    type: 'semua' | 'artikel' | 'jurusan' | 'pengumuman' | 'agenda';
     hasil: {
         jurusan: JurusanResult[];
         artikel: PaginatedArtikel | null;
+        pengumuman?: PengumumanResult[];
+        agenda?: AgendaResult[];
     };
     totalHasil: number;
 }
@@ -55,7 +78,7 @@ export default function Pencarian({
     locale,
 }: PencarianProps) {
     const [searchQuery, setSearchQuery] = useState(keyword);
-    const [activeTab, setActiveTab] = useState<'semua' | 'artikel' | 'jurusan'>(type);
+    const [activeTab, setActiveTab] = useState<'semua' | 'artikel' | 'jurusan' | 'pengumuman' | 'agenda'>(type);
 
     const handleSearch = (e?: FormEvent) => {
         if (e) e.preventDefault();
@@ -66,7 +89,7 @@ export default function Pencarian({
         );
     };
 
-    const handleTabChange = (newTab: 'semua' | 'artikel' | 'jurusan') => {
+    const handleTabChange = (newTab: 'semua' | 'artikel' | 'jurusan' | 'pengumuman' | 'agenda') => {
         setActiveTab(newTab);
         router.get(
             '/pencarian',
@@ -148,7 +171,7 @@ export default function Pencarian({
                             variants={fadeInUp}
                             className="flex items-center justify-center gap-2 overflow-x-auto pb-2 scrollbar-none"
                         >
-                            {(['semua', 'artikel', 'jurusan'] as const).map((tab) => (
+                            {(['semua', 'artikel', 'jurusan', 'pengumuman', 'agenda'] as const).map((tab) => (
                                 <button
                                     key={tab}
                                     onClick={() => handleTabChange(tab)}
@@ -161,7 +184,15 @@ export default function Pencarian({
                                 >
                                     {locale === 'id'
                                         ? tab.charAt(0).toUpperCase() + tab.slice(1)
-                                        : tab === 'semua' ? 'All' : tab === 'artikel' ? 'Articles' : 'Programs'}
+                                        : tab === 'semua'
+                                            ? 'All'
+                                            : tab === 'artikel'
+                                                ? 'Articles'
+                                                : tab === 'jurusan'
+                                                    ? 'Programs'
+                                                    : tab === 'pengumuman'
+                                                        ? 'Announcements'
+                                                        : 'Agenda'}
                                 </button>
                             ))}
                         </motion.div>
@@ -274,8 +305,140 @@ export default function Pencarian({
                                 </motion.div>
                             )}
 
+                            {/* Divider if exists */}
+                            {hasil.jurusan?.length > 0 && (hasil.pengumuman?.length ?? 0) > 0 && (
+                                <hr className="border-gray-200" />
+                            )}
+
+                            {/* PENGUMUMAN RESULTS */}
+                            {hasil.pengumuman && hasil.pengumuman.length > 0 && (
+                                <motion.div
+                                    variants={staggerContainer}
+                                    initial="initial"
+                                    whileInView="animate"
+                                    viewport={{ once: true }}
+                                >
+                                    <motion.div variants={fadeInUp} className="flex items-center gap-3 mb-6">
+                                        <Bell className="w-6 h-6 text-[#c9a84c]" />
+                                        <h2 className="text-2xl font-bold text-[#111111] font-serif">
+                                            {locale === 'id' ? 'Pengumuman' : 'Announcements'}
+                                        </h2>
+                                        <span className="bg-[#003f87]/10 text-[#003f87] font-semibold text-xs py-1 px-3 rounded-full ml-2">
+                                            {hasil.pengumuman.length} {locale === 'id' ? 'Hasil' : 'Results'}
+                                        </span>
+                                    </motion.div>
+
+                                    <div className="flex flex-col gap-4">
+                                        {hasil.pengumuman.map((item) => (
+                                            <motion.div
+                                                key={item.id}
+                                                variants={fadeInUp}
+                                                className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-300"
+                                            >
+                                                <div className="flex items-center gap-2 mb-2">
+                                                    <span className={cn(
+                                                        'text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded',
+                                                        item.tipe === 'urgent'
+                                                            ? 'bg-red-100 text-red-700'
+                                                            : item.tipe === 'penting'
+                                                                ? 'bg-amber-100 text-amber-700'
+                                                                : 'bg-blue-100 text-blue-700'
+                                                    )}>
+                                                        {item.tipe}
+                                                    </span>
+                                                    {item.tanggal_mulai && (
+                                                        <span className="text-gray-400 text-xs">
+                                                            {item.tanggal_mulai}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                                <h3
+                                                    className="text-lg font-bold text-[#111111] mb-2"
+                                                    dangerouslySetInnerHTML={{ __html: item.judul }}
+                                                />
+                                                <p
+                                                    className="text-gray-600 text-sm line-clamp-3 leading-relaxed"
+                                                    dangerouslySetInnerHTML={{ __html: item.konten }}
+                                                />
+                                            </motion.div>
+                                        ))}
+                                    </div>
+                                </motion.div>
+                            )}
+
+                            {/* Divider if exists */}
+                            {((hasil.jurusan?.length > 0 || (hasil.pengumuman?.length ?? 0) > 0)) && (hasil.agenda?.length ?? 0) > 0 && (
+                                <hr className="border-gray-200" />
+                            )}
+
+                            {/* AGENDA RESULTS */}
+                            {hasil.agenda && hasil.agenda.length > 0 && (
+                                <motion.div
+                                    variants={staggerContainer}
+                                    initial="initial"
+                                    whileInView="animate"
+                                    viewport={{ once: true }}
+                                >
+                                    <motion.div variants={fadeInUp} className="flex items-center gap-3 mb-6">
+                                        <Calendar className="w-6 h-6 text-[#c9a84c]" />
+                                        <h2 className="text-2xl font-bold text-[#111111] font-serif">
+                                            {locale === 'id' ? 'Agenda & Kegiatan' : 'Agenda & Events'}
+                                        </h2>
+                                        <span className="bg-[#003f87]/10 text-[#003f87] font-semibold text-xs py-1 px-3 rounded-full ml-2">
+                                            {hasil.agenda.length} {locale === 'id' ? 'Hasil' : 'Results'}
+                                        </span>
+                                    </motion.div>
+
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        {hasil.agenda.map((item) => (
+                                            <motion.a
+                                                href={`/agenda/${item.slug}`}
+                                                key={item.id}
+                                                variants={fadeInUp}
+                                                className="group bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-300 flex flex-col justify-between"
+                                            >
+                                                <div>
+                                                    <div className="flex items-center justify-between gap-2 mb-3">
+                                                        <span
+                                                            className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded text-white"
+                                                            style={{ backgroundColor: item.warna || '#003f87' }}
+                                                        >
+                                                            {item.tipe || 'Agenda'}
+                                                        </span>
+                                                        {item.tanggal_mulai && (
+                                                            <span className="text-gray-400 text-xs">
+                                                                {item.tanggal_mulai} {item.tanggal_selesai ? `- ${item.tanggal_selesai}` : ''}
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                    <h3
+                                                        className="text-lg font-bold text-[#111111] mb-2 group-hover:text-[#003f87] transition-colors"
+                                                        dangerouslySetInnerHTML={{ __html: item.judul }}
+                                                    />
+                                                    {item.deskripsi && (
+                                                        <p
+                                                            className="text-gray-600 text-sm line-clamp-2 leading-relaxed mb-3"
+                                                            dangerouslySetInnerHTML={{ __html: item.deskripsi }}
+                                                        />
+                                                    )}
+                                                    {item.lokasi && (
+                                                        <p
+                                                            className="text-gray-400 text-xs line-clamp-1 mb-4"
+                                                            dangerouslySetInnerHTML={{ __html: `📍 ${item.lokasi}` }}
+                                                        />
+                                                    )}
+                                                </div>
+                                                <span className="text-[#003f87] text-sm font-semibold flex items-center gap-1 group-hover:gap-2 transition-all">
+                                                    {locale === 'id' ? 'Detail Agenda' : 'Event Detail'} <ArrowRight className="w-4 h-4" />
+                                                </span>
+                                            </motion.a>
+                                        ))}
+                                    </div>
+                                </motion.div>
+                            )}
+
                             {/* Divider if both exist */}
-                            {hasil.jurusan?.length > 0 && (hasil.artikel?.data?.length ?? 0) > 0 && (
+                            {(hasil.jurusan?.length > 0 || (hasil.pengumuman?.length ?? 0) > 0 || (hasil.agenda?.length ?? 0) > 0) && (hasil.artikel?.data?.length ?? 0) > 0 && (
                                 <hr className="border-gray-200" />
                             )}
 

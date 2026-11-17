@@ -69,6 +69,11 @@ class Pengumuman extends Model
 
     public function scopeActive(Builder $query): Builder
     {
+        return $this->scopeAktif($query);
+    }
+
+    public function scopeAktif(Builder $query): Builder
+    {
         $today = Carbon::today();
 
         return $query->where('is_active', true)

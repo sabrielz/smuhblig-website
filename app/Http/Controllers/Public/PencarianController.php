@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Public;
 
 use App\Enums\ArticleStatus;
 use App\Http\Controllers\Controller;
+use App\Models\Agenda;
 use App\Models\Article;
 use App\Models\Jurusan;
+use App\Models\Pengumuman;
 use Artesaos\SEOTools\Facades\SEOMeta;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -31,7 +33,7 @@ class PencarianController extends Controller
     {
         $request->validate([
             'q' => 'required|string|min:2|max:100',
-            'type' => 'nullable|in:artikel,jurusan,semua',
+            'type' => 'nullable|in:artikel,jurusan,pengumuman,agenda,semua',
         ]);
 
         $q = strip_tags(trim($request->input('q')));
@@ -41,20 +43,22 @@ class PencarianController extends Controller
         $hasil = [
             'artikel' => null,
             'jurusan' => [],
+            'pengumuman' => [],
+            'agenda' => [],
         ];
         $totalHasil = 0;
 
+        $operator = config('database.default') === 'pgsql' ? 'ilike' : 'like';
+
         // Search Jurusan
-        if ($type !== 'artikel') {
+        if ($type === 'semua' || $type === 'jurusan') {
             $jurusanQuery = Jurusan::query()
                 ->where('is_active', true)
                 ->join('jurusan_translations', function ($join) use ($locale) {
                     $join->on('jurusans.id', '=', 'jurusan_translations.jurusan_id')
                         ->where('jurusan_translations.locale', '=', $locale);
                 })
-                ->where(function ($query) use ($q) {
-                    // PostgreSQL ILIKE is used via 'ilike' operator in Laravel. If DB is MySQL, 'like' acts as ilike structurally but Laravel supports 'ilike' syntax
-                    $operator = config('database.default') === 'pgsql' ? 'ilike' : 'like';
+                ->where(function ($query) use ($q, $operator) {
                     $query->where('jurusan_translations.nama', $operator, "%{$q}%")
                         ->orWhere('jurusan_translations.deskripsi_singkat', $operator, "%{$q}%")
                         ->orWhere('jurusan_translations.deskripsi_lengkap', $operator, "%{$q}%");
@@ -77,10 +81,72 @@ class PencarianController extends Controller
             $totalHasil += $hasil['jurusan']->count();
         }
 
-        // Search Artikel
-        if ($type !== 'jurusan') {
-            $operator = config('database.default') === 'pgsql' ? 'ilike' : 'like';
+        // Search Pengumuman
+        if ($type === 'semua' || $type === 'pengumuman') {
+            $pengumumanQuery = Pengumuman::query()
+                ->aktif()
+                ->join('pengumuman_translations', function ($join) use ($locale) {
+                    $join->on('pengumuman.id', '=', 'pengumuman_translations.pengumuman_id')
+                        ->where('pengumuman_translations.locale', '=', $locale);
+                })
+                ->where(function ($query) use ($q, $operator) {
+                    $query->where('pengumuman_translations.judul', $operator, "%{$q}%")
+                        ->orWhere('pengumuman_translations.konten', $operator, "%{$q}%");
+                })
+                ->select('pengumuman.*', 'pengumuman_translations.judul', 'pengumuman_translations.konten')
+                ->orderByDesc('created_at')
+                ->get();
 
+            $hasil['pengumuman'] = $pengumumanQuery->map(function ($p) use ($q) {
+                return [
+                    'id' => $p->id,
+                    'slug' => $p->slug,
+                    'tipe' => $p->tipe,
+                    'judul' => $this->highlight($p->judul ?? 'Pengumuman', $q),
+                    'konten' => $this->highlight(strip_tags($p->konten ?? ''), $q),
+                    'tanggal_mulai' => $p->tanggal_mulai ? $p->tanggal_mulai->format('d M Y') : null,
+                ];
+            });
+
+            $totalHasil += $hasil['pengumuman']->count();
+        }
+
+        // Search Agenda
+        if ($type === 'semua' || $type === 'agenda') {
+            $agendaQuery = Agenda::query()
+                ->active()
+                ->join('agenda_translations', function ($join) use ($locale) {
+                    $join->on('agendas.id', '=', 'agenda_translations.agenda_id')
+                        ->where('agenda_translations.locale', '=', $locale);
+                })
+                ->where(function ($query) use ($q, $operator) {
+                    $query->where('agenda_translations.judul', $operator, "%{$q}%")
+                        ->orWhere('agenda_translations.deskripsi', $operator, "%{$q}%")
+                        ->orWhere('agenda_translations.lokasi', $operator, "%{$q}%");
+                })
+                ->select('agendas.*', 'agenda_translations.judul', 'agenda_translations.deskripsi', 'agenda_translations.lokasi')
+                ->orderByDesc('tanggal_mulai')
+                ->get();
+
+            $hasil['agenda'] = $agendaQuery->map(function ($ag) use ($q) {
+                return [
+                    'id' => $ag->id,
+                    'slug' => $ag->slug,
+                    'tipe' => $ag->tipe,
+                    'warna' => $ag->warna,
+                    'judul' => $this->highlight($ag->judul ?? 'Agenda', $q),
+                    'deskripsi' => $this->highlight(strip_tags($ag->deskripsi ?? ''), $q),
+                    'lokasi' => $this->highlight($ag->lokasi ?? '', $q),
+                    'tanggal_mulai' => $ag->tanggal_mulai->format('d M Y'),
+                    'tanggal_selesai' => $ag->tanggal_selesai ? $ag->tanggal_selesai->format('d M Y') : null,
+                ];
+            });
+
+            $totalHasil += $hasil['agenda']->count();
+        }
+
+        // Search Artikel
+        if ($type === 'semua' || $type === 'artikel') {
             $artikelQuery = Article::query()
                 ->where('status', ArticleStatus::Published->value)
                 ->join('article_translations', function ($join) use ($locale) {
@@ -111,7 +177,7 @@ class PencarianController extends Controller
                         'category' => [
                             'name' => $a->category ? ($a->category->translation()?->name ?? 'Uncategorized') : 'Uncategorized',
                         ],
-                        'thumbnail' => $a->getFirstMediaUrl('thumbnail') ?: 'https://placehold.co/600x400',
+                        'thumbnail' => $a->getFirstMediaUrl('thumbnail') ?: asset('images/placeholder-artikel.svg'),
                     ];
                 });
             });
@@ -131,7 +197,12 @@ class PencarianController extends Controller
     {
         $q = strip_tags(trim($request->input('q')));
         if (empty($q) || strlen($q) < 2) {
-            return response()->json(['artikel' => [], 'jurusan' => []]);
+            return response()->json([
+                'artikel' => [],
+                'jurusan' => [],
+                'pengumuman' => [],
+                'agenda' => [],
+            ]);
         }
 
         $locale = app()->getLocale();
@@ -158,6 +229,56 @@ class PencarianController extends Controller
                     'title' => $this->highlight($j->nama ?? '', $q),
                     'type' => 'Jurusan',
                     'url' => route('jurusan.show', $j->slug),
+                ];
+            });
+
+        // Limit Pengumuman 3
+        $pengumuman = Pengumuman::query()
+            ->aktif()
+            ->join('pengumuman_translations', function ($join) use ($locale) {
+                $join->on('pengumuman.id', '=', 'pengumuman_translations.pengumuman_id')
+                    ->where('pengumuman_translations.locale', '=', $locale);
+            })
+            ->where(function ($query) use ($q, $operator) {
+                $query->where('pengumuman_translations.judul', $operator, "%{$q}%")
+                    ->orWhere('pengumuman_translations.konten', $operator, "%{$q}%");
+            })
+            ->select('pengumuman.id', 'pengumuman.slug', 'pengumuman_translations.judul')
+            ->orderByDesc('created_at')
+            ->limit(3)
+            ->get()
+            ->map(function ($p) use ($q) {
+                return [
+                    'id' => $p->id,
+                    'slug' => $p->slug,
+                    'title' => $this->highlight($p->judul ?? 'Pengumuman', $q),
+                    'type' => 'Pengumuman',
+                    'url' => '#', // Detail pengumuman publik akan dibuat di Phase 3
+                ];
+            });
+
+        // Limit Agenda 3
+        $agenda = Agenda::query()
+            ->active()
+            ->join('agenda_translations', function ($join) use ($locale) {
+                $join->on('agendas.id', '=', 'agenda_translations.agenda_id')
+                    ->where('agenda_translations.locale', '=', $locale);
+            })
+            ->where(function ($query) use ($q, $operator) {
+                $query->where('agenda_translations.judul', $operator, "%{$q}%")
+                    ->orWhere('agenda_translations.deskripsi', $operator, "%{$q}%");
+            })
+            ->select('agendas.id', 'agendas.slug', 'agenda_translations.judul')
+            ->orderByDesc('tanggal_mulai')
+            ->limit(3)
+            ->get()
+            ->map(function ($ag) use ($q) {
+                return [
+                    'id' => $ag->id,
+                    'slug' => $ag->slug,
+                    'title' => $this->highlight($ag->judul ?? 'Agenda', $q),
+                    'type' => 'Agenda',
+                    'url' => route('agenda.show', $ag->slug),
                 ];
             });
 
@@ -189,6 +310,8 @@ class PencarianController extends Controller
         return response()->json([
             'jurusan' => $jurusan,
             'artikel' => $artikel,
+            'pengumuman' => $pengumuman,
+            'agenda' => $agenda,
         ]);
     }
 }
