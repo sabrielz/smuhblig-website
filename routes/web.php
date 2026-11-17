@@ -89,6 +89,7 @@ use App\Http\Controllers\Admin\KategoriController;
 use App\Http\Controllers\Admin\PrestasiController;
 use App\Http\Controllers\Admin\ProfilController;
 use App\Http\Controllers\Admin\TagController;
+use App\Http\Controllers\Admin\UnduhanController;
 use App\Http\Controllers\Public\PengumumanController as PublicPengumumanController;
 
 Route::get('/pengumuman', [PublicPengumumanController::class, 'index'])->name('pengumuman.index');
@@ -204,6 +205,9 @@ Route::middleware(['auth', EnsureHasCmsRole::class])
 
         // Prestasi
         Route::resource('prestasi', PrestasiController::class)->except(['show']);
+
+        // Unduhan Dokumen
+        Route::resource('unduhan', UnduhanController::class)->except(['show']);
 
         // Jurusan (Edit 5 existing only)
         Route::get('/jurusan', [App\Http\Controllers\Admin\JurusanController::class, 'index'])->name('jurusan.index');

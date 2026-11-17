@@ -342,3 +342,36 @@ export interface Prestasi {
     };
     created_at?: string;
 }
+
+export interface UnduhanFile {
+    id: number;
+    file_name: string;
+    mime_type: string;
+    extension: string;
+    size: number;
+    human_size: string;
+}
+
+export interface Unduhan {
+    id: number;
+    slug: string;
+    kategori: 'brosur' | 'kalender' | 'formulir' | 'sk' | 'lainnya';
+    tanggal_terbit: string | null;
+    jumlah_unduh: number;
+    is_active: boolean;
+    file?: UnduhanFile | null;
+    translations: {
+        id: {
+            judul: string;
+            deskripsi: string | null;
+        };
+        en: {
+            judul: string | null;
+            deskripsi: string | null;
+        };
+    };
+    judul?: string;
+    deskripsi?: string | null;
+    created_at?: string;
+    updated_at?: string;
+}
