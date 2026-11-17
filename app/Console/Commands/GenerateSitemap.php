@@ -56,6 +56,7 @@ class GenerateSitemap extends Command
             ->add($makeUrl('/', 1.0, Url::CHANGE_FREQUENCY_DAILY))
             // Static pages
             ->add($makeUrl('/tentang', 0.8, Url::CHANGE_FREQUENCY_WEEKLY))
+            ->add($makeUrl('/guru', 0.8, Url::CHANGE_FREQUENCY_WEEKLY))
             ->add($makeUrl('/jurusan', 0.8, Url::CHANGE_FREQUENCY_WEEKLY))
             ->add($makeUrl('/berita', 0.8, Url::CHANGE_FREQUENCY_DAILY))
             ->add($makeUrl('/agenda', 0.8, Url::CHANGE_FREQUENCY_WEEKLY))

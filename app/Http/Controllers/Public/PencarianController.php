@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Public\PencarianRequest;
 use App\Models\Agenda;
 use App\Models\Article;
+use App\Models\Guru;
 use App\Models\Jurusan;
 use App\Models\Pengumuman;
 use Artesaos\SEOTools\Facades\SEOMeta;
@@ -40,6 +41,7 @@ class PencarianController extends Controller
             'jurusan' => [],
             'pengumuman' => [],
             'agenda' => [],
+            'guru' => [],
         ];
         $totalHasil = 0;
 
@@ -138,6 +140,38 @@ class PencarianController extends Controller
             });
 
             $totalHasil += $hasil['agenda']->count();
+        }
+
+        // Search Guru & Tendik
+        if ($type === 'semua' || $type === 'guru') {
+            $guruQuery = Guru::query()
+                ->active()
+                ->join('guru_translations', function ($join) use ($locale) {
+                    $join->on('guru.id', '=', 'guru_translations.guru_id')
+                        ->where('guru_translations.locale', '=', $locale);
+                })
+                ->where(function ($query) use ($q, $operator) {
+                    $query->where('guru.nama', $operator, "%{$q}%")
+                        ->orWhere('guru_translations.jabatan', $operator, "%{$q}%")
+                        ->orWhere('guru_translations.mapel', $operator, "%{$q}%");
+                })
+                ->select('guru.*', 'guru_translations.jabatan', 'guru_translations.mapel')
+                ->with('media')
+                ->get();
+
+            $hasil['guru'] = $guruQuery->map(function ($g) use ($q) {
+                return [
+                    'id' => $g->id,
+                    'nama' => $this->highlight($g->nama_lengkap, $q),
+                    'kelompok' => $g->kelompok,
+                    'jabatan' => $this->highlight($g->jabatan ?? '', $q),
+                    'mapel' => $this->highlight($g->mapel ?? '', $q),
+                    'foto_url' => $g->getFirstMediaUrl('foto', 'webp') ?: $g->getFirstMediaUrl('foto') ?: null,
+                    'url' => route('guru.index'),
+                ];
+            });
+
+            $totalHasil += $hasil['guru']->count();
         }
 
         // Search Artikel
@@ -277,6 +311,31 @@ class PencarianController extends Controller
                 ];
             });
 
+        // Limit Guru 3
+        $guru = Guru::query()
+            ->active()
+            ->join('guru_translations', function ($join) use ($locale) {
+                $join->on('guru.id', '=', 'guru_translations.guru_id')
+                    ->where('guru_translations.locale', '=', $locale);
+            })
+            ->where(function ($query) use ($q, $operator) {
+                $query->where('guru.nama', $operator, "%{$q}%")
+                    ->orWhere('guru_translations.jabatan', $operator, "%{$q}%")
+                    ->orWhere('guru_translations.mapel', $operator, "%{$q}%");
+            })
+            ->select('guru.*', 'guru_translations.jabatan')
+            ->orderBy('urutan')
+            ->limit(3)
+            ->get()
+            ->map(function ($g) use ($q) {
+                return [
+                    'id' => $g->id,
+                    'title' => $this->highlight($g->nama_lengkap, $q),
+                    'type' => $g->kelompok === 'guru' ? 'Guru' : 'Tendik',
+                    'url' => route('guru.index'),
+                ];
+            });
+
         // Limit Artikel 5
         $artikel = Article::query()
             ->terbit()
@@ -307,6 +366,7 @@ class PencarianController extends Controller
             'artikel' => $artikel,
             'pengumuman' => $pengumuman,
             'agenda' => $agenda,
+            'guru' => $guru,
         ]);
     }
 }

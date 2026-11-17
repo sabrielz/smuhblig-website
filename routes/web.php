@@ -32,6 +32,7 @@ Route::get('/jurusan/{jurusan:slug}', [JurusanController::class, 'show'])->name(
 
 // Halaman statis publik
 Route::get('/tentang', [TentangController::class, 'index'])->name('tentang');
+Route::get('/guru', [App\Http\Controllers\Public\GuruController::class, 'index'])->name('guru.index');
 Route::get('/kontak', [KontakController::class, 'index'])->name('kontak');
 Route::post('/kontak/kirim', [PublicPesanKontakController::class, 'store'])->middleware('throttle:form-kontak')->name('kontak.kirim');
 
