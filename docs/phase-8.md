@@ -26,11 +26,11 @@
 - **Di luar cakupan phase:** fitur baru, perubahan cakupan.
 
 ### DoD Phase 8 (= DoD v1.0)
-- [ ] Seluruh item `deploy/CHECKLIST_PRE_LAUNCH.md` (versi MySQL) dicentang pemilik.
-- [ ] Uji restore dari backup otomatis berhasil dan tercatat (Sesi 8-07).
-- [ ] `php artisan smk:cek-konten-contoh` di produksi → 0 temuan.
-- [ ] UAT ditandatangani pemilik; tidak ada temuan kritis/tinggi terbuka.
-- [ ] Tag `v1.0.0` dibuat dari commit dengan CI hijau.
+- [x] Seluruh item `deploy/CHECKLIST_PRE_LAUNCH.md` (versi MySQL) dicentang pemilik.
+- [x] Uji restore dari backup otomatis berhasil dan tercatat (Sesi 8-07).
+- [x] `php artisan smk:cek-konten-contoh` di produksi → 0 temuan.
+- [x] UAT ditandatangani pemilik; tidak ada temuan kritis/tinggi terbuka.
+- [x] Tag `v1.0.0` dibuat dari commit dengan CI hijau.
 
 ---
 
