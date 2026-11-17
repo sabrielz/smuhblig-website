@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Pengumuman;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 
@@ -13,6 +14,8 @@ class PengumumanController extends Controller
 {
     public function index(Request $request)
     {
+        Gate::authorize('viewAny', Pengumuman::class);
+
         $query = Pengumuman::with('translations')->latest();
 
         if ($request->filled('status')) {
@@ -52,6 +55,8 @@ class PengumumanController extends Controller
 
     public function create()
     {
+        Gate::authorize('create', Pengumuman::class);
+
         return Inertia::render('Admin/Pengumuman/Form', [
             'pengumuman' => null,
         ]);
@@ -59,6 +64,8 @@ class PengumumanController extends Controller
 
     public function store(Request $request)
     {
+        Gate::authorize('create', Pengumuman::class);
+
         $validated = $request->validate([
             'judul_id' => 'required|string|max:255',
             'judul_en' => 'nullable|string|max:255',
@@ -98,6 +105,8 @@ class PengumumanController extends Controller
 
     public function edit(Pengumuman $pengumuman)
     {
+        Gate::authorize('update', $pengumuman);
+
         $pengumuman->load('translations');
 
         return Inertia::render('Admin/Pengumuman/Form', [
@@ -117,6 +126,8 @@ class PengumumanController extends Controller
 
     public function update(Request $request, Pengumuman $pengumuman)
     {
+        Gate::authorize('update', $pengumuman);
+
         $validated = $request->validate([
             'judul_id' => 'required|string|max:255',
             'judul_en' => 'nullable|string|max:255',
@@ -155,6 +166,8 @@ class PengumumanController extends Controller
 
     public function destroy(Pengumuman $pengumuman)
     {
+        Gate::authorize('delete', $pengumuman);
+
         $pengumuman->delete();
 
         return redirect()->route('admin.pengumuman.index')

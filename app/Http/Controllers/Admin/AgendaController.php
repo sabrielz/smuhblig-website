@@ -8,6 +8,7 @@ use App\Http\Resources\Admin\AgendaResource;
 use App\Models\Agenda;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 
@@ -18,6 +19,8 @@ class AgendaController extends Controller
      */
     public function index(Request $request)
     {
+        Gate::authorize('viewAny', Agenda::class);
+
         $query = Agenda::with('translations')->orderBy('tanggal_mulai', 'desc');
 
         if ($request->filled('bulan') && $request->filled('tahun')) {
@@ -37,6 +40,8 @@ class AgendaController extends Controller
      */
     public function create()
     {
+        Gate::authorize('create', Agenda::class);
+
         return Inertia::render('Admin/Agenda/Form', [
             'agenda' => null,
             'isEdit' => false,
@@ -48,6 +53,8 @@ class AgendaController extends Controller
      */
     public function store(StoreAgendaRequest $request)
     {
+        Gate::authorize('create', Agenda::class);
+
         $validated = $request->validated();
 
         DB::transaction(function () use ($validated) {
@@ -89,6 +96,8 @@ class AgendaController extends Controller
      */
     public function edit(Agenda $agenda)
     {
+        Gate::authorize('update', $agenda);
+
         $agenda->load('translations');
 
         return Inertia::render('Admin/Agenda/Form', [
@@ -102,6 +111,8 @@ class AgendaController extends Controller
      */
     public function update(StoreAgendaRequest $request, Agenda $agenda)
     {
+        Gate::authorize('update', $agenda);
+
         $validated = $request->validated();
 
         DB::transaction(function () use ($validated, $agenda) {
@@ -155,6 +166,8 @@ class AgendaController extends Controller
      */
     public function destroy(Agenda $agenda)
     {
+        Gate::authorize('delete', $agenda);
+
         $agenda->delete();
 
         return redirect()->route('admin.agenda.index')->with('success', 'Agenda berhasil dihapus.');

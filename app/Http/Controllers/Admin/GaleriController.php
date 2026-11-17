@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Galeri;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -14,6 +15,8 @@ class GaleriController extends Controller
 {
     public function index()
     {
+        Gate::authorize('viewAny', Galeri::class);
+
         $galeris = Galeri::with(['translations', 'media'])
             ->orderBy('sort_order', 'asc')
             ->orderBy('created_at', 'desc')
@@ -37,6 +40,8 @@ class GaleriController extends Controller
 
     public function create()
     {
+        Gate::authorize('create', Galeri::class);
+
         return Inertia::render('Admin/Galeri/Form', [
             'galeri' => null,
         ]);
@@ -44,6 +49,8 @@ class GaleriController extends Controller
 
     public function store(Request $request)
     {
+        Gate::authorize('create', Galeri::class);
+
         $validated = $request->validate([
             'judul_id' => 'required|string|max:255',
             'judul_en' => 'nullable|string|max:255',
@@ -85,6 +92,8 @@ class GaleriController extends Controller
 
     public function show(Galeri $galeri)
     {
+        Gate::authorize('view', $galeri);
+
         $galeri->load(['translations', 'media']);
 
         $photos = $galeri->getMedia('photos')->map(function ($media) {
@@ -112,6 +121,8 @@ class GaleriController extends Controller
 
     public function edit(Galeri $galeri)
     {
+        Gate::authorize('update', $galeri);
+
         $galeri->load('translations');
 
         return Inertia::render('Admin/Galeri/Form', [
@@ -130,6 +141,8 @@ class GaleriController extends Controller
 
     public function update(Request $request, Galeri $galeri)
     {
+        Gate::authorize('update', $galeri);
+
         $validated = $request->validate([
             'judul_id' => 'required|string|max:255',
             'judul_en' => 'nullable|string|max:255',
@@ -168,6 +181,8 @@ class GaleriController extends Controller
 
     public function destroy(Galeri $galeri)
     {
+        Gate::authorize('delete', $galeri);
+
         $galeri->delete();
 
         return redirect()->route('admin.galeri.index')
@@ -176,6 +191,8 @@ class GaleriController extends Controller
 
     public function uploadFoto(Request $request, Galeri $galeri)
     {
+        Gate::authorize('update', $galeri);
+
         $request->validate([
             'photos' => 'required|array|max:20',
             'photos.*' => 'required|file|image|mimes:jpg,jpeg,png,webp|max:5120', // 5MB max
@@ -192,6 +209,9 @@ class GaleriController extends Controller
     public function deleteFoto(Request $request, int $mediaId)
     {
         $media = Media::findOrFail($mediaId);
+        $galeri = Galeri::findOrFail($media->model_id);
+        Gate::authorize('update', $galeri);
+
         $media->delete();
 
         return redirect()->back()->with('success', 'Foto berhasil dihapus.');

@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests\Admin;
 
+use App\Models\Agenda;
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreAgendaRequest extends FormRequest
@@ -11,7 +13,20 @@ class StoreAgendaRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        /** @var User|null $user */
+        $user = $this->user();
+        if (! $user) {
+            return false;
+        }
+
+        /** @var Agenda|null $agenda */
+        $agenda = $this->route('agenda');
+
+        if ($agenda) {
+            return $user->can('update', $agenda);
+        }
+
+        return $user->can('create', Agenda::class);
     }
 
     /**
