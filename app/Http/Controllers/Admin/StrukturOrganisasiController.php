@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\ReorderStrukturOrganisasiRequest;
 use App\Http\Requests\Admin\StoreStrukturOrganisasiRequest;
 use App\Http\Requests\Admin\UpdateStrukturOrganisasiRequest;
+use App\Http\Resources\Admin\StrukturOrganisasiResource;
 use App\Models\StrukturOrganisasi;
 use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
@@ -14,13 +15,12 @@ class StrukturOrganisasiController extends Controller
 {
     public function index()
     {
-        $struktur = StrukturOrganisasi::with(['children.children', 'media'])
+        $strukturModels = StrukturOrganisasi::with(['children.children', 'media'])
             ->whereNull('parent_id')
             ->orderBy('urutan')
-            ->get()
-            ->map(function ($node) {
-                return $this->formatNode($node);
-            });
+            ->get();
+
+        $struktur = StrukturOrganisasiResource::collection($strukturModels)->resolve();
 
         $allNodes = StrukturOrganisasi::active()
             ->orderBy('nama')
@@ -31,19 +31,6 @@ class StrukturOrganisasiController extends Controller
             'strukturTree' => $struktur,
             'allNodes' => $allNodes,
         ]);
-    }
-
-    private function formatNode($node)
-    {
-        $data = $node->toArray();
-        $data['foto_url'] = $node->getFirstMediaUrl('foto');
-        if (isset($data['children']) && is_array($data['children'])) {
-            $data['children'] = collect($node->children)->sortBy('urutan')->map(function ($child) {
-                return $this->formatNode($child);
-            })->values()->toArray();
-        }
-
-        return $data;
     }
 
     public function store(StoreStrukturOrganisasiRequest $request)

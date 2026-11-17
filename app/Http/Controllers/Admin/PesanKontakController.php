@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\BulkArsipPesanRequest;
+use App\Http\Resources\Admin\PesanKontakResource;
 use App\Models\PesanKontak;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -24,18 +25,7 @@ class PesanKontakController extends Controller
             $query->where('status', $request->input('status'));
         }
 
-        $pesans = $query->paginate(20)->withQueryString()->through(fn ($p) => [
-            'id' => $p->id,
-            'nama' => $p->nama,
-            'email' => $p->email,
-            'nomor_telepon' => $p->nomor_telepon,
-            'subjek' => $p->subjek,
-            'status' => $p->status,
-            'ip_address' => $p->ip_address,
-            'dibaca_at' => $p->dibaca_at?->toISOString(),
-            'dibaca_oleh' => $p->pembaca?->name,
-            'created_at' => $p->created_at->toISOString(),
-        ]);
+        $pesans = $query->paginate(20)->withQueryString()->through(fn ($p) => (new PesanKontakResource($p))->resolve());
 
         $totalBaru = PesanKontak::baru()->count();
 

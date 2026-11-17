@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Admin\NotifikasiAdminResource;
 use App\Models\NotifikasiAdmin;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -28,16 +29,7 @@ class NotifikasiController extends Controller
             $query->whereNotNull('dibaca_at');
         }
 
-        $notifikasi = $query->paginate(20)->through(fn ($n) => [
-            'id' => $n->id,
-            'tipe' => $n->tipe,
-            'judul' => $n->judul,
-            'pesan' => $n->pesan,
-            'url' => $n->url,
-            'dibaca' => ! is_null($n->dibaca_at),
-            'dibaca_at' => $n->dibaca_at?->diffForHumans(),
-            'created_at' => $n->created_at->diffForHumans(),
-        ]);
+        $notifikasi = $query->paginate(20)->through(fn ($n) => (new NotifikasiAdminResource($n))->resolve());
 
         $belumDibacaCount = NotifikasiAdmin::untukUser($request->user()->id)
             ->belumDibaca()

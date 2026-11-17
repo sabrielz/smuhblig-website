@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\ReorderStatistikRequest;
 use App\Http\Requests\Admin\UpdateStatistikRequest;
+use App\Http\Resources\Admin\StatistikResource;
 use App\Models\Statistik;
 use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
@@ -13,7 +14,7 @@ class StatistikController extends Controller
 {
     public function index()
     {
-        $statistik = Statistik::ordered()->get();
+        $statistik = StatistikResource::collection(Statistik::ordered()->get())->resolve();
 
         return Inertia::render('Admin/Statistik/Index', [
             'statistik' => $statistik,
