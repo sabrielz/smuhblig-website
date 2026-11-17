@@ -65,7 +65,7 @@ class BerandaController extends Controller
                         'title' => $translation?->title ?? $a->slug,
                         'excerpt' => $translation?->excerpt ?? '',
                         'slug' => $a->slug,
-                        'thumbnail' => $a->getFirstMediaUrl('thumbnail') ?: 'https://picsum.photos/seed/'.$a->id.'news/800/450',
+                        'thumbnail' => $a->getFirstMediaUrl('thumbnail') ?: asset('images/placeholder-artikel.svg'),
                         'published_at' => optional($a->published_at)->translatedFormat('d M Y') ?? '',
                         'category' => [
                             'name' => $catTranslation?->name ?? optional($a->category)->name ?? '',

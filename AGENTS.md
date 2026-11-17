@@ -444,10 +444,11 @@ Skrip ini menjalankan:
 
 ### Seeding Order (via `DatabaseSeeder`)
 
-Saat ini `DatabaseSeeder` memanggil 8 seeder (target 11 seeder akan diselaraskan di Phase 2):
+`DatabaseSeeder` memanggil 11 seeder:
 ```
 RoleSeeder → AdminUserSeeder → CategorySeeder → JurusanSeeder →
-TautanSeeder → GaleriSeeder → ArticleSeeder → PengaturanSeeder
+TautanSeeder → GaleriSeeder → ArticleSeeder → PengaturanSeeder →
+HalamanKontenSeeder → StatistikSeeder → StrukturOrganisasiSeeder
 ```
 
 ---

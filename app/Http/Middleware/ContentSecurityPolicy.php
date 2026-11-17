@@ -68,7 +68,7 @@ class ContentSecurityPolicy
 
         $scriptSrc = "'self' 'nonce-{$nonce}' https://fonts.googleapis.com";
         $styleSrc = "'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com";
-        $imgSrc = "'self' data: blob: https://picsum.photos https://*.googleusercontent.com";
+        $imgSrc = "'self' data: blob: https://*.googleusercontent.com";
 
         $gaId = Pengaturan::get('seo_google_analytics');
         if (! empty($gaId)) {

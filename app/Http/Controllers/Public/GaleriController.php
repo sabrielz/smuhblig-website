@@ -42,14 +42,9 @@ class GaleriController extends Controller
                         'description' => $translation ? $translation->description : '',
                         'event_date' => $galeri->event_date ? $galeri->event_date->format('Y-m-d') : null,
                         'formatted_date' => $galeri->event_date ? $galeri->event_date->translatedFormat('d F Y') : null,
-                        'photo_count' => $photos->count() > 0 ? $photos->count() : 4,
-                        'thumbnail_url' => $photos->first() ? $photos->first()->getUrl() : 'https://picsum.photos/seed/galeri-'.$galeri->id.'/800/600',
-                        'photos' => $photos->isEmpty() ? [
-                            'https://picsum.photos/seed/galeri-'.$galeri->id.'-1/800/1000',
-                            'https://picsum.photos/seed/galeri-'.$galeri->id.'-2/1000/800',
-                            'https://picsum.photos/seed/galeri-'.$galeri->id.'-3/800/800',
-                            'https://picsum.photos/seed/galeri-'.$galeri->id.'-4/1200/800',
-                        ] : $photos->map(fn ($media) => $media->getUrl())->toArray(),
+                        'photo_count' => $photos->count(),
+                        'thumbnail_url' => $photos->first() ? $photos->first()->getUrl() : asset('images/placeholder-artikel.svg'),
+                        'photos' => $photos->map(fn ($media) => $media->getUrl())->toArray(),
                     ];
                 });
         });

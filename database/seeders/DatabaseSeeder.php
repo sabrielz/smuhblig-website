@@ -21,6 +21,9 @@ class DatabaseSeeder extends Seeder
             GaleriSeeder::class,
             ArticleSeeder::class,
             PengaturanSeeder::class,
+            HalamanKontenSeeder::class,
+            StatistikSeeder::class,
+            StrukturOrganisasiSeeder::class,
         ]);
     }
 }
