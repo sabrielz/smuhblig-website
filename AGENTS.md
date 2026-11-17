@@ -472,7 +472,7 @@ HalamanKontenSeeder → StatistikSeeder → StrukturOrganisasiSeeder
 - `hreflang` alternate links for `id` and `en`
 - Sitemap auto-generated at `/sitemap.xml` via `spatie/laravel-sitemap`
 - Semantic HTML5 elements throughout
-- **Security Note:** CSP middleware saat ini sedang nonaktif (dinonaktifkan sementara dan dijadwalkan aktif kembali di Phase 1). Tags & i18next terpasang tapi belum dipakai penuh di frontend. Fitur pencarian saat ini mencakup Jurusan + Artikel.
+- **Security Note:** CSP middleware telah aktif dengan nonce script & frame-ancestors none. Fitur pencarian mencakup Jurusan, Artikel, Pengumuman, dan Agenda. Seluruh toggle pengaturan (`artikel_ai_enabled`, `multibahasa_enabled`, `ai_translate_auto`, `artikel_approval`) telah berefek penuh di backend dan frontend. Status artikel menggunakan enum `ArticleStatus` (Draft, PendingReview, Published, Archived). Seeder lengkap 11 seeder dengan placeholder SVG lokal (bebas dependensi eksternal picsum). Seluruh validasi controller menggunakan FormRequest dan props admin menggunakan Resource. Class styling bersih menggunakan token Tailwind v4 tanpa arbitrary hex di JSX.
 
 ---
 

@@ -46,7 +46,7 @@ This is the **official website and CMS** for SMK Muhammadiyah Bligo — a vocati
 - 🎓 **Jurusan** — 5 vocational programs with detailed descriptions and career prospects
 - 📅 **Agenda** — School events calendar with detail pages
 - 📨 **Kontak** — Contact form with rate-limiting and spam protection
-- 🔍 **Pencarian** — Search across Jurusan and Artikel
+- 🔍 **Pencarian** — Search across Jurusan, Artikel, Pengumuman, and Agenda
 - 🔗 **Tautan** — Quick links portal
 - 🌐 **Bilingual** — Full Indonesian/English content with locale switcher
 
