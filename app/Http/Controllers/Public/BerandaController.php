@@ -9,6 +9,7 @@ use App\Models\Article;
 use App\Models\HalamanKonten;
 use App\Models\Jurusan;
 use App\Models\Pengaturan;
+use App\Models\Pengumuman;
 use App\Models\Statistik;
 use Artesaos\SEOTools\Facades\OpenGraph;
 use Artesaos\SEOTools\Facades\SEOMeta;
@@ -100,6 +101,24 @@ class BerandaController extends Controller
         $kontenCtaAkhir = HalamanKonten::getSection('beranda', 'cta_akhir', $locale);
         $statistik = Statistik::active()->ordered()->get();
 
+        $pengumumanUrgentModel = Pengumuman::query()
+            ->aktif()
+            ->where('tipe', 'urgent')
+            ->with(['translations' => fn ($q) => $q->whereIn('locale', [$locale, 'id'])])
+            ->orderByDesc('tanggal_mulai')
+            ->orderByDesc('created_at')
+            ->first();
+
+        $pengumumanUrgent = null;
+        if ($pengumumanUrgentModel) {
+            $trans = $pengumumanUrgentModel->translation($locale) ?? $pengumumanUrgentModel->translation('id');
+            $pengumumanUrgent = [
+                'id' => $pengumumanUrgentModel->id,
+                'slug' => $pengumumanUrgentModel->slug,
+                'judul' => $trans ? $trans->judul : 'Pengumuman Penting',
+            ];
+        }
+
         $siteName = $data['pengaturan']['site_name'];
         $tagline = $data['pengaturan']['tagline'];
         SEOMeta::setTitle('Beranda | '.$siteName);
@@ -114,6 +133,7 @@ class BerandaController extends Controller
             'kontenJurusan' => $kontenJurusan,
             'kontenBerita' => $kontenBerita,
             'kontenCtaAkhir' => $kontenCtaAkhir,
+            'pengumumanUrgent' => $pengumumanUrgent,
         ]));
     }
 }

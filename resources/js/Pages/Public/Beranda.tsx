@@ -12,6 +12,7 @@ import {
 import PublicLayout from "@/Layouts/PublicLayout";
 import { JurusanCard } from "@/Components/UI/JurusanCard";
 import { ArticleCard } from "@/Components/UI/ArticleCard";
+import { AnnouncementBanner, UrgentAnnouncement } from "@/Components/UI/AnnouncementBanner";
 import { Button } from "@/Components/UI/Button";
 import {
     fadeInUp,
@@ -70,6 +71,7 @@ interface BerandaProps {
     kontenJurusan?: Record<string, string>;
     kontenBerita?: Record<string, string>;
     kontenCtaAkhir?: Record<string, string>;
+    pengumumanUrgent?: UrgentAnnouncement | null;
 }
 
 // ─── Animated Counter ─────────────────────────────────────────────────────────
@@ -365,6 +367,7 @@ export default function Beranda({
     kontenJurusan = {},
     kontenBerita = {},
     kontenCtaAkhir = {},
+    pengumumanUrgent = null,
 }: BerandaProps) {
     const { pengaturan } = usePage<SharedProps>().props;
 
@@ -377,6 +380,8 @@ export default function Beranda({
     return (
         <PublicLayout>
             <Head title="Beranda — SMK Muhammadiyah Bligo" />
+
+            <AnnouncementBanner announcement={pengumumanUrgent} />
 
             {/* ══════════════════════════════════════════════════════════════
                 SECTION 1 — HERO
