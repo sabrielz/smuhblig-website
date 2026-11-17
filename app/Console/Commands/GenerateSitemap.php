@@ -77,7 +77,7 @@ class GenerateSitemap extends Command
         });
 
         // Article pages (only published and published_at <= now())
-        Article::published()->get()->each(function (Article $article) use ($sitemap, $makeUrl) {
+        Article::terbit()->get()->each(function (Article $article) use ($sitemap, $makeUrl) {
             $sitemap->add(
                 $makeUrl("/berita/{$article->slug}", 0.7, Url::CHANGE_FREQUENCY_MONTHLY)
                     ->setLastModificationDate($article->updated_at)

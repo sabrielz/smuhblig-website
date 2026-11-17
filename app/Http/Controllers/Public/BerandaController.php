@@ -44,9 +44,9 @@ class BerandaController extends Controller
                     ];
                 });
 
-            // ── 3 Artikel published terbaru ────────────────────────────────────
+            // ── 3 Artikel terbit terbaru ────────────────────────────────────
             $beritaTerbaru = Article::query()
-                ->published()
+                ->terbit()
                 ->orderByDesc('published_at')
                 ->limit(3)
                 ->with([

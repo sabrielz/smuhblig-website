@@ -89,6 +89,11 @@ class Article extends Model implements HasMedia
 
     public function scopePublished(Builder $query): Builder
     {
+        return $this->scopeTerbit($query);
+    }
+
+    public function scopeTerbit(Builder $query): Builder
+    {
         return $query->where('status', ArticleStatus::Published->value)
             ->whereNotNull('published_at')
             ->where('published_at', '<=', now());

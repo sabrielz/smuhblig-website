@@ -19,7 +19,7 @@ class BeritaController extends Controller
     public function index(Request $request): Response
     {
         $articles = Article::query()
-            ->published()
+            ->terbit()
             ->byLocale()
             ->with(['translations', 'category.translations', 'user', 'media'])
             ->when($request->filled('category'), function ($query) use ($request) {
@@ -76,8 +76,8 @@ class BeritaController extends Controller
 
     public function show(Article $article): Response
     {
-        // Ensure article is published
-        if ($article->status !== ArticleStatus::Published) {
+        // Ensure article is published and within publish date
+        if ($article->status !== ArticleStatus::Published || ! $article->published_at || $article->published_at->isFuture()) {
             abort(404);
         }
 
@@ -86,7 +86,7 @@ class BeritaController extends Controller
         $article->load(['translations', 'category.translations', 'user', 'media']);
 
         $relatedArticles = Article::query()
-            ->published()
+            ->terbit()
             ->byLocale()
             ->where('category_id', $article->category_id)
             ->where('id', '!=', $article->id)
@@ -114,7 +114,7 @@ class BeritaController extends Controller
             });
 
         $categories = Category::withCount(['articles' => function ($query) {
-            $query->published();
+            $query->terbit();
         }])->with('translations')->get()->map(function ($category) {
             return [
                 'id' => $category->id,
