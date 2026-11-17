@@ -214,7 +214,7 @@ export default function StatistikIndex({ statistik: initialStatistik }: Props) {
 
         try {
             const promises = items.map(item =>
-                fetch(route('admin.statistik.update', item.id), {
+                fetch(route('admin.statistik.update', { statistik: item.id }), {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -247,7 +247,7 @@ export default function StatistikIndex({ statistik: initialStatistik }: Props) {
     };
 
     return (
-        <AdminLayout>
+        <AdminLayout title="Statistik Beranda">
             <Head title="Statistik Beranda" />
 
             <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">

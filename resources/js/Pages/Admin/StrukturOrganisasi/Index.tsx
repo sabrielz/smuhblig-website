@@ -94,7 +94,7 @@ export default function StrukturIndex({ strukturTree, allNodes }: Props) {
 
     const handleDelete = () => {
         if (!deletingId) return;
-        destroy(route('admin.struktur-organisasi.destroy', deletingId), {
+        destroy(route('admin.struktur-organisasi.destroy', { struktur_organisasi: deletingId }), {
             preserveScroll: true,
             onSuccess: () => {
                 setIsConfirmOpen(false);
@@ -115,7 +115,7 @@ export default function StrukturIndex({ strukturTree, allNodes }: Props) {
 
         if (editingNode) {
             // Inertia doesn't support PUT with File uploads directly well via form data in v2 without method spoofing
-            router.post(route('admin.struktur-organisasi.update', editingNode.id), {
+            router.post(route('admin.struktur-organisasi.update', { struktur_organisasi: editingNode.id }), {
                 _method: 'put',
                 ...submitData
             }, {
@@ -287,7 +287,7 @@ export default function StrukturIndex({ strukturTree, allNodes }: Props) {
     };
 
     return (
-        <AdminLayout>
+        <AdminLayout title="Struktur Organisasi">
             <Head title="Struktur Organisasi" />
 
             <div className="max-w-full mx-auto py-6 sm:px-6 lg:px-8">
