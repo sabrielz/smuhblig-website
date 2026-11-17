@@ -48,6 +48,16 @@ class Pengaturan extends Model
     }
 
     /**
+     * Get a boolean setting value by key.
+     */
+    public static function bool(string $key, bool $default = false): bool
+    {
+        $value = self::get($key, $default);
+
+        return filter_var($value, FILTER_VALIDATE_BOOLEAN);
+    }
+
+    /**
      * Set or update a setting value.
      */
     public static function set(string $key, mixed $value): void
