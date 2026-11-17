@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
 use App\Models\Galeri;
+use App\Models\Video;
 use Artesaos\SEOTools\Facades\OpenGraph;
 use Artesaos\SEOTools\Facades\SEOMeta;
 use Artesaos\SEOTools\Facades\TwitterCard;
@@ -50,13 +51,36 @@ class GaleriController extends Controller
                 });
         });
 
+        $videoCacheKey = "public_video_{$locale}";
+        $videos = Cache::remember($videoCacheKey, now()->addMinutes(30), function () use ($locale) {
+            return Video::query()
+                ->active()
+                ->ordered()
+                ->with(['translations' => fn ($q) => $q->whereIn('locale', [$locale, 'id']), 'galeri.translations'])
+                ->get()
+                ->map(function (Video $v) use ($locale) {
+                    $trans = $v->translation($locale);
+
+                    return [
+                        'id' => $v->id,
+                        'youtube_id' => $v->youtube_id,
+                        'thumbnail_url' => $v->thumbnail_url,
+                        'watch_url' => $v->watch_url,
+                        'judul' => $trans ? $trans->judul : '',
+                        'galeri_id' => $v->galeri_id,
+                        'galeri_title' => $v->galeri ? (($trans = $v->galeri->translation($locale)) ? $trans->title : $v->galeri->slug) : null,
+                    ];
+                });
+        });
+
         SEOMeta::setTitle('Galeri | SMK Muhammadiyah Bligo');
-        SEOMeta::setDescription('Koleksi foto dan galeri kegiatan di SMK Muhammadiyah Bligo.');
+        SEOMeta::setDescription('Koleksi foto dan video kegiatan di SMK Muhammadiyah Bligo.');
         OpenGraph::setUrl(request()->url());
         OpenGraph::addProperty('type', 'website');
 
         return Inertia::render('Public/Galeri', [
             'galleries' => $galleries,
+            'videos' => $videos,
         ]);
     }
 

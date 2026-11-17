@@ -96,6 +96,7 @@ use App\Http\Controllers\Admin\ProfilController;
 use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Admin\TestimoniController;
 use App\Http\Controllers\Admin\UnduhanController;
+use App\Http\Controllers\Admin\VideoController;
 use App\Http\Controllers\Public\PengumumanController as PublicPengumumanController;
 
 Route::get('/pengumuman', [PublicPengumumanController::class, 'index'])->name('pengumuman.index');
@@ -225,6 +226,9 @@ Route::middleware(['auth', EnsureHasCmsRole::class])
         // Mitra Industri
         Route::post('/mitra/reorder', [MitraController::class, 'reorder'])->name('mitra.reorder');
         Route::resource('mitra', MitraController::class)->except(['show']);
+
+        // Galeri Video YouTube
+        Route::resource('video', VideoController::class)->except(['show']);
 
         // Jurusan (Edit 5 existing only)
         Route::get('/jurusan', [App\Http\Controllers\Admin\JurusanController::class, 'index'])->name('jurusan.index');

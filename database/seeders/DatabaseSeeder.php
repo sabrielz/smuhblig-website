@@ -36,6 +36,7 @@ class DatabaseSeeder extends Seeder
                 FaqContohSeeder::class,
                 TestimoniContohSeeder::class,
                 MitraContohSeeder::class,
+                VideoContohSeeder::class,
             ]);
         }
     }

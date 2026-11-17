@@ -26,6 +26,7 @@ import {
     HelpCircle,
     Quote,
     Handshake,
+    Video,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SharedProps } from "@/types";
@@ -81,7 +82,10 @@ export default function AdminSidebar({ isOpen, setIsOpen }: SidebarProps) {
                         { label: 'Tag', href: '/admin/tag', icon: Tag, badge: null },
                     ]
                     : []),
-                ...(user?.can?.kelola_galeri ? [{ label: 'Galeri', href: '/admin/galeri', icon: ImageIcon, badge: null }] : []),
+                ...(user?.can?.kelola_galeri ? [
+                    { label: 'Galeri Foto', href: '/admin/galeri', icon: ImageIcon, badge: null },
+                    { label: 'Galeri Video', href: '/admin/video', icon: Video, badge: null },
+                ] : []),
                 ...(user?.can?.kelola_pengumuman ? [{ label: 'Pengumuman', href: '/admin/pengumuman', icon: Bell, badge: null }] : []),
                 { label: 'Konten Halaman', href: '/admin/konten/beranda', icon: PencilLine, badge: null },
                 {

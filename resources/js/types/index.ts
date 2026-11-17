@@ -436,3 +436,28 @@ export interface Mitra {
     created_at?: string;
     updated_at?: string;
 }
+
+export interface VideoItem {
+    id: number;
+    youtube_id: string;
+    thumbnail_url: string;
+    watch_url: string;
+    galeri_id: number | null;
+    galeri?: {
+        id: number;
+        judul: string;
+    } | null;
+    urutan: number;
+    is_active: boolean;
+    translations: {
+        id: {
+            judul: string;
+        };
+        en: {
+            judul: string | null;
+        };
+    };
+    judul?: string;
+    created_at?: string;
+    updated_at?: string;
+}
