@@ -41,18 +41,18 @@ This is the **official website and CMS** for SMK Muhammadiyah Bligo — a vocati
 
 ### Public Website
 - 🏠 **Beranda** — Hero section, announcements, featured articles, statistics, gallery showcase
-- 📰 **Berita** — Full-featured news/blog with categories, tags, search, and pagination
+- 📰 **Berita** — Full-featured news/blog with categories, search, and pagination
 - 🖼️ **Galeri** — Photo albums with lightbox viewer
 - 🎓 **Jurusan** — 5 vocational programs with detailed descriptions and career prospects
 - 📅 **Agenda** — School events calendar with detail pages
 - 📨 **Kontak** — Contact form with rate-limiting and spam protection
-- 🔍 **Pencarian** — Full-text search across articles, announcements, and events
+- 🔍 **Pencarian** — Search across Jurusan and Artikel
 - 🔗 **Tautan** — Quick links portal
 - 🌐 **Bilingual** — Full Indonesian/English content with locale switcher
 
 ### Admin CMS
 - 📊 **Dashboard** — Real-time statistics, recent activities, quick actions
-- ✍️ **Article Management** — Rich text editor (TipTap), draft/review/publish workflow, tagging
+- ✍️ **Article Management** — Rich text editor (TipTap), draft/review/publish workflow
 - 🤖 **AI Writing Tools** — Content generation, revision, grammar correction, SEO analysis, auto-translation
 - 📢 **Pengumuman** — Announcement management with urgency levels (info, penting, urgent)
 - 🖼️ **Galeri Management** — Album CRUD with drag-and-drop photo upload
@@ -61,7 +61,7 @@ This is the **official website and CMS** for SMK Muhammadiyah Bligo — a vocati
 - 📝 **Konten Halaman** — CMS-managed static page content
 - 👥 **User Management** — Role-based access (admin, editor, author)
 - ⚙️ **Settings** — Site configuration, SMTP setup, AI configuration
-- 🔔 **Notifications** — Real-time in-app notifications
+- 🔔 **Notifications** — Polling-based in-app notifications
 - 📈 **Statistics** — Customizable dashboard statistics with drag-and-drop ordering
 - 🏢 **Struktur Organisasi** — Org chart management with photo uploads
 
@@ -87,7 +87,7 @@ This is the **official website and CMS** for SMK Muhammadiyah Bligo — a vocati
 | **Animations** | Framer Motion | ^12.0 |
 | **Rich Editor** | TipTap | ^2.0 |
 | **Icons** | Lucide React | latest |
-| **Database** | MySQL 8.0 | (Docker) / PostgreSQL (prod) |
+| **Database** | MySQL 8.0 | Dev & Production |
 | **Cache/Queue/Session** | Redis | via Predis |
 | **AI** | Anthropic Claude | via queue |
 
@@ -139,10 +139,10 @@ This is the **official website and CMS** for SMK Muhammadiyah Bligo — a vocati
 
 ### Prerequisites
 
-- **PHP** >= 8.2 with extensions: `mbstring`, `xml`, `curl`, `mysql`/`pgsql`, `redis`
+- **PHP** >= 8.2 with extensions: `mbstring`, `xml`, `curl`, `mysql`, `redis`
 - **Composer** >= 2.x
 - **Node.js** >= 20.x with npm
-- **MySQL** 8.0+ or **PostgreSQL** 14+
+- **MySQL** 8.0+
 - **Redis** 6+
 
 ### Option A — Local Development (Laragon / Manual)
@@ -432,12 +432,12 @@ TautanSeeder → GaleriSeeder → ArticleSeeder → PengaturanSeeder
 
 | Variable | Default | Purpose |
 |----------|---------|---------|
-| `DB_CONNECTION` | `mysql` | Database driver (`mysql` or `pgsql`) |
+| `DB_CONNECTION` | `mysql` | Database driver (`mysql`) |
 | `QUEUE_CONNECTION` | `redis` | Queue backend |
 | `SESSION_DRIVER` | `redis` | Session storage |
 | `CACHE_STORE` | `redis` | Cache backend |
 | `ANTHROPIC_API_KEY` | — | Anthropic AI key (server-side only) |
-| `ANTHROPIC_MODEL` | `claude-opus-4-5` | AI model name |
+| `ANTHROPIC_MODEL` | `claude-sonnet-4-20250514` | AI model name (default in config/ai.php) |
 | `AI_MAX_TOKENS` | `4096` | Max tokens per AI request |
 | `APP_LOCALE` | `id` | Default locale |
 | `APP_AVAILABLE_LOCALES` | `id,en` | Supported locales |
@@ -497,6 +497,7 @@ See [`BACKUP_SETUP.md`](./BACKUP_SETUP.md) for database and storage backup proce
 | Document | Description |
 |----------|-------------|
 | [`AGENTS.md`](./AGENTS.md) | Comprehensive AI agent reference — architecture, conventions, hard rules |
+| [`docs/phase-*.md`](./docs/) | Phase implementation guides (phase-0.md through phase-8.md) |
 | [`BACKUP_SETUP.md`](./BACKUP_SETUP.md) | Database & storage backup/restore procedures |
 | [`.env.example`](./.env.example) | Local development environment template |
 | [`.env.production.example`](./.env.production.example) | Production environment template (annotated) |
