@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Public;
 
 use App\Enums\ArticleStatus;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Public\PencarianRequest;
 use App\Models\Agenda;
 use App\Models\Article;
 use App\Models\Jurusan;
@@ -29,13 +30,8 @@ class PencarianController extends Controller
         return preg_replace("/(?!<[^>]*?>)($keyword)(?![^<]*?>)/i", '<mark class="bg-[#c9a84c]/30 text-inherit rounded-sm px-0.5">$1</mark>', $text);
     }
 
-    public function index(Request $request)
+    public function index(PencarianRequest $request)
     {
-        $request->validate([
-            'q' => 'required|string|min:2|max:100',
-            'type' => 'nullable|in:artikel,jurusan,pengumuman,agenda,semua',
-        ]);
-
         $q = strip_tags(trim($request->input('q')));
         $type = $request->input('type', 'semua');
         $locale = app()->getLocale();

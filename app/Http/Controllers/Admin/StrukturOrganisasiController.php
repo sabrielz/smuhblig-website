@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\ReorderStrukturOrganisasiRequest;
+use App\Http\Requests\Admin\StoreStrukturOrganisasiRequest;
+use App\Http\Requests\Admin\UpdateStrukturOrganisasiRequest;
 use App\Models\StrukturOrganisasi;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 
@@ -44,17 +46,9 @@ class StrukturOrganisasiController extends Controller
         return $data;
     }
 
-    public function store(Request $request)
+    public function store(StoreStrukturOrganisasiRequest $request)
     {
-        $validated = $request->validate([
-            'parent_id' => 'nullable|exists:struktur_organisasis,id',
-            'nama' => 'required|string|max:255',
-            'jabatan' => 'required|string|max:255',
-            'jabatan_en' => 'nullable|string|max:255',
-            'level' => 'required|integer|in:0,1,2',
-            'is_active' => 'boolean',
-            'foto' => 'nullable|file|mimes:jpg,jpeg,png,webp|mimetypes:image/jpeg,image/png,image/webp|max:2048',
-        ]);
+        $validated = $request->validated();
 
         $maxUrutan = StrukturOrganisasi::where('parent_id', $validated['parent_id'])->max('urutan') ?? 0;
 
@@ -77,17 +71,9 @@ class StrukturOrganisasiController extends Controller
         return back()->with('success', 'Anggota berhasil ditambahkan.');
     }
 
-    public function update(Request $request, StrukturOrganisasi $struktur_organisasi)
+    public function update(UpdateStrukturOrganisasiRequest $request, StrukturOrganisasi $struktur_organisasi)
     {
-        $validated = $request->validate([
-            'parent_id' => 'nullable|exists:struktur_organisasis,id',
-            'nama' => 'required|string|max:255',
-            'jabatan' => 'required|string|max:255',
-            'jabatan_en' => 'nullable|string|max:255',
-            'level' => 'required|integer|in:0,1,2',
-            'is_active' => 'boolean',
-            'foto' => 'nullable|file|mimes:jpg,jpeg,png,webp|mimetypes:image/jpeg,image/png,image/webp|max:2048',
-        ]);
+        $validated = $request->validated();
 
         $struktur_organisasi->update([
             'parent_id' => $validated['parent_id'],
@@ -122,14 +108,9 @@ class StrukturOrganisasiController extends Controller
         return back()->with('success', 'Anggota berhasil dihapus.');
     }
 
-    public function reorder(Request $request)
+    public function reorder(ReorderStrukturOrganisasiRequest $request)
     {
-        $validated = $request->validate([
-            'items' => 'required|array',
-            'items.*.id' => 'required|exists:struktur_organisasis,id',
-            'items.*.urutan' => 'required|integer',
-            'items.*.parent_id' => 'nullable|exists:struktur_organisasis,id',
-        ]);
+        $validated = $request->validated();
 
         foreach ($validated['items'] as $item) {
             $updateData = ['urutan' => $item['urutan']];

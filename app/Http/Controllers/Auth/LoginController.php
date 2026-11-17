@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\ForgotPasswordRequest;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Requests\Auth\ResetPasswordRequest;
 use App\Services\EmailConfigService;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\RedirectResponse;
@@ -80,12 +82,8 @@ class LoginController extends Controller
     /**
      * Send a password reset link to the given user.
      */
-    public function sendResetLink(Request $request): RedirectResponse
+    public function sendResetLink(ForgotPasswordRequest $request): RedirectResponse
     {
-        $request->validate([
-            'email' => ['required', 'email'],
-        ]);
-
         // Apply dynamic SMTP config before sending
         EmailConfigService::configure();
 
@@ -115,15 +113,8 @@ class LoginController extends Controller
     /**
      * Handle an incoming new password request.
      */
-    public function resetPassword(Request $request): RedirectResponse
+    public function resetPassword(ResetPasswordRequest $request): RedirectResponse
     {
-        $request->validate([
-            'token' => ['required'],
-            'email' => ['required', 'email'],
-            'password' => ['required', 'min:8', 'confirmed'],
-            'password_confirmation' => ['required'],
-        ]);
-
         $status = Password::reset(
             $request->only('email', 'password', 'password_confirmation', 'token'),
             function ($user) use ($request) {
