@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\LogsActivityTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Statistik extends Model
 {
+    use LogsActivityTrait;
+
     protected $fillable = [
         'key',
         'nilai',

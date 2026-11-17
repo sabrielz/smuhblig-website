@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\LogsActivityTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -11,7 +12,7 @@ use Spatie\Sluggable\SlugOptions;
 
 class Category extends Model
 {
-    use HasFactory, HasSlug;
+    use HasFactory, HasSlug, LogsActivityTrait;
 
     protected $fillable = [
         'name',

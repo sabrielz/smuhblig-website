@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\ArticleStatus;
+use App\Traits\LogsActivityTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -16,7 +17,7 @@ use Spatie\Tags\HasTags;
 
 class Article extends Model implements HasMedia
 {
-    use HasFactory, HasSlug, HasTags, InteractsWithMedia;
+    use HasFactory, HasSlug, HasTags, InteractsWithMedia, LogsActivityTrait;
 
     protected $fillable = [
         'user_id',

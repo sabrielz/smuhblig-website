@@ -3,14 +3,18 @@
 namespace App\Providers;
 
 use App\Http\Middleware\SlowRequestLogger;
+use App\Listeners\CatatLogin;
 use App\Models\AiJob;
 use App\Models\Article;
 use App\Observers\AiJobObserver;
 use App\Observers\ArticleObserver;
 use App\Services\EmailConfigService;
+use Illuminate\Auth\Events\Failed;
+use Illuminate\Auth\Events\Login;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
@@ -36,6 +40,10 @@ class AppServiceProvider extends ServiceProvider
         // 2. Daftarkan observer untuk Article & AiJob
         Article::observe(ArticleObserver::class);
         AiJob::observe(AiJobObserver::class);
+
+        // 2.1 Daftarkan listener login untuk audit trail aktivitas (Sesi 6-04)
+        Event::listen(Login::class, [CatatLogin::class, 'handle']);
+        Event::listen(Failed::class, [CatatLogin::class, 'handle']);
 
         // 2.5 Daftarkan middleware pencatatan request lambat secara global (atau bisa ke grup khusus)
         // Kita tidak menggunakan Kernel HTTP Laravel versi lama, melainkan Router:
