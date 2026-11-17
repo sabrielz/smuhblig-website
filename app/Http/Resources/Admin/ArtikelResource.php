@@ -32,6 +32,7 @@ class ArtikelResource extends JsonResource
             }),
             'slug' => $this->slug,
             'status' => $this->status,
+            'catatan_review' => $this->resource->catatan_review,
             'published_at' => $this->published_at ? $this->published_at->format('Y-m-d\TH:i:s') : null,
             'formatted_published_at' => $this->published_at ? $this->published_at->format('d M Y') : null,
             'meta_title' => $this->meta_title,

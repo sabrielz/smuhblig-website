@@ -8,7 +8,9 @@ import { Input } from '@/Components/UI/Input';
 import { Select } from '@/Components/UI/Select';
 import { Pagination } from '@/Components/UI/Pagination';
 import { ConfirmDialog } from '@/Components/UI/ConfirmDialog';
-import { Search, Plus, Edit, Trash2, CheckCircle } from 'lucide-react';
+import { Modal } from '@/Components/UI/Modal';
+import { Textarea } from '@/Components/UI/Textarea';
+import { Search, Plus, Edit, Trash2, CheckCircle, RotateCcw } from 'lucide-react';
 import { SharedProps } from '@/types';
 
 interface Article {
@@ -51,6 +53,10 @@ export default function Index({ articles, categories, filters }: Props) {
     const [categoryId, setCategoryId] = useState(filters.category_id || '');
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
     const [articleToDelete, setArticleToDelete] = useState<number | null>(null);
+    const [kembalikanModalOpen, setKembalikanModalOpen] = useState(false);
+    const [articleToKembalikan, setArticleToKembalikan] = useState<number | null>(null);
+    const [catatanReview, setCatatanReview] = useState('');
+    const [isSubmittingKembalikan, setIsSubmittingKembalikan] = useState(false);
 
     const handleFilter = (e?: React.FormEvent) => {
         if (e) e.preventDefault();
@@ -76,6 +82,31 @@ export default function Index({ articles, categories, filters }: Props) {
 
     const handlePublish = (id: number) => {
         router.post(route('admin.artikel.publish', id as any), {}, { preserveScroll: true });
+    };
+
+    const triggerKembalikan = (id: number) => {
+        setArticleToKembalikan(id);
+        setCatatanReview('');
+        setKembalikanModalOpen(true);
+    };
+
+    const handleConfirmKembalikan = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!articleToKembalikan || !catatanReview.trim()) return;
+
+        setIsSubmittingKembalikan(true);
+        router.post(
+            route('admin.artikel.kembalikan', articleToKembalikan as any),
+            { catatan: catatanReview },
+            {
+                preserveScroll: true,
+                onFinish: () => {
+                    setIsSubmittingKembalikan(false);
+                    setKembalikanModalOpen(false);
+                    setCatatanReview('');
+                },
+            }
+        );
     };
 
     const getStatusBadge = (status: string) => {
@@ -161,6 +192,17 @@ export default function Index({ articles, categories, filters }: Props) {
                             title="Publish"
                         >
                             <CheckCircle className="w-4 h-4" />
+                        </Button>
+                    )}
+                    {can?.publish_artikel && article.status === 'pending_review' && (
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-amber-600 hover:text-amber-700 hover:bg-amber-50"
+                            onClick={() => triggerKembalikan(article.id)}
+                            title="Kembalikan dengan Catatan"
+                        >
+                            <RotateCcw className="w-4 h-4" />
                         </Button>
                     )}
                     <Link href={route('admin.artikel.edit', { artikel: article.id })}>
@@ -275,6 +317,50 @@ export default function Index({ articles, categories, filters }: Props) {
                 cancelLabel="Batal"
                 variant="danger"
             />
+
+            {/* Modal Kembalikan dengan Catatan */}
+            <Modal
+                isOpen={kembalikanModalOpen}
+                onClose={() => setKembalikanModalOpen(false)}
+                title="Kembalikan Artikel ke Penulis"
+            >
+                <form onSubmit={handleConfirmKembalikan} className="space-y-4">
+                    <p className="text-xs text-neutral-500">
+                        Status artikel akan diubah kembali menjadi <strong>Draft</strong>. Berikan catatan revisi yang jelas agar penulis dapat memperbaiki kontennya.
+                    </p>
+                    <div>
+                        <label className="block text-xs font-semibold text-neutral-700 mb-1">
+                            Catatan Revisi <span className="text-red-500">*</span>
+                        </label>
+                        <Textarea
+                            rows={4}
+                            maxLength={1000}
+                            placeholder="Tuliskan catatan perbaikan untuk penulis artikel..."
+                            value={catatanReview}
+                            onChange={(e) => setCatatanReview(e.target.value)}
+                            required
+                        />
+                        <p className="text-[10px] text-neutral-400 mt-1 text-right">{catatanReview.length}/1000 karakter</p>
+                    </div>
+
+                    <div className="flex justify-end gap-2 pt-2">
+                        <Button
+                            type="button"
+                            variant="outline"
+                            onClick={() => setKembalikanModalOpen(false)}
+                        >
+                            Batal
+                        </Button>
+                        <Button
+                            type="submit"
+                            variant="primary"
+                            disabled={isSubmittingKembalikan || !catatanReview.trim()}
+                        >
+                            Kembalikan ke Draft
+                        </Button>
+                    </div>
+                </form>
+            </Modal>
         </AdminLayout>
     );
 }

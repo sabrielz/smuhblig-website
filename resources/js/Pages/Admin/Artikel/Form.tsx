@@ -73,6 +73,7 @@ interface ArticleData {
     en_reviewed?: boolean;
     tags?: string[];
     revisions?: import('@/types').ArticleRevisionItem[];
+    catatan_review?: string | null;
 }
 
 interface Props {
@@ -491,6 +492,17 @@ export default function Form({ article, categories }: Props) {
                     Main Content Area (60% tablet, 65% desktop)
                    ══════════════════════════════════════ */}
                 <div className="w-full md:w-[60%] lg:w-[65%] flex flex-col gap-6">
+
+                    {/* Catatan Review (Sesi 6-12) */}
+                    {article?.catatan_review && (
+                        <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 flex items-start gap-3">
+                            <div className="w-2.5 h-2.5 rounded-full bg-amber-500 shrink-0 mt-1.5" />
+                            <div className="text-xs">
+                                <p className="font-bold text-amber-900">Catatan Review dari Editor:</p>
+                                <p className="text-amber-800 mt-1 whitespace-pre-wrap">{article.catatan_review}</p>
+                            </div>
+                        </div>
+                    )}
 
                     {/* Language Tab Switcher */}
                     {multibahasaEnabled && (

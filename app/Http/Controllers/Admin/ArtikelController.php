@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Enums\ArticleStatus;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\KembalikanArtikelRequest;
 use App\Http\Requests\Admin\StoreArtikelRequest;
 use App\Http\Requests\Admin\UpdateArtikelRequest;
 use App\Http\Resources\Admin\ArtikelResource;
@@ -16,6 +17,7 @@ use App\Models\Category;
 use App\Models\Pengaturan;
 use App\Models\User;
 use App\Services\HtmlSanitizer;
+use App\Services\NotifikasiService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -556,5 +558,37 @@ class ArtikelController extends Controller
 
             return back()->with('error', 'Terjadi kesalahan saat memulihkan revisi.');
         }
+    }
+
+    /**
+     * Mengembalikan artikel ke draft disertai catatan revisi (Sesi 6-12).
+     */
+    public function kembalikan(KembalikanArtikelRequest $request, Article $artikel)
+    {
+        Gate::authorize('update', $artikel);
+
+        $catatan = (string) $request->validated('catatan');
+
+        $artikel->update([
+            'status' => ArticleStatus::Draft,
+            'catatan_review' => $catatan,
+        ]);
+
+        // Kirim notifikasi ke penulis artikel
+        if ($artikel->user_id) {
+            $title = ($trans = $artikel->translation('id')) ? $trans->title : 'Artikel';
+
+            NotifikasiService::kirim(
+                [$artikel->user_id],
+                'artikel_dikembalikan',
+                'Artikel perlu direvisi: '.$title,
+                'Catatan editor: '.$catatan,
+                '/admin/artikel/'.$artikel->id.'/edit',
+                ['article_id' => $artikel->id, 'catatan' => $catatan],
+            );
+        }
+
+        return redirect()->route('admin.artikel.index')
+            ->with('success', 'Artikel berhasil dikembalikan ke status draft dengan catatan revisi.');
     }
 }
