@@ -17,6 +17,7 @@ import {
     Mail,
     FolderTree,
     Tag,
+    UserCircle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SharedProps } from "@/types";
@@ -93,11 +94,17 @@ export default function AdminSidebar({ isOpen, setIsOpen }: SidebarProps) {
                 { label: "Tautan", href: "/admin/tautan", icon: LinkIcon, badge: null },
             ],
         },
-        ...(user?.is_admin
-            ? [
-                  {
-                      label: "Sistem",
-                      items: [
+        {
+            label: "Sistem",
+            items: [
+                {
+                    label: "Profil Saya",
+                    href: "/admin/profil",
+                    icon: UserCircle,
+                    badge: null,
+                },
+                ...(user?.is_admin
+                    ? [
                           {
                               label: "Pengguna",
                               href: "/admin/pengguna",
@@ -110,10 +117,10 @@ export default function AdminSidebar({ isOpen, setIsOpen }: SidebarProps) {
                               icon: Settings,
                               badge: null,
                           },
-                      ],
-                  },
-              ]
-            : []),
+                      ]
+                    : []),
+            ],
+        },
     ];
 
     const isActive = (href: string) => {

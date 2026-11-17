@@ -355,7 +355,11 @@ export default function AdminTopbar({ title, onMenuClick }: AdminTopbarProps) {
                     </div>
 
                     {/* ── Profile ── */}
-                    <div className="flex items-center gap-3 sm:border-l sm:border-neutral-200 sm:pl-6 cursor-pointer hover:bg-neutral-50 p-2 sm:-mr-2 rounded-lg transition-colors">
+                    <Link
+                        href={route('admin.profil.edit')}
+                        className="flex items-center gap-3 sm:border-l sm:border-neutral-200 sm:pl-6 cursor-pointer hover:bg-neutral-50 p-2 sm:-mr-2 rounded-lg transition-colors"
+                        title="Profil Saya"
+                    >
                         <div className="hidden sm:flex flex-col text-right">
                             <span className="text-sm font-medium text-neutral-800">{user?.name || 'Admin'}</span>
                             <span className="text-xs text-neutral-500 capitalize">{user?.role || 'Admin'}</span>
@@ -371,7 +375,7 @@ export default function AdminTopbar({ title, onMenuClick }: AdminTopbarProps) {
                                 <span className="text-primary-600 font-medium">{user?.name?.charAt(0) || 'A'}</span>
                             </div>
                         )}
-                    </div>
+                    </Link>
                 </div>
             </div>
         </header>
