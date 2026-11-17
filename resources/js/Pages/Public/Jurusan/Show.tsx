@@ -9,6 +9,7 @@ import {
 import PublicLayout from '@/Layouts/PublicLayout';
 import { fadeInUp, staggerContainer, slideFromLeft, slideFromRight, scaleIn } from '@/lib/motion';
 import { JurusanCard } from '@/Components/UI/JurusanCard';
+import { MitraStrip } from '@/Components/UI/MitraStrip';
 import { cn } from '@/lib/utils';
 import type { SharedProps } from '@/types';
 
@@ -39,6 +40,13 @@ interface JurusanData {
     fasilitas: string[];
     cover_image: string | null;
     gallery_images: string[];
+    mitras?: Array<{
+        id: number;
+        nama: string;
+        bidang?: string;
+        url?: string | null;
+        logo_url?: string | null;
+    }>;
 }
 
 interface Props {
@@ -446,6 +454,27 @@ export default function JurusanShow({ jurusan: response, jurusanLain, pengaturan
                                 </div>
                             ))}
                         </div>
+                    </div>
+                </section>
+            )}
+
+            {/* --- SECTION: MITRA INDUSTRI JURUSAN --- */}
+            {jurusan.mitras && jurusan.mitras.length > 0 && (
+                <section className="py-20 bg-neutral-50/70 border-t border-neutral-200/60">
+                    <div className="container mx-auto px-4 lg:px-8 max-w-7xl">
+                        <div className="text-center max-w-2xl mx-auto mb-12">
+                            <span className="text-xs font-mono tracking-widest uppercase text-primary-600 block mb-2">
+                                KERJA SAMA INDUSTRI
+                            </span>
+                            <h2 className="text-2xl lg:text-3xl font-serif font-bold text-neutral-900">
+                                Mitra Industri Rekanan {jurusan.kode}
+                            </h2>
+                            <p className="text-neutral-500 text-sm mt-3">
+                                Perusahaan rekanan yang bekerja sama dalam praktik kerja lapangan (PKL), uji kompetensi, dan rekrutmen kerja lulusan.
+                            </p>
+                        </div>
+
+                        <MitraStrip items={jurusan.mitras} />
                     </div>
                 </section>
             )}

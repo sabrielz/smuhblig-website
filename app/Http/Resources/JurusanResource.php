@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use App\Models\Jurusan;
 use App\Models\JurusanTranslation;
+use App\Models\Mitra;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -56,6 +57,19 @@ class JurusanResource extends JsonResource
             // Media
             'cover_image' => $this->getFirstMediaUrl('cover') ?: null,
             'gallery_images' => $this->getMedia('gallery')->map(fn ($media) => $media->getUrl())->toArray(),
+
+            // Mitra Industri Terkait
+            'mitras' => $this->relationLoaded('mitras') ? $this->mitras->where('is_active', true)->map(function (Mitra $m) {
+                $media = $m->getFirstMedia('logo');
+
+                return [
+                    'id' => $m->id,
+                    'nama' => $m->nama,
+                    'bidang' => $m->bidang,
+                    'url' => $m->url,
+                    'logo_url' => $media ? ($media->getUrl('thumb') ?: $media->getUrl()) : null,
+                ];
+            })->values()->all() : [],
         ];
     }
 }

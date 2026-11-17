@@ -16,6 +16,7 @@ import { ArticleCard } from "@/Components/UI/ArticleCard";
 import { AnnouncementBanner, UrgentAnnouncement } from "@/Components/UI/AnnouncementBanner";
 import { Button } from "@/Components/UI/Button";
 import { TestimoniCarousel, TestimoniItem } from "@/Components/UI/TestimoniCarousel";
+import { MitraStrip, MitraItem } from "@/Components/UI/MitraStrip";
 import {
     fadeInUp,
     staggerContainer,
@@ -80,6 +81,7 @@ interface BerandaProps {
     prestasiTerbaru?: PrestasiItem[];
     beritaTerbaru?: ArticleItem[];
     testimoni?: TestimoniItem[];
+    mitraIndustri?: MitraItem[];
     statistik?: StatItemDB[];
     pengaturan?: Pengaturan;
     kontenHero?: Record<string, string>;
@@ -379,6 +381,7 @@ export default function Beranda({
     prestasiTerbaru = [],
     beritaTerbaru = [],
     testimoni = [],
+    mitraIndustri = [],
     statistik = [],
     kontenHero = {},
     kontenStatistik = {},
@@ -894,6 +897,34 @@ export default function Beranda({
                             />
 
                             <TestimoniCarousel items={testimoni} isEn={isEn} />
+                        </div>
+                    </section>
+                </>
+            )}
+
+            {/* ══════════════════════════════════════════════════════════════
+                SECTION — MITRA INDUSTRI (Hanya dirender jika ada data)
+            ══════════════════════════════════════════════════════════════ */}
+            {mitraIndustri.length > 0 && (
+                <>
+                    <SectionDivider />
+                    <section
+                        id="beranda-mitra"
+                        className="py-16 lg:py-24 bg-white"
+                        aria-label="Mitra industri dan kerjasama"
+                    >
+                        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-16">
+                            <SectionHeader
+                                label={isEn ? "INDUSTRY PARTNERS" : "JEJARING INDUSTRI"}
+                                title={isEn ? "Trusted by Leading Companies" : "Dipercaya oleh Dunia Industri"}
+                                subtitle={
+                                    isEn
+                                        ? "Strong collaboration with industry partners for internships, curriculum alignment, and graduate recruitment."
+                                        : "Kolaborasi strategis dengan berbagai perusahaan nasional untuk program PKL, sinkronisasi kurikulum, dan penyaluran kerja lulusan."
+                                }
+                            />
+
+                            <MitraStrip items={mitraIndustri} />
                         </div>
                     </section>
                 </>

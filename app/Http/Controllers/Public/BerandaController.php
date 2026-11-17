@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Article;
 use App\Models\HalamanKonten;
 use App\Models\Jurusan;
+use App\Models\Mitra;
 use App\Models\Pengaturan;
 use App\Models\Pengumuman;
 use App\Models\Prestasi;
@@ -125,6 +126,24 @@ class BerandaController extends Controller
                     ];
                 });
 
+            // ── Mitra Industri Aktif ──────────────────────────────────────────
+            $mitraIndustri = Mitra::query()
+                ->active()
+                ->ordered()
+                ->with('media')
+                ->get()
+                ->map(function (Mitra $m) {
+                    $media = $m->getFirstMedia('logo');
+
+                    return [
+                        'id' => $m->id,
+                        'nama' => $m->nama,
+                        'bidang' => $m->bidang,
+                        'url' => $m->url,
+                        'logo_url' => $media ? ($media->getUrl('thumb') ?: $media->getUrl()) : null,
+                    ];
+                });
+
             // ── Pengaturan ─────────────────────────────────────────────────────
             $settings = Pengaturan::getAllSettings();
 
@@ -133,6 +152,7 @@ class BerandaController extends Controller
                 'prestasiTerbaru' => $prestasiTerbaru,
                 'beritaTerbaru' => $beritaTerbaru,
                 'testimoni' => $testimoni,
+                'mitraIndustri' => $mitraIndustri,
                 'pengaturan' => [
                     'site_name' => $settings['site_name'] ?? 'SMK Muhammadiyah Bligo',
                     'tagline' => $settings['site_tagline'] ?? 'Mencetak Generasi Unggul dan Berakhlak Mulia',

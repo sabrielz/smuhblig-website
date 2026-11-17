@@ -53,7 +53,7 @@ class JurusanController extends Controller
 
         $data = Cache::remember("public.jurusan.show.{$jurusan->slug}.{$locale}", 3600, function () use ($jurusan) {
             // Load relasi yang dibutuhkan
-            $jurusan->load(['translations', 'media']);
+            $jurusan->load(['translations', 'media', 'mitras.media']);
 
             return $jurusan;
         });
