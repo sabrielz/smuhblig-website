@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
         if (app()->environment('local')) {
             $this->call([
                 GuruContohSeeder::class,
+                FasilitasContohSeeder::class,
             ]);
         }
     }
