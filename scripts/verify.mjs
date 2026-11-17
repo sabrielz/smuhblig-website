@@ -48,6 +48,9 @@ if (jsTsFiles.length > 0) {
     run(`npx eslint --quiet ${quoted}`, 'ESLint (Lint JS/TS)');
 }
 
+// Selalu jalankan cek i18n
+run('node scripts/check-i18n.mjs', 'i18n Key Consistency Check');
+
 // Selalu type-check & test frontend
 run('npx tsc --noEmit', 'TypeScript Check');
 run('npx vitest run --passWithNoTests', 'Vitest (Frontend Tests)');
