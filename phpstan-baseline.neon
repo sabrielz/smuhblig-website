@@ -1,0 +1,601 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/DashboardController.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Collection\<int,App\\Models\\Article\>\:\:map\(\) contains unresolvable type\.$#'
+			identifier: argument.unresolvableType
+			count: 1
+			path: app/Http/Controllers/Admin/DashboardController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>judul" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/Admin/GaleriController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>deskripsi_lengkap" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 2
+			path: app/Http/Controllers/Admin/JurusanController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>deskripsi_singkat" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 2
+			path: app/Http/Controllers/Admin/JurusanController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>fasilitas" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 2
+			path: app/Http/Controllers/Admin/JurusanController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>highlight_1_en" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/Admin/JurusanController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>highlight_1_label" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/Admin/JurusanController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>highlight_2_en" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/Admin/JurusanController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>highlight_2_label" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/Admin/JurusanController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>highlight_3_en" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/Admin/JurusanController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>highlight_3_label" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/Admin/JurusanController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>kompetensi" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 2
+			path: app/Http/Controllers/Admin/JurusanController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>konten_hero" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 2
+			path: app/Http/Controllers/Admin/JurusanController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>nama" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 2
+			path: app/Http/Controllers/Admin/JurusanController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>prospek_karir" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 2
+			path: app/Http/Controllers/Admin/JurusanController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>tagline" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 2
+			path: app/Http/Controllers/Admin/JurusanController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$ai_translated\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Admin/KontenHalamanController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/KontenHalamanController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$locale\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/KontenHalamanController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$reviewed\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/KontenHalamanController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$value\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Admin/KontenHalamanController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>ai_translated" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/Admin/KontenHalamanController.php
+
+		-
+			message: '#^Cannot call method diffForHumans\(\) on string\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: app/Http/Controllers/Admin/NotifikasiController.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Pagination\\AbstractPaginator\<int,App\\Models\\NotifikasiAdmin\>\:\:through\(\) contains unresolvable type\.$#'
+			identifier: argument.unresolvableType
+			count: 1
+			path: app/Http/Controllers/Admin/NotifikasiController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Http/Controllers/Admin/PenggunaController.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Collection\<int,App\\Models\\User\>\:\:map\(\) contains unresolvable type\.$#'
+			identifier: argument.unresolvableType
+			count: 1
+			path: app/Http/Controllers/Admin/PenggunaController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>name" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 2
+			path: app/Http/Controllers/Admin/PenggunaController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>id" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/Admin/PengumumanController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>judul" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/Admin/PengumumanController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Admin/PesanKontakController.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Pagination\\AbstractPaginator\<int,App\\Models\\PesanKontak\>\:\:through\(\) contains unresolvable type\.$#'
+			identifier: argument.unresolvableType
+			count: 1
+			path: app/Http/Controllers/Admin/PesanKontakController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\JurusanTranslation\:\:\$deskripsi\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Public/BerandaController.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:translation\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Public/BerandaController.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Collection\<int,App\\Models\\Jurusan\>\:\:map\(\) contains unresolvable type\.$#'
+			identifier: argument.unresolvableType
+			count: 1
+			path: app/Http/Controllers/Public/BerandaController.php
+
+		-
+			message: '#^Parameter \#3 \$callback of static method Illuminate\\Cache\\Repository\:\:remember\(\) contains unresolvable type\.$#'
+			identifier: argument.unresolvableType
+			count: 1
+			path: app/Http/Controllers/Public/BerandaController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>deskripsi" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/Public/BerandaController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>excerpt" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/Public/BerandaController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>nama" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/Public/BerandaController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>name" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/Public/BerandaController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>tagline" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/Public/BerandaController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>title" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/Public/BerandaController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$avatar_url\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Http/Controllers/Public/BeritaController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Http/Controllers/Public/BeritaController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$slug\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Public/BeritaController.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:translation\(\)\.$#'
+			identifier: method.notFound
+			count: 3
+			path: app/Http/Controllers/Public/BeritaController.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Collection\<int,App\\Models\\Article\>\:\:map\(\) contains unresolvable type\.$#'
+			identifier: argument.unresolvableType
+			count: 1
+			path: app/Http/Controllers/Public/BeritaController.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Pagination\\AbstractPaginator\<int,App\\Models\\Article\>\:\:through\(\) contains unresolvable type\.$#'
+			identifier: argument.unresolvableType
+			count: 1
+			path: app/Http/Controllers/Public/BeritaController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>excerpt" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 2
+			path: app/Http/Controllers/Public/BeritaController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>name" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 2
+			path: app/Http/Controllers/Public/BeritaController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>title" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 2
+			path: app/Http/Controllers/Public/BeritaController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>deskripsi_singkat" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/Public/JurusanController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>nama" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/Public/JurusanController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Jurusan\:\:\$deskripsi_singkat\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Public/PencarianController.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:translation\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Public/PencarianController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>name" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/Public/PencarianController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Middleware/HandleInertiaRequests.php
+
+		-
+			message: '#^Expression on left side of \?\? is not nullable\.$#'
+			identifier: nullCoalesce.expr
+			count: 1
+			path: app/Http/Middleware/HandleInertiaRequests.php
+
+		-
+			message: '#^Using nullsafe method call on non\-nullable type Illuminate\\Database\\Eloquent\\Collection\<int, Illuminate\\Database\\Eloquent\\Model\>\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 2
+			path: app/Http/Middleware/HandleInertiaRequests.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>name" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Middleware/HandleInertiaRequests.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>id" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Middleware/SlowRequestLogger.php
+
+		-
+			message: '#^Using nullsafe method call on non\-nullable type App\\Models\\User\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Requests/Auth/LoginRequest.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\Admin\\AgendaResource\:\:\$created_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/Admin/AgendaResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\Admin\\AgendaResource\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/Admin/AgendaResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\Admin\\AgendaResource\:\:\$is_active\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/Admin/AgendaResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\Admin\\AgendaResource\:\:\$slug\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/Admin/AgendaResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\Admin\\AgendaResource\:\:\$tanggal_mulai\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/Admin/AgendaResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\Admin\\AgendaResource\:\:\$tanggal_selesai\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/Admin/AgendaResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\Admin\\AgendaResource\:\:\$tipe\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/Admin/AgendaResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\Admin\\AgendaResource\:\:\$translations\.$#'
+			identifier: property.notFound
+			count: 4
+			path: app/Http/Resources/Admin/AgendaResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\Admin\\AgendaResource\:\:\$updated_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/Admin/AgendaResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\Admin\\AgendaResource\:\:\$warna\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/Admin/AgendaResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\Admin\\ArtikelResource\:\:\$category\.$#'
+			identifier: property.notFound
+			count: 4
+			path: app/Http/Resources/Admin/ArtikelResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\Admin\\ArtikelResource\:\:\$category_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/Admin/ArtikelResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\Admin\\ArtikelResource\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/Admin/ArtikelResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\Admin\\ArtikelResource\:\:\$meta_description\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/Admin/ArtikelResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\Admin\\ArtikelResource\:\:\$meta_title\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/Admin/ArtikelResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\Admin\\ArtikelResource\:\:\$published_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/Admin/ArtikelResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\Admin\\ArtikelResource\:\:\$slug\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/Admin/ArtikelResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\Admin\\ArtikelResource\:\:\$status\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/Admin/ArtikelResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\Admin\\ArtikelResource\:\:\$translations\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Resources/Admin/ArtikelResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\Admin\\ArtikelResource\:\:\$user\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Resources/Admin/ArtikelResource.php
+
+		-
+			message: '#^Call to an undefined method App\\Http\\Resources\\Admin\\ArtikelResource\:\:getFirstMediaUrl\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Resources/Admin/ArtikelResource.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>fasilitas" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Resources/JurusanResource.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>kompetensi" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Resources/JurusanResource.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>nama" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Resources/JurusanResource.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>prospek_karir" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Resources/JurusanResource.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$reviewed\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Jobs/TranslateHalamanKonten.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$locale\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Article.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$reviewed\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Article.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$locale\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Galeri.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$reviewed\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Galeri.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$value\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/HalamanKonten.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$locale\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Jurusan.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$reviewed\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Jurusan.php
+
+		-
+			message: '#^Method App\\Models\\Jurusan\:\:translation\(\) should return App\\Models\\JurusanTranslation\|null but returns Illuminate\\Database\\Eloquent\\Model\|null\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Models/Jurusan.php
+
+		-
+			message: '#^PHPDoc tag @var above a method has no effect\.$#'
+			identifier: varTag.misplaced
+			count: 1
+			path: app/Models/NotifikasiAdmin.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Pengaturan\:\:\$value\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Pengaturan.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>title" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Observers/ArticleObserver.php
+
+		-
+			message: '#^Unsafe call to private method App\\Services\\EmailConfigService\:\:guessEncryption\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 1
+			path: app/Services/EmailConfigService.php
