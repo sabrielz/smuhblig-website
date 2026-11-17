@@ -1,9 +1,7 @@
-import React, { useEffect } from 'react';
+import { useEffect, useRef, useId } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AlertTriangle, Info, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
-// Assuming there might be a Button component or just using standard html buttons
-// import { Button } from './Button';
 
 export interface ConfirmDialogProps {
     isOpen: boolean;
@@ -28,17 +26,66 @@ export function ConfirmDialog({
     variant = 'danger',
     isLoading = false,
 }: ConfirmDialogProps) {
+    const dialogRef = useRef<HTMLDivElement>(null);
+    const previousActiveElement = useRef<HTMLElement | null>(null);
+    const titleId = useId();
+    const descId = useId();
+
     useEffect(() => {
-        if (isOpen) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = '';
-        }
+        if (!isOpen) return;
+
+        previousActiveElement.current = document.activeElement as HTMLElement | null;
+        document.body.style.overflow = 'hidden';
+
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') {
+                e.stopPropagation();
+                onClose();
+                return;
+            }
+
+            if (e.key === 'Tab' && dialogRef.current) {
+                const focusable = dialogRef.current.querySelectorAll<HTMLElement>(
+                    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+                );
+                if (focusable.length === 0) return;
+
+                const first = focusable[0];
+                const last = focusable[focusable.length - 1];
+
+                if (e.shiftKey) {
+                    if (document.activeElement === first) {
+                        e.preventDefault();
+                        last.focus();
+                    }
+                } else {
+                    if (document.activeElement === last) {
+                        e.preventDefault();
+                        first.focus();
+                    }
+                }
+            }
+        };
+
+        document.addEventListener('keydown', handleKeyDown);
+
+        const timer = setTimeout(() => {
+            if (dialogRef.current) {
+                const cancelBtn = dialogRef.current.querySelector<HTMLElement>('button[data-cancel-btn]');
+                if (cancelBtn) cancelBtn.focus();
+                else dialogRef.current.focus();
+            }
+        }, 50);
 
         return () => {
+            clearTimeout(timer);
+            document.removeEventListener('keydown', handleKeyDown);
             document.body.style.overflow = '';
+            if (previousActiveElement.current && typeof previousActiveElement.current.focus === 'function') {
+                previousActiveElement.current.focus();
+            }
         };
-    }, [isOpen]);
+    }, [isOpen, onClose]);
 
     const isDanger = variant === 'danger';
 
@@ -54,15 +101,22 @@ export function ConfirmDialog({
                         transition={{ duration: 0.2 }}
                         onClick={onClose}
                         className="absolute inset-0 bg-neutral-900/40 backdrop-blur-sm"
+                        aria-hidden="true"
                     />
 
                     {/* Dialog Panel */}
                     <motion.div
+                        ref={dialogRef}
+                        tabIndex={-1}
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby={titleId}
+                        aria-describedby={descId}
                         initial={{ opacity: 0, scale: 0.95, y: 10 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95, y: 10 }}
                         transition={{ duration: 0.2, ease: 'easeOut' }}
-                        className="relative w-full max-w-md bg-white rounded-2xl shadow-xl overflow-hidden"
+                        className="relative w-full max-w-md bg-white rounded-2xl shadow-xl overflow-hidden focus:outline-none"
                     >
                         <div className="p-6">
                             <div className="flex items-start">
@@ -81,60 +135,56 @@ export function ConfirmDialog({
                                     )}
                                 </div>
                                 <div className="ml-4 flex-1">
-                                    <h3 className="text-lg font-semibold text-neutral-900">
+                                    <h3 id={titleId} className="text-lg font-bold text-neutral-900">
                                         {title}
                                     </h3>
-                                    <p className="mt-2 text-sm text-neutral-600">
+                                    <p id={descId} className="mt-2 text-sm text-neutral-600 leading-relaxed">
                                         {message}
                                     </p>
                                 </div>
+                                <button
+                                    type="button"
+                                    onClick={onClose}
+                                    aria-label="Tutup konfirmasi"
+                                    className="text-neutral-400 hover:text-neutral-500 p-1 -mr-1 rounded-lg"
+                                >
+                                    <X className="w-5 h-5" />
+                                </button>
+                            </div>
+
+                            <div className="mt-6 flex items-center justify-end gap-3">
+                                <button
+                                    type="button"
+                                    data-cancel-btn
+                                    onClick={onClose}
+                                    disabled={isLoading}
+                                    className="px-4 py-2 text-sm font-semibold text-neutral-700 bg-neutral-100 hover:bg-neutral-200 rounded-xl transition-colors disabled:opacity-50"
+                                >
+                                    {cancelLabel}
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={onConfirm}
+                                    disabled={isLoading}
+                                    className={cn(
+                                        'px-4 py-2 text-sm font-semibold text-white rounded-xl transition-colors flex items-center gap-2 shadow-sm disabled:opacity-50',
+                                        isDanger
+                                            ? 'bg-red-600 hover:bg-red-700'
+                                            : 'bg-primary-600 hover:bg-primary-700'
+                                    )}
+                                >
+                                    {isLoading && (
+                                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                    )}
+                                    {confirmLabel}
+                                </button>
                             </div>
                         </div>
-
-                        <div className="px-6 py-4 bg-neutral-50 flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-3 gap-3 sm:gap-0">
-                            <button
-                                type="button"
-                                onClick={onClose}
-                                disabled={isLoading}
-                                className="w-full sm:w-auto px-4 py-2 text-sm font-medium text-neutral-700 bg-white border border-neutral-300 rounded-lg hover:bg-neutral-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-200 transition-colors disabled:opacity-50"
-                            >
-                                {cancelLabel}
-                            </button>
-                            <button
-                                type="button"
-                                onClick={onConfirm}
-                                disabled={isLoading}
-                                className={cn(
-                                    'w-full sm:w-auto px-4 py-2 text-sm font-medium text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors disabled:opacity-50 flex items-center justify-center',
-                                    isDanger
-                                        ? 'bg-red-600 hover:bg-red-700 focus:ring-red-500'
-                                        : 'bg-primary-600 hover:bg-primary-600/90 focus:ring-primary-600'
-                                )}
-                            >
-                                {isLoading ? (
-                                    <span className="flex items-center space-x-2">
-                                        <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                        </svg>
-                                        Loading...
-                                    </span>
-                                ) : (
-                                    confirmLabel
-                                )}
-                            </button>
-                        </div>
-
-                        <button
-                            type="button"
-                            onClick={onClose}
-                            className="absolute top-4 right-4 text-neutral-400 hover:text-neutral-500 transition-colors"
-                        >
-                            <X className="w-5 h-5" />
-                        </button>
                     </motion.div>
                 </div>
             )}
         </AnimatePresence>
     );
 }
+
+export default ConfirmDialog;

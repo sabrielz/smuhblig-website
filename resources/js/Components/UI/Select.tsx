@@ -1,4 +1,4 @@
-import React, { SelectHTMLAttributes, forwardRef } from 'react';
+import { SelectHTMLAttributes, forwardRef, useId } from 'react';
 import { cn } from '@/lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -19,7 +19,9 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
         { className, label, error, options, id, placeholder, ...props },
         ref
     ) => {
-        const selectId = id || `select-${Math.random().toString(36).substring(2, 9)}`;
+        const generatedId = useId();
+        const selectId = id || generatedId;
+        const errorId = `${selectId}-error`;
 
         return (
             <div className="w-full">
@@ -36,6 +38,8 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
                     <select
                         id={selectId}
                         ref={ref}
+                        aria-invalid={error ? 'true' : 'false'}
+                        aria-describedby={error ? errorId : undefined}
                         className={cn(
                             'block w-full rounded-lg border-neutral-300 shadow-sm transition-colors duration-200 min-h-[44px]',
                             'focus:border-primary-600 focus:ring focus:ring-primary-600 focus:ring-opacity-20',
@@ -61,6 +65,8 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
                 <AnimatePresence>
                     {error && (
                         <motion.p
+                            id={errorId}
+                            role="alert"
                             initial={{ opacity: 0, height: 0, marginTop: 0 }}
                             animate={{ opacity: 1, height: 'auto', marginTop: 4 }}
                             exit={{ opacity: 0, height: 0, marginTop: 0 }}

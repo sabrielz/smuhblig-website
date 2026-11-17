@@ -1,4 +1,4 @@
-import React, { InputHTMLAttributes, forwardRef, ReactNode } from 'react';
+import { InputHTMLAttributes, forwardRef, ReactNode, useId } from 'react';
 import { cn } from '@/lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -15,7 +15,15 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         { className, label, error, hint, leftIcon, rightIcon, id, ...props },
         ref
     ) => {
-        const inputId = id || `input-${Math.random().toString(36).substring(2, 9)}`;
+        const generatedId = useId();
+        const inputId = id || generatedId;
+        const errorId = `${inputId}-error`;
+        const hintId = `${inputId}-hint`;
+
+        const describedBy = [
+            error ? errorId : null,
+            hint && !error ? hintId : null,
+        ].filter(Boolean).join(' ') || undefined;
 
         return (
             <div className="w-full">
@@ -38,6 +46,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
                     <input
                         id={inputId}
                         ref={ref}
+                        aria-invalid={error ? 'true' : 'false'}
+                        aria-describedby={describedBy}
                         className={cn(
                             'block w-full rounded-lg border-neutral-300 shadow-sm transition-colors duration-200 min-h-[44px]',
                             'focus:border-primary-600 focus:ring focus:ring-primary-600 focus:ring-opacity-20',
@@ -60,6 +70,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
                 <AnimatePresence>
                     {error && (
                         <motion.p
+                            id={errorId}
+                            role="alert"
                             initial={{ opacity: 0, height: 0, marginTop: 0 }}
                             animate={{ opacity: 1, height: 'auto', marginTop: 4 }}
                             exit={{ opacity: 0, height: 0, marginTop: 0 }}
@@ -71,7 +83,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
                 </AnimatePresence>
 
                 {hint && !error && (
-                    <p className="mt-1.5 text-sm text-neutral-500">{hint}</p>
+                    <p id={hintId} className="mt-1.5 text-sm text-neutral-500">{hint}</p>
                 )}
             </div>
         );

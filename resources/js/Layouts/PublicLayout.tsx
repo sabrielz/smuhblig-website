@@ -69,9 +69,15 @@ export default function PublicLayout({ children, jsonLd: additionalJsonLd }: Pub
 
             {/* ── Layout shell ── */}
             <div className="flex min-h-screen flex-col">
+                <a
+                    href="#konten"
+                    className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200] focus:px-4 focus:py-2 focus:bg-primary-600 focus:text-white focus:rounded-lg focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-white"
+                >
+                    Lewati ke konten
+                </a>
                 <GlobalToast />
                 <Navbar />
-                <main className="flex-1">{children}</main>
+                <main id="konten" className="flex-1">{children}</main>
                 <Footer />
             </div>
         </>

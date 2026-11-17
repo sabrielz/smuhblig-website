@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect, useRef, useId } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight, ChevronLeft, X } from 'lucide-react';
 
@@ -21,16 +21,80 @@ export function Lightbox({
     title,
     subtitle,
 }: LightboxProps) {
+    const dialogRef = useRef<HTMLDivElement>(null);
+    const previousActiveElement = useRef<HTMLElement | null>(null);
+    const titleId = useId();
+
     useEffect(() => {
-        if (isOpen) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = '';
-        }
-        return () => {
-            document.body.style.overflow = '';
+        if (!isOpen) return;
+
+        previousActiveElement.current = document.activeElement as HTMLElement | null;
+        document.body.style.overflow = 'hidden';
+
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') {
+                e.stopPropagation();
+                onClose();
+                return;
+            }
+            if (e.key === 'ArrowRight') {
+                e.stopPropagation();
+                if (photos.length > 1) {
+                    onIndexChange((currentIndex + 1) % photos.length);
+                }
+                return;
+            }
+            if (e.key === 'ArrowLeft') {
+                e.stopPropagation();
+                if (photos.length > 1) {
+                    onIndexChange((currentIndex - 1 + photos.length) % photos.length);
+                }
+                return;
+            }
+
+            // Focus trap
+            if (e.key === 'Tab' && dialogRef.current) {
+                const focusable = dialogRef.current.querySelectorAll<HTMLElement>(
+                    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+                );
+                if (focusable.length === 0) return;
+
+                const first = focusable[0];
+                const last = focusable[focusable.length - 1];
+
+                if (e.shiftKey) {
+                    if (document.activeElement === first) {
+                        e.preventDefault();
+                        last.focus();
+                    }
+                } else {
+                    if (document.activeElement === last) {
+                        e.preventDefault();
+                        first.focus();
+                    }
+                }
+            }
         };
-    }, [isOpen]);
+
+        document.addEventListener('keydown', handleKeyDown);
+
+        const timer = setTimeout(() => {
+            if (dialogRef.current) {
+                const closeBtn = dialogRef.current.querySelector<HTMLElement>('button[aria-label="Tutup pratinjau"]');
+                if (closeBtn) closeBtn.focus();
+                else dialogRef.current.focus();
+            }
+        }, 50);
+
+        return () => {
+            clearTimeout(timer);
+            document.removeEventListener('keydown', handleKeyDown);
+            document.body.style.overflow = '';
+            if (previousActiveElement.current && typeof previousActiveElement.current.focus === 'function') {
+                previousActiveElement.current.focus();
+            }
+        };
+    }, [isOpen, onClose, currentIndex, photos.length, onIndexChange]);
 
     if (!isOpen || photos.length === 0) return null;
 
@@ -45,17 +109,22 @@ export function Lightbox({
     return (
         <AnimatePresence>
             <motion.div
+                ref={dialogRef}
+                tabIndex={-1}
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby={title ? titleId : undefined}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-md p-0 sm:p-8"
+                className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-md p-0 sm:p-8 focus:outline-none"
                 onClick={onClose}
             >
                 {/* Header Title */}
                 {(title || subtitle) && (
                     <div className="absolute top-4 left-4 sm:top-6 sm:left-6 z-10 text-white text-left max-w-[70vw] pointer-events-none">
                         {title && (
-                            <h3 className="font-serif text-xl sm:text-2xl font-bold drop-shadow-md">
+                            <h3 id={titleId} className="font-serif text-xl sm:text-2xl font-bold drop-shadow-md">
                                 {title}
                             </h3>
                         )}
@@ -137,6 +206,7 @@ export function Lightbox({
                                 key={i}
                                 type="button"
                                 onClick={() => onIndexChange(i)}
+                                aria-label={`Buka foto ke-${i + 1}`}
                                 className={`relative flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden snap-center transition-all cursor-pointer ${
                                     currentIndex === i
                                         ? 'ring-2 ring-gold-500 opacity-100 scale-105'

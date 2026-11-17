@@ -1,4 +1,4 @@
-import React, { TextareaHTMLAttributes, forwardRef } from 'react';
+import { TextareaHTMLAttributes, forwardRef, useId } from 'react';
 import { cn } from '@/lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -13,7 +13,15 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
         { className, label, error, hint, rows = 4, id, ...props },
         ref
     ) => {
-        const textareaId = id || `textarea-${Math.random().toString(36).substring(2, 9)}`;
+        const generatedId = useId();
+        const textareaId = id || generatedId;
+        const errorId = `${textareaId}-error`;
+        const hintId = `${textareaId}-hint`;
+
+        const describedBy = [
+            error ? errorId : null,
+            hint && !error ? hintId : null,
+        ].filter(Boolean).join(' ') || undefined;
 
         return (
             <div className="w-full">
@@ -31,6 +39,8 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
                         id={textareaId}
                         ref={ref}
                         rows={rows}
+                        aria-invalid={error ? 'true' : 'false'}
+                        aria-describedby={describedBy}
                         className={cn(
                             'block w-full rounded-lg border-neutral-300 shadow-sm transition-colors duration-200 min-h-[44px]',
                             'focus:border-primary-600 focus:ring focus:ring-primary-600 focus:ring-opacity-20',
@@ -45,6 +55,8 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
                 <AnimatePresence>
                     {error && (
                         <motion.p
+                            id={errorId}
+                            role="alert"
                             initial={{ opacity: 0, height: 0, marginTop: 0 }}
                             animate={{ opacity: 1, height: 'auto', marginTop: 4 }}
                             exit={{ opacity: 0, height: 0, marginTop: 0 }}
@@ -56,7 +68,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
                 </AnimatePresence>
 
                 {hint && !error && (
-                    <p className="mt-1.5 text-sm text-neutral-500">{hint}</p>
+                    <p id={hintId} className="mt-1.5 text-sm text-neutral-500">{hint}</p>
                 )}
             </div>
         );

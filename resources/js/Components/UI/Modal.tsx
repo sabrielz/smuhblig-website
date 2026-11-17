@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useId } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
@@ -20,26 +20,77 @@ const sizeClasses = {
     lg: 'max-w-lg',
     xl: 'max-w-xl',
     '2xl': 'max-w-2xl',
-    full: 'max-w-[95vw] sm:max-w-7xl'
+    full: 'max-w-[95vw] sm:max-w-7xl',
 };
 
 export function Modal({ isOpen, onClose, title, children, size = 'md', className }: ModalProps) {
     const overlayRef = useRef<HTMLDivElement>(null);
+    const dialogRef = useRef<HTMLDivElement>(null);
+    const previousActiveElement = useRef<HTMLElement | null>(null);
+    const titleId = useId();
 
     useEffect(() => {
-        const handleEscape = (e: KeyboardEvent) => {
-            if (e.key === 'Escape') onClose();
+        if (!isOpen) return;
+
+        // Simpan elemen pemicu yang aktif sebelum modal terbuka
+        previousActiveElement.current = document.activeElement as HTMLElement | null;
+        document.body.style.overflow = 'hidden';
+
+        // Focus trap & Esc handler
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') {
+                e.stopPropagation();
+                onClose();
+                return;
+            }
+
+            if (e.key === 'Tab' && dialogRef.current) {
+                const focusableElements = dialogRef.current.querySelectorAll<HTMLElement>(
+                    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+                );
+                if (focusableElements.length === 0) return;
+
+                const firstElement = focusableElements[0];
+                const lastElement = focusableElements[focusableElements.length - 1];
+
+                if (e.shiftKey) {
+                    if (document.activeElement === firstElement) {
+                        e.preventDefault();
+                        lastElement.focus();
+                    }
+                } else {
+                    if (document.activeElement === lastElement) {
+                        e.preventDefault();
+                        firstElement.focus();
+                    }
+                }
+            }
         };
 
-        if (isOpen) {
-            document.addEventListener('keydown', handleEscape);
-            document.body.style.overflow = 'hidden';
-        }
+        document.addEventListener('keydown', handleKeyDown);
+
+        // Auto-focus elemen pertama dalam dialog setelah mount
+        const timer = setTimeout(() => {
+            if (dialogRef.current) {
+                const focusable = dialogRef.current.querySelector<HTMLElement>(
+                    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+                );
+                if (focusable) {
+                    focusable.focus();
+                } else {
+                    dialogRef.current.focus();
+                }
+            }
+        }, 50);
 
         return () => {
-            document.removeEventListener('keydown', handleEscape);
+            clearTimeout(timer);
+            document.removeEventListener('keydown', handleKeyDown);
             document.body.style.overflow = 'unset';
-            // Cleanup to ensure overflow is removed correctly if deeply unmounted
+            // Kembalikan fokus ke elemen pemicu
+            if (previousActiveElement.current && typeof previousActiveElement.current.focus === 'function') {
+                previousActiveElement.current.focus();
+            }
         };
     }, [isOpen, onClose]);
 
@@ -67,14 +118,17 @@ export function Modal({ isOpen, onClose, title, children, size = 'md', className
 
                     {/* Modal Panel */}
                     <motion.div
+                        ref={dialogRef}
+                        tabIndex={-1}
                         variants={scaleIn}
                         initial="hidden"
                         animate="visible"
                         exit="hidden"
                         role="dialog"
                         aria-modal="true"
+                        aria-labelledby={title ? titleId : undefined}
                         className={cn(
-                            "relative w-full bg-white rounded-2xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden",
+                            "relative w-full bg-white rounded-2xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden focus:outline-none",
                             sizeClasses[size],
                             className
                         )}
@@ -82,11 +136,13 @@ export function Modal({ isOpen, onClose, title, children, size = 'md', className
                         {/* Header */}
                         {title && (
                             <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-100 shrink-0">
-                                <h2 className="text-lg font-semibold text-neutral-900">
+                                <h2 id={titleId} className="text-lg font-semibold text-neutral-900">
                                     {title}
                                 </h2>
                                 <button
+                                    type="button"
                                     onClick={onClose}
+                                    aria-label="Tutup dialog"
                                     className="p-2 -mr-2 text-neutral-400 hover:text-neutral-600 hover:bg-neutral-50 rounded-lg transition-colors"
                                 >
                                     <X className="w-5 h-5" strokeWidth={1.5} />
@@ -97,7 +153,9 @@ export function Modal({ isOpen, onClose, title, children, size = 'md', className
                         {/* Close button if no title */}
                         {!title && (
                             <button
+                                type="button"
                                 onClick={onClose}
+                                aria-label="Tutup dialog"
                                 className="absolute top-4 right-4 z-10 p-2 text-neutral-400 hover:text-neutral-600 hover:bg-neutral-50 rounded-lg transition-colors bg-white/50 backdrop-blur-sm"
                             >
                                 <X className="w-5 h-5" strokeWidth={1.5} />

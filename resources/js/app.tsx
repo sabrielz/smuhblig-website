@@ -1,5 +1,6 @@
 import { createInertiaApp, router } from '@inertiajs/react';
 import { createRoot } from 'react-dom/client';
+import { MotionConfig } from 'framer-motion';
 import { route as ziggyRoute } from 'ziggy-js';
 import i18n from './i18n';
 
@@ -50,7 +51,11 @@ createInertiaApp({
             }
         });
 
-        createRoot(el).render(<App {...props} />);
+        createRoot(el).render(
+            <MotionConfig reducedMotion="user">
+                <App {...props} />
+            </MotionConfig>
+        );
     },
 
     progress: {
