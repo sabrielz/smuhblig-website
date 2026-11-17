@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\ReorderStatistikRequest;
+use App\Http\Requests\Admin\UpdateStatistikRequest;
 use App\Models\Statistik;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 
@@ -19,15 +20,9 @@ class StatistikController extends Controller
         ]);
     }
 
-    public function update(Request $request, Statistik $statistik)
+    public function update(UpdateStatistikRequest $request, Statistik $statistik)
     {
-        $validated = $request->validate([
-            'nilai' => 'required|integer|min:0',
-            'label' => 'required|string|max:255',
-            'label_en' => 'nullable|string|max:255',
-            'suffix' => 'nullable|string|max:5',
-            'is_active' => 'boolean',
-        ]);
+        $validated = $request->validated();
 
         $statistik->update([
             'nilai' => $validated['nilai'],
@@ -43,13 +38,9 @@ class StatistikController extends Controller
         return back()->with('success', 'Statistik berhasil diperbarui.');
     }
 
-    public function reorder(Request $request)
+    public function reorder(ReorderStatistikRequest $request)
     {
-        $validated = $request->validate([
-            'items' => 'required|array',
-            'items.*.id' => 'required|exists:statistiks,id',
-            'items.*.sort_order' => 'required|integer',
-        ]);
+        $validated = $request->validated();
 
         foreach ($validated['items'] as $item) {
             Statistik::where('id', $item['id'])->update(['sort_order' => $item['sort_order']]);

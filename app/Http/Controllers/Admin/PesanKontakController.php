@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\BulkArsipPesanRequest;
 use App\Models\PesanKontak;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -88,12 +89,9 @@ class PesanKontakController extends Controller
     /**
      * Bulk archive multiple messages.
      */
-    public function bulkArsip(Request $request): RedirectResponse
+    public function bulkArsip(BulkArsipPesanRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'ids' => ['required', 'array'],
-            'ids.*' => ['integer', 'exists:pesan_kontak,id'],
-        ]);
+        $validated = $request->validated();
 
         PesanKontak::whereIn('id', $validated['ids'])->update(['status' => 'diarsip']);
 

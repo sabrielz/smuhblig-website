@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\StorePenggunaRequest;
+use App\Http\Requests\Admin\UpdatePenggunaRequest;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rule;
-use Illuminate\Validation\Rules\Password;
 use Inertia\Inertia;
 
 class PenggunaController extends Controller
@@ -38,15 +37,9 @@ class PenggunaController extends Controller
         return Inertia::render('Admin/Pengguna/Create');
     }
 
-    public function store(Request $request)
+    public function store(StorePenggunaRequest $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => ['required', Password::defaults()],
-            'role' => 'required|string|in:admin,editor,author',
-            'is_active' => 'boolean',
-        ]);
+        $validated = $request->validated();
 
         $user = User::create([
             'name' => $validated['name'],
@@ -73,7 +66,7 @@ class PenggunaController extends Controller
         ]);
     }
 
-    public function update(Request $request, User $pengguna)
+    public function update(UpdatePenggunaRequest $request, User $pengguna)
     {
         // Proteksi edit diri sendiri
         if (auth()->id() === $pengguna->id) {
@@ -82,13 +75,7 @@ class PenggunaController extends Controller
             }
         }
 
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($pengguna->id)],
-            'password' => ['nullable', Password::defaults()],
-            'role' => 'required|string|in:admin,editor,author',
-            'is_active' => 'boolean',
-        ]);
+        $validated = $request->validated();
 
         $pengguna->name = $validated['name'];
         $pengguna->email = $validated['email'];
