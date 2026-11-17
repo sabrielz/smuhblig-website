@@ -177,6 +177,9 @@ All routes are in `routes/web.php` (~214 lines). Two groups:
 | `/agenda/{slug}/ics` | `AgendaPublikController@ics` | `agenda.ics` |
 | `/tentang` | `TentangController@index` | `tentang` |
 | `/kontak` | `KontakController@index` | `kontak` |
+| `/unduhan` | `Public\UnduhanController@index` | `unduhan.index` |
+| `/unduhan/{unduhan:slug}/berkas` | `Public\UnduhanController@download` | `unduhan.download` |
+| `/faq` | `Public\FaqController@index` | `faq` |
 | `/pencarian` | `PencarianController@index` | `pencarian.index` |
 | `/tautan` | `TautanController@index` | `tautan` |
 | `/portal` | Inline closure | `portal` |
@@ -196,6 +199,11 @@ All routes are in `routes/web.php` (~214 lines). Two groups:
 | Fasilitas | `FasilitasController` (resource + reorder) | Admin & Editor |
 | Ekstrakurikuler | `EkstrakurikulerController` (resource + reorder) | Admin & Editor |
 | Prestasi | `PrestasiController` (resource) | Admin & Editor |
+| Unduhan | `UnduhanController` (resource) | Admin & Editor |
+| FAQ | `FaqController` (resource + reorder) | Admin & Editor |
+| Testimoni | `TestimoniController` (resource + reorder) | Admin & Editor |
+| Mitra Industri | `MitraController` (resource + reorder) | Admin & Editor |
+| Video | `VideoController` (resource + reorder) | Admin & Editor |
 | Notifikasi | `NotifikasiController` | All CMS roles |
 | Profil Saya | `ProfilController` (edit + update + password) | All CMS roles |
 | Pesan Kontak | `PesanKontakController` | All CMS roles (delete: admin only) |
@@ -212,7 +220,7 @@ All routes are in `routes/web.php` (~214 lines). Two groups:
 
 ## 5. Data Model Summary
 
-**26 Eloquent models** across the domain:
+**31 Eloquent models** across the domain:
 
 | Model | Translation Table | Spatie Packages | Notes |
 |-------|------------------|-----------------|-------|
@@ -227,6 +235,11 @@ All routes are in `routes/web.php` (~214 lines). Two groups:
 | `Galeri` | `GaleriTranslation` | Sluggable, MediaLibrary, Translatable | Photo albums |
 | `Pengumuman` | `PengumumanTranslation` | Sluggable, Translatable | Types: info, penting, urgent |
 | `Agenda` | `AgendaTranslation` | Sluggable, Translatable | School events/calendar |
+| `Unduhan` | `UnduhanTranslation` | Sluggable, MediaLibrary, Translatable | Berkas dokumen/brosur (disk local non-publik) |
+| `Faq` | `FaqTranslation` | Translatable | Pertanyaan umum dikelompokkan per kategori |
+| `Testimoni` | `TestimoniTranslation` | MediaLibrary, Translatable | Bukti sosial siswa/ortu/mitra (persetujuan_tampil) |
+| `Mitra` | — | MediaLibrary | Mitra industri & kerjasama (pivot: jurusan_mitra) |
+| `Video` | `VideoTranslation` | Translatable | Galeri video YouTube resmi sekolah |
 | `HalamanKonten` | `HalamanKontenTranslation` | Translatable | CMS-managed static page content |
 | `Tautan` | — | — | Important links (external) |
 | `Pengaturan` | — | — | Key-value site settings |

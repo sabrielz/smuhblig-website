@@ -49,6 +49,11 @@ This is the **official website and CMS** for SMK Muhammadiyah Bligo — a vocati
 - 🏢 **Fasilitas** — School campus infrastructure and workshop facilities with photo lightbox galleries
 - 🏃 **Ekstrakurikuler** — Student activities, Hizbul Wathan scouting, martial arts, and talent clubs
 - 🏆 **Prestasi** — Academic and non-academic awards and student achievements directory
+- 📥 **Unduhan** — School public documents, circulars, and brochures download repository
+- ❓ **FAQ** — Frequently asked questions directory with interactive accordions and JSON-LD FAQPage schema
+- 💬 **Testimoni** — Social proof showcase featuring alumni, parent, and industry partner testimonials
+- 🤝 **Mitra Industri** — Corporate and industry network showcase across home and program pages
+- 🎥 **Video Galeri** — YouTube video showcase embedded in gallery with privacy-friendly external links
 - 📅 **Agenda** — School events calendar with detail pages and iCalendar (.ics) export
 - 📨 **Kontak** — Contact form with rate-limiting and spam protection
 - 🔍 **Pencarian** — Comprehensive search across all public content modules
@@ -66,6 +71,11 @@ This is the **official website and CMS** for SMK Muhammadiyah Bligo — a vocati
 - 📝 **Konten Halaman** — CMS-managed static page content
 - 👤 **Profil Saya** — Self-service profile, avatar, and password management for all CMS staff
 - 👥 **User Management** — Role-based access (admin, editor, author)
+- 📥 **Unduhan Dokumen** — Manage downloadable documents with storage isolation and file type validations
+- ❓ **FAQ Management** — Category-based FAQ management with drag-and-drop ordering
+- 💬 **Testimoni Management** — Testimonials moderation with mandatory subject permission toggle
+- 🤝 **Mitra Industri Management** — Manage corporate partners with vocational program associations
+- 🎥 **Video Management** — Curate YouTube video entries with YouTube URL parsing
 - ⚙️ **Settings** — Site configuration, SMTP setup, AI configuration
 - 🔔 **Notifications** — Polling-based in-app notifications
 - 📈 **Statistics** — Customizable dashboard statistics with drag-and-drop ordering
