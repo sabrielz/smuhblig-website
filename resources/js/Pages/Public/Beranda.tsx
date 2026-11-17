@@ -15,6 +15,7 @@ import { JurusanCard } from "@/Components/UI/JurusanCard";
 import { ArticleCard } from "@/Components/UI/ArticleCard";
 import { AnnouncementBanner, UrgentAnnouncement } from "@/Components/UI/AnnouncementBanner";
 import { Button } from "@/Components/UI/Button";
+import { TestimoniCarousel, TestimoniItem } from "@/Components/UI/TestimoniCarousel";
 import {
     fadeInUp,
     staggerContainer,
@@ -78,6 +79,7 @@ interface BerandaProps {
     jurusan?: JurusanItem[];
     prestasiTerbaru?: PrestasiItem[];
     beritaTerbaru?: ArticleItem[];
+    testimoni?: TestimoniItem[];
     statistik?: StatItemDB[];
     pengaturan?: Pengaturan;
     kontenHero?: Record<string, string>;
@@ -376,6 +378,7 @@ export default function Beranda({
     jurusan = [],
     prestasiTerbaru = [],
     beritaTerbaru = [],
+    testimoni = [],
     statistik = [],
     kontenHero = {},
     kontenStatistik = {},
@@ -384,7 +387,8 @@ export default function Beranda({
     kontenCtaAkhir = {},
     pengumumanUrgent = null,
 }: BerandaProps) {
-    const { pengaturan } = usePage<SharedProps>().props;
+    const { pengaturan, locale } = usePage<SharedProps>().props;
+    const isEn = locale === 'en';
 
     const heroRef = useRef<HTMLDivElement>(null);
     const { scrollY } = useScroll();
@@ -866,6 +870,34 @@ export default function Beranda({
                     </motion.div>
                 </div>
             </section>
+
+            {/* ══════════════════════════════════════════════════════════════
+                SECTION — TESTIMONI (Hanya dirender jika ada data)
+            ══════════════════════════════════════════════════════════════ */}
+            {testimoni.length > 0 && (
+                <>
+                    <SectionDivider />
+                    <section
+                        id="beranda-testimoni"
+                        className="py-20 lg:py-28 bg-neutral-50/70"
+                        aria-label="Kisah dan testimoni"
+                    >
+                        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-16">
+                            <SectionHeader
+                                label={isEn ? "TESTIMONIALS" : "BUKTI SOSIAL"}
+                                title={isEn ? "Stories of Success" : "Kisah Sukses & Kepercayaan"}
+                                subtitle={
+                                    isEn
+                                        ? "Hear what our alumni, parents, and industry partners say about SMK Muhammadiyah Bligo."
+                                        : "Dengarkan pengalaman nyata dari alumni, orang tua siswa, dan mitra industri yang telah bekerja sama dengan kami."
+                                }
+                            />
+
+                            <TestimoniCarousel items={testimoni} isEn={isEn} />
+                        </div>
+                    </section>
+                </>
+            )}
 
             {/* ══════════════════════════════════════════════════════════════
                 SECTION 5 — CTA AKHIR

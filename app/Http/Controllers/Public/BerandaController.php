@@ -12,6 +12,7 @@ use App\Models\Pengaturan;
 use App\Models\Pengumuman;
 use App\Models\Prestasi;
 use App\Models\Statistik;
+use App\Models\Testimoni;
 use Artesaos\SEOTools\Facades\OpenGraph;
 use Artesaos\SEOTools\Facades\SEOMeta;
 use Illuminate\Support\Facades\Cache;
@@ -103,6 +104,27 @@ class BerandaController extends Controller
                     ];
                 });
 
+            // ── Testimoni (maks 8 yang berizin & aktif) ───────────────────────
+            $testimoni = Testimoni::query()
+                ->tampil()
+                ->ordered()
+                ->limit(8)
+                ->with(['translations' => fn ($q) => $q->whereIn('locale', [$locale, 'id']), 'media'])
+                ->get()
+                ->map(function (Testimoni $t) use ($locale) {
+                    $translation = $t->translation($locale);
+                    $media = $t->getFirstMedia('foto');
+
+                    return [
+                        'id' => $t->id,
+                        'nama' => $t->nama,
+                        'peran' => $t->peran,
+                        'keterangan' => $t->keterangan,
+                        'kutipan' => $translation ? $translation->kutipan : '',
+                        'foto_url' => $media ? ($media->getUrl('thumb') ?: $media->getUrl()) : null,
+                    ];
+                });
+
             // ── Pengaturan ─────────────────────────────────────────────────────
             $settings = Pengaturan::getAllSettings();
 
@@ -110,6 +132,7 @@ class BerandaController extends Controller
                 'jurusan' => $jurusan,
                 'prestasiTerbaru' => $prestasiTerbaru,
                 'beritaTerbaru' => $beritaTerbaru,
+                'testimoni' => $testimoni,
                 'pengaturan' => [
                     'site_name' => $settings['site_name'] ?? 'SMK Muhammadiyah Bligo',
                     'tagline' => $settings['site_tagline'] ?? 'Mencetak Generasi Unggul dan Berakhlak Mulia',
