@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Public;
 
 use App\Enums\ArticleStatus;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Public\BeritaDetailResource;
 use App\Jobs\IncrementArticleViewCount;
 use App\Models\Article;
 use App\Models\Category;
@@ -136,32 +137,7 @@ class BeritaController extends Controller
             ];
         });
 
-        $formattedArticle = [
-            'id' => $article->id,
-            'slug' => $article->slug,
-            'title' => $article->translation()?->title,
-            'excerpt' => $article->translation()?->excerpt,
-            'content' => $article->translation()?->content,
-            'published_at' => $article->published_at ? $article->published_at->format('d M Y') : '',
-            'category' => [
-                'id' => $article->category_id,
-                'name' => $article->category ? $article->category->translation()?->name : null,
-                'slug' => $article->category ? $article->category->slug : null,
-                'color' => '#003f87',
-            ],
-            'author' => [
-                'name' => $article->user ? $article->user->name : 'Admin',
-                'avatar' => $article->user && method_exists($article->user, 'avatar_url') ? $article->user->avatar_url : 'https://ui-avatars.com/api/?name=Admin',
-            ],
-            'thumbnail' => $article->getFirstMediaUrl('thumbnail') ?: 'https://placehold.co/1200x600',
-            'tags' => array_map(function ($tag) {
-                return [
-                    'id' => is_array($tag) ? ($tag['id'] ?? 0) : ($tag->id ?? 0),
-                    'name' => is_array($tag) ? ($tag['name'] ?? '') : ($tag->name ?? ''),
-                    'slug' => is_array($tag) ? ($tag['slug'] ?? '') : ($tag->slug ?? ''),
-                ];
-            }, $article->tags->toArray()),
-        ];
+        $formattedArticle = (new BeritaDetailResource($article))->resolve();
 
         SEOMeta::setTitle(($formattedArticle['title'] ?? 'Berita').' | SMK Muhammadiyah Bligo');
         SEOMeta::setDescription($formattedArticle['excerpt'] ?? '');

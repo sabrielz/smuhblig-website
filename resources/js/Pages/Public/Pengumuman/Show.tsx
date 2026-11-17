@@ -21,6 +21,7 @@ interface PengumumanDetail {
 
 interface ShowProps {
     pengumuman: PengumumanDetail;
+    isPreview?: boolean;
 }
 
 const GeometricPattern = () => (
@@ -41,7 +42,7 @@ const GeometricPattern = () => (
     </svg>
 );
 
-export default function PengumumanShow({ pengumuman }: ShowProps) {
+export default function PengumumanShow({ pengumuman, isPreview = false }: ShowProps) {
     const { locale } = usePage<SharedProps>().props;
 
     const getBadgeVariant = (tipe: string): 'info' | 'warning' | 'danger' => {
@@ -69,6 +70,12 @@ export default function PengumumanShow({ pengumuman }: ShowProps) {
 
     return (
         <PublicLayout>
+            {isPreview && (
+                <div className="bg-amber-500 text-white font-medium py-2.5 px-4 text-center text-sm shadow-md sticky top-0 z-50 flex items-center justify-center gap-2">
+                    <span className="inline-block w-2 h-2 rounded-full bg-white animate-pulse" />
+                    <span>Mode Pratinjau — Pengumuman ini belum diterbitkan ke publik.</span>
+                </div>
+            )}
             <Head title={`${pengumuman.judul} | ${locale === 'id' ? 'Pengumuman' : 'Announcement'}`} />
 
             {/* HERO SECTION */}

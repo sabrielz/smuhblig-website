@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreArtikelRequest;
 use App\Http\Requests\Admin\UpdateArtikelRequest;
 use App\Http\Resources\Admin\ArtikelResource;
+use App\Http\Resources\Public\BeritaDetailResource;
 use App\Jobs\TranslateArticle;
 use App\Models\Article;
 use App\Models\ArticleTranslation;
@@ -339,5 +340,69 @@ class ArtikelController extends Controller
         $enTranslation->update(['reviewed' => true]);
 
         return back()->with('success', 'Terjemahan ditandai sudah direview.');
+    }
+
+    /**
+     * Preview draft article with public view layout.
+     */
+    public function preview(Article $artikel)
+    {
+        Gate::authorize('update', $artikel);
+
+        $artikel->load(['translations', 'category.translations', 'user', 'media']);
+
+        $formattedArticle = (new BeritaDetailResource($artikel))->resolve();
+
+        $relatedArticles = Article::query()
+            ->terbit()
+            ->where('id', '!=', $artikel->id)
+            ->with(['translations', 'category.translations', 'user', 'media'])
+            ->latest('published_at')
+            ->take(3)
+            ->get()
+            ->map(function (Article $relArticle) {
+                /** @var Category|null $category */
+                $category = $relArticle->category;
+                /** @var User|null $author */
+                $author = $relArticle->user;
+
+                $relTrans = $relArticle->translation();
+                $catTrans = $category?->translation();
+
+                return [
+                    'id' => $relArticle->id,
+                    'slug' => $relArticle->slug,
+                    'title' => $relTrans ? $relTrans->title : 'Untitled',
+                    'excerpt' => $relTrans ? $relTrans->excerpt : '',
+                    'published_at' => $relArticle->published_at ? $relArticle->published_at->format('d M Y') : '',
+                    'category' => [
+                        'name' => $catTrans ? $catTrans->name : 'Uncategorized',
+                        'color' => '#003f87',
+                    ],
+                    'author' => [
+                        'name' => $author ? $author->name : 'Admin',
+                        'avatar' => $author ? $author->avatar_url : 'https://ui-avatars.com/api/?name=Admin',
+                    ],
+                    'thumbnail' => $relArticle->getFirstMediaUrl('thumbnail') ?: 'https://placehold.co/600x400',
+                ];
+            });
+
+        $categories = Category::withCount(['articles' => function ($query) {
+            $query->terbit();
+        }])->with('translations')->get()->map(function ($category) {
+            return [
+                'id' => $category->id,
+                'name' => $category->translation()?->name,
+                'slug' => $category->slug,
+                'articles_count' => $category->articles_count,
+            ];
+        });
+
+        return Inertia::render('Public/Berita/Show', [
+            'article' => $formattedArticle,
+            'relatedArticles' => $relatedArticles,
+            'categories' => $categories,
+            'isPreview' => true,
+        ]);
     }
 }

@@ -6,7 +6,7 @@ import { Input } from '@/Components/UI/Input';
 import { Textarea } from '@/Components/UI/Textarea';
 import { Select } from '@/Components/UI/Select';
 import TipTapEditor from '@/Components/Editor/TipTapEditor';
-import { ArrowLeft, Save, Bell, Calendar as CalendarIcon, Globe } from 'lucide-react';
+import { ArrowLeft, Save, Bell, Calendar as CalendarIcon, Globe, ExternalLink } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { SharedProps } from '@/types';
 import { usePage } from '@inertiajs/react';
@@ -65,20 +65,35 @@ export default function Form({ pengumuman }: Props) {
         <AdminLayout title={isEdit ? 'Edit Pengumuman' : 'Buat Pengumuman'}>
             <Head title={isEdit ? 'Edit Pengumuman' : 'Buat Pengumuman'} />
 
-            <div className="flex items-center gap-4 mb-6">
-                <Link href={route('admin.pengumuman.index')}>
-                    <Button variant="outline" size="sm" className="px-3">
-                        <ArrowLeft className="w-5 h-5" />
-                    </Button>
-                </Link>
-                <div>
-                    <h1 className="text-2xl font-bold text-gray-900 border-none m-0 p-0 leading-tight">
-                        {isEdit ? 'Edit Pengumuman' : 'Buat Pengumuman Baru'}
-                    </h1>
-                    <p className="text-sm text-gray-500 mt-1">
-                        Informasikan hal-hal penting ke pengunjung website
-                    </p>
+            <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-4">
+                    <Link href={route('admin.pengumuman.index')}>
+                        <Button variant="outline" size="sm" className="px-3">
+                            <ArrowLeft className="w-5 h-5" />
+                        </Button>
+                    </Link>
+                    <div>
+                        <h1 className="text-2xl font-bold text-gray-900 border-none m-0 p-0 leading-tight">
+                            {isEdit ? 'Edit Pengumuman' : 'Buat Pengumuman Baru'}
+                        </h1>
+                        <p className="text-sm text-gray-500 mt-1">
+                            Informasikan hal-hal penting ke pengunjung website
+                        </p>
+                    </div>
                 </div>
+
+                {isEdit && pengumuman && (
+                    <a
+                        href={route('admin.pengumuman.preview', { pengumuman: pengumuman.id })}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        <Button variant="outline" type="button">
+                            <ExternalLink className="w-4 h-4 mr-2" />
+                            Pratinjau
+                        </Button>
+                    </a>
+                )}
             </div>
 
             <form onSubmit={handleSubmit} className="flex flex-col md:flex-row gap-6 lg:gap-8 items-start">

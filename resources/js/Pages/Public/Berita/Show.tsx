@@ -39,6 +39,7 @@ interface ShowProps {
         slug: string;
         articles_count: number;
     }[];
+    isPreview?: boolean;
 }
 
 // ---------------------------------------------------------------------------
@@ -62,7 +63,7 @@ const GeometricPattern = () => (
     </svg>
 );
 
-export default function BeritaShow({ article, relatedArticles, categories }: ShowProps) {
+export default function BeritaShow({ article, relatedArticles, categories, isPreview = false }: ShowProps) {
     // Estimasi waktu baca dari jumlah kata konten (asumsi 200 kata/menit)
     const getReadingTime = (content: string) => {
         const text = content.replace(/<[^>]+>/g, ' ');
@@ -73,6 +74,12 @@ export default function BeritaShow({ article, relatedArticles, categories }: Sho
 
     return (
         <PublicLayout>
+            {isPreview && (
+                <div className="bg-amber-500 text-white font-medium py-2.5 px-4 text-center text-sm shadow-md sticky top-0 z-50 flex items-center justify-center gap-2">
+                    <span className="inline-block w-2 h-2 rounded-full bg-white animate-pulse" />
+                    <span>Mode Pratinjau — Artikel ini belum diterbitkan ke publik.</span>
+                </div>
+            )}
             <Head>
                 <title>{`${article.title} - Berita SMK Muhammadiyah Bligo`}</title>
                 <meta name="description" content={article.excerpt} />

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StorePengumumanRequest;
 use App\Http\Requests\Admin\UpdatePengumumanRequest;
 use App\Http\Resources\Admin\PengumumanResource;
+use App\Http\Resources\Public\PengumumanResource as PublicPengumumanResource;
 use App\Models\Pengumuman;
 use App\Services\HtmlSanitizer;
 use Illuminate\Http\Request;
@@ -146,5 +147,20 @@ class PengumumanController extends Controller
 
         return redirect()->route('admin.pengumuman.index')
             ->with('success', 'Pengumuman berhasil dihapus.');
+    }
+
+    /**
+     * Preview announcement draft with public view layout.
+     */
+    public function preview(Pengumuman $pengumuman)
+    {
+        Gate::authorize('update', $pengumuman);
+
+        $pengumuman->load('translations');
+
+        return Inertia::render('Public/Pengumuman/Show', [
+            'pengumuman' => (new PublicPengumumanResource($pengumuman))->resolve(),
+            'isPreview' => true,
+        ]);
     }
 }

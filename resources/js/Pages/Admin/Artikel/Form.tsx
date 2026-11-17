@@ -13,7 +13,7 @@ import { AiBubble } from '@/Components/Editor/AiBubble';
 import { AiPanel } from '@/Components/Editor/AiPanel';
 import { SeoPanel } from '@/Components/Editor/SeoPanel';
 import { AiStatusBadge } from '@/Components/Editor/AiStatusBadge';
-import { Save, Send, ArrowLeft, Sparkles } from 'lucide-react';
+import { Save, Send, ArrowLeft, Sparkles, ExternalLink } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { useAiJob } from '@/hooks/useAiJob';
 import type { Editor } from '@tiptap/react';
@@ -449,6 +449,18 @@ export default function Form({ article, categories }: Props) {
                 </div>
 
                 <div className="flex items-center gap-3">
+                    {isEdit && article && (
+                        <a
+                            href={route('admin.artikel.preview', { artikel: article.id })}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <Button variant="outline" type="button">
+                                <ExternalLink className="w-4 h-4 mr-2" />
+                                Pratinjau
+                            </Button>
+                        </a>
+                    )}
                     <Button
                         variant="outline"
                         onClick={() => handleSubmit('draft')}

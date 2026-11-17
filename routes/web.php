@@ -143,6 +143,7 @@ Route::middleware(['auth', EnsureHasCmsRole::class])
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
         // Artikel
+        Route::get('/artikel/{artikel}/preview', [ArtikelController::class, 'preview'])->name('artikel.preview');
         Route::post('/artikel/{artikel}/publish', [ArtikelController::class, 'publish'])->name('artikel.publish');
         Route::patch('/artikel/{artikel}/translation/reviewed', [ArtikelController::class, 'markTranslationReviewed'])->name('artikel.translation.reviewed');
         Route::resource('artikel', ArtikelController::class)->except(['show']);
@@ -167,6 +168,7 @@ Route::middleware(['auth', EnsureHasCmsRole::class])
         Route::delete('/galeri/foto/{mediaId}', [App\Http\Controllers\Admin\GaleriController::class, 'deleteFoto'])->name('galeri.deleteFoto');
 
         // Pengumuman
+        Route::get('/pengumuman/{pengumuman}/preview', [PengumumanController::class, 'preview'])->name('pengumuman.preview');
         Route::get('/pengumuman', [PengumumanController::class, 'index'])->name('pengumuman.index');
         Route::get('/pengumuman/buat', [PengumumanController::class, 'create'])->name('pengumuman.create');
         Route::post('/pengumuman', [PengumumanController::class, 'store'])->name('pengumuman.store');
