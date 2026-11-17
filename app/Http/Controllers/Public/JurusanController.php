@@ -5,10 +5,10 @@ namespace App\Http\Controllers\Public;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\JurusanResource;
 use App\Models\Jurusan;
+use App\Models\Pengaturan;
 use Artesaos\SEOTools\Facades\OpenGraph;
 use Artesaos\SEOTools\Facades\SEOMeta;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -81,15 +81,7 @@ class JurusanController extends Controller
 
         // Ambil pengaturan spmb_url jika ada. Jika tidak ada fallback ke '#' atau route.
         $pengaturan = Cache::remember('public.pengaturan.spmb_url', 3600, function () {
-            // Asumsi ada model Pengaturan, jika tidak ada, default to '#'
-            // Kita coba pakai DB facade jika model tidak ada
-            try {
-                $setting = DB::table('settings')->where('key', 'spmb_url')->first();
-
-                return $setting ? $setting->value : '#';
-            } catch (\Exception $e) {
-                return '#'; // Fallback
-            }
+            return Pengaturan::get('spmb_url') ?: '#';
         });
 
         return Inertia::render('Public/Jurusan/Show', [

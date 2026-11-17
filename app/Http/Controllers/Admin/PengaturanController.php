@@ -64,7 +64,7 @@ class PengaturanController extends Controller
             $ext = $file->getClientOriginalExtension() ?: 'png';
             $filename = Str::uuid().'.'.$ext;
             $path = $file->storeAs('settings', $filename, 'public');
-            Pengaturan::set('app_logo', 'storage/'.$path);
+            Pengaturan::set('site_logo', 'storage/'.$path);
         }
 
         if ($request->hasFile('site_favicon_file')) {
@@ -72,7 +72,7 @@ class PengaturanController extends Controller
             $ext = $file->getClientOriginalExtension() ?: 'ico';
             $filename = Str::uuid().'.'.$ext;
             $path = $file->storeAs('settings', $filename, 'public');
-            Pengaturan::set('app_favicon', 'storage/'.$path);
+            Pengaturan::set('site_favicon', 'storage/'.$path);
         }
 
         // Clear application cache if settings are changed

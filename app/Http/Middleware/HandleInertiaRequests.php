@@ -77,14 +77,31 @@ class HandleInertiaRequests extends Middleware
                 : 0,
 
             'pengaturan' => fn () => Cache::remember('pengaturan.shared', 3600, function () {
-                if (! Schema::hasTable('pengaturan')) {
+                $tableName = (new Pengaturan)->getTable();
+                if (! Schema::hasTable($tableName)) {
                     return $this->defaultPengaturan();
                 }
 
                 try {
                     $settings = Pengaturan::getAllSettings();
+                    $merged = array_merge($this->defaultPengaturan(), $settings);
 
-                    return array_merge($this->defaultPengaturan(), $settings);
+                    $booleanKeys = [
+                        'artikel_approval',
+                        'artikel_ai_enabled',
+                        'multibahasa_enabled',
+                        'ai_translate_auto',
+                        'email_notif_artikel_pending',
+                        'email_notif_pesan_baru',
+                    ];
+
+                    foreach ($booleanKeys as $bKey) {
+                        if (array_key_exists($bKey, $merged)) {
+                            $merged[$bKey] = filter_var($merged[$bKey], FILTER_VALIDATE_BOOLEAN);
+                        }
+                    }
+
+                    return $merged;
                 } catch (\Exception $e) {
                     return $this->defaultPengaturan();
                 }
