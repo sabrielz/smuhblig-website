@@ -73,6 +73,11 @@ use Illuminate\Http\Request;
 Route::get('/agenda', [AgendaPublikController::class, 'index'])->name('agenda.index');
 Route::get('/agenda/{agenda:slug}', [AgendaPublikController::class, 'show'])->name('agenda.show');
 
+use App\Http\Controllers\Public\PengumumanController as PublicPengumumanController;
+
+Route::get('/pengumuman', [PublicPengumumanController::class, 'index'])->name('pengumuman.index');
+Route::get('/pengumuman/{pengumuman:slug}', [PublicPengumumanController::class, 'show'])->name('pengumuman.show');
+
 Route::get('/daftar', function () {
     $spmbUrl = Pengaturan::get('spmb_url');
 

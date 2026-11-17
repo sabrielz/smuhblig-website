@@ -248,7 +248,7 @@ class PencarianController extends Controller
                     'slug' => $p->slug,
                     'title' => $this->highlight($p->judul ?? 'Pengumuman', $q),
                     'type' => 'Pengumuman',
-                    'url' => '#', // Detail pengumuman publik akan dibuat di Phase 3
+                    'url' => route('pengumuman.show', $p->slug),
                 ];
             });
 

@@ -6,6 +6,7 @@ use App\Models\Agenda;
 use App\Models\Article;
 use App\Models\Jurusan;
 use App\Models\Pengaturan;
+use App\Models\Pengumuman;
 use Illuminate\Console\Command;
 use Spatie\Sitemap\Sitemap;
 use Spatie\Sitemap\Tags\Url;
@@ -65,6 +66,14 @@ class GenerateSitemap extends Command
         Jurusan::active()->get()->each(function (Jurusan $jurusan) use ($sitemap, $makeUrl) {
             $sitemap->add(
                 $makeUrl("/jurusan/{$jurusan->slug}", 0.9, Url::CHANGE_FREQUENCY_WEEKLY)
+            );
+        });
+
+        // Pengumuman pages
+        Pengumuman::aktif()->get()->each(function (Pengumuman $pengumuman) use ($sitemap, $makeUrl) {
+            $sitemap->add(
+                $makeUrl("/pengumuman/{$pengumuman->slug}", 0.7, Url::CHANGE_FREQUENCY_WEEKLY)
+                    ->setLastModificationDate($pengumuman->updated_at)
             );
         });
 
