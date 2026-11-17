@@ -500,23 +500,28 @@ HalamanKontenSeeder → StatistikSeeder → StrukturOrganisasiSeeder
 
 ## 13. Performance Guidelines
 
-- All images → WebP conversion via Spatie Media Library
-- Lazy-load images below the fold
-- `Cache::remember()` for public data (pengaturan cached 1 hour)
-- Eager-load Eloquent relationships in controllers
-- `React.lazy()` + `Suspense` for heavy components when needed
-- Vite code-splitting via page-based `import.meta.glob`
+- All images → WebP conversion via Spatie Media Library with responsive variants (`thumb` 400w, `large` 1200w).
+- Lazy-load images below the fold, explicit `width`/`height` or aspect ratio to prevent CLS.
+- Preload hero images using `<link rel="preload" as="image">`.
+- `Cache::tags(['publik', '<modul>'])->remember(...)` for public endpoints with auto-invalidation via `PublicCacheObserver`. Fallback to standard `Cache::remember` if cache driver doesn't support tags.
+- Eager-load Eloquent relationships in controllers.
+- Inertia SSR enabled with Node.js fallback server (`resources/js/ssr.tsx`).
+- Vite code-splitting via page-based `import.meta.glob`.
+- Large pages modularized into section components (< 300 lines per page file).
 
 ---
 
 ## 14. SEO & Security
 
-- Backend: `artesaos/seotools` generates `<meta>` tags per page
-- Frontend: `PublicLayout.tsx` parses and injects SEO tags via `<Head>`
-- JSON-LD structured data (`EducationalOrganization`) on every public page
-- `hreflang` alternate links for `id` and `en`
-- Sitemap auto-generated at `/sitemap.xml` via `spatie/laravel-sitemap`
-- Semantic HTML5 elements throughout
+- Backend: `artesaos/seotools` generates `<meta>` tags per page with canonical URLs and Open Graph tags.
+- Frontend: `PublicLayout.tsx` parses and injects SEO tags via `<Head>`.
+- JSON-LD structured data (`EducationalOrganization`, `NewsArticle`, `Event`, `FAQPage`, `BreadcrumbList`) rendered per content type via `app/Support/JsonLd.php`.
+- `hreflang` alternate links for `id` and `en`.
+- Sitemap auto-generated at `/sitemap.xml` via `spatie/laravel-sitemap`.
+- Bilingual UI supported via `react-i18next` with JSON translation dictionaries in `resources/js/locales/{id,en}.json`.
+- Accessibility compliant with WCAG 2.1 AA: Skip to content links, focus trap in Modal/Lightbox, form labels tied with `htmlFor`/`id`, `aria-describedby` for errors, `MotionConfig reducedMotion="user"` at root.
+- Lighthouse CI configuration ready in `lighthouserc.json` with targets: Performance ≥ 85, Accessibility ≥ 90, Best Practices ≥ 90, SEO ≥ 95.
+- Semantic HTML5 elements throughout.
 - **Security Note:** CSP middleware telah aktif dengan nonce script & frame-ancestors none. Fitur pencarian mencakup Jurusan, Artikel, Pengumuman, Agenda, Guru & Tendik, Fasilitas, Ekstrakurikuler, dan Prestasi. Seluruh toggle pengaturan (`artikel_ai_enabled`, `multibahasa_enabled`, `ai_translate_auto`, `artikel_approval`) telah berefek penuh di backend dan frontend. Status artikel menggunakan enum `ArticleStatus` (Draft, PendingReview, Published, Archived). Seeder lengkap dengan placeholder SVG lokal (bebas dependensi eksternal picsum). Seluruh validasi controller menggunakan FormRequest dan props admin menggunakan Resource. Class styling bersih menggunakan token Tailwind v4 tanpa arbitrary hex di JSX. Modul Kategori & Tag telah terintegrasi penuh pada penulisan artikel dan filter publik/pengelolaan admin. Pengumuman publik memiliki halaman index/show dan banner darurat di Beranda. Galeri mendukung detail album per slug. Agenda mendukung unduhan kalender iCalendar (.ics). Modul Profil Sekolah lengkap: Guru & Tendik (publik, admin, reorder), Fasilitas (publik, admin, reorder, galeri foto s/d 8 foto), Ekstrakurikuler (publik, admin, reorder), Prestasi (publik, admin, section beranda), serta Navigasi dropdown/accordion Profil yang aksesibel. Editor TipTap aktif untuk konten Pengumuman, Agenda, Fasilitas, Ekstrakurikuler, dan Prestasi. Fitur pratinjau draft aktif untuk artikel dan pengumuman.
 
 ---

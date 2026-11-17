@@ -27,12 +27,12 @@
 - **Di luar cakupan phase:** desain ulang; fitur baru.
 
 ### DoD Phase 7
-- [ ] `grep -rn "locale === 'id' ?" resources/js/Pages/Public resources/js/Components/Layout resources/js/Components/UI` → kosong.
-- [ ] `node scripts/check-i18n.mjs` lulus (dipanggil `verify`).
-- [ ] `npm run build` menghasilkan bundle SSR; pemilik mengonfirmasi view-source halaman publik memuat konten & meta.
-- [ ] Tidak ada file di `resources/js/Pages` > 300 baris untuk 5 halaman target.
+- [x] `grep -rn "locale === 'id' ?" resources/js/Pages/Public resources/js/Components/Layout resources/js/Components/UI` → kosong.
+- [x] `node scripts/check-i18n.mjs` lulus (dipanggil `verify`).
+- [x] `npm run build` menghasilkan bundle SSR; pemilik mengonfirmasi view-source halaman publik memuat konten & meta.
+- [x] Tidak ada file di `resources/js/Pages` > 300 baris untuk 5 halaman target.
 - [ ] Pemilik menjalankan Lighthouse mobile (median 3 run) di staging: Performance ≥ 85, Accessibility ≥ 90, Best Practices ≥ 90, SEO ≥ 95; LCP < 2,5 s, INP < 200 ms, CLS < 0,1.
-- [ ] `npm run verify` lulus.
+- [x] `npm run verify` lulus.
 
 ---
 
