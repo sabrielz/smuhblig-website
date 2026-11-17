@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
             $this->call([
                 GuruContohSeeder::class,
                 FasilitasContohSeeder::class,
+                EkstrakurikulerContohSeeder::class,
             ]);
         }
     }
