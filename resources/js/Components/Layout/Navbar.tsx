@@ -123,9 +123,10 @@ interface MobileMenuProps {
     navLinks: NavLink[];
     currentPath: string;
     pengaturanName: string;
+    spmbUrl?: string;
 }
 
-function MobileMenu({ isOpen, onClose, locale, navLinks, currentPath, pengaturanName }: MobileMenuProps) {
+function MobileMenu({ isOpen, onClose, locale, navLinks, currentPath, pengaturanName, spmbUrl }: MobileMenuProps) {
     const easeOut: Easing = 'easeOut';
     const cubicBezierOpen: Easing = [0.25, 0.46, 0.45, 0.94];
     const cubicBezierClose: Easing = [0.55, 0, 1, 0.45];
@@ -241,14 +242,18 @@ function MobileMenu({ isOpen, onClose, locale, navLinks, currentPath, pengaturan
                                 <span className="text-sm text-white/50">Bahasa:</span>
                                 <LanguageToggle locale={locale} isScrolled={false} isDark />
                             </div>
-                            <Link
-                                href="/daftar"
-                                onClick={onClose}
-                                id="mobile-cta-daftar"
-                                className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#c9a84c] px-6 py-4 text-base font-semibold text-white transition-all duration-200 hover:bg-[#a8821f] active:scale-[0.98]"
-                            >
-                                {locale === 'id' ? 'Daftar Sekarang' : 'Register Now'}
-                            </Link>
+                            {spmbUrl && (
+                                <a
+                                    href={spmbUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    onClick={onClose}
+                                    id="mobile-cta-daftar"
+                                    className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#c9a84c] px-6 py-4 text-base font-semibold text-white transition-all duration-200 hover:bg-[#a8821f] active:scale-[0.98]"
+                                >
+                                    {locale === 'id' ? 'Daftar Sekarang' : 'Register Now'}
+                                </a>
+                            )}
                         </div>
                     </motion.div>
                 </>
@@ -615,6 +620,7 @@ export default function Navbar() {
                 navLinks={NAV_LINKS}
                 currentPath={currentPath}
                 pengaturanName={pengaturan?.site_name ?? 'SMK Muhammadiyah Bligo'}
+                spmbUrl={pengaturan?.spmb_url}
             />
         </>
     );

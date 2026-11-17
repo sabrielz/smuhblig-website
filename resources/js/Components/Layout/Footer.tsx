@@ -193,17 +193,21 @@ export default function Footer() {
 
                         {/* Links */}
                         <ul className="space-y-3">
-                            <li>
-                                <a
-                                    href="/daftar"
-                                    id="footer-link-daftar"
-                                    className="group inline-flex items-center gap-2 rounded-lg border border-[#c9a84c]/40 px-4 py-2.5 text-sm font-semibold text-[#c9a84c] transition-all duration-200 hover:border-[#c9a84c] hover:bg-[#c9a84c] hover:text-white"
-                                >
-                                    <span>
-                                        {locale === 'id' ? '🎓 Daftar Sekarang' : '🎓 Register Now'}
-                                    </span>
-                                </a>
-                            </li>
+                            {pengaturan?.spmb_url && (
+                                <li>
+                                    <a
+                                        href={pengaturan.spmb_url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        id="footer-link-daftar"
+                                        className="group inline-flex items-center gap-2 rounded-lg border border-[#c9a84c]/40 px-4 py-2.5 text-sm font-semibold text-[#c9a84c] transition-all duration-200 hover:border-[#c9a84c] hover:bg-[#c9a84c] hover:text-white"
+                                    >
+                                        <span>
+                                            {locale === 'id' ? '🎓 Daftar Sekarang' : '🎓 Register Now'}
+                                        </span>
+                                    </a>
+                                </li>
+                            )}
                             <li>
                                 <Link
                                     href="https://portal.smkmuhbligo.sch.id/"

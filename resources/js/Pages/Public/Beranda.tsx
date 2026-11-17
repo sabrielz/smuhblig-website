@@ -462,23 +462,25 @@ export default function Beranda({
                             variants={fadeInUp}
                             className="flex flex-col sm:flex-row items-center gap-4"
                         >
-                            <a
-                                href={pengaturan?.spmb_url || "#"}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                id="hero-cta-daftar"
-                                className="inline-flex flex-1 sm:flex-none justify-center w-full sm:w-auto items-center gap-2 font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 px-8 py-4 text-lg rounded-xl text-white hover:opacity-90 focus:ring-[#c9a84c]/50 shadow-lg hover:shadow-xl min-h-11"
-                                style={{
-                                    background:
-                                        "linear-gradient(135deg, #c9a84c 0%, #a8821f 100%)",
-                                }}
-                            >
-                                {kontenHero?.cta_primer_label || "-"}
-                                <ArrowRight
-                                    className="w-5 h-5"
-                                    strokeWidth={1.5}
-                                />
-                            </a>
+                            {pengaturan?.spmb_url && (
+                                <a
+                                    href={pengaturan.spmb_url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    id="hero-cta-daftar"
+                                    className="inline-flex flex-1 sm:flex-none justify-center w-full sm:w-auto items-center gap-2 font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 px-8 py-4 text-lg rounded-xl text-white hover:opacity-90 focus:ring-[#c9a84c]/50 shadow-lg hover:shadow-xl min-h-11"
+                                    style={{
+                                        background:
+                                            "linear-gradient(135deg, #c9a84c 0%, #a8821f 100%)",
+                                    }}
+                                >
+                                    {kontenHero?.cta_primer_label || "-"}
+                                    <ArrowRight
+                                        className="w-5 h-5"
+                                        strokeWidth={1.5}
+                                    />
+                                </a>
+                            )}
 
                             <Link
                                 href="/jurusan"
@@ -835,24 +837,26 @@ export default function Beranda({
                             variants={fadeInUp}
                             className="flex flex-col sm:flex-row items-center justify-center gap-4"
                         >
-                            <a
-                                href={pengaturan?.spmb_url || "#"}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                id="cta-mulai-pendaftaran"
-                                className="inline-flex items-center justify-center w-full sm:w-auto gap-3 font-semibold transition-all duration-200 px-10 py-5 text-xl rounded-2xl text-white shadow-2xl hover:shadow-[#c9a84c]/30 hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-[#c9a84c]/50 focus:ring-offset-2 focus:ring-offset-transparent min-h-11"
-                                style={{
-                                    background:
-                                        "linear-gradient(135deg, #c9a84c 0%, #a8821f 100%)",
-                                }}
-                            >
-                                {kontenCtaAkhir?.cta_primary ||
-                                    "Mulai Pendaftaran"}
-                                <ArrowRight
-                                    className="w-6 h-6"
-                                    strokeWidth={1.5}
-                                />
-                            </a>
+                            {pengaturan?.spmb_url && (
+                                <a
+                                    href={pengaturan.spmb_url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    id="cta-mulai-pendaftaran"
+                                    className="inline-flex items-center justify-center w-full sm:w-auto gap-3 font-semibold transition-all duration-200 px-10 py-5 text-xl rounded-2xl text-white shadow-2xl hover:shadow-[#c9a84c]/30 hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-[#c9a84c]/50 focus:ring-offset-2 focus:ring-offset-transparent min-h-11"
+                                    style={{
+                                        background:
+                                            "linear-gradient(135deg, #c9a84c 0%, #a8821f 100%)",
+                                    }}
+                                >
+                                    {kontenCtaAkhir?.cta_primary ||
+                                        "Mulai Pendaftaran"}
+                                    <ArrowRight
+                                        className="w-6 h-6"
+                                        strokeWidth={1.5}
+                                    />
+                                </a>
+                            )}
 
                             <Link
                                 href="/tentang"

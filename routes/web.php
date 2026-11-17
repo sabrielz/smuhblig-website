@@ -65,11 +65,18 @@ use App\Http\Controllers\Public\AgendaPublikController;
 use App\Http\Controllers\Public\GaleriController;
 use App\Http\Controllers\Public\TautanController;
 use App\Http\Middleware\EnsureHasCmsRole;
+use App\Models\Pengaturan;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Http\Request;
 
 Route::get('/agenda', [AgendaPublikController::class, 'index'])->name('agenda.index');
 Route::get('/agenda/{agenda:slug}', [AgendaPublikController::class, 'show'])->name('agenda.show');
+
+Route::get('/daftar', function () {
+    $spmbUrl = Pengaturan::get('spmb_url');
+
+    return $spmbUrl ? redirect()->away($spmbUrl) : redirect()->route('beranda');
+})->name('daftar');
 
 /*
 |--------------------------------------------------------------------------
