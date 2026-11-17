@@ -78,6 +78,7 @@ Route::get('/agenda', [AgendaPublikController::class, 'index'])->name('agenda.in
 Route::get('/agenda/{agenda:slug}', [AgendaPublikController::class, 'show'])->name('agenda.show');
 Route::get('/agenda/{agenda:slug}/ics', [AgendaPublikController::class, 'ics'])->name('agenda.ics');
 
+use App\Http\Controllers\Admin\EkstrakurikulerController;
 use App\Http\Controllers\Admin\FasilitasController;
 use App\Http\Controllers\Admin\GuruController;
 use App\Http\Controllers\Admin\KategoriController;
@@ -191,6 +192,10 @@ Route::middleware(['auth', EnsureHasCmsRole::class])
         // Fasilitas
         Route::post('/fasilitas/reorder', [FasilitasController::class, 'reorder'])->name('fasilitas.reorder');
         Route::resource('fasilitas', FasilitasController::class)->except(['show']);
+
+        // Ekstrakurikuler
+        Route::post('/ekstrakurikuler/reorder', [EkstrakurikulerController::class, 'reorder'])->name('ekstrakurikuler.reorder');
+        Route::resource('ekstrakurikuler', EkstrakurikulerController::class)->except(['show']);
 
         // Jurusan (Edit 5 existing only)
         Route::get('/jurusan', [App\Http\Controllers\Admin\JurusanController::class, 'index'])->name('jurusan.index');

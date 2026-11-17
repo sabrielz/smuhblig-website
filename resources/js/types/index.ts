@@ -285,3 +285,30 @@ export interface Fasilitas {
     };
     created_at?: string;
 }
+
+export interface Ekstrakurikuler {
+    id: number;
+    slug: string;
+    pembina_guru_id: number | null;
+    pembina?: {
+        id: number;
+        nama: string;
+        nama_lengkap: string;
+    } | null;
+    urutan: number;
+    is_active: boolean;
+    foto_url: string | null;
+    translations: {
+        id: {
+            nama: string;
+            deskripsi: string | null;
+            jadwal: string | null;
+        };
+        en: {
+            nama: string | null;
+            deskripsi: string | null;
+            jadwal: string | null;
+        };
+    };
+    created_at?: string;
+}

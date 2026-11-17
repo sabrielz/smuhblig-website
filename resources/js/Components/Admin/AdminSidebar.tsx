@@ -20,6 +20,7 @@ import {
     UserCircle,
     GraduationCap,
     Building2,
+    Activity,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SharedProps } from "@/types";
@@ -94,6 +95,7 @@ export default function AdminSidebar({ isOpen, setIsOpen }: SidebarProps) {
                     ? [
                         { label: "Guru & Tendik", href: "/admin/guru", icon: GraduationCap, badge: null },
                         { label: "Fasilitas", href: "/admin/fasilitas", icon: Building2, badge: null },
+                        { label: "Ekstrakurikuler", href: "/admin/ekstrakurikuler", icon: Activity, badge: null },
                     ]
                     : []),
                 { label: "Struktur Organisasi", href: "/admin/struktur-organisasi", icon: Network, badge: null },
