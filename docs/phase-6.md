@@ -27,12 +27,12 @@
 - **Di luar cakupan phase:** analitik pihak ketiga baru; alur persetujuan selain artikel.
 
 ### DoD Phase 6
-- [ ] Media terpakai (BR-030) tidak bisa dihapus (dicek di controller).
-- [ ] Setiap model konten memakai log aktivitas; perintah pembersihan terjadwal di `routes/console.php`.
-- [ ] Revisi artikel tersimpan di setiap `update` dan bisa dipulihkan.
-- [ ] Admin tanpa 2FA dialihkan ke halaman aktivasi sebelum memakai CMS.
-- [ ] Dashboard berbeda per peran; vitest `lib/diff.ts` & `MiniBarChart` lulus.
-- [ ] `npm run verify` lulus; `npm run build` sukses.
+- [x] Media terpakai (BR-030) tidak bisa dihapus (dicek di controller).
+- [x] Setiap model konten memakai log aktivitas; perintah pembersihan terjadwal di `routes/console.php`.
+- [x] Revisi artikel tersimpan di setiap `update` dan bisa dipulihkan.
+- [x] Admin tanpa 2FA dialihkan ke halaman aktivasi sebelum memakai CMS.
+- [x] Dashboard berbeda per peran; vitest `lib/diff.ts` & `MiniBarChart` lulus.
+- [x] `npm run verify` lulus; `npm run build` sukses.
 
 ---
 

@@ -56,6 +56,8 @@ It serves two audiences:
 | i18n | i18next + react-i18next | `^24.0` / `^15.0` | Bilingual: `id` (primary), `en` |
 | Carousel | Embla Carousel React | `^8.0` | |
 | Drag & Drop | dnd-kit | `^6.3.1` (core) / `^10.0.0` (sortable) | |
+| 2FA TOTP | pragmarx/google2fa + bacon/bacon-qr-code | `^9.1` / `^3.1` | Autentikasi dua faktor admin & staf |
+| Activity Log | spatie/laravel-activitylog | `^5.1` | Pencatatan mutasi model & login |
 
 ---
 
@@ -209,6 +211,9 @@ All routes are in `routes/web.php` (~214 lines). Two groups:
 | Pesan Kontak | `PesanKontakController` | All CMS roles (delete: admin only) |
 | Konten Halaman | `KontenHalamanController` | View: all, Update: admin only |
 | Media Upload | `MediaUploadController` | All CMS roles |
+| Pustaka Media | `MediaController` | Editor & Admin |
+| Log Aktivitas | `AktivitasController` | **Admin only** |
+| 2FA Settings | `TwoFactorController` | All CMS roles |
 | AI Features | `AiController` | All CMS roles (throttled) |
 | Tautan | `TautanController` (resource) | **Admin only** |
 | Pengaturan | `PengaturanController` | **Admin only** |
@@ -248,6 +253,8 @@ All routes are in `routes/web.php` (~214 lines). Two groups:
 | `PesanKontak` | — | — | Contact form submissions |
 | `NotifikasiAdmin` | — | — | In-app notifications for CMS users |
 | `AiJob` | — | — | AI task tracking (generate, revise, translate, seo) |
+| `ArticleRevision` | — | — | Snapshot revisi artikel (maks 30 per artikel) |
+| `KunjunganHarian` | — | — | Agregasi analitik kunjungan harian per konten |
 
 **Multilingual pattern:** Content stored in `*_translations` tables using Spatie Translatable. Available locales: `id` (Indonesian, primary), `en` (English).
 
@@ -385,6 +392,9 @@ All in `resources/js/lib/motion.ts` — **always use these, never define ad-hoc 
 - **AI API keys** — server-side only, never exposed to frontend
 - **All admin routes** — `auth` + Spatie role middleware
 - **All images** — converted to WebP via Spatie Media Library
+- **Alt text wajib** — setiap gambar konten baru wajib menyertakan atribut alt maks 150 karakter (BR-031)
+- **Media terpakai terlindungi** — media yang masih dirujuk konten/model tidak boleh dihapus (BR-030)
+- **2FA Admin wajib** — seluruh akun dengan peran admin wajib mengaktifkan TOTP 2FA (ADR-008)
 - **Cache** — `Cache::remember()` for public data that changes infrequently
 - **Migrations** — always create new migration files, never edit existing ones
 
