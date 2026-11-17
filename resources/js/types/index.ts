@@ -118,6 +118,12 @@ export interface Category {
     description: string | null;
     color: string;
     is_active: boolean;
+    sort_order?: number;
+    articles_count?: number;
+    translations?: {
+        id?: { name: string; description: string | null };
+        en?: { name: string; description: string | null };
+    };
 }
 
 export interface Tag {

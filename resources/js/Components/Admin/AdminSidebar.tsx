@@ -15,6 +15,7 @@ import {
     CalendarDays,
     PencilLine,
     Mail,
+    FolderTree,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SharedProps } from "@/types";
@@ -64,6 +65,9 @@ export default function AdminSidebar({ isOpen, setIsOpen }: SidebarProps) {
             label: 'Konten',
             items: [
                 { label: 'Artikel', href: '/admin/artikel', icon: FileText, badge: null },
+                ...(user?.is_admin || user?.roles?.includes('editor')
+                    ? [{ label: 'Kategori', href: '/admin/kategori', icon: FolderTree, badge: null }]
+                    : []),
                 ...(user?.can?.kelola_galeri ? [{ label: 'Galeri', href: '/admin/galeri', icon: ImageIcon, badge: null }] : []),
                 ...(user?.can?.kelola_pengumuman ? [{ label: 'Pengumuman', href: '/admin/pengumuman', icon: Bell, badge: null }] : []),
                 { label: 'Konten Halaman', href: '/admin/konten/beranda', icon: PencilLine, badge: null },
