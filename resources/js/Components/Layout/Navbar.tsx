@@ -2,7 +2,8 @@ import type { Variants, Easing } from 'framer-motion';
 import { useState, useEffect, useRef } from 'react';
 import { Link, router, usePage } from '@inertiajs/react';
 import { motion, AnimatePresence, useScroll } from 'framer-motion';
-import { Menu, X, GraduationCap, ChevronRight, ChevronDown, Search, Loader2, ArrowRight } from 'lucide-react';
+import { Menu, X, ChevronRight, ChevronDown, Search, Loader2, ArrowRight } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 import type { SharedProps } from '@/types';
 import { NavDropdown } from '@/Components/Layout/NavDropdown';
@@ -11,39 +12,39 @@ import { NavDropdown } from '@/Components/Layout/NavDropdown';
 // Nav links definition
 // ---------------------------------------------------------------------------
 export interface NavItem {
-    label: { id: string; en: string };
+    labelKey: string;
     href?: string;
     children?: Array<{
-        label: { id: string; en: string };
+        labelKey: string;
         href: string;
     }>;
 }
 
 const NAV_LINKS: NavItem[] = [
-    { label: { id: 'Beranda', en: 'Home' }, href: '/' },
+    { labelKey: 'nav.home', href: '/' },
     {
-        label: { id: 'Profil', en: 'Profile' },
+        labelKey: 'nav.profile',
         children: [
-            { label: { id: 'Tentang Sekolah', en: 'About School' }, href: '/tentang' },
-            { label: { id: 'Guru & Tendik', en: 'Teachers & Staff' }, href: '/guru' },
-            { label: { id: 'Fasilitas', en: 'Facilities' }, href: '/fasilitas' },
-            { label: { id: 'Ekstrakurikuler', en: 'Extracurricular' }, href: '/ekstrakurikuler' },
-            { label: { id: 'Prestasi', en: 'Achievements' }, href: '/prestasi' },
+            { labelKey: 'nav.about', href: '/tentang' },
+            { labelKey: 'nav.teachers', href: '/guru' },
+            { labelKey: 'nav.facilities', href: '/fasilitas' },
+            { labelKey: 'nav.extracurricular', href: '/ekstrakurikuler' },
+            { labelKey: 'nav.achievements', href: '/prestasi' },
         ],
     },
-    { label: { id: 'Jurusan', en: 'Programs' }, href: '/jurusan' },
+    { labelKey: 'nav.programs', href: '/jurusan' },
     {
-        label: { id: 'Informasi', en: 'Information' },
+        labelKey: 'nav.information',
         children: [
-            { label: { id: 'Berita', en: 'News' }, href: '/berita' },
-            { label: { id: 'Pengumuman', en: 'Announcements' }, href: '/pengumuman' },
-            { label: { id: 'Agenda', en: 'Events' }, href: '/agenda' },
-            { label: { id: 'Unduhan', en: 'Downloads' }, href: '/unduhan' },
-            { label: { id: 'FAQ', en: 'FAQ' }, href: '/faq' },
+            { labelKey: 'nav.news', href: '/berita' },
+            { labelKey: 'nav.announcements', href: '/pengumuman' },
+            { labelKey: 'nav.events', href: '/agenda' },
+            { labelKey: 'nav.downloads', href: '/unduhan' },
+            { labelKey: 'nav.faq', href: '/faq' },
         ],
     },
-    { label: { id: 'Galeri', en: 'Gallery' }, href: '/galeri' },
-    { label: { id: 'Kontak', en: 'Contact' }, href: '/kontak' },
+    { labelKey: 'nav.gallery', href: '/galeri' },
+    { labelKey: 'nav.contact', href: '/kontak' },
 ];
 
 // ---------------------------------------------------------------------------
@@ -78,16 +79,14 @@ function LanguageToggle({ locale, isScrolled, isDark = false }: LanguageTogglePr
             {(['id', 'en'] as const).map((lang) => (
                 <button
                     key={lang}
-                    id={`lang-toggle-${lang}`}
                     onClick={() => handleLocaleChange(lang)}
+                    aria-label={`Ganti bahasa ke ${lang === 'id' ? 'Bahasa Indonesia' : 'English'}`}
                     className={cn(
-                        'rounded-md px-2.5 py-1 text-xs font-semibold tracking-widest uppercase transition-all duration-200',
+                        'px-2 py-0.5 text-xs font-semibold rounded-md transition-all duration-200',
                         locale === lang
-                            ? isDark || !isScrolled
-                                ? 'bg-white text-primary-600'
-                                : 'bg-primary-600 text-white'
+                            ? 'bg-gold-500 text-white shadow-xs'
                             : isDark || !isScrolled
-                                ? 'text-white/60 hover:text-white'
+                                ? 'text-white/70 hover:text-white'
                                 : 'text-neutral-500 hover:text-neutral-900',
                     )}
                 >
@@ -99,7 +98,7 @@ function LanguageToggle({ locale, isScrolled, isDark = false }: LanguageTogglePr
 }
 
 // ---------------------------------------------------------------------------
-// Desktop Nav Link
+// Desktop Nav Link item
 // ---------------------------------------------------------------------------
 interface DesktopNavLinkProps {
     href: string;
@@ -113,30 +112,32 @@ function DesktopNavLink({ href, label, isScrolled, isActive }: DesktopNavLinkPro
         <Link
             href={href}
             className={cn(
-                'group relative px-1 py-2 text-sm font-medium transition-colors duration-200',
-                isScrolled
-                    ? isActive
-                        ? 'text-primary-600'
-                        : 'text-neutral-900 hover:text-primary-600'
-                    : isActive
-                        ? 'text-white'
+                'group relative py-1 text-sm font-medium transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 rounded-md px-1',
+                isActive
+                    ? isScrolled
+                        ? 'text-primary-600 font-semibold'
+                        : 'text-white font-semibold'
+                    : isScrolled
+                        ? 'text-neutral-700 hover:text-primary-600'
                         : 'text-white/80 hover:text-white',
             )}
         >
-            {label}
-            {/* Underline slide from left */}
-            <span
-                className={cn(
-                    'absolute bottom-0 left-0 h-0.5 bg-gold-500 transition-all duration-300 ease-out',
-                    isActive ? 'w-full' : 'w-0 group-hover:w-full',
-                )}
-            />
+            <span>{label}</span>
+            {isActive && (
+                <span
+                    className={cn(
+                        'absolute bottom-0 left-1 right-1 h-0.5 rounded-full',
+                        isScrolled ? 'bg-primary-600' : 'bg-gold-500',
+                    )}
+                    aria-hidden="true"
+                />
+            )}
         </Link>
     );
 }
 
 // ---------------------------------------------------------------------------
-// Mobile Menu Overlay
+// Mobile Nav Menu (full-screen drawer)
 // ---------------------------------------------------------------------------
 interface MobileMenuProps {
     isOpen: boolean;
@@ -145,37 +146,156 @@ interface MobileMenuProps {
     navLinks: NavItem[];
     currentPath: string;
     pengaturanName: string;
-    spmbUrl?: string;
-    multibahasaEnabled?: boolean;
+    spmbUrl?: string | null;
+    multibahasaEnabled: boolean;
 }
 
-function MobileMenu({ isOpen, onClose, locale, navLinks, currentPath, pengaturanName, spmbUrl, multibahasaEnabled = true }: MobileMenuProps) {
-    const easeOut: Easing = 'easeOut';
-    const cubicBezierOpen: Easing = [0.25, 0.46, 0.45, 0.94];
-    const cubicBezierClose: Easing = [0.55, 0, 1, 0.45];
-    const [accordionOpen, setAccordionOpen] = useState(false);
+interface MobileGroupProps {
+    link: NavItem;
+    index: number;
+    currentPath: string;
+    onClose: () => void;
+    linkVariants: Variants;
+}
 
-    const overlayVariants: Variants = {
-        hidden: { opacity: 0, x: '100%' },
+function MobileNavGroup({ link, index, currentPath, onClose, linkVariants }: MobileGroupProps) {
+    const { t } = useTranslation();
+    const isChildActive = (link.children || []).some((c) =>
+        c.href === '/' ? currentPath === '/' : currentPath.startsWith(c.href)
+    );
+    const [accordionOpen, setAccordionOpen] = useState(isChildActive);
+
+    return (
+        <motion.div
+            custom={index}
+            variants={linkVariants}
+            initial="hidden"
+            animate="visible"
+            className="space-y-1"
+        >
+            <button
+                type="button"
+                onClick={() => setAccordionOpen(!accordionOpen)}
+                className={cn(
+                    'w-full flex items-center justify-between px-4 py-4 text-lg font-medium transition-all duration-200 rounded-xl',
+                    isChildActive || accordionOpen
+                        ? 'bg-white/10 text-white'
+                        : 'text-white/70 hover:bg-white/5 hover:text-white'
+                )}
+            >
+                <span>{t(link.labelKey)}</span>
+                <ChevronDown
+                    className={cn(
+                        'h-5 w-5 transition-transform duration-200',
+                        accordionOpen ? 'rotate-180 text-gold-500' : 'text-white/60'
+                    )}
+                />
+            </button>
+
+            {accordionOpen && (
+                <div className="pl-4 pr-2 py-2 space-y-1 bg-white/5 rounded-b-xl">
+                    {(link.children || []).map((child) => {
+                        const isItemActive =
+                            child.href === '/'
+                                ? currentPath === '/'
+                                : currentPath.startsWith(child.href);
+                        return (
+                            <Link
+                                key={child.href}
+                                href={child.href}
+                                onClick={onClose}
+                                className={cn(
+                                    'flex items-center justify-between rounded-lg px-3 py-2.5 text-base font-medium transition-colors',
+                                    isItemActive
+                                        ? 'text-gold-400 font-semibold'
+                                        : 'text-white/70 hover:text-white'
+                                )}
+                            >
+                                <span>{t(child.labelKey)}</span>
+                                {isItemActive && (
+                                    <ChevronRight className="h-4 w-4 text-gold-500" />
+                                )}
+                            </Link>
+                        );
+                    })}
+                </div>
+            )}
+        </motion.div>
+    );
+}
+
+function MobileMenu({
+    isOpen,
+    onClose,
+    locale,
+    navLinks,
+    currentPath,
+    pengaturanName,
+    spmbUrl,
+    multibahasaEnabled,
+}: MobileMenuProps) {
+    const { t } = useTranslation();
+    const menuRef = useRef<HTMLDivElement>(null);
+    const firstFocusableRef = useRef<HTMLButtonElement>(null);
+
+    // Trap focus inside mobile menu
+    useEffect(() => {
+        if (!isOpen) return;
+
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') {
+                onClose();
+                return;
+            }
+            if (e.key !== 'Tab') return;
+
+            const focusableElements = menuRef.current?.querySelectorAll<HTMLElement>(
+                'a[href], button:not([disabled]), input:not([disabled])',
+            );
+            if (!focusableElements || focusableElements.length === 0) return;
+
+            const first = focusableElements[0];
+            const last = focusableElements[focusableElements.length - 1];
+
+            if (e.shiftKey && document.activeElement === first) {
+                e.preventDefault();
+                last.focus();
+            } else if (!e.shiftKey && document.activeElement === last) {
+                e.preventDefault();
+                first.focus();
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        firstFocusableRef.current?.focus();
+
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [isOpen, onClose]);
+
+    const backdropVariants: Variants = {
+        hidden: { opacity: 0 },
+        visible: { opacity: 1, transition: { duration: 0.25, ease: 'easeOut' as Easing } },
+        exit: { opacity: 0, transition: { duration: 0.2, ease: 'easeIn' as Easing } },
+    };
+
+    const drawerVariants: Variants = {
+        hidden: { x: '100%' },
         visible: {
-            opacity: 1,
             x: 0,
-            transition: { duration: 0.35, ease: cubicBezierOpen },
+            transition: { type: 'spring', damping: 28, stiffness: 280 },
         },
         exit: {
-            opacity: 0,
             x: '100%',
-            transition: { duration: 0.28, ease: cubicBezierClose },
+            transition: { duration: 0.22, ease: 'easeInOut' as Easing },
         },
     };
 
-    // linkVariants using 'custom' prop for per-item delay
     const linkVariants: Variants = {
-        hidden: { opacity: 0, x: 30 },
+        hidden: { opacity: 0, x: 20 },
         visible: (i: number) => ({
             opacity: 1,
             x: 0,
-            transition: { delay: 0.1 + i * 0.06, duration: 0.35, ease: easeOut },
+            transition: { delay: i * 0.05 + 0.1, duration: 0.25, ease: 'easeOut' as Easing },
         }),
     };
 
@@ -186,104 +306,76 @@ function MobileMenu({ isOpen, onClose, locale, navLinks, currentPath, pengaturan
                     {/* Backdrop */}
                     <motion.div
                         key="backdrop"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.3 }}
-                        onClick={onClose}
-                        className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm lg:hidden"
-                    />
-
-                    {/* Overlay panel */}
-                    <motion.div
-                        key="panel"
-                        variants={overlayVariants}
+                        variants={backdropVariants}
                         initial="hidden"
                         animate="visible"
                         exit="exit"
-                        className="fixed inset-y-0 right-0 z-50 flex w-full max-w-sm flex-col bg-primary-900 shadow-2xl lg:hidden"
+                        onClick={onClose}
+                        className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm lg:hidden"
+                        aria-hidden="true"
+                    />
+
+                    {/* Drawer */}
+                    <motion.div
+                        key="drawer"
+                        ref={menuRef}
+                        role="dialog"
+                        aria-modal="true"
+                        aria-label="Menu navigasi"
+                        variants={drawerVariants}
+                        initial="hidden"
+                        animate="visible"
+                        exit="exit"
+                        className="fixed inset-y-0 right-0 z-50 flex w-full max-w-sm flex-col bg-primary-900 text-white shadow-2xl lg:hidden"
                     >
-                        {/* Header */}
-                        <div className="flex items-center justify-between border-b border-white/10 px-6 py-5">
-                            <div className="flex items-center gap-3">
-                                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gold-500">
-                                    <GraduationCap className="h-5 w-5 text-white" strokeWidth={1.5} />
-                                </div>
-                                <span className="text-sm font-semibold text-white/90">{pengaturanName}</span>
-                            </div>
-                            <button
-                                id="mobile-menu-close"
+                        {/* Header: Logo & Close */}
+                        <div className="flex h-20 items-center justify-between border-b border-white/10 px-6">
+                            <Link
+                                href="/"
                                 onClick={onClose}
-                                className="flex h-9 w-9 items-center justify-center rounded-lg text-white/60 transition-colors hover:bg-white/10 hover:text-white"
+                                className="flex items-center gap-3 group"
+                            >
+                                <img
+                                    src="/smuhblig/logo-smk.png"
+                                    alt="Logo SMK Muhammadiyah Bligo"
+                                    className="h-9 w-auto object-contain"
+                                />
+                                <div className="flex flex-col">
+                                    <span className="text-sm font-bold leading-tight text-white">
+                                        {pengaturanName}
+                                    </span>
+                                    <span className="text-[11px] text-gold-500 font-medium">
+                                        Pekalongan
+                                    </span>
+                                </div>
+                            </Link>
+
+                            <button
+                                ref={firstFocusableRef}
+                                onClick={onClose}
+                                aria-label="Tutup menu"
+                                className="flex h-9 w-9 items-center justify-center rounded-lg text-white/70 hover:bg-white/10 hover:text-white transition-colors"
                             >
                                 <X className="h-5 w-5" strokeWidth={1.5} />
                             </button>
                         </div>
 
-                        {/* Nav links */}
-                        <nav className="flex flex-1 flex-col gap-1 overflow-y-auto px-4 py-6">
+                        {/* Nav Links */}
+                        <nav
+                            aria-label="Navigasi mobile"
+                            className="flex-1 overflow-y-auto px-4 py-6 space-y-1"
+                        >
                             {navLinks.map((link, i) => {
                                 if (link.children) {
-                                    const isChildActive = link.children.some((c) =>
-                                        c.href === '/' ? currentPath === '/' : currentPath.startsWith(c.href)
-                                    );
                                     return (
-                                        <motion.div
-                                            key={`group-${i}`}
-                                            custom={i}
-                                            variants={linkVariants}
-                                            initial="hidden"
-                                            animate="visible"
-                                            className="rounded-xl overflow-hidden"
-                                        >
-                                            <button
-                                                type="button"
-                                                onClick={() => setAccordionOpen(!accordionOpen)}
-                                                className={cn(
-                                                    'w-full flex items-center justify-between px-4 py-4 text-lg font-medium transition-all duration-200 rounded-xl',
-                                                    isChildActive || accordionOpen
-                                                        ? 'bg-white/10 text-white'
-                                                        : 'text-white/70 hover:bg-white/5 hover:text-white'
-                                                )}
-                                            >
-                                                <span>{locale === 'id' ? link.label.id : link.label.en}</span>
-                                                <ChevronDown
-                                                    className={cn(
-                                                        'h-5 w-5 transition-transform duration-200',
-                                                        accordionOpen ? 'rotate-180 text-gold-500' : 'text-white/60'
-                                                    )}
-                                                />
-                                            </button>
-
-                                            {accordionOpen && (
-                                                <div className="pl-4 pr-2 py-2 space-y-1 bg-white/5 rounded-b-xl">
-                                                    {link.children.map((child) => {
-                                                        const isItemActive =
-                                                            child.href === '/'
-                                                                ? currentPath === '/'
-                                                                : currentPath.startsWith(child.href);
-                                                        return (
-                                                            <Link
-                                                                key={child.href}
-                                                                href={child.href}
-                                                                onClick={onClose}
-                                                                className={cn(
-                                                                    'flex items-center justify-between rounded-lg px-3 py-2.5 text-base font-medium transition-colors',
-                                                                    isItemActive
-                                                                        ? 'text-gold-400 font-semibold'
-                                                                        : 'text-white/70 hover:text-white'
-                                                                )}
-                                                            >
-                                                                <span>{locale === 'id' ? child.label.id : child.label.en}</span>
-                                                                {isItemActive && (
-                                                                    <ChevronRight className="h-4 w-4 text-gold-500" />
-                                                                )}
-                                                            </Link>
-                                                        );
-                                                    })}
-                                                </div>
-                                            )}
-                                        </motion.div>
+                                        <MobileNavGroup
+                                            key={`mobile-group-${i}`}
+                                            link={link}
+                                            index={i}
+                                            currentPath={currentPath}
+                                            onClose={onClose}
+                                            linkVariants={linkVariants}
+                                        />
                                     );
                                 }
 
@@ -310,7 +402,7 @@ function MobileMenu({ isOpen, onClose, locale, navLinks, currentPath, pengaturan
                                             )}
                                         >
                                             <span>
-                                                {locale === 'id' ? link.label.id : link.label.en}
+                                                {t(link.labelKey)}
                                             </span>
                                             {isActive && (
                                                 <ChevronRight
@@ -328,7 +420,7 @@ function MobileMenu({ isOpen, onClose, locale, navLinks, currentPath, pengaturan
                         <div className="border-t border-white/10 px-6 py-6 space-y-4">
                             {multibahasaEnabled && (
                                 <div className="flex items-center gap-3">
-                                    <span className="text-sm text-white/50">Bahasa:</span>
+                                    <span className="text-sm text-white/50">{t('nav.language')}</span>
                                     <LanguageToggle locale={locale} isScrolled={false} isDark />
                                 </div>
                             )}
@@ -341,7 +433,7 @@ function MobileMenu({ isOpen, onClose, locale, navLinks, currentPath, pengaturan
                                     id="mobile-cta-daftar"
                                     className="flex w-full items-center justify-center gap-2 rounded-xl bg-gold-500 px-6 py-4 text-base font-semibold text-white transition-all duration-200 hover:bg-gold-600 active:scale-[0.98]"
                                 >
-                                    {locale === 'id' ? 'Daftar Sekarang' : 'Register Now'}
+                                    {t('nav.register_now')}
                                 </a>
                             )}
                         </div>
@@ -358,10 +450,10 @@ function MobileMenu({ isOpen, onClose, locale, navLinks, currentPath, pengaturan
 interface SearchOverlayProps {
     isOpen: boolean;
     onClose: () => void;
-    locale: string;
 }
 
-function SearchOverlay({ isOpen, onClose, locale }: SearchOverlayProps) {
+function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
+    const { t } = useTranslation();
     const [keyword, setKeyword] = useState('');
     const [loading, setLoading] = useState(false);
     const [results, setResults] = useState<{ artikel: any[]; jurusan: any[] }>({ artikel: [], jurusan: [] });
@@ -461,7 +553,7 @@ function SearchOverlay({ isOpen, onClose, locale }: SearchOverlayProps) {
                                 <input
                                     ref={inputRef}
                                     type="text"
-                                    placeholder={locale === 'id' ? "Cari informasi, artikel, atau jurusan..." : "Search info, articles, or programs..."}
+                                    placeholder={t('nav.search_placeholder')}
                                     className="w-full bg-transparent border-none text-lg text-gray-800 focus:outline-none focus:ring-0 p-0 placeholder-gray-400"
                                     value={keyword}
                                     onChange={handleInput}
@@ -484,13 +576,15 @@ function SearchOverlay({ isOpen, onClose, locale }: SearchOverlayProps) {
                                         <div className="inline-flex items-center justify-center p-3 rounded-full bg-gray-100 mb-3">
                                             <Search className="h-6 w-6 text-gray-400" />
                                         </div>
-                                        <p>{locale === 'id' ? 'Tidak ada hasil yang ditemukan untuk' : 'No results found for'} "{keyword}"</p>
+                                        <p>{t('nav.search_no_results')} "{keyword}"</p>
                                     </div>
                                 )}
 
                                 {results.jurusan.length > 0 && (
                                     <div className="mb-6">
-                                        <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3 px-2">Jurusan</h3>
+                                        <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3 px-2">
+                                            {t('nav.search_categories.programs')}
+                                        </h3>
                                         <div className="space-y-1">
                                             {results.jurusan.map((j) => (
                                                 <Link
@@ -511,7 +605,9 @@ function SearchOverlay({ isOpen, onClose, locale }: SearchOverlayProps) {
 
                                 {results.artikel.length > 0 && (
                                     <div className="mb-2">
-                                        <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3 px-2">Artikel</h3>
+                                        <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3 px-2">
+                                            {t('nav.search_categories.articles')}
+                                        </h3>
                                         <div className="space-y-1">
                                             {results.artikel.map((a) => (
                                                 <Link
@@ -534,7 +630,7 @@ function SearchOverlay({ isOpen, onClose, locale }: SearchOverlayProps) {
                                             onClick={handleSubmit}
                                             className="text-sm font-medium text-primary-600 hover:text-primary-900 inline-flex items-center gap-1"
                                         >
-                                            {locale === 'id' ? 'Lihat semua hasil pencarian' : 'See all search results'}
+                                            {t('nav.search_view_all')}
                                             <ArrowRight className="h-4 w-4" />
                                         </button>
                                     </div>
@@ -552,6 +648,7 @@ function SearchOverlay({ isOpen, onClose, locale }: SearchOverlayProps) {
 // Navbar (main export)
 // ---------------------------------------------------------------------------
 export default function Navbar() {
+    const { t } = useTranslation();
     const { locale, pengaturan } = usePage<SharedProps>().props;
     const multibahasaEnabled = pengaturan?.multibahasa_enabled ?? true;
     const [isScrolled, setIsScrolled] = useState(false);
@@ -609,19 +706,11 @@ export default function Navbar() {
                         id="navbar-logo"
                         className="flex items-center flex-shrink-0 group"
                     >
-                        {/*
-                          Container gambar logo responsif
-                          - h-9 (36px) s/d md:h-12 (48px)
-                          - width dijaga proporsional melalui 'w-auto' atau 'object-contain'
-                          Ganti value src di bawah dengan path gambar asli: misal '/images/logo-smk.png'
-                        */}
                         <img
                             src="/smuhblig/logo-smk.png"
                             alt="Logo SMK Muhammadiyah Bligo"
                             className={cn(
                                 'h-9 w-auto md:h-11 object-contain transition-all duration-300',
-                                // Jika butuh efek cerah di navigasi gelap vs terang:
-                                // !isScrolled ? 'brightness-0 invert' : ''
                             )}
                         />
                     </Link>
@@ -636,8 +725,7 @@ export default function Navbar() {
                                 return (
                                     <NavDropdown
                                         key={`dropdown-${idx}`}
-                                        label={link.label}
-                                        locale={locale}
+                                        labelKey={link.labelKey}
                                         items={link.children}
                                         currentPath={currentPath}
                                         isScrolled={isScrolled}
@@ -653,7 +741,7 @@ export default function Navbar() {
                                 <DesktopNavLink
                                     key={link.href}
                                     href={link.href || '/'}
-                                    label={locale === 'id' ? link.label.id : link.label.en}
+                                    label={t(link.labelKey)}
                                     isScrolled={isScrolled}
                                     isActive={isActive}
                                 />
@@ -693,7 +781,7 @@ export default function Navbar() {
                             id="navbar-cta-daftar"
                             className="hidden lg:inline-flex items-center gap-2 rounded-xl bg-white px-5 py-2.5 text-sm font-semibold text-primary-600 shadow-sm transition-all duration-200 hover:bg-neutral-200 hover:shadow-md active:scale-[0.97]"
                         >
-                            {locale === 'id' ? 'Portal' : 'Portal'}
+                            {t('nav.portal')}
                         </Link>
 
                         {/* Hamburger — mobile */}
@@ -716,7 +804,7 @@ export default function Navbar() {
             </motion.header>
 
             {/* Content Overlays */}
-            <SearchOverlay isOpen={searchOpen} onClose={() => setSearchOpen(false)} locale={locale} />
+            <SearchOverlay isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
 
             {/* Mobile overlay */}
             <MobileMenu

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Link, usePage } from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
 import { AlertCircle, X, ArrowRight } from 'lucide-react';
-import type { SharedProps } from '@/types';
+import { useTranslation } from 'react-i18next';
 
 export interface UrgentAnnouncement {
     id: number;
@@ -14,7 +14,7 @@ interface AnnouncementBannerProps {
 }
 
 export function AnnouncementBanner({ announcement }: AnnouncementBannerProps) {
-    const { locale } = usePage<SharedProps>().props;
+    const { t } = useTranslation();
     const [dismissed, setDismissed] = useState(true);
 
     useEffect(() => {
@@ -44,7 +44,7 @@ export function AnnouncementBanner({ announcement }: AnnouncementBannerProps) {
 
     return (
         <aside
-            aria-label={locale === 'id' ? 'Pengumuman Penting' : 'Urgent Announcement'}
+            aria-label={t('ui.announcement_urgent')}
             className="relative bg-red-600 text-white px-4 py-2.5 z-40 shadow-sm"
         >
             <div className="container mx-auto max-w-[1280px] flex items-center justify-between gap-3 text-xs sm:text-sm">
@@ -60,14 +60,14 @@ export function AnnouncementBanner({ announcement }: AnnouncementBannerProps) {
                         href={route('pengumuman.show', { pengumuman: announcement.slug })}
                         className="inline-flex items-center gap-1 font-semibold underline underline-offset-4 hover:text-red-100 transition-colors shrink-0 ml-1"
                     >
-                        <span>{locale === 'id' ? 'Lihat Detail' : 'View Details'}</span>
+                        <span>{t('ui.announcement_view_detail')}</span>
                         <ArrowRight className="w-3.5 h-3.5" />
                     </Link>
                 </div>
 
                 <button
                     onClick={handleDismiss}
-                    aria-label={locale === 'id' ? 'Tutup Pengumuman' : 'Close Announcement'}
+                    aria-label={t('ui.announcement_close')}
                     className="p-1 rounded hover:bg-red-700 text-white/80 hover:text-white transition-colors shrink-0"
                 >
                     <X className="w-4 h-4" />

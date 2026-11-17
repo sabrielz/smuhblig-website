@@ -4,5 +4,50 @@
     "read_more": "Baca Selengkapnya",
     "search": "Cari...",
     "all": "Semua"
+  },
+  "nav": {
+    "home": "Beranda",
+    "profile": "Profil",
+    "about": "Tentang Sekolah",
+    "teachers": "Guru & Tendik",
+    "facilities": "Fasilitas",
+    "extracurricular": "Ekstrakurikuler",
+    "achievements": "Prestasi",
+    "programs": "Jurusan",
+    "information": "Informasi",
+    "news": "Berita",
+    "announcements": "Pengumuman",
+    "events": "Agenda",
+    "downloads": "Unduhan",
+    "faq": "FAQ",
+    "gallery": "Galeri",
+    "contact": "Kontak",
+    "portal": "Portal",
+    "register_now": "Daftar Sekarang",
+    "language": "Bahasa:",
+    "search_placeholder": "Cari informasi, artikel, atau jurusan...",
+    "search_no_results": "Tidak ada hasil yang ditemukan untuk",
+    "search_view_all": "Lihat semua hasil pencarian",
+    "search_categories": {
+      "programs": "Jurusan",
+      "articles": "Artikel"
+    }
+  },
+  "footer": {
+    "address_sub": "Sapugarut Gg. 7, Kab. Pekalongan, Jawa Tengah",
+    "school_desc": "SMK Muhammadiyah Bligo adalah sekolah kejuruan berlandaskan nilai-nilai Islam yang berkomitmen mencetak generasi unggul, berkarakter mulia, dan siap berkarya di era global.",
+    "navigation_title": "Navigasi",
+    "important_links_title": "Tautan Penting",
+    "register_btn": "🎓 Daftar Sekarang",
+    "portal": "Portal",
+    "latest_news": "Berita Terbaru",
+    "contact_us": "Hubungi Kami",
+    "follow_us": "Ikuti Kami",
+    "copyright": "Bagian dari Persyarikatan Muhammadiyah."
+  },
+  "ui": {
+    "announcement_urgent": "Pengumuman Penting",
+    "announcement_view_detail": "Lihat Detail",
+    "announcement_close": "Tutup Pengumuman"
   }
 }

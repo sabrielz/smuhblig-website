@@ -1,28 +1,29 @@
 import { Link, usePage } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 import { Instagram, Youtube, Facebook, Heart } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 import { fadeInUp, staggerContainer } from '@/lib/motion';
 import type { SharedProps } from '@/types';
 
 // ---------------------------------------------------------------------------
-// Nav links (reuse same structure)
+// Nav links (reuse same structure with translation keys)
 // ---------------------------------------------------------------------------
 const NAV_LINKS = [
-    { label: { id: 'Beranda', en: 'Home' }, href: '/' },
-    { label: { id: 'Tentang', en: 'About' }, href: '/tentang' },
-    { label: { id: 'Guru & Tendik', en: 'Teachers' }, href: '/guru' },
-    { label: { id: 'Fasilitas', en: 'Facilities' }, href: '/fasilitas' },
-    { label: { id: 'Ekstrakurikuler', en: 'Extracurricular' }, href: '/ekstrakurikuler' },
-    { label: { id: 'Prestasi', en: 'Achievements' }, href: '/prestasi' },
-    { label: { id: 'Jurusan', en: 'Programs' }, href: '/jurusan' },
-    { label: { id: 'Berita', en: 'News' }, href: '/berita' },
-    { label: { id: 'Pengumuman', en: 'Announcements' }, href: '/pengumuman' },
-    { label: { id: 'Agenda', en: 'Events' }, href: '/agenda' },
-    { label: { id: 'Unduhan', en: 'Downloads' }, href: '/unduhan' },
-    { label: { id: 'FAQ', en: 'FAQ' }, href: '/faq' },
-    { label: { id: 'Galeri', en: 'Gallery' }, href: '/galeri' },
-    { label: { id: 'Kontak', en: 'Contact' }, href: '/kontak' },
+    { labelKey: 'nav.home', href: '/' },
+    { labelKey: 'nav.about', href: '/tentang' },
+    { labelKey: 'nav.teachers', href: '/guru' },
+    { labelKey: 'nav.facilities', href: '/fasilitas' },
+    { labelKey: 'nav.extracurricular', href: '/ekstrakurikuler' },
+    { labelKey: 'nav.achievements', href: '/prestasi' },
+    { labelKey: 'nav.programs', href: '/jurusan' },
+    { labelKey: 'nav.news', href: '/berita' },
+    { labelKey: 'nav.announcements', href: '/pengumuman' },
+    { labelKey: 'nav.events', href: '/agenda' },
+    { labelKey: 'nav.downloads', href: '/unduhan' },
+    { labelKey: 'nav.faq', href: '/faq' },
+    { labelKey: 'nav.gallery', href: '/galeri' },
+    { labelKey: 'nav.contact', href: '/kontak' },
 ];
 
 // ---------------------------------------------------------------------------
@@ -48,10 +49,18 @@ function IslamicDivider() {
     return (
         <div className="flex items-center gap-3 my-6" aria-hidden="true">
             <div className="flex-1 h-px bg-white/15" />
-            {/* Diamond ornament */}
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="text-gold-500/50 flex-shrink-0">
-                <rect x="6" y="0" width="4" height="4" transform="rotate(45 8 2)" fill="currentColor" />
-                <rect x="6" y="10" width="4" height="4" transform="rotate(45 8 12)" fill="currentColor" opacity="0.5" />
+            <svg
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+                aria-hidden="true"
+                className="text-gold-500/70"
+            >
+                <polygon
+                    points="8,1 10,6 15,8 10,10 8,15 6,10 1,8 6,6"
+                    fill="currentColor"
+                />
             </svg>
             <div className="flex-1 h-px bg-white/15" />
         </div>
@@ -59,25 +68,27 @@ function IslamicDivider() {
 }
 
 // ---------------------------------------------------------------------------
-// Social Icon Button
+// Social Button
 // ---------------------------------------------------------------------------
 interface SocialButtonProps {
     href: string;
     label: string;
-    id: string;
+    id?: string;
     children: React.ReactNode;
 }
 
 function SocialButton({ href, label, id, children }: SocialButtonProps) {
-    if (!href) return null;
     return (
         <a
             href={href}
-            id={id}
             target="_blank"
             rel="noopener noreferrer"
             aria-label={label}
-            className="group flex h-10 w-10 items-center justify-center rounded-full border border-white/30 text-white/70 transition-all duration-250 hover:border-transparent hover:bg-white hover:text-primary-600 hover:scale-110"
+            id={id}
+            className={cn(
+                'flex h-9 w-9 items-center justify-center rounded-lg border border-white/15 text-white/70',
+                'transition-all duration-200 hover:border-gold-500 hover:bg-gold-500/10 hover:text-gold-500 hover:scale-105 active:scale-95',
+            )}
         >
             {children}
         </a>
@@ -88,52 +99,66 @@ function SocialButton({ href, label, id, children }: SocialButtonProps) {
 // Footer (main export)
 // ---------------------------------------------------------------------------
 export default function Footer() {
-    const { locale, pengaturan } = usePage<SharedProps>().props;
+    const { t } = useTranslation();
+    const { pengaturan } = usePage<SharedProps>().props;
 
-    const siteName = pengaturan?.site_name ?? 'SMK Muhammadiyah Bligo';
-    const tagline = pengaturan?.site_tagline ?? 'Unggul, Islami, Berkarakter';
-    const instagram = pengaturan?.sosial_instagram ?? '';
-    const youtube = pengaturan?.sosial_youtube ?? '';
-    const facebook = pengaturan?.sosial_facebook ?? '';
-    const tiktok = pengaturan?.sosial_tiktok ?? '';
+    const siteName = pengaturan?.site_name || 'SMK Muhammadiyah Bligo';
+    const tagline = pengaturan?.site_tagline || 'Pusat Keunggulan Vokasi Islami';
+    const instagram = pengaturan?.sosial_instagram;
+    const youtube = pengaturan?.sosial_youtube;
+    const facebook = pengaturan?.sosial_facebook;
+    const tiktok = pengaturan?.sosial_tiktok;
 
-    const hasSocial = instagram || youtube || facebook || tiktok;
+    const hasSocial = Boolean(instagram || youtube || facebook || tiktok);
 
     return (
-        <footer id="site-footer" className="bg-primary-900" aria-label="Footer">
-            <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <footer
+            id="main-footer"
+            className="relative bg-primary-900 text-white overflow-hidden"
+        >
+            {/* Background geometric overlay */}
+            <div
+                className="absolute inset-0 opacity-[0.03] pointer-events-none"
+                aria-hidden="true"
+                style={{
+                    backgroundImage: `radial-gradient(circle at 1px 1px, #c9a84c 1px, transparent 0)`,
+                    backgroundSize: '24px 24px',
+                }}
+            />
 
-                {/* ── Main footer grid ── */}
+            {/* Top gold accent line */}
+            <div className="h-0.5 w-full bg-gradient-to-r from-transparent via-gold-500 to-transparent" />
+
+            <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                {/* ── Main Footer Content ── */}
                 <motion.div
                     variants={staggerContainer}
                     initial="hidden"
                     whileInView="visible"
-                    viewport={{ once: true, margin: '-60px' }}
-                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8 py-16 lg:py-20"
+                    viewport={{ once: true }}
+                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 py-16"
                 >
-                    {/* ── Column 1: Brand (40%) ── */}
+                    {/* ── Column 1: School Identity (40%) ── */}
                     <motion.div
                         variants={fadeInUp}
-                        className="col-span-1 md:col-span-2 lg:col-span-5 flex flex-col items-center md:items-start text-center md:text-left space-y-5"
+                        className="col-span-1 md:col-span-2 lg:col-span-5 space-y-4 flex flex-col items-center md:items-start text-center md:text-left"
                     >
-                        {/* Logo mark */}
-                        <div className="flex flex-col md:flex-row items-center md:items-start gap-3">
+                        {/* Logo and Name */}
+                        <div className="flex items-center gap-3">
                             {pengaturan?.site_logo ? (
                                 <img
-                                    src={`/${pengaturan.site_logo}`}
+                                    src={`/storage/${pengaturan.site_logo}`}
                                     alt={`Logo ${siteName}`}
-                                    className="h-12 w-auto max-w-[48px] object-contain flex-shrink-0 bg-white rounded-lg p-1"
+                                    className="h-10 w-auto object-contain"
                                 />
                             ) : (
-                                <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl bg-gold-500">
+                                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gold-500/20 border border-gold-500/40">
                                     <svg
                                         viewBox="0 0 24 24"
                                         fill="none"
-                                        stroke="white"
+                                        stroke="currentColor"
                                         strokeWidth="1.5"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        className="h-6 w-6"
+                                        className="h-5 w-5 text-gold-500"
                                         aria-hidden="true"
                                     >
                                         <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
@@ -143,7 +168,7 @@ export default function Footer() {
                             )}
                             <div>
                                 <p className="text-base font-bold text-white leading-tight">{siteName}</p>
-                                <p className="text-xs text-gold-500 font-medium mt-0.5">Sapugarut Gg. 7, Kab. Pekalongan, Jawa Tengah</p>
+                                <p className="text-xs text-gold-500 font-medium mt-0.5">{t('footer.address_sub')}</p>
                             </div>
                         </div>
 
@@ -157,9 +182,7 @@ export default function Footer() {
 
                         {/* Description */}
                         <p className="text-sm leading-relaxed text-white/55 max-w-xs">
-                            {locale === 'id'
-                                ? 'SMK Muhammadiyah Bligo adalah sekolah kejuruan berlandaskan nilai-nilai Islam yang berkomitmen mencetak generasi unggul, berkarakter mulia, dan siap berkarya di era global.'
-                                : 'SMK Muhammadiyah Bligo is an Islamic vocational school committed to nurturing an excellent generation with noble character, ready to contribute in the global era.'}
+                            {t('footer.school_desc')}
                         </p>
                     </motion.div>
 
@@ -169,7 +192,7 @@ export default function Footer() {
                         className="col-span-1 md:col-span-1 lg:col-span-3 space-y-5 flex flex-col items-center md:items-start text-center md:text-left"
                     >
                         <h3 className="text-xs font-bold tracking-widest uppercase text-gold-500">
-                            {locale === 'id' ? 'Navigasi' : 'Navigation'}
+                            {t('footer.navigation_title')}
                         </h3>
                         <ul className="space-y-3">
                             {NAV_LINKS.map((link) => (
@@ -182,7 +205,7 @@ export default function Footer() {
                                             className="inline-block h-px w-4 bg-white/25 transition-all duration-200 group-hover:w-6 group-hover:bg-gold-500"
                                             aria-hidden="true"
                                         />
-                                        {locale === 'id' ? link.label.id : link.label.en}
+                                        {t(link.labelKey)}
                                     </Link>
                                 </li>
                             ))}
@@ -195,7 +218,7 @@ export default function Footer() {
                         className="col-span-1 md:col-span-1 lg:col-span-4 space-y-5 flex flex-col items-center md:items-start text-center md:text-left"
                     >
                         <h3 className="text-xs font-bold tracking-widest uppercase text-gold-500">
-                            {locale === 'id' ? 'Tautan Penting' : 'Important Links'}
+                            {t('footer.important_links_title')}
                         </h3>
 
                         {/* Links */}
@@ -210,7 +233,7 @@ export default function Footer() {
                                         className="group inline-flex items-center gap-2 rounded-lg border border-gold-500/40 px-4 py-2.5 text-sm font-semibold text-gold-500 transition-all duration-200 hover:border-gold-500 hover:bg-gold-500 hover:text-white"
                                     >
                                         <span>
-                                            {locale === 'id' ? '🎓 Daftar Sekarang' : '🎓 Register Now'}
+                                            {t('footer.register_btn')}
                                         </span>
                                     </a>
                                 </li>
@@ -225,7 +248,7 @@ export default function Footer() {
                                         className="inline-block h-px w-4 bg-white/25 transition-all duration-200 group-hover:w-6 group-hover:bg-gold-500"
                                         aria-hidden="true"
                                     />
-                                    {locale === 'id' ? 'Portal' : 'Portal'}
+                                    {t('footer.portal')}
                                 </Link>
                             </li>
                             <li>
@@ -238,7 +261,7 @@ export default function Footer() {
                                         className="inline-block h-px w-4 bg-white/25 transition-all duration-200 group-hover:w-6 group-hover:bg-gold-500"
                                         aria-hidden="true"
                                     />
-                                    {locale === 'id' ? 'Berita Terbaru' : 'Latest News'}
+                                    {t('footer.latest_news')}
                                 </Link>
                             </li>
                             <li>
@@ -251,7 +274,7 @@ export default function Footer() {
                                         className="inline-block h-px w-4 bg-white/25 transition-all duration-200 group-hover:w-6 group-hover:bg-gold-500"
                                         aria-hidden="true"
                                     />
-                                    {locale === 'id' ? 'Hubungi Kami' : 'Contact Us'}
+                                    {t('footer.contact_us')}
                                 </Link>
                             </li>
                         </ul>
@@ -260,7 +283,7 @@ export default function Footer() {
                         {hasSocial && (
                             <div className="pt-2 space-y-3">
                                 <p className="text-xs font-medium text-white/40 uppercase tracking-widest text-center md:text-left">
-                                    {locale === 'id' ? 'Ikuti Kami' : 'Follow Us'}
+                                    {t('footer.follow_us')}
                                 </p>
                                 <div className="flex items-center justify-center md:justify-start gap-2.5">
                                     {instagram && (
@@ -308,10 +331,7 @@ export default function Footer() {
                 {/* ── Copyright bar ── */}
                 <div className="flex flex-col items-center justify-between gap-3 border-t border-white/10 py-6 sm:flex-row">
                     <p className="text-xs text-white/35 text-center sm:text-left">
-                        © {new Date().getFullYear()} {siteName}.{' '}
-                        {locale === 'id'
-                            ? 'Bagian dari Persyarikatan Muhammadiyah.'
-                            : 'Part of Persyarikatan Muhammadiyah.'}
+                        © {new Date().getFullYear()} {siteName}. {t('footer.copyright')}
                     </p>
                     <p className={cn(
                         'flex items-center gap-1.5 text-xs italic text-gold-500/60',

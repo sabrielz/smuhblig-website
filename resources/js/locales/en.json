@@ -4,5 +4,50 @@
     "read_more": "Read More",
     "search": "Search...",
     "all": "All"
+  },
+  "nav": {
+    "home": "Home",
+    "profile": "Profile",
+    "about": "About School",
+    "teachers": "Teachers & Staff",
+    "facilities": "Facilities",
+    "extracurricular": "Extracurricular",
+    "achievements": "Achievements",
+    "programs": "Programs",
+    "information": "Information",
+    "news": "News",
+    "announcements": "Announcements",
+    "events": "Events",
+    "downloads": "Downloads",
+    "faq": "FAQ",
+    "gallery": "Gallery",
+    "contact": "Contact",
+    "portal": "Portal",
+    "register_now": "Register Now",
+    "language": "Language:",
+    "search_placeholder": "Search info, articles, or programs...",
+    "search_no_results": "No results found for",
+    "search_view_all": "See all search results",
+    "search_categories": {
+      "programs": "Programs",
+      "articles": "Articles"
+    }
+  },
+  "footer": {
+    "address_sub": "Sapugarut Gg. 7, Kab. Pekalongan, Jawa Tengah",
+    "school_desc": "SMK Muhammadiyah Bligo is an Islamic vocational school committed to nurturing an excellent generation with noble character, ready to contribute in the global era.",
+    "navigation_title": "Navigation",
+    "important_links_title": "Important Links",
+    "register_btn": "🎓 Register Now",
+    "portal": "Portal",
+    "latest_news": "Latest News",
+    "contact_us": "Contact Us",
+    "follow_us": "Follow Us",
+    "copyright": "Part of Persyarikatan Muhammadiyah."
+  },
+  "ui": {
+    "announcement_urgent": "Urgent Announcement",
+    "announcement_view_detail": "View Details",
+    "announcement_close": "Close Announcement"
   }
 }

@@ -3,6 +3,23 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import { NavDropdown } from './NavDropdown';
 
+// Mock react-i18next
+vi.mock('react-i18next', () => ({
+    useTranslation: () => ({
+        t: (key: string) => {
+            const map: Record<string, string> = {
+                'nav.profile': 'Profil',
+                'nav.about': 'Tentang Sekolah',
+                'nav.teachers': 'Guru & Tendik',
+                'nav.facilities': 'Fasilitas',
+                'nav.extracurricular': 'Ekstrakurikuler',
+                'nav.achievements': 'Prestasi',
+            };
+            return map[key] || key;
+        },
+    }),
+}));
+
 // Mock Inertia Link
 vi.mock('@inertiajs/react', () => ({
     Link: ({ children, href, onClick, ...props }: any) => (
@@ -14,18 +31,17 @@ vi.mock('@inertiajs/react', () => ({
 
 describe('NavDropdown Component', () => {
     const items = [
-        { label: { id: 'Tentang Sekolah', en: 'About School' }, href: '/tentang' },
-        { label: { id: 'Guru & Tendik', en: 'Teachers & Staff' }, href: '/guru' },
-        { label: { id: 'Fasilitas', en: 'Facilities' }, href: '/fasilitas' },
-        { label: { id: 'Ekstrakurikuler', en: 'Extracurricular' }, href: '/ekstrakurikuler' },
-        { label: { id: 'Prestasi', en: 'Achievements' }, href: '/prestasi' },
+        { labelKey: 'nav.about', href: '/tentang' },
+        { labelKey: 'nav.teachers', href: '/guru' },
+        { labelKey: 'nav.facilities', href: '/fasilitas' },
+        { labelKey: 'nav.extracurricular', href: '/ekstrakurikuler' },
+        { labelKey: 'nav.achievements', href: '/prestasi' },
     ];
 
     it('opens dropdown when pressing Enter and closes on Escape', () => {
         render(
             <NavDropdown
-                label={{ id: 'Profil', en: 'Profile' }}
-                locale="id"
+                labelKey="nav.profile"
                 items={items}
                 currentPath="/"
                 isScrolled={false}
@@ -49,8 +65,7 @@ describe('NavDropdown Component', () => {
     it('toggles dropdown on click', () => {
         render(
             <NavDropdown
-                label={{ id: 'Profil', en: 'Profile' }}
-                locale="id"
+                labelKey="nav.profile"
                 items={items}
                 currentPath="/"
                 isScrolled={false}

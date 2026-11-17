@@ -1,28 +1,28 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from '@inertiajs/react';
 import { ChevronDown } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 
 export interface NavChildItem {
-    label: { id: string; en: string };
+    labelKey: string;
     href: string;
 }
 
 export interface NavDropdownProps {
-    label: { id: string; en: string };
-    locale: string;
+    labelKey: string;
     items: NavChildItem[];
     currentPath: string;
     isScrolled: boolean;
 }
 
 export function NavDropdown({
-    label,
-    locale,
+    labelKey,
     items,
     currentPath,
     isScrolled,
 }: NavDropdownProps) {
+    const { t } = useTranslation();
     const [isOpen, setIsOpen] = useState(false);
     const triggerRef = useRef<HTMLButtonElement>(null);
     const menuRef = useRef<HTMLDivElement>(null);
@@ -57,30 +57,47 @@ export function NavDropdown({
             e.preventDefault();
             setIsOpen(false);
             triggerRef.current?.focus();
+        } else if (e.key === 'Tab') {
+            const links = menuRef.current?.querySelectorAll('a');
+            if (links && links.length > 0) {
+                const lastLink = links[links.length - 1];
+                if (e.shiftKey && document.activeElement === links[0]) {
+                    setIsOpen(false);
+                } else if (!e.shiftKey && document.activeElement === lastLink) {
+                    setIsOpen(false);
+                }
+            }
         }
     };
 
-    // Close when clicking outside
+    // Close on click outside
     useEffect(() => {
-        if (!isOpen) return;
-
         const handleClickOutside = (e: MouseEvent) => {
             if (
-                triggerRef.current &&
-                !triggerRef.current.contains(e.target as Node) &&
                 menuRef.current &&
-                !menuRef.current.contains(e.target as Node)
+                !menuRef.current.contains(e.target as Node) &&
+                triggerRef.current &&
+                !triggerRef.current.contains(e.target as Node)
             ) {
                 setIsOpen(false);
             }
         };
 
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
+        if (isOpen) {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
     }, [isOpen]);
 
     return (
-        <div className="relative inline-block text-left" onKeyDown={handleMenuKeyDown}>
+        <div
+            className="relative"
+            onMouseEnter={() => setIsOpen(true)}
+            onMouseLeave={() => setIsOpen(false)}
+            onKeyDown={handleMenuKeyDown}
+        >
             <button
                 ref={triggerRef}
                 type="button"
@@ -99,7 +116,7 @@ export function NavDropdown({
                             : 'text-white/80 hover:text-white'
                 )}
             >
-                <span>{locale === 'id' ? label.id : label.en}</span>
+                <span>{t(labelKey)}</span>
                 <ChevronDown
                     className={cn(
                         'w-4 h-4 transition-transform duration-200',
@@ -141,7 +158,7 @@ export function NavDropdown({
                                         : 'text-neutral-700 hover:bg-neutral-50 hover:text-primary-600'
                                 )}
                             >
-                                <span>{locale === 'id' ? item.label.id : item.label.en}</span>
+                                <span>{t(item.labelKey)}</span>
                             </Link>
                         );
                     })}
