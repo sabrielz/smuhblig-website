@@ -40,8 +40,8 @@ function StatusBadge({ status }: { status: PesanKontak['status'] }) {
 function InfoRow({ icon, label, value }: { icon: React.ReactNode; label: string; value: React.ReactNode }) {
     return (
         <div className="flex items-start gap-3 py-3 border-b border-neutral-100 last:border-0">
-            <div className="w-8 h-8 rounded-lg bg-[#003f87]/8 flex items-center justify-center shrink-0 mt-0.5">
-                <span className="text-[#003f87]">{icon}</span>
+            <div className="w-8 h-8 rounded-lg bg-primary-600/8 flex items-center justify-center shrink-0 mt-0.5">
+                <span className="text-primary-600">{icon}</span>
             </div>
             <div className="flex-1 min-w-0">
                 <p className="text-xs font-semibold uppercase tracking-wide text-neutral-400 mb-0.5">{label}</p>
@@ -120,7 +120,7 @@ export default function Show({ pesan }: Props) {
                     <div className="flex flex-wrap items-center gap-3">
                         <a
                             href={`mailto:${pesan.email}?subject=Re: ${encodeURIComponent(pesan.subjek)}`}
-                            className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#003f87] text-white text-sm font-semibold rounded-xl hover:bg-[#002d6b] transition-colors"
+                            className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary-600 text-white text-sm font-semibold rounded-xl hover:bg-primary-800 transition-colors"
                         >
                             <Mail className="w-4 h-4" strokeWidth={1.5} />
                             Balas via Email
@@ -169,7 +169,7 @@ export default function Show({ pesan }: Props) {
                             value={
                                 <a
                                     href={`mailto:${pesan.email}`}
-                                    className="text-[#0050a8] hover:underline"
+                                    className="text-primary-500 hover:underline"
                                 >
                                     {pesan.email}
                                 </a>
@@ -180,7 +180,7 @@ export default function Show({ pesan }: Props) {
                                 icon={<Phone className="w-4 h-4" strokeWidth={1.5} />}
                                 label="Telepon"
                                 value={
-                                    <a href={`tel:${pesan.nomor_telepon}`} className="text-[#0050a8] hover:underline">
+                                    <a href={`tel:${pesan.nomor_telepon}`} className="text-primary-500 hover:underline">
                                         {pesan.nomor_telepon}
                                     </a>
                                 }

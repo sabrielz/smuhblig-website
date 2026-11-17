@@ -134,7 +134,7 @@ export default function Index({ settings, aiStats }: { settings: Record<string, 
                                 onClick={() => setActiveTab(tab.id)}
                                 className={`flex-shrink-0 snap-start flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg transition-colors text-left ${
                                     isActive
-                                    ? 'bg-[#003f87] text-white shadow-sm'
+                                    ? 'bg-primary-600 text-white shadow-sm'
                                     : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
                                 }`}
                             >
@@ -248,8 +248,8 @@ export default function Index({ settings, aiStats }: { settings: Record<string, 
                                 <h2 className="text-lg font-bold text-gray-900 mb-4 border-b pb-2">Pengaturan Kecerdasan Buatan (AI)</h2>
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                                    <div className="bg-[#003f87]/5 border border-primary-navy/10 rounded-xl p-4">
-                                        <span className="text-xs font-bold text-primary-navy uppercase">Total Job & Status</span>
+                                    <div className="bg-primary-600/5 border border-primary-900/10 rounded-xl p-4">
+                                        <span className="text-xs font-bold text-primary-900 uppercase">Total Job & Status</span>
                                         <div className="mt-2 text-2xl font-bold">{aiStats.total_jobs} <span className="text-sm font-normal text-gray-500">jobs bulan ini</span></div>
                                         <div className="flex gap-4 mt-2 text-sm text-gray-600">
                                             <span className="text-green-600 font-medium">✓ {aiStats.completed} Sukses</span>
@@ -323,7 +323,7 @@ export default function Index({ settings, aiStats }: { settings: Record<string, 
                                             placeholder="● ● ● ● ● ● ● ●"
                                             value={data.email_password}
                                             onChange={e => setData('email_password', e.target.value)}
-                                            className="w-full px-3.5 py-2.5 rounded-xl text-sm border border-gray-200 focus:border-[#003f87] focus:ring-2 focus:ring-[#003f87]/15 outline-none transition-all"
+                                            className="w-full px-3.5 py-2.5 rounded-xl text-sm border border-gray-200 focus:border-primary-600 focus:ring-2 focus:ring-primary-600/15 outline-none transition-all"
                                         />
                                         <p className="text-xs text-gray-400">Biarkan kosong jika tidak ingin mengubah password saat ini.</p>
                                     </div>
@@ -367,14 +367,14 @@ export default function Index({ settings, aiStats }: { settings: Record<string, 
                                                 placeholder="email@contoh.com"
                                                 value={testEmailAddress}
                                                 onChange={e => { setTestEmailAddress(e.target.value); setTestEmailResult(null); }}
-                                                className="w-full px-3.5 py-2.5 rounded-xl text-sm border border-gray-200 focus:border-[#003f87] focus:ring-2 focus:ring-[#003f87]/15 outline-none transition-all"
+                                                className="w-full px-3.5 py-2.5 rounded-xl text-sm border border-gray-200 focus:border-primary-600 focus:ring-2 focus:ring-primary-600/15 outline-none transition-all"
                                             />
                                         </div>
                                         <button
                                             type="button"
                                             onClick={handleTestEmail}
                                             disabled={testEmailLoading || !testEmailAddress}
-                                            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#003f87] text-white text-sm font-semibold hover:bg-[#002d6b] disabled:opacity-60 disabled:cursor-not-allowed transition-all shrink-0"
+                                            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary-600 text-white text-sm font-semibold hover:bg-primary-800 disabled:opacity-60 disabled:cursor-not-allowed transition-all shrink-0"
                                         >
                                             {testEmailLoading ? (
                                                 <Loader2 className="w-4 h-4 animate-spin" />

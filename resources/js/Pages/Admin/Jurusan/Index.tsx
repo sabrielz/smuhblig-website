@@ -23,7 +23,7 @@ export default function Index() {
                     <div key={jurusan.id} className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden flex flex-col">
                         <div
                             className="h-24 w-full"
-                            style={{ background: jurusan.color_gradient || 'linear-gradient(to right, #003f87, #001f4d)' }}
+                            style={{ background: jurusan.color_gradient || 'linear-gradient(to right, var(--color-primary-600), var(--color-primary-900))' }}
                         />
                         <div className="p-5 flex-1 flex flex-col pl-6">
                             <div className="flex justify-between items-start mb-2">

@@ -72,8 +72,8 @@ export default function Dashboard({
                         <p className="text-sm font-medium text-neutral-500 mb-1">Total Artikel Published</p>
                         <p className="text-3xl font-bold text-neutral-900">{totalArtikel.published}</p>
                     </div>
-                    <div className="h-12 w-12 rounded-xl bg-[#003f87]/10 flex items-center justify-center">
-                        <FileCheck className="h-6 w-6 text-[#003f87]" />
+                    <div className="h-12 w-12 rounded-xl bg-primary-600/10 flex items-center justify-center">
+                        <FileCheck className="h-6 w-6 text-primary-600" />
                     </div>
                 </div>
 
@@ -150,7 +150,7 @@ export default function Dashboard({
                                             <td className="px-6 py-4 text-right">
                                                 <Link
                                                     href={`/admin/artikel/${artikel.id}/edit`}
-                                                    className="inline-flex items-center justify-center w-8 h-8 rounded-md bg-neutral-100 text-neutral-600 hover:bg-[#003f87]/10 hover:text-[#003f87] transition-colors"
+                                                    className="inline-flex items-center justify-center w-8 h-8 rounded-md bg-neutral-100 text-neutral-600 hover:bg-primary-600/10 hover:text-primary-600 transition-colors"
                                                     title="Edit Artikel"
                                                 >
                                                     <Edit className="w-4 h-4" />
@@ -207,14 +207,14 @@ export default function Dashboard({
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                 <Link
                     href="/admin/artikel/buat"
-                    className="w-full sm:w-auto inline-flex items-center justify-center font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed bg-[#003f87] text-white hover:bg-[#002d6b] focus:ring-[#003f87]/50 border border-transparent px-6 py-3 min-h-[44px] text-base rounded-xl"
+                    className="w-full sm:w-auto inline-flex items-center justify-center font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed bg-primary-600 text-white hover:bg-primary-800 focus:ring-primary-600/50 border border-transparent px-6 py-3 min-h-[44px] text-base rounded-xl"
                 >
                     <Plus className="w-5 h-5 mr-2" />
                     Tulis Artikel Baru
                 </Link>
                 <Link
                     href="/admin/galeri/buat"
-                    className="w-full sm:w-auto inline-flex items-center justify-center font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed border-2 border-[#003f87] text-[#003f87] hover:bg-[#eef5fc] focus:ring-[#003f87]/50 px-6 py-3 min-h-[44px] text-base rounded-xl"
+                    className="w-full sm:w-auto inline-flex items-center justify-center font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed border-2 border-primary-600 text-primary-600 hover:bg-primary-50 focus:ring-primary-600/50 px-6 py-3 min-h-[44px] text-base rounded-xl"
                 >
                     <Images className="w-5 h-5 mr-2" />
                     Upload Galeri

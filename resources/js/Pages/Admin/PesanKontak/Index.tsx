@@ -108,7 +108,7 @@ export default function Index({ pesans, filters, totalBaru }: Props) {
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
                 <div>
                     <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
-                        <Mail className="w-6 h-6 text-[#003f87]" strokeWidth={1.5} />
+                        <Mail className="w-6 h-6 text-primary-600" strokeWidth={1.5} />
                         Pesan Masuk
                         {totalBaru > 0 && (
                             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-600 text-white">
@@ -146,7 +146,7 @@ export default function Index({ pesans, filters, totalBaru }: Props) {
                         className={cn(
                             'px-4 py-1.5 rounded-lg text-sm font-semibold transition-colors whitespace-nowrap',
                             activeFilter === opt.value
-                                ? 'bg-[#003f87] text-white'
+                                ? 'bg-primary-600 text-white'
                                 : 'text-neutral-600 hover:bg-neutral-100'
                         )}
                     >
@@ -158,8 +158,8 @@ export default function Index({ pesans, filters, totalBaru }: Props) {
             {/* Empty state */}
             {pesans.data.length === 0 ? (
                 <div className="bg-white rounded-2xl border border-neutral-100 shadow-sm p-16 flex flex-col items-center justify-center text-center">
-                    <div className="w-16 h-16 bg-[#003f87]/10 rounded-2xl flex items-center justify-center mb-4">
-                        <Inbox className="w-8 h-8 text-[#003f87]" strokeWidth={1.5} />
+                    <div className="w-16 h-16 bg-primary-600/10 rounded-2xl flex items-center justify-center mb-4">
+                        <Inbox className="w-8 h-8 text-primary-600" strokeWidth={1.5} />
                     </div>
                     <h3 className="text-lg font-bold text-neutral-900 mb-1">
                         {activeFilter === 'semua' ? 'Belum ada pesan masuk' : `Tidak ada pesan dengan status "${activeFilter}"`}
@@ -178,7 +178,7 @@ export default function Index({ pesans, filters, totalBaru }: Props) {
                                     <th className="w-10 px-4 py-3 text-left">
                                         <input
                                             type="checkbox"
-                                            className="rounded border-neutral-300 text-[#003f87] focus:ring-[#003f87]"
+                                            className="rounded border-neutral-300 text-primary-600 focus:ring-primary-600"
                                             checked={selectedIds.length === pesans.data.length && pesans.data.length > 0}
                                             onChange={toggleSelectAll}
                                         />
@@ -202,7 +202,7 @@ export default function Index({ pesans, filters, totalBaru }: Props) {
                                         <td className="w-10 px-4 py-3.5">
                                             <input
                                                 type="checkbox"
-                                                className="rounded border-neutral-300 text-[#003f87] focus:ring-[#003f87]"
+                                                className="rounded border-neutral-300 text-primary-600 focus:ring-primary-600"
                                                 checked={selectedIds.includes(pesan.id)}
                                                 onChange={() => toggleSelect(pesan.id)}
                                             />

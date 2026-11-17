@@ -174,7 +174,7 @@ function FieldEditor({ item, locale, value, onChange, section, aiEnabled = true 
     const baseInputClass = cn(
         'w-full rounded-lg border border-neutral-200 bg-white px-3 py-2',
         'text-sm text-neutral-800 placeholder:text-neutral-400',
-        'focus:outline-none focus:ring-2 focus:ring-[#003f87]/30 focus:border-[#003f87]',
+        'focus:outline-none focus:ring-2 focus:ring-primary-600/30 focus:border-primary-600',
         'transition-colors duration-150',
     );
 
@@ -233,7 +233,7 @@ function FieldEditor({ item, locale, value, onChange, section, aiEnabled = true 
                             href={value}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex items-center gap-1 px-3 py-2 rounded-lg border border-neutral-200 text-sm text-neutral-600 hover:text-[#003f87] hover:border-[#003f87] transition-colors"
+                            className="flex items-center gap-1 px-3 py-2 rounded-lg border border-neutral-200 text-sm text-neutral-600 hover:text-primary-600 hover:border-primary-600 transition-colors"
                             title="Buka link"
                         >
                             <ExternalLink className="w-4 h-4" strokeWidth={1.5} />
@@ -251,7 +251,7 @@ function FieldEditor({ item, locale, value, onChange, section, aiEnabled = true 
                     className="flex items-center gap-2 text-sm text-neutral-700 hover:text-neutral-900 transition-colors"
                 >
                     {value === 'true' ? (
-                        <ToggleRight className="w-8 h-8 text-[#003f87]" strokeWidth={1.5} />
+                        <ToggleRight className="w-8 h-8 text-primary-600" strokeWidth={1.5} />
                     ) : (
                         <ToggleLeft className="w-8 h-8 text-neutral-400" strokeWidth={1.5} />
                     )}
@@ -301,7 +301,7 @@ function SectionAccordion({ sectionName, items, values, onFieldChange, aiEnabled
                 className="w-full flex items-center justify-between px-5 py-4 hover:bg-neutral-50 transition-colors"
             >
                 <div className="flex items-center gap-3">
-                    <div className="w-1.5 h-5 rounded-full bg-[#003f87]" />
+                    <div className="w-1.5 h-5 rounded-full bg-primary-600" />
                     <span className="font-semibold text-neutral-800 text-sm">{displayName}</span>
                     <span className="text-xs text-neutral-400 font-normal">{items.length} field</span>
                 </div>
@@ -333,7 +333,7 @@ function SectionAccordion({ sectionName, items, values, onFieldChange, aiEnabled
                                     {/* ID */}
                                     <div className="space-y-2">
                                         <div className="flex items-center gap-2">
-                                            <span className="text-xs font-bold px-2 py-0.5 rounded bg-[#003f87] text-white">ID</span>
+                                            <span className="text-xs font-bold px-2 py-0.5 rounded bg-primary-600 text-white">ID</span>
                                             <span className="text-xs text-neutral-500">Bahasa Indonesia</span>
                                         </div>
                                         <FieldEditor
@@ -531,13 +531,13 @@ export default function KontenHalamanEdit() {
                 {/* ── Page Header ── */}
                 <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
                     <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-[#003f87]/10 flex items-center justify-center shrink-0">
-                            <PencilLine className="w-5 h-5 text-[#003f87]" strokeWidth={1.5} />
+                        <div className="w-10 h-10 rounded-xl bg-primary-600/10 flex items-center justify-center shrink-0">
+                            <PencilLine className="w-5 h-5 text-primary-600" strokeWidth={1.5} />
                         </div>
                         <div>
                             <h1 className="text-xl font-bold text-neutral-900">
                                 Kelola Konten:{' '}
-                                <span className="text-[#003f87]">{displayHalaman}</span>
+                                <span className="text-primary-600">{displayHalaman}</span>
                             </h1>
                             <p className="text-sm text-neutral-500 mt-0.5">
                                 Semua teks statis halaman {displayHalaman.toLowerCase()} bisa diubah di sini
@@ -555,9 +555,9 @@ export default function KontenHalamanEdit() {
                             disabled={isAiRunning}
                             className={cn(
                                 'flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200',
-                                'border border-[#c9a84c] text-[#8a6a1c] hover:bg-[#c9a84c] hover:text-white',
+                                'border border-gold-500 text-gold-700 hover:bg-gold-500 hover:text-white',
                                 'disabled:opacity-60 disabled:cursor-not-allowed',
-                                isAiRunning && 'bg-[#fdf7e8]',
+                                isAiRunning && 'bg-gold-100',
                             )}
                         >
                             {isAiRunning ? (
@@ -580,7 +580,7 @@ export default function KontenHalamanEdit() {
                             disabled={isSaving}
                             className={cn(
                                 'flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200',
-                                'bg-[#003f87] text-white hover:bg-[#002d6b] shadow-sm hover:shadow-md',
+                                'bg-primary-600 text-white hover:bg-primary-800 shadow-sm hover:shadow-md',
                                 'disabled:opacity-60 disabled:cursor-not-allowed',
                             )}
                         >
@@ -632,7 +632,7 @@ export default function KontenHalamanEdit() {
                                 className={cn(
                                     'flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150',
                                     page === halaman
-                                        ? 'bg-[#003f87] text-white shadow-sm'
+                                        ? 'bg-primary-600 text-white shadow-sm'
                                         : 'text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900',
                                 )}
                             >
@@ -656,7 +656,7 @@ export default function KontenHalamanEdit() {
                                 onChange={(e) => {
                                     router.visit(`/admin/konten/${e.target.value}`);
                                 }}
-                                className="w-full rounded-lg border border-neutral-200 bg-white px-3 py-2.5 text-sm text-neutral-800 focus:outline-none focus:ring-2 focus:ring-[#003f87]/30 focus:border-[#003f87]"
+                                className="w-full rounded-lg border border-neutral-200 bg-white px-3 py-2.5 text-sm text-neutral-800 focus:outline-none focus:ring-2 focus:ring-primary-600/30 focus:border-primary-600"
                             >
                                 {halamanValid.map((page) => (
                                     <option key={page} value={page}>
@@ -696,7 +696,7 @@ export default function KontenHalamanEdit() {
                                     disabled={isSaving}
                                     className={cn(
                                         'flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-all duration-200',
-                                        'bg-[#003f87] text-white hover:bg-[#002d6b] shadow-sm hover:shadow-md',
+                                        'bg-primary-600 text-white hover:bg-primary-800 shadow-sm hover:shadow-md',
                                         'disabled:opacity-60 disabled:cursor-not-allowed',
                                     )}
                                 >

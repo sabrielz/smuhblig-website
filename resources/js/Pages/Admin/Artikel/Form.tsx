@@ -565,9 +565,9 @@ export default function Form({ article, categories }: Props) {
                             {activeTab === 'en' && (
                                 <>
                                     {/* Translate button */}
-                                    <div className="flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-[#001f4d]/5 to-[#003f87]/5 border border-[#003f87]/10">
+                                    <div className="flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-primary-900/5 to-primary-600/5 border border-primary-600/10">
                                         <div>
-                                            <p className="text-sm font-semibold text-[#003f87]">
+                                            <p className="text-sm font-semibold text-primary-600">
                                                 Gunakan AI untuk menerjemahkan
                                             </p>
                                             <p className="text-xs text-neutral-500 mt-0.5">
@@ -578,7 +578,7 @@ export default function Form({ article, categories }: Props) {
                                             type="button"
                                             onClick={() => void handleTranslate()}
                                             disabled={translateJob.isPolling}
-                                            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#001f4d] to-[#003f87] text-white text-sm font-semibold hover:from-[#002a6b] hover:to-[#0050b0] transition-all shadow-md shadow-[#003f87]/20 disabled:opacity-50 disabled:cursor-not-allowed active:scale-95 whitespace-nowrap"
+                                            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-primary-900 to-primary-600 text-white text-sm font-semibold hover:from-primary-800 hover:to-primary-500 transition-all shadow-md shadow-primary-600/20 disabled:opacity-50 disabled:cursor-not-allowed active:scale-95 whitespace-nowrap"
                                         >
                                             {translateJob.isPolling ? (
                                                 <span className="w-3.5 h-3.5 border-2 border-white/40 border-t-white rounded-full animate-spin" />
@@ -738,7 +738,7 @@ function TabButton({ active, onClick, label }: TabButtonProps) {
             onClick={onClick}
             className={`px-6 py-2 rounded-xl text-sm font-semibold transition-all duration-200 ${
                 active
-                    ? 'bg-[#003f87] text-white shadow-sm'
+                    ? 'bg-primary-600 text-white shadow-sm'
                     : 'text-neutral-500 hover:text-neutral-900 hover:bg-neutral-50'
             }`}
         >
