@@ -25,6 +25,11 @@ interface ShowProps {
             name: string;
             avatar: string;
         };
+        tags?: Array<{
+            id: number;
+            name: string;
+            slug: string;
+        }>;
     };
     relatedArticles: any[];
     categories: {
@@ -196,6 +201,24 @@ export default function BeritaShow({ article, relatedArticles, categories }: Sho
                                     className="prose prose-base sm:prose-lg max-w-none prose-img:rounded-2xl prose-headings:font-serif prose-headings:text-neutral-900 prose-a:text-primary-navy hover:prose-a:text-primary-600 focus:outline-none"
                                     dangerouslySetInnerHTML={{ __html: article.content || '' }}
                                 />
+
+                                {/* Tag Artikel */}
+                                {article.tags && article.tags.length > 0 && (
+                                    <div className="mt-10 pt-6 border-t border-neutral-100 flex flex-wrap items-center gap-2">
+                                        <span className="text-xs font-semibold uppercase tracking-wider text-neutral-400 mr-1">
+                                            Tags:
+                                        </span>
+                                        {article.tags.map((tag) => (
+                                            <Link
+                                                key={tag.id}
+                                                href={route('berita.index', { tag: tag.name })}
+                                                className="inline-flex items-center px-3 py-1 rounded-full bg-neutral-100 hover:bg-primary-50 text-neutral-700 hover:text-primary-700 text-xs font-medium transition-colors"
+                                            >
+                                                #{tag.name}
+                                            </Link>
+                                        ))}
+                                    </div>
+                                )}
 
                                 {/* Share Buttons */}
                                 <div className="mt-16 pt-8 border-t border-neutral-100">

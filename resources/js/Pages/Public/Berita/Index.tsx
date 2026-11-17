@@ -9,7 +9,7 @@ import { Input } from '@/Components/UI/Input';
 import { motion } from 'framer-motion';
 import { fadeInUp, staggerContainer } from '@/lib/motion';
 import { cn } from '@/lib/utils';
-import { Search, Newspaper, ChevronRight } from 'lucide-react';
+import { Search, Newspaper, ChevronRight, X, Tag } from 'lucide-react';
 
 interface Category {
     id: number;
@@ -27,6 +27,7 @@ interface IndexProps {
     categories: Category[];
     filters: {
         category?: string;
+        tag?: string;
         q?: string;
     };
 }
@@ -147,13 +148,13 @@ export default function BeritaIndex({ articles, categories, filters }: IndexProp
 
             <div className="py-16 lg:py-24 bg-neutral-50 min-h-screen">
                 <div className="container px-4 mx-auto max-w-7xl">
-                    {/* SECTION 2: Filter Kategori */}
-                    <div className="flex flex-nowrap overflow-x-auto pb-4 mb-10 gap-2 scrollbar-hide no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
+                    {/* SECTION 2: Filter Kategori & Tag Aktif */}
+                    <div className="flex flex-nowrap overflow-x-auto pb-4 mb-6 gap-2 scrollbar-hide no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
                         <button
                             onClick={() => handleCategoryClick()}
                             className={cn(
                                 "whitespace-nowrap flex-shrink-0 px-6 py-2.5 rounded-full text-sm font-medium transition-colors border",
-                                !filters.category
+                                !filters.category && !filters.tag
                                     ? "bg-primary-600 text-white border-primary-navy shadow-sm"
                                     : "bg-white text-neutral-600 border-neutral-200 hover:border-primary-navy hover:text-primary-navy"
                             )}
@@ -176,6 +177,27 @@ export default function BeritaIndex({ articles, categories, filters }: IndexProp
                             </button>
                         ))}
                     </div>
+
+                    {/* Tag Filter Badge */}
+                    {filters.tag && (
+                        <div className="mb-8 flex items-center gap-2">
+                            <span className="text-sm text-neutral-500">Menampilkan topik:</span>
+                            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-50 text-primary-700 text-xs font-semibold border border-primary-200">
+                                <Tag className="w-3.5 h-3.5" />
+                                #{filters.tag}
+                                <Link
+                                    href={route('berita.index', {
+                                        ...(filters.category ? { category: filters.category } : {}),
+                                        ...(filters.q ? { q: filters.q } : {}),
+                                    })}
+                                    className="p-0.5 rounded-full hover:bg-primary-200 text-primary-700 transition-colors ml-0.5"
+                                    aria-label="Hapus filter tag"
+                                >
+                                    <X className="w-3.5 h-3.5" />
+                                </Link>
+                            </span>
+                        </div>
+                    )}
 
                     {/* SECTION 3: Grid Artikel */}
                     {articles.data.length > 0 ? (

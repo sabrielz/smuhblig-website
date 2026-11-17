@@ -6,6 +6,7 @@ import { Textarea } from '@/Components/UI/Textarea';
 import { Select } from '@/Components/UI/Select';
 import { Button } from '@/Components/UI/Button';
 import { ImageUpload } from '@/Components/UI/ImageUpload';
+import { TagInput } from '@/Components/UI/TagInput';
 import TipTapEditor from '@/Components/Editor/TipTapEditor';
 import { AiToolbar } from '@/Components/Editor/AiToolbar';
 import { AiBubble } from '@/Components/Editor/AiBubble';
@@ -69,6 +70,7 @@ interface ArticleData {
     // Translation status
     en_ai_translated?: boolean;
     en_reviewed?: boolean;
+    tags?: string[];
 }
 
 interface Props {
@@ -104,6 +106,8 @@ export default function Form({ article, categories }: Props) {
         title_en:   article?.title_en ?? '',
         excerpt_en: article?.excerpt_en ?? '',
         content_en: article?.content_en ?? '',
+        // Tags
+        tags: (article?.tags ?? []) as string[],
     });
 
     /* ── EN translation status ── */
@@ -678,6 +682,20 @@ export default function Form({ article, categories }: Props) {
                             ]}
                             error={errors.category_id}
                             required
+                        />
+                    </div>
+
+                    {/* Tag Artikel */}
+                    <div className="bg-white rounded-2xl shadow-sm border border-neutral-100 p-5 gap-3 flex flex-col">
+                        <div className="border-b border-neutral-100 pb-3">
+                            <h3 className="text-lg font-semibold text-neutral-900">Tag Artikel</h3>
+                        </div>
+                        <TagInput
+                            value={data.tags}
+                            onChange={(tags) => setData('tags', tags)}
+                            maxTags={10}
+                            placeholder="Ketik tag lalu tekan Enter..."
+                            error={errors.tags as string | undefined}
                         />
                     </div>
 
