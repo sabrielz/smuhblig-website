@@ -7,9 +7,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreArtikelRequest;
 use App\Http\Requests\Admin\UpdateArtikelRequest;
 use App\Http\Resources\Admin\ArtikelResource;
+use App\Jobs\TranslateArticle;
 use App\Models\Article;
 use App\Models\ArticleTranslation;
 use App\Models\Category;
+use App\Models\Pengaturan;
 use App\Models\User;
 use App\Services\HtmlSanitizer;
 use Illuminate\Http\Request;
@@ -148,6 +150,16 @@ class ArtikelController extends Controller
 
             DB::commit();
 
+            // Auto-translate EN if conditions met
+            if (
+                $validated['status'] === ArticleStatus::Published->value
+                && Pengaturan::bool('ai_translate_auto', false)
+                && Pengaturan::bool('artikel_ai_enabled', true)
+                && empty($validated['title_en'])
+            ) {
+                TranslateArticle::dispatch($article);
+            }
+
             return redirect()->route('admin.artikel.index')->with('success', 'Artikel berhasil dibuat.');
         } catch (\Exception $e) {
             DB::rollBack();
@@ -231,6 +243,17 @@ class ArtikelController extends Controller
 
             DB::commit();
 
+            // Auto-translate EN if conditions met
+            if (
+                $validated['status'] === ArticleStatus::Published->value
+                && Pengaturan::bool('ai_translate_auto', false)
+                && Pengaturan::bool('artikel_ai_enabled', true)
+                && empty($validated['title_en'])
+                && ! $artikel->translations()->where('locale', 'en')->exists()
+            ) {
+                TranslateArticle::dispatch($artikel);
+            }
+
             return redirect()->route('admin.artikel.index')->with('success', 'Artikel berhasil diperbarui.');
         } catch (\Exception $e) {
             DB::rollBack();
@@ -271,6 +294,15 @@ class ArtikelController extends Controller
                 'published_at' => now(),
             ]);
             DB::commit();
+
+            // Auto-translate EN if conditions met
+            if (
+                Pengaturan::bool('ai_translate_auto', false)
+                && Pengaturan::bool('artikel_ai_enabled', true)
+                && ! $artikel->translations()->where('locale', 'en')->exists()
+            ) {
+                TranslateArticle::dispatch($artikel);
+            }
 
             return back()->with('success', 'Artikel berhasil dipublish.');
         } catch (\Exception $e) {
