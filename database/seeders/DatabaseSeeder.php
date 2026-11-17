@@ -25,5 +25,11 @@ class DatabaseSeeder extends Seeder
             StatistikSeeder::class,
             StrukturOrganisasiSeeder::class,
         ]);
+
+        if (app()->environment('local')) {
+            $this->call([
+                GuruContohSeeder::class,
+            ]);
+        }
     }
 }
