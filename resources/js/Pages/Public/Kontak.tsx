@@ -21,8 +21,12 @@ import {
     MessageSquare,
     FileText,
     PhoneCall,
+    HelpCircle,
+    ArrowRight,
 } from 'lucide-react';
 import PublicLayout from '@/Layouts/PublicLayout';
+import Accordion from '@/Components/UI/Accordion';
+import { Link } from '@inertiajs/react';
 import type { SharedProps, Pengaturan, Tautan } from '@/types';
 import {
     fadeInUp,
@@ -37,10 +41,17 @@ import { cn } from '@/lib/utils';
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
+interface FaqKontakItem {
+    id: number;
+    pertanyaan: string;
+    jawaban: string;
+}
+
 interface KontakProps {
     pengaturan: Pengaturan;
     tautan: Tautan[];
     kontenInfo?: Record<string, string>;
+    faqUmum?: FaqKontakItem[];
 }
 
 // ---------------------------------------------------------------------------
@@ -725,15 +736,60 @@ const FormKontak = () => {
 };
 
 // ---------------------------------------------------------------------------
+// Section — FAQ Umum Singkat Sebelum Form
+// ---------------------------------------------------------------------------
+const FaqSingkatSection = ({ faqs }: { faqs?: FaqKontakItem[] }) => {
+    if (!faqs || faqs.length === 0) return null;
+
+    return (
+        <section className="py-12 bg-neutral-50/70 border-t border-neutral-200/60">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
+                <div className="text-center mb-8">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-50 text-primary-600 text-xs font-semibold mb-2">
+                        <HelpCircle className="w-3.5 h-3.5" />
+                        <span>Pertanyaan Umum</span>
+                    </div>
+                    <h2 className="font-serif text-2xl sm:text-3xl font-bold text-neutral-900">
+                        Pertanyaan yang Sering Diajukan
+                    </h2>
+                    <p className="text-xs sm:text-sm text-neutral-500 mt-2 max-w-xl mx-auto">
+                        Sebelum mengirimkan pesan, mungkin jawaban yang Anda butuhkan sudah tersedia pada daftar pertanyaan umum berikut.
+                    </p>
+                </div>
+
+                <Accordion
+                    items={faqs.map((f) => ({
+                        id: f.id,
+                        title: f.pertanyaan,
+                        content: f.jawaban,
+                    }))}
+                />
+
+                <div className="text-center mt-6">
+                    <Link
+                        href="/faq"
+                        className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-primary-600 hover:text-primary-700 hover:underline"
+                    >
+                        <span>Lihat Semua Pertanyaan & Jawaban di Halaman FAQ</span>
+                        <ArrowRight className="w-4 h-4" />
+                    </Link>
+                </div>
+            </div>
+        </section>
+    );
+};
+
+// ---------------------------------------------------------------------------
 // Page Component
 // ---------------------------------------------------------------------------
-export default function Kontak({ pengaturan, tautan, kontenInfo }: KontakProps) {
+export default function Kontak({ pengaturan, tautan, kontenInfo, faqUmum }: KontakProps) {
     const displayTautan = tautan && tautan.length > 0 ? tautan : FallbackTautan;
 
     return (
         <PublicLayout>
             <PageHero />
             <InfoDanPeta pengaturan={pengaturan} kontenInfo={kontenInfo} />
+            <FaqSingkatSection faqs={faqUmum} />
             <FormKontak />
             <TautanSection tautan={displayTautan} />
         </PublicLayout>

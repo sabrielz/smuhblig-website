@@ -41,6 +41,7 @@ Route::get('/prestasi', [App\Http\Controllers\Public\PrestasiController::class, 
 Route::get('/prestasi/{prestasi:slug}', [App\Http\Controllers\Public\PrestasiController::class, 'show'])->name('prestasi.show');
 Route::get('/unduhan', [App\Http\Controllers\Public\UnduhanController::class, 'index'])->name('unduhan.index');
 Route::get('/unduhan/{unduhan:slug}/berkas', [App\Http\Controllers\Public\UnduhanController::class, 'download'])->middleware('throttle:60,1')->name('unduhan.download');
+Route::get('/faq', [App\Http\Controllers\Public\FaqController::class, 'index'])->name('faq');
 Route::get('/kontak', [KontakController::class, 'index'])->name('kontak');
 Route::post('/kontak/kirim', [PublicPesanKontakController::class, 'store'])->middleware('throttle:form-kontak')->name('kontak.kirim');
 

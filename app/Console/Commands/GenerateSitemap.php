@@ -68,6 +68,7 @@ class GenerateSitemap extends Command
             ->add($makeUrl('/agenda', 0.8, Url::CHANGE_FREQUENCY_WEEKLY))
             ->add($makeUrl('/galeri', 0.8, Url::CHANGE_FREQUENCY_WEEKLY))
             ->add($makeUrl('/unduhan', 0.8, Url::CHANGE_FREQUENCY_WEEKLY))
+            ->add($makeUrl('/faq', 0.8, Url::CHANGE_FREQUENCY_WEEKLY))
             ->add($makeUrl('/kontak', 0.8, Url::CHANGE_FREQUENCY_MONTHLY))
             ->add($makeUrl('/tautan', 0.8, Url::CHANGE_FREQUENCY_MONTHLY));
 

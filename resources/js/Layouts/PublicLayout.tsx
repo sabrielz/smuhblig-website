@@ -11,12 +11,13 @@ import { SharedProps } from '@/types';
 // ---------------------------------------------------------------------------
 interface PublicLayoutProps {
     children: React.ReactNode;
+    jsonLd?: Record<string, any>[];
 }
 
 // ---------------------------------------------------------------------------
 // PublicLayout
 // ---------------------------------------------------------------------------
-export default function PublicLayout({ children }: PublicLayoutProps) {
+export default function PublicLayout({ children, jsonLd: additionalJsonLd }: PublicLayoutProps) {
     const { seo, pengaturan, csp_nonce } = usePage<SharedProps>().props;
     const { url: currentUrl } = usePage();
     const currentPath = currentUrl.split('?')[0];
@@ -59,6 +60,11 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                 <script type="application/ld+json" nonce={csp_nonce}>
                     {JSON.stringify(jsonLd)}
                 </script>
+                {additionalJsonLd && additionalJsonLd.map((schema, index) => (
+                    <script key={`jsonld-${index}`} type="application/ld+json" nonce={csp_nonce}>
+                        {JSON.stringify(schema)}
+                    </script>
+                ))}
             </Head>
 
             {/* ── Layout shell ── */}
