@@ -144,6 +144,12 @@ export default function AdminSidebar({ isOpen, setIsOpen }: SidebarProps) {
                               icon: Settings,
                               badge: null,
                           },
+                          {
+                              label: "Log Aktivitas",
+                              href: "/admin/aktivitas",
+                              icon: Activity,
+                              badge: null,
+                          },
                       ]
                     : []),
             ],

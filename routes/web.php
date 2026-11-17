@@ -85,6 +85,7 @@ Route::get('/agenda', [AgendaPublikController::class, 'index'])->name('agenda.in
 Route::get('/agenda/{agenda:slug}', [AgendaPublikController::class, 'show'])->name('agenda.show');
 Route::get('/agenda/{agenda:slug}/ics', [AgendaPublikController::class, 'ics'])->name('agenda.ics');
 
+use App\Http\Controllers\Admin\AktivitasController;
 use App\Http\Controllers\Admin\EkstrakurikulerController;
 use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\FasilitasController;
@@ -272,6 +273,9 @@ Route::middleware(['auth', EnsureHasCmsRole::class])
 
             // Pengguna CRUD — hanya admin
             Route::resource('pengguna', PenggunaController::class);
+
+            // Log Aktivitas Audit Trail — hanya admin
+            Route::get('/aktivitas', [AktivitasController::class, 'index'])->name('aktivitas.index');
         });
 
         // AI Features (async via queue)

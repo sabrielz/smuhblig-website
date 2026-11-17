@@ -10,3 +10,4 @@ Artisan::command('inspire', function () {
 
 Schedule::command('smk:cleanup')->weekly()->at('02:00');
 Schedule::command('sitemap:generate')->dailyAt('01:00');
+Schedule::command('activitylog:clean')->dailyAt('02:30');
