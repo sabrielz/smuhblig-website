@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreAgendaRequest;
 use App\Http\Resources\Admin\AgendaResource;
 use App\Models\Agenda;
+use App\Services\HtmlSanitizer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
@@ -80,7 +81,7 @@ class AgendaController extends Controller
                 $agenda->translations()->create([
                     'locale' => $locale,
                     'judul' => $data['judul'],
-                    'deskripsi' => $data['deskripsi'] ?? null,
+                    'deskripsi' => ! empty($data['deskripsi']) ? HtmlSanitizer::clean((string) $data['deskripsi']) : null,
                     'lokasi' => $data['lokasi'] ?? null,
                     'ai_translated' => false,
                     'reviewed' => true,
@@ -148,7 +149,7 @@ class AgendaController extends Controller
                         ['locale' => $locale],
                         [
                             'judul' => $data['judul'],
-                            'deskripsi' => $data['deskripsi'] ?? null,
+                            'deskripsi' => ! empty($data['deskripsi']) ? HtmlSanitizer::clean((string) $data['deskripsi']) : null,
                             'lokasi' => $data['lokasi'] ?? null,
                             'ai_translated' => false,
                             'reviewed' => true,

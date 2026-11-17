@@ -5,8 +5,11 @@ import { Button } from '@/Components/UI/Button';
 import { Input } from '@/Components/UI/Input';
 import { Textarea } from '@/Components/UI/Textarea';
 import { Select } from '@/Components/UI/Select';
+import TipTapEditor from '@/Components/Editor/TipTapEditor';
 import { ArrowLeft, Save, Bell, Calendar as CalendarIcon, Globe } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import type { SharedProps } from '@/types';
+import { usePage } from '@inertiajs/react';
 import toast from 'react-hot-toast';
 
 interface Pengumuman {
@@ -27,6 +30,8 @@ interface Props {
 
 export default function Form({ pengumuman }: Props) {
     const isEdit = !!pengumuman;
+    const { pengaturan } = usePage<SharedProps>().props;
+    const aiEnabled = pengaturan?.artikel_ai_enabled ?? true;
     const [activeTab, setActiveTab] = useState<'id' | 'en'>('id');
 
     const { data, setData, post, put, processing, errors } = useForm({
@@ -120,14 +125,18 @@ export default function Form({ pengumuman }: Props) {
                                         required
                                         autoFocus
                                     />
-                                    <Textarea
-                                        label="Isi Pengumuman"
-                                        value={data.konten_id || ''}
-                                        onChange={(e) => setData('konten_id', e.target.value)}
-                                        error={errors.konten_id}
-                                        rows={6}
-                                        required
-                                    />
+                                    <div>
+                                        <label className="block text-sm font-medium text-neutral-700 mb-1.5">
+                                            Isi Pengumuman <span className="text-red-500">*</span>
+                                        </label>
+                                        <TipTapEditor
+                                            value={data.konten_id || ''}
+                                            onChange={(html) => setData('konten_id', html)}
+                                            placeholder="Tulis detail isi pengumuman..."
+                                            error={errors.konten_id}
+                                            aiEnabled={aiEnabled}
+                                        />
+                                    </div>
                                 </div>
                             )}
 
@@ -142,13 +151,18 @@ export default function Form({ pengumuman }: Props) {
                                         onChange={(e) => setData('judul_en', e.target.value)}
                                         error={errors.judul_en}
                                     />
-                                    <Textarea
-                                        label="Isi Pengumuman (EN)"
-                                        value={data.konten_en || ''}
-                                        onChange={(e) => setData('konten_en', e.target.value)}
-                                        error={errors.konten_en}
-                                        rows={6}
-                                    />
+                                    <div>
+                                        <label className="block text-sm font-medium text-neutral-700 mb-1.5">
+                                            Isi Pengumuman (EN)
+                                        </label>
+                                        <TipTapEditor
+                                            value={data.konten_en || ''}
+                                            onChange={(html) => setData('konten_en', html)}
+                                            placeholder="Announcement content in English..."
+                                            error={errors.konten_en}
+                                            aiEnabled={aiEnabled}
+                                        />
+                                    </div>
                                 </div>
                             )}
                         </div>

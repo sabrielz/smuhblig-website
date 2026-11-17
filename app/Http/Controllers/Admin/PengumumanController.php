@@ -7,6 +7,7 @@ use App\Http\Requests\Admin\StorePengumumanRequest;
 use App\Http\Requests\Admin\UpdatePengumumanRequest;
 use App\Http\Resources\Admin\PengumumanResource;
 use App\Models\Pengumuman;
+use App\Services\HtmlSanitizer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Gate;
@@ -72,12 +73,12 @@ class PengumumanController extends Controller
             [
                 'locale' => 'id',
                 'judul' => $validated['judul_id'],
-                'konten' => $validated['konten_id'],
+                'konten' => HtmlSanitizer::clean($validated['konten_id'] ?? ''),
             ],
             [
                 'locale' => 'en',
                 'judul' => $validated['judul_en'] ?? $validated['judul_id'],
-                'konten' => $validated['konten_en'] ?? $validated['konten_id'],
+                'konten' => HtmlSanitizer::clean($validated['konten_en'] ?? $validated['konten_id'] ?? ''),
             ],
         ]);
 
@@ -122,14 +123,14 @@ class PengumumanController extends Controller
 
         $pengumuman->translations()->where('locale', 'id')->update([
             'judul' => $validated['judul_id'],
-            'konten' => $validated['konten_id'],
+            'konten' => HtmlSanitizer::clean($validated['konten_id'] ?? ''),
         ]);
 
         $pengumuman->translations()->updateOrCreate(
             ['locale' => 'en'],
             [
                 'judul' => $validated['judul_en'] ?? $validated['judul_id'],
-                'konten' => $validated['konten_en'] ?? $validated['konten_id'],
+                'konten' => HtmlSanitizer::clean($validated['konten_en'] ?? $validated['konten_id'] ?? ''),
             ]
         );
 

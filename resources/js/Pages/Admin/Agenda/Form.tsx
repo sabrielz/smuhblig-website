@@ -5,9 +5,12 @@ import { Button } from '@/Components/UI/Button';
 import { Input } from '@/Components/UI/Input';
 import { Textarea } from '@/Components/UI/Textarea';
 import { Switch } from '@/Components/UI/Switch';
+import TipTapEditor from '@/Components/Editor/TipTapEditor';
 import { ArrowLeft, Save, Globe } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/Components/UI/Tabs';
+import type { SharedProps } from '@/types';
+import { usePage } from '@inertiajs/react';
 
 interface AgendaTranslation {
     judul: string;
@@ -34,6 +37,9 @@ interface Props {
 }
 
 export default function Form({ agenda, isEdit }: Props) {
+    const { pengaturan } = usePage<SharedProps>().props;
+    const aiEnabled = pengaturan?.artikel_ai_enabled ?? true;
+
     const { data, setData, post, put, processing, errors } = useForm({
         tanggal_mulai: agenda?.tanggal_mulai || '',
         tanggal_selesai: agenda?.tanggal_selesai || '',
@@ -150,21 +156,18 @@ export default function Form({ agenda, isEdit }: Props) {
                                         </div>
 
                                         <div className="space-y-1">
-                                            <label className="text-sm font-medium text-gray-700">Deskripsi Singkat</label>
-                                            <Textarea
+                                            <label className="text-sm font-medium text-gray-700">Deskripsi</label>
+                                            <TipTapEditor
                                                 value={data.translations[lang as 'id' | 'en'].deskripsi || ''}
-                                                onChange={e => {
+                                                onChange={(html) => {
                                                     const newData = { ...data };
-                                                    newData.translations[lang as 'id' | 'en'].deskripsi = e.target.value;
+                                                    newData.translations[lang as 'id' | 'en'].deskripsi = html;
                                                     setData(newData);
                                                 }}
                                                 placeholder={lang === 'id' ? 'Keterangan tambahan...' : 'Additional notes...'}
-                                                rows={4}
-                                                className={cn(errors[`translations.${lang}.deskripsi` as keyof typeof errors] && "border-red-500 focus:ring-red-500")}
+                                                error={errors[`translations.${lang}.deskripsi` as keyof typeof errors]}
+                                                aiEnabled={aiEnabled}
                                             />
-                                            {errors[`translations.${lang}.deskripsi` as keyof typeof errors] && (
-                                                <p className="text-sm text-red-500">{errors[`translations.${lang}.deskripsi` as keyof typeof errors]}</p>
-                                            )}
                                         </div>
                                     </TabsContent>
                                 ))}
