@@ -18,7 +18,9 @@ export default function Index({ settings, aiStats }: { settings: Record<string, 
     const [testEmailResult, setTestEmailResult] = useState<{ success: boolean; message: string } | null>(null);
 
     const getCsrfToken = () =>
-        (document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement)?.content ?? '';
+        typeof document !== 'undefined'
+            ? (document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement)?.content ?? ''
+            : '';
 
     const handleTestEmail = async () => {
         if (!testEmailAddress) return;

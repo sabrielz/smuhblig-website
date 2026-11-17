@@ -31,7 +31,9 @@ export default function NotifikasiIndex({ notifikasi, activeFilter, belumDibacaC
     const { props } = usePage<SharedProps>();
 
     const getCsrfToken = () =>
-        (document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement)?.content ?? '';
+        typeof document !== 'undefined'
+            ? (document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement)?.content ?? ''
+            : '';
 
     const filters = [
         { key: 'semua', label: 'Semua', href: '/admin/notifikasi?filter=semua' },

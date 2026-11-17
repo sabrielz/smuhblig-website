@@ -28,6 +28,7 @@ import { SharedProps } from '@/types';
    CSRF helper
    ───────────────────────────────────────────── */
 function getCsrf(): string {
+    if (typeof document === 'undefined') return '';
     return (
         document.querySelector<HTMLMetaElement>('meta[name="csrf-token"]')?.content ?? ''
     );
