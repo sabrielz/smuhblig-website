@@ -82,6 +82,7 @@ interface Props {
 export default function Form({ article, categories }: Props) {
     const { auth, pengaturan } = usePage<SharedProps>().props;
     const aiEnabled = pengaturan?.artikel_ai_enabled ?? true;
+    const multibahasaEnabled = pengaturan?.multibahasa_enabled ?? true;
     const allowedStatuses = auth.user?.artikel_status_options ?? ['draft', 'pending_review'];
     const isEdit = !!article;
     const [activeTab, setActiveTab] = useState<'id' | 'en'>('id');
@@ -474,34 +475,36 @@ export default function Form({ article, categories }: Props) {
                 <div className="w-full md:w-[60%] lg:w-[65%] flex flex-col gap-6">
 
                     {/* Language Tab Switcher */}
-                    <div className="bg-white rounded-2xl shadow-sm border border-neutral-100 p-1 flex items-center gap-1 w-max">
-                        <TabButton
-                            active={activeTab === 'id'}
-                            onClick={() => setActiveTab('id')}
-                            label="Indonesia (ID)"
-                        />
-                        <div className="relative flex items-center gap-2">
+                    {multibahasaEnabled && (
+                        <div className="bg-white rounded-2xl shadow-sm border border-neutral-100 p-1 flex items-center gap-1 w-max">
                             <TabButton
-                                active={activeTab === 'en'}
-                                onClick={() => setActiveTab('en')}
-                                label="English (EN)"
+                                active={activeTab === 'id'}
+                                onClick={() => setActiveTab('id')}
+                                label="Indonesia (ID)"
                             />
-                            {/* Translation status badge next to EN tab */}
-                            {enTranslationStatus && (
-                                <div className="ml-1">
-                                    <AiStatusBadge
-                                        status={enTranslationStatus}
-                                        onMarkReviewed={
-                                            isEdit && enTranslationStatus === 'ai_translated'
-                                                ? handleMarkReviewed
-                                                : undefined
-                                        }
-                                        isMarkingReviewed={isMarkingReviewed}
-                                    />
-                                </div>
-                            )}
+                            <div className="relative flex items-center gap-2">
+                                <TabButton
+                                    active={activeTab === 'en'}
+                                    onClick={() => setActiveTab('en')}
+                                    label="English (EN)"
+                                />
+                                {/* Translation status badge next to EN tab */}
+                                {enTranslationStatus && (
+                                    <div className="ml-1">
+                                        <AiStatusBadge
+                                            status={enTranslationStatus}
+                                            onMarkReviewed={
+                                                isEdit && enTranslationStatus === 'ai_translated'
+                                                    ? handleMarkReviewed
+                                                    : undefined
+                                            }
+                                            isMarkingReviewed={isMarkingReviewed}
+                                        />
+                                    </div>
+                                )}
+                            </div>
                         </div>
-                    </div>
+                    )}
 
                     {/* Editor Card */}
                     <div className="bg-white rounded-2xl shadow-sm border border-neutral-100 overflow-hidden">

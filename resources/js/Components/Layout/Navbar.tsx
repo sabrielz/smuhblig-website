@@ -124,9 +124,10 @@ interface MobileMenuProps {
     currentPath: string;
     pengaturanName: string;
     spmbUrl?: string;
+    multibahasaEnabled?: boolean;
 }
 
-function MobileMenu({ isOpen, onClose, locale, navLinks, currentPath, pengaturanName, spmbUrl }: MobileMenuProps) {
+function MobileMenu({ isOpen, onClose, locale, navLinks, currentPath, pengaturanName, spmbUrl, multibahasaEnabled = true }: MobileMenuProps) {
     const easeOut: Easing = 'easeOut';
     const cubicBezierOpen: Easing = [0.25, 0.46, 0.45, 0.94];
     const cubicBezierClose: Easing = [0.55, 0, 1, 0.45];
@@ -238,10 +239,12 @@ function MobileMenu({ isOpen, onClose, locale, navLinks, currentPath, pengaturan
 
                         {/* Bottom: Language toggle + CTA */}
                         <div className="border-t border-white/10 px-6 py-6 space-y-4">
-                            <div className="flex items-center gap-3">
-                                <span className="text-sm text-white/50">Bahasa:</span>
-                                <LanguageToggle locale={locale} isScrolled={false} isDark />
-                            </div>
+                            {multibahasaEnabled && (
+                                <div className="flex items-center gap-3">
+                                    <span className="text-sm text-white/50">Bahasa:</span>
+                                    <LanguageToggle locale={locale} isScrolled={false} isDark />
+                                </div>
+                            )}
                             {spmbUrl && (
                                 <a
                                     href={spmbUrl}
@@ -463,6 +466,7 @@ function SearchOverlay({ isOpen, onClose, locale }: SearchOverlayProps) {
 // ---------------------------------------------------------------------------
 export default function Navbar() {
     const { locale, pengaturan } = usePage<SharedProps>().props;
+    const multibahasaEnabled = pengaturan?.multibahasa_enabled ?? true;
     const [isScrolled, setIsScrolled] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
     const [searchOpen, setSearchOpen] = useState(false);
@@ -560,12 +564,14 @@ export default function Navbar() {
                     {/* ── Right Actions ── */}
                     <div className="flex items-center gap-3">
                         {/* Language Toggle — desktop */}
-                        <div className={cn(
-                            'hidden lg:flex transition-colors duration-300',
-                            isScrolled ? 'text-[#636366]' : 'text-white',
-                        )}>
-                            <LanguageToggle locale={locale} isScrolled={isScrolled} />
-                        </div>
+                        {multibahasaEnabled && (
+                            <div className={cn(
+                                'hidden lg:flex transition-colors duration-300',
+                                isScrolled ? 'text-[#636366]' : 'text-white',
+                            )}>
+                                <LanguageToggle locale={locale} isScrolled={isScrolled} />
+                            </div>
+                        )}
 
                         {/* Search Action */}
                         <button
@@ -621,6 +627,7 @@ export default function Navbar() {
                 currentPath={currentPath}
                 pengaturanName={pengaturan?.site_name ?? 'SMK Muhammadiyah Bligo'}
                 spmbUrl={pengaturan?.spmb_url}
+                multibahasaEnabled={pengaturan?.multibahasa_enabled ?? true}
             />
         </>
     );

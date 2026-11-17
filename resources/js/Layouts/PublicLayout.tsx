@@ -53,7 +53,9 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                     <title>{pengaturan?.site_name || 'SMK Muhammadiyah Bligo'}</title>
                 )}
                 <link rel="alternate" hrefLang="id" href={`${baseUrl}${currentPath}?lang=id`} />
-                <link rel="alternate" hrefLang="en" href={`${baseUrl}${currentPath}?lang=en`} />
+                {(pengaturan?.multibahasa_enabled ?? true) && (
+                    <link rel="alternate" hrefLang="en" href={`${baseUrl}${currentPath}?lang=en`} />
+                )}
                 <script type="application/ld+json" nonce={csp_nonce}>
                     {JSON.stringify(jsonLd)}
                 </script>

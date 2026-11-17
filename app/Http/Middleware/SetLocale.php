@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Pengaturan;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,6 +20,13 @@ class SetLocale
      */
     public function handle(Request $request, Closure $next): Response
     {
+        // If multilingual is disabled, always enforce Indonesian ('id')
+        if (! Pengaturan::bool('multibahasa_enabled', true)) {
+            app()->setLocale('id');
+
+            return $next($request);
+        }
+
         $availableLocales = config('app.available_locales', ['id', 'en']);
 
         // 1. Check query param
