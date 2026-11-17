@@ -84,6 +84,7 @@ use App\Http\Controllers\Admin\EkstrakurikulerController;
 use App\Http\Controllers\Admin\FasilitasController;
 use App\Http\Controllers\Admin\GuruController;
 use App\Http\Controllers\Admin\KategoriController;
+use App\Http\Controllers\Admin\PrestasiController;
 use App\Http\Controllers\Admin\ProfilController;
 use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Public\PengumumanController as PublicPengumumanController;
@@ -198,6 +199,9 @@ Route::middleware(['auth', EnsureHasCmsRole::class])
         // Ekstrakurikuler
         Route::post('/ekstrakurikuler/reorder', [EkstrakurikulerController::class, 'reorder'])->name('ekstrakurikuler.reorder');
         Route::resource('ekstrakurikuler', EkstrakurikulerController::class)->except(['show']);
+
+        // Prestasi
+        Route::resource('prestasi', PrestasiController::class)->except(['show']);
 
         // Jurusan (Edit 5 existing only)
         Route::get('/jurusan', [App\Http\Controllers\Admin\JurusanController::class, 'index'])->name('jurusan.index');

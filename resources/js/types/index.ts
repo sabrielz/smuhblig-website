@@ -312,3 +312,33 @@ export interface Ekstrakurikuler {
     };
     created_at?: string;
 }
+
+export interface Prestasi {
+    id: number;
+    slug: string;
+    tingkat: 'sekolah' | 'kabupaten' | 'provinsi' | 'nasional' | 'internasional';
+    tingkat_label?: string;
+    kategori: 'akademik' | 'non_akademik';
+    kategori_label?: string;
+    tahun: number;
+    tanggal: string | null;
+    jurusan_id: number | null;
+    jurusan?: {
+        id: number;
+        nama: string;
+        slug: string;
+    } | null;
+    is_active: boolean;
+    foto_url: string | null;
+    translations: {
+        id: {
+            judul: string;
+            ringkasan: string | null;
+        };
+        en: {
+            judul: string | null;
+            ringkasan: string | null;
+        };
+    };
+    created_at?: string;
+}
