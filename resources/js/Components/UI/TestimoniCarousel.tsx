@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
 import { ChevronLeft, ChevronRight, Quote } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { Badge } from '@/Components/UI/Badge';
 
 export interface TestimoniItem {
@@ -17,19 +18,14 @@ interface Props {
     isEn?: boolean;
 }
 
-const PERAN_LABELS: Record<string, { id: string; en: string }> = {
-    alumni: { id: 'Alumni', en: 'Alumnus' },
-    orang_tua: { id: 'Orang Tua Siswa', en: 'Parent' },
-    mitra: { id: 'Mitra Industri', en: 'Industry Partner' },
-};
-
 const PERAN_BADGE_VARIANTS: Record<string, 'gold' | 'primary' | 'success' | 'warning' | 'neutral'> = {
     alumni: 'primary',
     orang_tua: 'gold',
     mitra: 'success',
 };
 
-export function TestimoniCarousel({ items, isEn = false }: Props) {
+export function TestimoniCarousel({ items }: Props) {
+    const { t } = useTranslation();
     const [emblaRef, emblaApi] = useEmblaCarousel({
         loop: true,
         align: 'start',
@@ -87,9 +83,7 @@ export function TestimoniCarousel({ items, isEn = false }: Props) {
                                 <div>
                                     <div className="flex items-center justify-between gap-2 mb-4">
                                         <Badge variant={PERAN_BADGE_VARIANTS[item.peran] || 'neutral'}>
-                                            {isEn
-                                                ? PERAN_LABELS[item.peran]?.en || item.peran
-                                                : PERAN_LABELS[item.peran]?.id || item.peran}
+                                            {t(`ui.peran.${item.peran}`, { defaultValue: item.peran })}
                                         </Badge>
                                         <div className="w-8 h-8 rounded-full bg-primary-50 text-primary-600 flex items-center justify-center shrink-0">
                                             <Quote className="w-4 h-4" />

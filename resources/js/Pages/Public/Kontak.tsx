@@ -1,5 +1,6 @@
 import { usePage, useForm } from '@inertiajs/react';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import {
     MapPin,
     Phone,
@@ -78,7 +79,9 @@ const GeometricPattern = () => (
 // ---------------------------------------------------------------------------
 // Section 1 — Page Hero
 // ---------------------------------------------------------------------------
-const PageHero = () => (
+const PageHero = () => {
+    const { t } = useTranslation();
+    return (
     <section className="relative bg-primary-900 overflow-hidden min-h-[360px] flex items-center">
         <GeometricPattern />
         <div className="absolute inset-0 bg-gradient-to-br from-primary-600/60 via-transparent to-primary-900" />
@@ -94,14 +97,14 @@ const PageHero = () => (
                     variants={fadeInUp}
                     className="text-xs font-bold tracking-[0.25em] uppercase text-gold-500 mb-4"
                 >
-                    HUBUNGI KAMI
+                    {t('kontak.eyebrow')}
                 </motion.p>
                 <motion.h1
                     variants={fadeInUp}
                     className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6"
                 >
-                    Kami Siap{' '}
-                    <span className="text-gold-500">Membantu</span> Anda
+                    {t('kontak.headline_prefix')}{' '}
+                    <span className="text-gold-500">{t('kontak.headline_highlight')}</span> {t('kontak.headline_suffix')}
                 </motion.h1>
                 <motion.nav
                     variants={fadeInUp}
@@ -109,17 +112,18 @@ const PageHero = () => (
                     className="flex items-center gap-2 text-sm text-white/60"
                 >
                     <a href="/" className="hover:text-white transition-colors duration-200">
-                        Beranda
+                        {t('nav.home')}
                     </a>
                     <ChevronRight size={14} className="text-white/40" />
-                    <span className="text-white/90">Kontak</span>
+                    <span className="text-white/90">{t('kontak.breadcrumb')}</span>
                 </motion.nav>
             </motion.div>
         </div>
 
         <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white to-transparent" />
     </section>
-);
+    );
+};
 
 // ---------------------------------------------------------------------------
 // Section 2 — Kontak Info + Peta

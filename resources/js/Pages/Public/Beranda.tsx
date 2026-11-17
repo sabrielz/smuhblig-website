@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Head, Link, usePage } from "@inertiajs/react";
 import { motion, useScroll, useTransform, useInView } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import {
     ChevronDown,
     ArrowRight,
@@ -390,8 +391,8 @@ export default function Beranda({
     kontenCtaAkhir = {},
     pengumumanUrgent = null,
 }: BerandaProps) {
-    const { pengaturan, locale } = usePage<SharedProps>().props;
-    const isEn = locale === 'en';
+    const { t } = useTranslation();
+    const { pengaturan } = usePage<SharedProps>().props;
 
     const heroRef = useRef<HTMLDivElement>(null);
     const { scrollY } = useScroll();
@@ -537,7 +538,7 @@ export default function Beranda({
                     aria-hidden="true"
                 >
                     <span className="text-white/40 text-xs tracking-widest uppercase font-mono">
-                        Scroll
+                        {t('beranda.scroll')}
                     </span>
                     <motion.div
                         animate={{ y: [0, 8, 0] }}
@@ -773,7 +774,7 @@ export default function Beranda({
                                                     href={`/prestasi/${p.slug}`}
                                                     className="inline-flex items-center gap-1 group-hover:text-primary-700 transition-colors"
                                                 >
-                                                    Detail Penghargaan
+                                                    {t('beranda.prestasi_badge')}
                                                     <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
                                                 </Link>
                                             </div>
@@ -793,7 +794,7 @@ export default function Beranda({
                                     href="/prestasi"
                                     className="inline-flex items-center gap-2 font-semibold text-primary-600 hover:text-primary-900 transition-colors group"
                                 >
-                                    Lihat Semua Prestasi Sekolah
+                                    {t('beranda.prestasi_all')}
                                     <ArrowRight
                                         className="w-4 h-4 transition-transform group-hover:translate-x-1"
                                         strokeWidth={1.5}
@@ -845,7 +846,7 @@ export default function Beranda({
                     ) : (
                         <div className="text-center py-16 text-neutral-500">
                             <BookOpen className="w-12 h-12 mx-auto mb-4 opacity-30" />
-                            <p>Belum ada berita yang dipublikasikan.</p>
+                            <p>{t('beranda.berita_empty')}</p>
                         </div>
                     )}
 
@@ -867,7 +868,7 @@ export default function Beranda({
                                     />
                                 }
                             >
-                                Lihat Semua Berita
+                                {t('beranda.berita_all')}
                             </Button>
                         </Link>
                     </motion.div>
@@ -887,16 +888,12 @@ export default function Beranda({
                     >
                         <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-16">
                             <SectionHeader
-                                label={isEn ? "TESTIMONIALS" : "BUKTI SOSIAL"}
-                                title={isEn ? "Stories of Success" : "Kisah Sukses & Kepercayaan"}
-                                subtitle={
-                                    isEn
-                                        ? "Hear what our alumni, parents, and industry partners say about SMK Muhammadiyah Bligo."
-                                        : "Dengarkan pengalaman nyata dari alumni, orang tua siswa, dan mitra industri yang telah bekerja sama dengan kami."
-                                }
+                                label={t('beranda.testimoni_label')}
+                                title={t('beranda.testimoni_title')}
+                                subtitle={t('beranda.testimoni_subtitle')}
                             />
 
-                            <TestimoniCarousel items={testimoni} isEn={isEn} />
+                            <TestimoniCarousel items={testimoni} />
                         </div>
                     </section>
                 </>
@@ -915,13 +912,9 @@ export default function Beranda({
                     >
                         <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-16">
                             <SectionHeader
-                                label={isEn ? "INDUSTRY PARTNERS" : "JEJARING INDUSTRI"}
-                                title={isEn ? "Trusted by Leading Companies" : "Dipercaya oleh Dunia Industri"}
-                                subtitle={
-                                    isEn
-                                        ? "Strong collaboration with industry partners for internships, curriculum alignment, and graduate recruitment."
-                                        : "Kolaborasi strategis dengan berbagai perusahaan nasional untuk program PKL, sinkronisasi kurikulum, dan penyaluran kerja lulusan."
-                                }
+                                label={t('beranda.mitra_label')}
+                                title={t('beranda.mitra_title')}
+                                subtitle={t('beranda.mitra_subtitle')}
                             />
 
                             <MitraStrip items={mitraIndustri} />

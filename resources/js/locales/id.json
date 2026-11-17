@@ -48,6 +48,35 @@
   "ui": {
     "announcement_urgent": "Pengumuman Penting",
     "announcement_view_detail": "Lihat Detail",
-    "announcement_close": "Tutup Pengumuman"
+    "announcement_close": "Tutup Pengumuman",
+    "peran": {
+      "alumni": "Alumni",
+      "orang_tua": "Orang Tua Siswa",
+      "mitra": "Mitra Industri"
+    }
+  },
+  "beranda": {
+    "scroll": "Gulir",
+    "prestasi_badge": "Detail Penghargaan",
+    "prestasi_all": "Lihat Semua Prestasi Sekolah",
+    "berita_empty": "Belum ada berita yang dipublikasikan.",
+    "berita_all": "Lihat Semua Berita & Informasi",
+    "testimoni_label": "BUKTI SOSIAL",
+    "testimoni_title": "Kisah Sukses & Kepercayaan",
+    "testimoni_subtitle": "Dengarkan pengalaman nyata dari alumni, orang tua siswa, dan mitra industri yang telah bekerja sama dengan kami.",
+    "mitra_label": "JEJARING INDUSTRI",
+    "mitra_title": "Dipercaya oleh Dunia Industri",
+    "mitra_subtitle": "Kolaborasi strategis dengan berbagai perusahaan nasional untuk program PKL, sinkronisasi kurikulum, dan penyaluran kerja lulusan."
+  },
+  "tentang": {
+    "eyebrow": "TENTANG KAMI",
+    "breadcrumb": "Tentang"
+  },
+  "kontak": {
+    "eyebrow": "HUBUNGI KAMI",
+    "headline_prefix": "Kami Siap",
+    "headline_highlight": "Membantu",
+    "headline_suffix": "Anda",
+    "breadcrumb": "Kontak"
   }
 }

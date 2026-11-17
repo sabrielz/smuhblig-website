@@ -48,6 +48,35 @@
   "ui": {
     "announcement_urgent": "Urgent Announcement",
     "announcement_view_detail": "View Details",
-    "announcement_close": "Close Announcement"
+    "announcement_close": "Close Announcement",
+    "peran": {
+      "alumni": "Alumnus",
+      "orang_tua": "Parent",
+      "mitra": "Industry Partner"
+    }
+  },
+  "beranda": {
+    "scroll": "Scroll",
+    "prestasi_badge": "Award Details",
+    "prestasi_all": "View All School Achievements",
+    "berita_empty": "No news has been published yet.",
+    "berita_all": "View All News & Updates",
+    "testimoni_label": "TESTIMONIALS",
+    "testimoni_title": "Stories of Success",
+    "testimoni_subtitle": "Hear what our alumni, parents, and industry partners say about SMK Muhammadiyah Bligo.",
+    "mitra_label": "INDUSTRY PARTNERS",
+    "mitra_title": "Trusted by Leading Companies",
+    "mitra_subtitle": "Strong collaboration with industry partners for internships, curriculum alignment, and graduate recruitment."
+  },
+  "tentang": {
+    "eyebrow": "ABOUT US",
+    "breadcrumb": "About"
+  },
+  "kontak": {
+    "eyebrow": "CONTACT US",
+    "headline_prefix": "We Are Ready to",
+    "headline_highlight": "Help",
+    "headline_suffix": "You",
+    "breadcrumb": "Contact"
   }
 }

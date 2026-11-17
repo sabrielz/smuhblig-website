@@ -1,5 +1,6 @@
 import { usePage } from '@inertiajs/react';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import { Check, Star, Lightbulb, RefreshCw, ChevronRight, User, BookOpen, Users, Briefcase } from 'lucide-react';
 import PublicLayout from '@/Layouts/PublicLayout';
 import type { SharedProps, Pengaturan } from '@/types';
@@ -48,7 +49,9 @@ const GeometricPattern = () => (
 // ---------------------------------------------------------------------------
 // Section 1 — Page Hero
 // ---------------------------------------------------------------------------
-const PageHero = ({ kontenHero }: { kontenHero?: Record<string, string> }) => (
+const PageHero = ({ kontenHero }: { kontenHero?: Record<string, string> }) => {
+    const { t } = useTranslation();
+    return (
     <section className="relative bg-primary-900 overflow-hidden min-h-[360px] flex items-center">
         <GeometricPattern />
 
@@ -67,7 +70,7 @@ const PageHero = ({ kontenHero }: { kontenHero?: Record<string, string> }) => (
                     variants={fadeInUp}
                     className="text-xs font-bold tracking-[0.25em] uppercase text-gold-500 mb-4"
                 >
-                    TENTANG KAMI
+                    {t('tentang.eyebrow')}
                 </motion.p>
 
                 {/* Headline */}
@@ -84,10 +87,10 @@ const PageHero = ({ kontenHero }: { kontenHero?: Record<string, string> }) => (
                     className="flex items-center gap-2 text-sm text-white/60"
                 >
                     <a href="/" className="hover:text-white transition-colors duration-200">
-                        Beranda
+                        {t('nav.home')}
                     </a>
                     <ChevronRight size={14} className="text-white/40" />
-                    <span className="text-white/90">Tentang</span>
+                    <span className="text-white/90">{t('tentang.breadcrumb')}</span>
                 </motion.nav>
             </motion.div>
         </div>
@@ -95,7 +98,8 @@ const PageHero = ({ kontenHero }: { kontenHero?: Record<string, string> }) => (
         {/* Bottom fade */}
         <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white to-transparent" />
     </section>
-);
+    );
+};
 
 // ---------------------------------------------------------------------------
 // Section 2 — Profil Singkat
