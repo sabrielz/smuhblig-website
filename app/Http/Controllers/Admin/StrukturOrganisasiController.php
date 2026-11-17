@@ -53,7 +53,7 @@ class StrukturOrganisasiController extends Controller
             'jabatan_en' => 'nullable|string|max:255',
             'level' => 'required|integer|in:0,1,2',
             'is_active' => 'boolean',
-            'foto' => 'nullable|image|max:2048',
+            'foto' => 'nullable|file|mimes:jpg,jpeg,png,webp|mimetypes:image/jpeg,image/png,image/webp|max:2048',
         ]);
 
         $maxUrutan = StrukturOrganisasi::where('parent_id', $validated['parent_id'])->max('urutan') ?? 0;
@@ -86,7 +86,7 @@ class StrukturOrganisasiController extends Controller
             'jabatan_en' => 'nullable|string|max:255',
             'level' => 'required|integer|in:0,1,2',
             'is_active' => 'boolean',
-            'foto' => 'nullable|image|max:2048',
+            'foto' => 'nullable|file|mimes:jpg,jpeg,png,webp|mimetypes:image/jpeg,image/png,image/webp|max:2048',
         ]);
 
         $struktur_organisasi->update([

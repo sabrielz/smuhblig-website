@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 class PengaturanController extends Controller
@@ -59,12 +60,18 @@ class PengaturanController extends Controller
         }
 
         if ($request->hasFile('site_logo_file')) {
-            $path = $request->file('site_logo_file')->store('settings', 'public');
+            $file = $request->file('site_logo_file');
+            $ext = $file->getClientOriginalExtension() ?: 'png';
+            $filename = Str::uuid().'.'.$ext;
+            $path = $file->storeAs('settings', $filename, 'public');
             Pengaturan::set('app_logo', 'storage/'.$path);
         }
 
         if ($request->hasFile('site_favicon_file')) {
-            $path = $request->file('site_favicon_file')->store('settings', 'public');
+            $file = $request->file('site_favicon_file');
+            $ext = $file->getClientOriginalExtension() ?: 'ico';
+            $filename = Str::uuid().'.'.$ext;
+            $path = $file->storeAs('settings', $filename, 'public');
             Pengaturan::set('app_favicon', 'storage/'.$path);
         }
 

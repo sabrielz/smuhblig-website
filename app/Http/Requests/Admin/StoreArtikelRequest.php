@@ -29,7 +29,13 @@ class StoreArtikelRequest extends FormRequest
             'published_at' => ['nullable', 'date'],
             'meta_title' => ['nullable', 'string', 'max:255'],
             'meta_description' => ['nullable', 'string'],
-            'thumbnail' => ['nullable', 'image', 'max:2048'], // max 2MB
+            'thumbnail' => [
+                'nullable',
+                'file',
+                'mimes:jpg,jpeg,png,webp',
+                'mimetypes:image/jpeg,image/png,image/webp',
+                'max:2048',
+            ], // max 2MB sesuai BR-004
 
             // Translations (ID) - Wajib
             'title_id' => ['required', 'string', 'max:500'],

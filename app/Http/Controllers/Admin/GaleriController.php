@@ -195,7 +195,7 @@ class GaleriController extends Controller
 
         $request->validate([
             'photos' => 'required|array|max:20',
-            'photos.*' => 'required|file|image|mimes:jpg,jpeg,png,webp|max:5120', // 5MB max
+            'photos.*' => 'required|file|mimes:jpg,jpeg,png,webp|mimetypes:image/jpeg,image/png,image/webp|max:20480', // 20MB max sesuai BR-004
         ]);
 
         foreach ($request->file('photos') as $photo) {

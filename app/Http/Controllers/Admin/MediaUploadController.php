@@ -40,7 +40,13 @@ class MediaUploadController extends Controller
     public function upload(Request $request): JsonResponse
     {
         $request->validate([
-            'image' => ['required', 'file', 'max:5120'], // max 5MB — validasi lanjutan di bawah
+            'image' => [
+                'required',
+                'file',
+                'mimes:jpg,jpeg,png,webp',
+                'mimetypes:image/jpeg,image/png,image/webp',
+                'max:2048',
+            ],
         ]);
 
         /** @var UploadedFile $file */

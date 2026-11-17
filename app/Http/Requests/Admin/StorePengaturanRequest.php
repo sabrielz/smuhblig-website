@@ -68,8 +68,20 @@ class StorePengaturanRequest extends FormRequest
             'email_admin_address' => ['nullable', 'string', 'max:255'],
 
             // File uploads
-            'site_logo_file' => ['nullable', 'file', 'image', 'mimes:jpg,jpeg,png,webp,ico', 'max:2048'],
-            'site_favicon_file' => ['nullable', 'file', 'image', 'mimes:jpg,jpeg,png,webp,ico', 'max:2048'],
+            'site_logo_file' => [
+                'nullable',
+                'file',
+                'mimes:jpg,jpeg,png,webp,ico',
+                'mimetypes:image/jpeg,image/png,image/webp,image/x-icon,image/vnd.microsoft.icon',
+                'max:2048',
+            ],
+            'site_favicon_file' => [
+                'nullable',
+                'file',
+                'mimes:jpg,jpeg,png,webp,ico',
+                'mimetypes:image/jpeg,image/png,image/webp,image/x-icon,image/vnd.microsoft.icon',
+                'max:2048',
+            ],
         ];
     }
 }
