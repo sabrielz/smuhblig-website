@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\ReorderTautanRequest;
 use App\Http\Requests\Admin\StoreTautanRequest;
 use App\Http\Requests\Admin\UpdateTautanRequest;
+use App\Http\Resources\Admin\TautanResource;
 use App\Models\Tautan;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -17,7 +18,7 @@ class TautanController extends Controller
         $tautans = Tautan::ordered()->get();
 
         return Inertia::render('Admin/Tautan/Index', [
-            'tautans' => $tautans,
+            'tautans' => TautanResource::collection($tautans),
         ]);
     }
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StorePenggunaRequest;
 use App\Http\Requests\Admin\UpdatePenggunaRequest;
+use App\Http\Resources\Admin\PenggunaResource;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
@@ -15,20 +16,10 @@ class PenggunaController extends Controller
     {
         $penggunas = User::with('roles')
             ->orderBy('name')
-            ->get()
-            ->map(function ($user) {
-                return [
-                    'id' => $user->id,
-                    'name' => $user->name,
-                    'email' => $user->email,
-                    'role' => $user->roles->first()?->name ?? '-',
-                    'is_active' => $user->is_active,
-                    'last_login_at' => $user->last_login_at?->format('d M Y, H:i'),
-                ];
-            });
+            ->get();
 
         return Inertia::render('Admin/Pengguna/Index', [
-            'penggunas' => $penggunas,
+            'penggunas' => PenggunaResource::collection($penggunas),
         ]);
     }
 

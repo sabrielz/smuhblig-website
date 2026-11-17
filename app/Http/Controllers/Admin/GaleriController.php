@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreGaleriRequest;
 use App\Http\Requests\Admin\UpdateGaleriRequest;
 use App\Http\Requests\Admin\UploadFotoGaleriRequest;
+use App\Http\Resources\Admin\GaleriResource;
 use App\Models\Galeri;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -23,21 +24,10 @@ class GaleriController extends Controller
         $galeris = Galeri::with(['translations', 'media'])
             ->orderBy('sort_order', 'asc')
             ->orderBy('created_at', 'desc')
-            ->get()
-            ->map(function (Galeri $galeri) {
-                return [
-                    'id' => $galeri->id,
-                    'judul' => $galeri->translation('id')?->judul ?? '-',
-                    'event_date' => $galeri->event_date?->format('Y-m-d'),
-                    'is_active' => $galeri->is_active,
-                    'is_featured' => $galeri->is_featured,
-                    'foto_count' => $galeri->media->count(),
-                    'thumbnail' => $galeri->getFirstMediaUrl('photos', 'preview') ?: $galeri->getFirstMediaUrl('photos'),
-                ];
-            });
+            ->get();
 
         return Inertia::render('Admin/Galeri/Index', [
-            'galeris' => $galeris,
+            'galeris' => GaleriResource::collection($galeris),
         ]);
     }
 

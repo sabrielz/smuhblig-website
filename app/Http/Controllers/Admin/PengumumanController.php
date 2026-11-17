@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StorePengumumanRequest;
 use App\Http\Requests\Admin\UpdatePengumumanRequest;
+use App\Http\Resources\Admin\PengumumanResource;
 use App\Models\Pengumuman;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -34,19 +35,7 @@ class PengumumanController extends Controller
         }
 
         $pengumumans = $query->paginate(10)->through(function ($p) {
-            $today = Carbon::today();
-            $isExpired = $p->tanggal_selesai && $p->tanggal_selesai->lt($today);
-            $isActive = $p->is_active && ! $isExpired;
-
-            return [
-                'id' => $p->id,
-                'judul' => $p->translation('id')?->judul ?? '-',
-                'tipe' => $p->tipe,
-                'tanggal_mulai' => $p->tanggal_mulai?->format('Y-m-d'),
-                'tanggal_selesai' => $p->tanggal_selesai?->format('Y-m-d'),
-                'is_active' => $isActive,
-                'status_label' => $isActive ? 'Aktif' : ($isExpired ? 'Kadaluarsa' : 'Tidak Aktif'),
-            ];
+            return (new PengumumanResource($p))->resolve();
         });
 
         return Inertia::render('Admin/Pengumuman/Index', [
