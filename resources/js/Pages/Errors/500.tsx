@@ -11,19 +11,19 @@ export default function Error500({ status }: { status: number }) {
             <Head title="500 Terjadi Kesalahan — SMK Muhammadiyah Bligo" />
 
             <div
-                className="min-h-screen flex items-center justify-center p-6 sm:p-8 relative overflow-hidden"
-                style={{ backgroundColor: '#001f4d', fontFamily: 'Plus Jakarta Sans, sans-serif' }}
+                className="min-h-screen flex items-center justify-center p-6 sm:p-8 relative overflow-hidden bg-primary-900"
+                style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}
             >
                 {/* Soft Bubble Pattern Overlay */}
                 <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none' }}>
                     <div
-                        style={{ position: 'absolute', top: '-20%', left: '-10%', width: '50vw', height: '50vw', maxWidth: '600px', maxHeight: '600px', borderRadius: '50%', opacity: 0.2, pointerEvents: 'none', background: 'radial-gradient(circle, #c9a84c 0%, transparent 70%)', filter: 'blur(80px)' }}
+                        style={{ position: 'absolute', top: '-20%', left: '-10%', width: '50vw', height: '50vw', maxWidth: '600px', maxHeight: '600px', borderRadius: '50%', opacity: 0.2, pointerEvents: 'none', background: 'radial-gradient(circle, var(--color-gold-500) 0%, transparent 70%)', filter: 'blur(80px)' }}
                     />
                     <div
-                        style={{ position: 'absolute', bottom: '-20%', right: '-10%', width: '60vw', height: '60vw', maxWidth: '800px', maxHeight: '800px', borderRadius: '50%', opacity: 0.3, pointerEvents: 'none', background: 'radial-gradient(circle, #0050a8 0%, transparent 70%)', filter: 'blur(100px)' }}
+                        style={{ position: 'absolute', bottom: '-20%', right: '-10%', width: '60vw', height: '60vw', maxWidth: '800px', maxHeight: '800px', borderRadius: '50%', opacity: 0.3, pointerEvents: 'none', background: 'radial-gradient(circle, var(--color-primary-500) 0%, transparent 70%)', filter: 'blur(100px)' }}
                     />
                     <div
-                        style={{ position: 'absolute', top: '20%', right: '10%', width: '40vw', height: '40vw', maxWidth: '500px', maxHeight: '500px', borderRadius: '50%', opacity: 0.1, pointerEvents: 'none', background: 'radial-gradient(circle, #ffffff 0%, transparent 70%)', filter: 'blur(60px)' }}
+                        style={{ position: 'absolute', top: '20%', right: '10%', width: '40vw', height: '40vw', maxWidth: '500px', maxHeight: '500px', borderRadius: '50%', opacity: 0.1, pointerEvents: 'none', background: 'radial-gradient(circle, var(--color-neutral-0) 0%, transparent 70%)', filter: 'blur(60px)' }}
                     />
                 </div>
 
@@ -65,8 +65,7 @@ export default function Error500({ status }: { status: number }) {
                         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto">
                             <button
                                 onClick={() => window.location.reload()}
-                                className="inline-flex items-center justify-center gap-2 font-semibold transition-all duration-200 px-8 py-4 rounded-xl text-white shadow-lg w-full sm:w-auto hover:opacity-90"
-                                style={{ background: 'linear-gradient(135deg, #c9a84c 0%, #a8821f 100%)' }}
+                                className="inline-flex items-center justify-center gap-2 font-semibold transition-all duration-200 px-8 py-4 rounded-xl text-white shadow-lg w-full sm:w-auto hover:opacity-90 bg-gradient-to-r from-gold-500 to-gold-600"
                             >
                                 <RefreshCw className="w-5 h-5" strokeWidth={1.5} />
                                 Muat Ulang Halaman

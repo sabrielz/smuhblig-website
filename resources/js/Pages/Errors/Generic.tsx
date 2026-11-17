@@ -10,15 +10,15 @@ function BubbleBackground() {
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
             <div
                 className="absolute top-[-20%] left-[-10%] w-[50vw] h-[50vw] max-w-[600px] max-h-[600px] rounded-full opacity-20 pointer-events-none"
-                style={{ background: 'radial-gradient(circle, #c9a84c 0%, transparent 70%)', filter: 'blur(80px)' }}
+                style={{ background: 'radial-gradient(circle, var(--color-gold-500) 0%, transparent 70%)', filter: 'blur(80px)' }}
             />
             <div
                 className="absolute bottom-[-20%] right-[-10%] w-[60vw] h-[60vw] max-w-[800px] max-h-[800px] rounded-full opacity-30 pointer-events-none"
-                style={{ background: 'radial-gradient(circle, #0050a8 0%, transparent 70%)', filter: 'blur(100px)' }}
+                style={{ background: 'radial-gradient(circle, var(--color-primary-500) 0%, transparent 70%)', filter: 'blur(100px)' }}
             />
             <div
                 className="absolute top-[20%] right-[10%] w-[40vw] h-[40vw] max-w-[500px] max-h-[500px] rounded-full opacity-10 pointer-events-none"
-                style={{ background: 'radial-gradient(circle, #ffffff 0%, transparent 70%)', filter: 'blur(60px)' }}
+                style={{ background: 'radial-gradient(circle, var(--color-neutral-0) 0%, transparent 70%)', filter: 'blur(60px)' }}
             />
         </div>
     );
@@ -29,7 +29,7 @@ export default function ErrorGeneric({ status }: { status: number }) {
         <PublicLayout>
             <Head title={`${status} Terjadi Kesalahan — SMK Muhammadiyah Bligo`} />
 
-            <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden bg-[#001f4d]">
+            <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden bg-primary-900">
                 {/* Soft Bubble Pattern Overlay */}
                 <BubbleBackground />
 
@@ -43,7 +43,7 @@ export default function ErrorGeneric({ status }: { status: number }) {
                         {/* Background Text Status */}
                         <motion.div
                             variants={scaleIn}
-                            className="absolute z-0 font-serif font-bold select-none text-[#c9a84c] opacity-15"
+                            className="absolute z-0 font-serif font-bold select-none text-gold-500 opacity-15"
                             style={{
                                 fontFamily: 'Playfair Display, Georgia, serif',
                                 fontSize: 'clamp(80px, 15vw, 150px)',
@@ -70,8 +70,7 @@ export default function ErrorGeneric({ status }: { status: number }) {
                             <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
                                 <button
                                     onClick={() => window.location.reload()}
-                                    className="inline-flex items-center justify-center gap-2 font-semibold transition-all duration-200 px-8 py-4 rounded-xl text-white shadow-lg focus:outline-none focus:ring-2 focus:ring-[#c9a84c]/50 hover:shadow-xl hover:opacity-90 w-full sm:w-auto"
-                                    style={{ background: 'linear-gradient(135deg, #c9a84c 0%, #a8821f 100%)' }}
+                                    className="inline-flex items-center justify-center gap-2 font-semibold transition-all duration-200 px-8 py-4 rounded-xl text-white shadow-lg focus:outline-none focus:ring-2 focus:ring-gold-500/50 hover:shadow-xl hover:opacity-90 w-full sm:w-auto bg-gradient-to-r from-gold-500 to-gold-600"
                                 >
                                     <RefreshCw className="w-5 h-5" strokeWidth={1.5} />
                                     Muat Ulang Halaman

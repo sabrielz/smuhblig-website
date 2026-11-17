@@ -107,8 +107,8 @@ export function ImageUpload({
                     'relative overflow-hidden rounded-xl border-2 border-dashed transition-all duration-200 cursor-pointer group',
                     aspectRatio,
                     isDragging
-                        ? 'border-[#003f87] bg-blue-50/50'
-                        : 'border-neutral-300 hover:border-[#003f87] hover:bg-neutral-50',
+                        ? 'border-primary-600 bg-primary-50/50'
+                        : 'border-neutral-300 hover:border-primary-600 hover:bg-neutral-50',
                     displayError ? 'border-red-500 hover:border-red-600' : ''
                 )}
                 onDragOver={handleDragOver}
@@ -143,7 +143,7 @@ export function ImageUpload({
                     </div>
                 ) : (
                     <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center text-neutral-500">
-                        <div className="w-12 h-12 mb-4 rounded-full bg-neutral-100 flex items-center justify-center text-neutral-600 group-hover:bg-[#003f87]/10 group-hover:text-[#003f87] transition-colors">
+                        <div className="w-12 h-12 mb-4 rounded-full bg-neutral-100 flex items-center justify-center text-neutral-600 group-hover:bg-primary-600/10 group-hover:text-primary-600 transition-colors">
                             <UploadCloud className="w-6 h-6" />
                         </div>
                         <p className="text-sm font-medium text-neutral-700 mb-1">

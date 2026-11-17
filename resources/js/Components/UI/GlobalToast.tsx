@@ -7,20 +7,20 @@ export function GlobalToast() {
             toastOptions={{
                 className: 'font-sans text-sm rounded-xl shadow-lg border border-neutral-100',
                 style: {
-                    background: '#ffffff',
-                    color: '#111111',
+                    background: 'var(--color-neutral-0)',
+                    color: 'var(--color-neutral-900)',
                     padding: '16px',
                 },
                 success: {
                     iconTheme: {
-                        primary: '#30d158',
-                        secondary: '#ffffff',
+                        primary: 'var(--color-success)',
+                        secondary: 'var(--color-neutral-0)',
                     },
                 },
                 error: {
                     iconTheme: {
-                        primary: '#ff453a',
-                        secondary: '#ffffff',
+                        primary: 'var(--color-error)',
+                        secondary: 'var(--color-neutral-0)',
                     },
                 },
             }}

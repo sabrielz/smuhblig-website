@@ -71,7 +71,7 @@ export function ConfirmDialog({
                                         'flex-shrink-0 flex items-center justify-center w-12 h-12 rounded-full',
                                         isDanger
                                             ? 'bg-red-100 text-red-600'
-                                            : 'bg-blue-100 text-[#003f87]'
+                                            : 'bg-primary-50 text-primary-600'
                                     )}
                                 >
                                     {isDanger ? (
@@ -108,7 +108,7 @@ export function ConfirmDialog({
                                     'w-full sm:w-auto px-4 py-2 text-sm font-medium text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors disabled:opacity-50 flex items-center justify-center',
                                     isDanger
                                         ? 'bg-red-600 hover:bg-red-700 focus:ring-red-500'
-                                        : 'bg-[#003f87] hover:bg-[#003f87]/90 focus:ring-[#003f87]'
+                                        : 'bg-primary-600 hover:bg-primary-600/90 focus:ring-primary-600'
                                 )}
                             >
                                 {isLoading ? (

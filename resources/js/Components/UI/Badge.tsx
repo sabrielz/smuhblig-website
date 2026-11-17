@@ -16,8 +16,8 @@ export function Badge({
     const baseStyles = 'inline-flex items-center justify-center rounded-full font-medium';
 
     const variants = {
-        primary: 'bg-[#003f87]/10 text-[#003f87]',
-        gold: 'bg-[#c9a84c]/10 text-[#c9a84c]',
+        primary: 'bg-primary-600/10 text-primary-600',
+        gold: 'bg-gold-500/10 text-gold-500',
         success: 'bg-emerald-100 text-emerald-800',
         warning: 'bg-amber-100 text-amber-800',
         danger: 'bg-red-100 text-red-800',

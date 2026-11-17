@@ -21,7 +21,7 @@ export function Pagination({
         const maxVisiblePages = 5;
 
         let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
-        let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+        const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
 
         if (endPage - startPage + 1 < maxVisiblePages) {
             startPage = Math.max(1, endPage - maxVisiblePages + 1);
@@ -54,7 +54,7 @@ export function Pagination({
                     className={cn(
                         'w-10 h-10 flex items-center justify-center rounded-lg text-sm font-medium transition-colors',
                         currentPage === i
-                            ? 'bg-[#003f87] text-white shadow-sm'
+                            ? 'bg-primary-600 text-white shadow-sm'
                             : 'text-neutral-600 hover:bg-neutral-100'
                     )}
                 >

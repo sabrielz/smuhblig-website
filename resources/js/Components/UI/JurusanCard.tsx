@@ -25,7 +25,7 @@ export function JurusanCard({ jurusan, className }: JurusanCardProps) {
         <motion.div
             whileHover={{ y: -6, transition: { duration: 0.25, ease: 'easeOut' } }}
             className={cn(
-                "relative group overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-shadow duration-300 bg-[#001f4d]",
+                "relative group overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-shadow duration-300 bg-primary-900",
                 className
             )}
             style={

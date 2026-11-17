@@ -25,11 +25,11 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         const baseStyles = 'inline-flex items-center justify-center font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed min-h-[44px] md:min-h-0';
 
         const variants = {
-            primary: 'bg-[#003f87] text-white hover:bg-[#002d6b] focus:ring-[#003f87]/50 border border-transparent',
-            gold: 'bg-[#c9a84c] text-white hover:bg-[#a8821f] focus:ring-[#c9a84c]/50 border border-transparent',
-            outline: 'border-2 border-[#003f87] text-[#003f87] hover:bg-[#eef5fc] focus:ring-[#003f87]/50',
-            ghost: 'text-[#003f87] hover:bg-[#eef5fc] focus:ring-[#003f87]/50 border border-transparent',
-            white: 'bg-white text-[#003f87] hover:bg-neutral-100 focus:ring-white/50 border border-transparent',
+            primary: 'bg-primary-600 text-white hover:bg-primary-800 focus:ring-primary-600/50 border border-transparent',
+            gold: 'bg-gold-500 text-white hover:bg-gold-600 focus:ring-gold-500/50 border border-transparent',
+            outline: 'border-2 border-primary-600 text-primary-600 hover:bg-primary-50 focus:ring-primary-600/50',
+            ghost: 'text-primary-600 hover:bg-primary-50 focus:ring-primary-600/50 border border-transparent',
+            white: 'bg-white text-primary-600 hover:bg-neutral-100 focus:ring-white/50 border border-transparent',
             danger: 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-600/50 border border-transparent',
         };
 
