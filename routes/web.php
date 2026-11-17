@@ -73,6 +73,7 @@ use Illuminate\Http\Request;
 
 Route::get('/agenda', [AgendaPublikController::class, 'index'])->name('agenda.index');
 Route::get('/agenda/{agenda:slug}', [AgendaPublikController::class, 'show'])->name('agenda.show');
+Route::get('/agenda/{agenda:slug}/ics', [AgendaPublikController::class, 'ics'])->name('agenda.ics');
 
 use App\Http\Controllers\Admin\KategoriController;
 use App\Http\Controllers\Admin\ProfilController;

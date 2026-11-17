@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
+use Symfony\Component\HttpFoundation\Response;
 
 class AgendaPublikController extends Controller
 {
@@ -79,6 +80,69 @@ class AgendaPublikController extends Controller
 
         return Inertia::render('Public/AgendaDetail', [
             'agenda' => new AgendaResource($agenda),
+        ]);
+    }
+
+    public function ics(Agenda $agenda): Response
+    {
+        if (! $agenda->is_active) {
+            abort(404);
+        }
+
+        $agenda->load('translations');
+        $locale = app()->getLocale();
+        $trans = $agenda->translation($locale) ?? $agenda->translation('id') ?? $agenda->translations()->first();
+
+        $judul = $trans ? $trans->judul : ($agenda->judul ?? 'Agenda');
+        $deskripsi = $trans ? $trans->deskripsi : '';
+        $lokasi = $trans ? ($trans->lokasi ?? '') : '';
+
+        // Format tanggal all-day (VALUE=DATE:YYYYMMDD)
+        $dtStart = $agenda->tanggal_mulai->format('Ymd');
+
+        // iCalendar standar DTEND untuk all-day adalah exclusive (tanggal_selesai + 1 hari)
+        $endDate = $agenda->tanggal_selesai
+            ? $agenda->tanggal_selesai->copy()->addDay()
+            : $agenda->tanggal_mulai->copy()->addDay();
+        $dtEnd = $endDate->format('Ymd');
+
+        // Bersihkan deskripsi & lokasi (strip tags & escape koma, titik dua, backslash)
+        $cleanDesc = strip_tags($deskripsi);
+        $cleanDesc = str_replace(["\r\n", "\r", "\n"], '\\n', $cleanDesc);
+        $cleanDesc = addcslashes($cleanDesc, ',;\\');
+
+        $cleanSummary = addcslashes($judul, ',;\\');
+        $cleanLocation = addcslashes($lokasi, ',;\\');
+
+        $dtStamp = now()->format('Ymd\THis\Z');
+        $uid = "agenda-{$agenda->id}@smkmuhbligo.sch.id";
+
+        $lines = [
+            'BEGIN:VCALENDAR',
+            'VERSION:2.0',
+            'PRODID:-//SMK Muhammadiyah Bligo//NONSGML v1.0//ID',
+            'CALSCALE:GREGORIAN',
+            'METHOD:PUBLISH',
+            'BEGIN:VEVENT',
+            "UID:{$uid}",
+            "DTSTAMP:{$dtStamp}",
+            "DTSTART;VALUE=DATE:{$dtStart}",
+            "DTEND;VALUE=DATE:{$dtEnd}",
+            "SUMMARY:{$cleanSummary}",
+            "DESCRIPTION:{$cleanDesc}",
+            "LOCATION:{$cleanLocation}",
+            'STATUS:CONFIRMED',
+            'END:VEVENT',
+            'END:VCALENDAR',
+        ];
+
+        // Format baris diakhiri CRLF (\r\n) sesuai RFC 5545
+        $content = implode("\r\n", $lines)."\r\n";
+        $filename = "agenda-{$agenda->slug}.ics";
+
+        return response($content, 200, [
+            'Content-Type' => 'text/calendar; charset=utf-8',
+            'Content-Disposition' => "attachment; filename=\"{$filename}\"",
         ]);
     }
 }

@@ -1,6 +1,6 @@
 import { usePage, Link } from '@inertiajs/react';
 import { motion } from 'framer-motion';
-import { ChevronRight, Calendar, MapPin, Clock, ArrowLeft } from 'lucide-react';
+import { ChevronRight, Calendar, MapPin, Clock, ArrowLeft, Download } from 'lucide-react';
 import PublicLayout from '@/Layouts/PublicLayout';
 import type { SharedProps } from '@/types';
 import { fadeInUp, staggerContainer } from '@/lib/motion';
@@ -204,6 +204,18 @@ export default function AgendaDetail({ agenda }: AgendaDetailProps) {
                                             </div>
                                         </div>
                                     )}
+                                </div>
+
+                                {/* Tombol Tambah ke Kalender (.ics) */}
+                                <div className="mb-8">
+                                    <a
+                                        href={route('agenda.ics', { agenda: data.slug })}
+                                        download
+                                        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary-600 hover:bg-primary-700 text-white font-semibold text-sm transition-colors shadow-sm"
+                                    >
+                                        <Download className="w-4 h-4" />
+                                        <span>{locale === 'en' ? 'Add to Calendar (.ics)' : 'Tambah ke Kalender (.ics)'}</span>
+                                    </a>
                                 </div>
 
                                 {translation.deskripsi && (
