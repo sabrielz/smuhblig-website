@@ -49,16 +49,16 @@ const IslamicPattern = () => (
 // ---------------------------------------------------------------------------
 const LogoMark = () => (
     <div className="flex items-center gap-3">
-        <div className="w-12 h-12 rounded-xl bg-[#c9a84c]/20 border border-[#c9a84c]/40 flex items-center justify-center">
-            <span className="text-[#c9a84c] font-bold text-lg" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+        <div className="w-12 h-12 rounded-xl bg-gold-500/20 border border-gold-500/40 flex items-center justify-center">
+            <span className="text-gold-500 font-bold text-lg font-sans">
                 SMK
             </span>
         </div>
         <div>
-            <div className="text-white font-bold text-sm leading-tight" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+            <div className="text-white font-bold text-sm leading-tight font-sans">
                 SMK Muhammadiyah
             </div>
-            <div className="text-[#c9a84c] text-xs font-medium tracking-wide">
+            <div className="text-gold-500 text-xs font-medium tracking-wide">
                 Bligo
             </div>
         </div>
@@ -93,8 +93,7 @@ export default function Login() {
                 LEFT PANEL — Branded Visual (60%)
             ---------------------------------------------------------------- */}
             <motion.div
-                className="relative hidden md:flex md:w-[60%] flex-col justify-between p-12 overflow-hidden"
-                style={{ backgroundColor: '#001f4d' }}
+                className="relative hidden md:flex md:w-[60%] flex-col justify-between p-12 overflow-hidden bg-primary-900"
                 variants={fadeIn}
                 initial="hidden"
                 animate="visible"
@@ -136,30 +135,23 @@ export default function Login() {
                 >
                     <motion.p
                         variants={fadeInUp}
-                        className="text-[#c9a84c] text-sm font-semibold tracking-[0.2em] uppercase"
+                        className="text-gold-500 text-sm font-semibold tracking-[0.2em] uppercase"
                     >
                         Panel Administrasi
                     </motion.p>
                     <motion.h1
                         variants={fadeInUp}
-                        className="text-white leading-tight"
-                        style={{
-                            fontFamily: "'Playfair Display', Georgia, serif",
-                            fontSize: '3rem',
-                            fontWeight: 800,
-                            letterSpacing: '-0.01em',
-                        }}
+                        className="text-white leading-tight font-serif font-extrabold text-5xl tracking-tight"
                     >
                         Kelola Konten
                         <br />
-                        <span style={{ color: '#c9a84c' }}>Sekolah</span> dengan
+                        <span className="text-gold-500">Sekolah</span> dengan
                         <br />
                         Mudah
                     </motion.h1>
                     <motion.p
                         variants={fadeInUp}
-                        className="text-white/60 text-lg leading-relaxed max-w-md"
-                        style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+                        className="text-white/60 text-lg leading-relaxed max-w-md font-sans"
                     >
                         Sistem manajemen konten terpadu untuk SMK Muhammadiyah Bligo.
                         Tulis artikel, kelola galeri, dan pantau pengumuman dari satu dashboard.
@@ -172,12 +164,12 @@ export default function Login() {
                     initial="hidden"
                     animate="visible"
                     transition={{ delay: 0.8 }}
-                    className="relative z-10 border-l-2 border-[#c9a84c]/40 pl-5"
+                    className="relative z-10 border-l-2 border-gold-500/40 pl-5"
                 >
                     <p className="text-white/50 text-sm italic leading-relaxed">
                         "Mencetak generasi unggul, berilmu, dan berakhlak mulia."
                     </p>
-                    <p className="text-[#c9a84c]/70 text-xs mt-2 font-medium tracking-wide">
+                    <p className="text-gold-500/70 text-xs mt-2 font-medium tracking-wide">
                         SMK MUHAMMADIYAH BLIGO
                     </p>
                 </motion.div>
@@ -197,10 +189,9 @@ export default function Login() {
                 {/* Mobile-only logo */}
                 <div className="flex md:hidden items-center justify-center mb-10">
                     <div
-                        className="flex items-center gap-3 px-5 py-3 rounded-xl"
-                        style={{ backgroundColor: '#001f4d' }}
+                        className="flex items-center gap-3 px-5 py-3 rounded-xl bg-primary-900"
                     >
-                        <span className="text-[#c9a84c] font-bold text-base" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                        <span className="text-gold-500 font-bold text-base font-sans">
                             SMK
                         </span>
                         <span className="text-white text-sm font-semibold">Muhammadiyah Bligo</span>
@@ -215,16 +206,10 @@ export default function Login() {
                 >
                     {/* Header */}
                     <motion.div variants={fadeInUp} className="space-y-2">
-                        <h2
-                            className="text-3xl font-bold"
-                            style={{
-                                color: '#111111',
-                                fontFamily: "'Plus Jakarta Sans', sans-serif",
-                            }}
-                        >
+                        <h2 className="text-3xl font-bold text-neutral-900 font-sans">
                             Selamat Datang
                         </h2>
-                        <p className="text-sm" style={{ color: '#636366', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                        <p className="text-sm text-neutral-500 font-sans">
                             Masuk ke panel admin SMK Muhammadiyah Bligo
                         </p>
                     </motion.div>
@@ -233,20 +218,15 @@ export default function Login() {
                     {hasError && (
                         <motion.div
                             variants={scaleIn}
-                            className="flex items-start gap-3 px-4 py-3 rounded-xl border"
-                            style={{
-                                backgroundColor: '#fff0ef',
-                                borderColor: '#ff453a33',
-                            }}
+                            className="flex items-start gap-3 px-4 py-3 rounded-xl border bg-error-light border-error/20"
                             role="alert"
                         >
                             <AlertCircle
                                 size={18}
                                 strokeWidth={1.5}
-                                className="mt-0.5 shrink-0"
-                                style={{ color: '#ff453a' }}
+                                className="mt-0.5 shrink-0 text-error"
                             />
-                            <p className="text-sm" style={{ color: '#ff453a', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                            <p className="text-sm text-error font-sans">
                                 {errors.email || errors.password || flash.error}
                             </p>
                         </motion.div>
@@ -263,8 +243,7 @@ export default function Login() {
                         <motion.div variants={fadeInUp} className="space-y-1.5">
                             <label
                                 htmlFor="login-email"
-                                className="block text-sm font-semibold"
-                                style={{ color: '#111111' }}
+                                className="block text-sm font-semibold text-neutral-900"
                             >
                                 Alamat Email
                             </label>
@@ -273,7 +252,7 @@ export default function Login() {
                                     <Mail
                                         size={16}
                                         strokeWidth={1.5}
-                                        style={{ color: errors.email ? '#ff453a' : '#8e8e93' }}
+                                        className={errors.email ? 'text-error' : 'text-neutral-400'}
                                     />
                                 </div>
                                 <input
@@ -286,13 +265,12 @@ export default function Login() {
                                     onChange={(e) => setData('email', e.target.value)}
                                     placeholder="admin@smkmuhbligo.sch.id"
                                     className={cn(
-                                        'w-full pl-10 pr-4 py-3 rounded-xl text-sm border transition-all duration-200 outline-none',
+                                        'w-full pl-10 pr-4 py-3 rounded-xl text-sm border transition-all duration-200 outline-none font-sans text-neutral-900',
                                         'focus:ring-2',
                                         errors.email
-                                            ? 'border-[#ff453a] bg-[#fff0ef] focus:ring-[#ff453a]/20'
-                                            : 'border-[#e5e5ea] bg-white focus:border-[#003f87] focus:ring-[#003f87]/15 hover:border-[#aeaeb2]',
+                                            ? 'border-error bg-error-light focus:ring-error/20'
+                                            : 'border-neutral-100 bg-white focus:border-primary-600 focus:ring-primary-600/15 hover:border-neutral-300',
                                     )}
-                                    style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", color: '#111111' }}
                                     aria-describedby={errors.email ? 'email-error' : undefined}
                                     aria-invalid={!!errors.email}
                                 />
@@ -303,8 +281,7 @@ export default function Login() {
                         <motion.div variants={fadeInUp} className="space-y-1.5">
                             <label
                                 htmlFor="login-password"
-                                className="block text-sm font-semibold"
-                                style={{ color: '#111111' }}
+                                className="block text-sm font-semibold text-neutral-900"
                             >
                                 Password
                             </label>
@@ -313,7 +290,7 @@ export default function Login() {
                                     <Lock
                                         size={16}
                                         strokeWidth={1.5}
-                                        style={{ color: errors.password ? '#ff453a' : '#8e8e93' }}
+                                        className={errors.password ? 'text-error' : 'text-neutral-400'}
                                     />
                                 </div>
                                 <input
@@ -325,26 +302,25 @@ export default function Login() {
                                     onChange={(e) => setData('password', e.target.value)}
                                     placeholder="Masukkan password Anda"
                                     className={cn(
-                                        'w-full pl-10 pr-12 py-3 rounded-xl text-sm border transition-all duration-200 outline-none',
+                                        'w-full pl-10 pr-12 py-3 rounded-xl text-sm border transition-all duration-200 outline-none font-sans text-neutral-900',
                                         'focus:ring-2',
                                         errors.password
-                                            ? 'border-[#ff453a] bg-[#fff0ef] focus:ring-[#ff453a]/20'
-                                            : 'border-[#e5e5ea] bg-white focus:border-[#003f87] focus:ring-[#003f87]/15 hover:border-[#aeaeb2]',
+                                            ? 'border-error bg-error-light focus:ring-error/20'
+                                            : 'border-neutral-100 bg-white focus:border-primary-600 focus:ring-primary-600/15 hover:border-neutral-300',
                                     )}
-                                    style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", color: '#111111' }}
                                     aria-describedby={errors.password ? 'password-error' : undefined}
                                     aria-invalid={!!errors.password}
                                 />
                                 <button
                                     type="button"
                                     onClick={() => setShowPassword((prev) => !prev)}
-                                    className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 rounded-md transition-colors duration-150 hover:bg-[#f2f2f7]"
+                                    className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 rounded-md transition-colors duration-150 hover:bg-neutral-50"
                                     aria-label={showPassword ? 'Sembunyikan password' : 'Tampilkan password'}
                                 >
                                     {showPassword ? (
-                                        <EyeOff size={16} strokeWidth={1.5} style={{ color: '#8e8e93' }} />
+                                        <EyeOff size={16} strokeWidth={1.5} className="text-neutral-400" />
                                     ) : (
-                                        <Eye size={16} strokeWidth={1.5} style={{ color: '#8e8e93' }} />
+                                        <Eye size={16} strokeWidth={1.5} className="text-neutral-400" />
                                     )}
                                 </button>
                             </div>
@@ -358,12 +334,11 @@ export default function Login() {
                                 name="remember"
                                 checked={data.remember}
                                 onChange={(e) => setData('remember', e.target.checked)}
-                                className="w-4 h-4 rounded border-[#d1d1d6] accent-[#003f87] cursor-pointer"
+                                className="w-4 h-4 rounded border-neutral-200 accent-primary-600 cursor-pointer"
                             />
                             <label
                                 htmlFor="login-remember"
-                                className="text-sm cursor-pointer select-none"
-                                style={{ color: '#636366' }}
+                                className="text-sm cursor-pointer select-none text-neutral-500"
                             >
                                 Ingat saya selama 30 hari
                             </label>
@@ -376,15 +351,14 @@ export default function Login() {
                                 type="submit"
                                 disabled={processing}
                                 className={cn(
-                                    'w-full flex items-center justify-center gap-2.5',
+                                    'w-full flex items-center justify-center gap-2.5 font-sans',
                                     'px-6 py-3.5 rounded-xl text-sm font-semibold text-white',
                                     'transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2',
-                                    'focus:ring-[#003f87]',
+                                    'focus:ring-primary-600',
                                     processing
-                                        ? 'opacity-75 cursor-not-allowed bg-[#003f87]'
-                                        : 'bg-[#003f87] hover:bg-[#002d6b] active:scale-[0.99] shadow-md shadow-[#003f87]/25',
+                                        ? 'opacity-75 cursor-not-allowed bg-primary-600'
+                                        : 'bg-primary-600 hover:bg-primary-800 active:scale-[0.99] shadow-md shadow-primary-600/25',
                                 )}
-                                style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
                             >
                                 {processing ? (
                                     <>
@@ -401,8 +375,7 @@ export default function Login() {
                         <motion.div variants={fadeInUp} className="text-center">
                             <a
                                 href={route('password.request')}
-                                className="text-sm font-medium transition-colors duration-150 hover:underline"
-                                style={{ color: '#003f87', fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+                                className="text-sm font-medium transition-colors duration-150 hover:underline text-primary-600 font-sans"
                             >
                                 Lupa password?
                             </a>
@@ -417,11 +390,10 @@ export default function Login() {
                         <a
                             href={route('beranda')}
                             className={cn(
-                                'inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium',
+                                'inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium font-sans',
                                 'transition-all duration-150',
-                                'text-[#003f87] hover:bg-[#eef5fc]',
+                                'text-primary-600 hover:bg-primary-50',
                             )}
-                            style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
                         >
                             <ArrowLeft size={15} strokeWidth={1.5} />
                             Kembali ke Website
@@ -435,8 +407,7 @@ export default function Login() {
                     initial="hidden"
                     animate="visible"
                     transition={{ delay: 1 }}
-                    className="mt-12 text-center text-xs"
-                    style={{ color: '#aeaeb2', fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+                    className="mt-12 text-center text-xs text-neutral-300 font-sans"
                 >
                     © {new Date().getFullYear()} SMK Muhammadiyah Bligo. Hak cipta dilindungi.
                 </motion.p>

@@ -56,8 +56,7 @@ export default function ResetPassword() {
         <div className="min-h-screen flex flex-col md:flex-row font-sans">
             {/* ── LEFT PANEL ── */}
             <motion.div
-                className="relative hidden md:flex md:w-[60%] flex-col justify-between p-12 overflow-hidden"
-                style={{ backgroundColor: '#001f4d' }}
+                className="relative hidden md:flex md:w-[60%] flex-col justify-between p-12 overflow-hidden bg-primary-900"
                 variants={fadeIn}
                 initial="hidden"
                 animate="visible"
@@ -71,38 +70,37 @@ export default function ResetPassword() {
                 {/* Logo */}
                 <motion.div variants={fadeInUp} initial="hidden" animate="visible" transition={{ delay: 0.2 }} className="relative z-10">
                     <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 rounded-xl bg-[#c9a84c]/20 border border-[#c9a84c]/40 flex items-center justify-center">
-                            <span className="text-[#c9a84c] font-bold text-lg" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>SMK</span>
+                        <div className="w-12 h-12 rounded-xl bg-gold-500/20 border border-gold-500/40 flex items-center justify-center">
+                            <span className="text-gold-500 font-bold text-lg font-sans">SMK</span>
                         </div>
                         <div>
                             <div className="text-white font-bold text-sm leading-tight">SMK Muhammadiyah</div>
-                            <div className="text-[#c9a84c] text-xs font-medium">Bligo</div>
+                            <div className="text-gold-500 text-xs font-medium">Bligo</div>
                         </div>
                     </div>
                 </motion.div>
 
                 {/* Center */}
                 <motion.div className="relative z-10 space-y-6" variants={staggerContainer} initial="hidden" animate="visible">
-                    <motion.p variants={fadeInUp} className="text-[#c9a84c] text-sm font-semibold tracking-[0.2em] uppercase">
+                    <motion.p variants={fadeInUp} className="text-gold-500 text-sm font-semibold tracking-[0.2em] uppercase">
                         Buat Password Baru
                     </motion.p>
                     <motion.h1
                         variants={fadeInUp}
-                        className="text-white leading-tight"
-                        style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: '3rem', fontWeight: 800, letterSpacing: '-0.01em' }}
+                        className="text-white leading-tight font-serif text-5xl font-extrabold tracking-tight"
                     >
-                        Password <span style={{ color: '#c9a84c' }}>baru,</span>
+                        Password <span className="text-gold-500">baru,</span>
                         <br />akses kembali.
                     </motion.h1>
-                    <motion.p variants={fadeInUp} className="text-white/60 text-lg leading-relaxed max-w-md" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                    <motion.p variants={fadeInUp} className="text-white/60 text-lg leading-relaxed max-w-md font-sans">
                         Buat password yang kuat dan mudah Anda ingat. Gunakan minimal 8 karakter.
                     </motion.p>
                 </motion.div>
 
                 {/* Bottom */}
-                <motion.div variants={fadeInUp} initial="hidden" animate="visible" transition={{ delay: 0.8 }} className="relative z-10 border-l-2 border-[#c9a84c]/40 pl-5">
+                <motion.div variants={fadeInUp} initial="hidden" animate="visible" transition={{ delay: 0.8 }} className="relative z-10 border-l-2 border-gold-500/40 pl-5">
                     <p className="text-white/50 text-sm italic leading-relaxed">"Mencetak generasi unggul, berilmu, dan berakhlak mulia."</p>
-                    <p className="text-[#c9a84c]/70 text-xs mt-2 font-medium tracking-wide">SMK MUHAMMADIYAH BLIGO</p>
+                    <p className="text-gold-500/70 text-xs mt-2 font-medium tracking-wide">SMK MUHAMMADIYAH BLIGO</p>
                 </motion.div>
             </motion.div>
 
@@ -116,8 +114,8 @@ export default function ResetPassword() {
             >
                 {/* Mobile logo */}
                 <div className="flex md:hidden items-center justify-center mb-10">
-                    <div className="flex items-center gap-3 px-5 py-3 rounded-xl" style={{ backgroundColor: '#001f4d' }}>
-                        <span className="text-[#c9a84c] font-bold text-base" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>SMK</span>
+                    <div className="flex items-center gap-3 px-5 py-3 rounded-xl bg-primary-900">
+                        <span className="text-gold-500 font-bold text-base font-sans">SMK</span>
                         <span className="text-white text-sm font-semibold">Muhammadiyah Bligo</span>
                     </div>
                 </div>
@@ -125,13 +123,13 @@ export default function ResetPassword() {
                 <motion.div className="max-w-sm w-full mx-auto space-y-8" variants={staggerContainer} initial="hidden" animate="visible">
                     {/* Header */}
                     <motion.div variants={fadeInUp} className="space-y-2">
-                        <div className="w-12 h-12 rounded-2xl bg-[#003f87]/10 flex items-center justify-center mb-4">
-                            <KeyRound className="w-6 h-6 text-[#003f87]" strokeWidth={1.5} />
+                        <div className="w-12 h-12 rounded-2xl bg-primary-600/10 flex items-center justify-center mb-4">
+                            <KeyRound className="w-6 h-6 text-primary-600" strokeWidth={1.5} />
                         </div>
-                        <h2 className="text-3xl font-bold" style={{ color: '#111111', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                        <h2 className="text-3xl font-bold text-neutral-900 font-sans">
                             Buat Password Baru
                         </h2>
-                        <p className="text-sm" style={{ color: '#636366', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                        <p className="text-sm text-neutral-500 font-sans">
                             Untuk akun: <strong>{email}</strong>
                         </p>
                     </motion.div>
@@ -140,12 +138,11 @@ export default function ResetPassword() {
                     {hasError && (
                         <motion.div
                             variants={scaleIn}
-                            className="flex items-start gap-3 px-4 py-3 rounded-xl border"
-                            style={{ backgroundColor: '#fff0ef', borderColor: '#ff453a33' }}
+                            className="flex items-start gap-3 px-4 py-3 rounded-xl border border-error/20 bg-error-light"
                             role="alert"
                         >
-                            <AlertCircle size={18} strokeWidth={1.5} className="mt-0.5 shrink-0" style={{ color: '#ff453a' }} />
-                            <p className="text-sm" style={{ color: '#ff453a' }}>
+                            <AlertCircle size={18} strokeWidth={1.5} className="mt-0.5 shrink-0 text-error" />
+                            <p className="text-sm text-error">
                                 {errors.email || errors.password || errors.password_confirmation}
                             </p>
                         </motion.div>
@@ -159,12 +156,12 @@ export default function ResetPassword() {
 
                         {/* Password */}
                         <motion.div variants={fadeInUp} className="space-y-1.5">
-                            <label htmlFor="reset-password" className="block text-sm font-semibold" style={{ color: '#111111' }}>
+                            <label htmlFor="reset-password" className="block text-sm font-semibold text-neutral-900">
                                 Password Baru
                             </label>
                             <div className="relative">
                                 <div className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none">
-                                    <Lock size={16} strokeWidth={1.5} style={{ color: errors.password ? '#ff453a' : '#8e8e93' }} />
+                                    <Lock size={16} strokeWidth={1.5} className={errors.password ? 'text-error' : 'text-neutral-400'} />
                                 </div>
                                 <input
                                     id="reset-password"
@@ -176,23 +173,22 @@ export default function ResetPassword() {
                                     onChange={(e) => setData('password', e.target.value)}
                                     placeholder="Minimal 8 karakter"
                                     className={cn(
-                                        'w-full pl-10 pr-12 py-3 rounded-xl text-sm border transition-all duration-200 outline-none focus:ring-2',
+                                        'w-full pl-10 pr-12 py-3 rounded-xl text-sm border transition-all duration-200 outline-none focus:ring-2 font-sans text-neutral-900',
                                         errors.password
-                                            ? 'border-[#ff453a] bg-[#fff0ef] focus:ring-[#ff453a]/20'
-                                            : 'border-[#e5e5ea] bg-white focus:border-[#003f87] focus:ring-[#003f87]/15 hover:border-[#aeaeb2]',
+                                            ? 'border-error bg-error-light focus:ring-error/20'
+                                            : 'border-neutral-100 bg-white focus:border-primary-600 focus:ring-primary-600/15 hover:border-neutral-300',
                                     )}
-                                    style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", color: '#111111' }}
                                     aria-invalid={!!errors.password}
                                 />
                                 <button
                                     type="button"
                                     onClick={() => setShowPassword((v) => !v)}
-                                    className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 rounded-md transition-colors hover:bg-[#f2f2f7]"
+                                    className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 rounded-md transition-colors hover:bg-neutral-50 text-neutral-400"
                                     aria-label={showPassword ? 'Sembunyikan' : 'Tampilkan'}
                                 >
                                     {showPassword
-                                        ? <EyeOff size={16} strokeWidth={1.5} style={{ color: '#8e8e93' }} />
-                                        : <Eye size={16} strokeWidth={1.5} style={{ color: '#8e8e93' }} />
+                                        ? <EyeOff size={16} strokeWidth={1.5} />
+                                        : <Eye size={16} strokeWidth={1.5} />
                                     }
                                 </button>
                             </div>
@@ -200,12 +196,12 @@ export default function ResetPassword() {
 
                         {/* Confirm Password */}
                         <motion.div variants={fadeInUp} className="space-y-1.5">
-                            <label htmlFor="reset-password-confirm" className="block text-sm font-semibold" style={{ color: '#111111' }}>
+                            <label htmlFor="reset-password-confirm" className="block text-sm font-semibold text-neutral-900">
                                 Konfirmasi Password
                             </label>
                             <div className="relative">
                                 <div className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none">
-                                    <Lock size={16} strokeWidth={1.5} style={{ color: errors.password_confirmation ? '#ff453a' : '#8e8e93' }} />
+                                    <Lock size={16} strokeWidth={1.5} className={errors.password_confirmation ? 'text-error' : 'text-neutral-400'} />
                                 </div>
                                 <input
                                     id="reset-password-confirm"
@@ -216,23 +212,22 @@ export default function ResetPassword() {
                                     onChange={(e) => setData('password_confirmation', e.target.value)}
                                     placeholder="Ulangi password baru"
                                     className={cn(
-                                        'w-full pl-10 pr-12 py-3 rounded-xl text-sm border transition-all duration-200 outline-none focus:ring-2',
+                                        'w-full pl-10 pr-12 py-3 rounded-xl text-sm border transition-all duration-200 outline-none focus:ring-2 font-sans text-neutral-900',
                                         errors.password_confirmation
-                                            ? 'border-[#ff453a] bg-[#fff0ef] focus:ring-[#ff453a]/20'
-                                            : 'border-[#e5e5ea] bg-white focus:border-[#003f87] focus:ring-[#003f87]/15 hover:border-[#aeaeb2]',
+                                            ? 'border-error bg-error-light focus:ring-error/20'
+                                            : 'border-neutral-100 bg-white focus:border-primary-600 focus:ring-primary-600/15 hover:border-neutral-300',
                                     )}
-                                    style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", color: '#111111' }}
                                     aria-invalid={!!errors.password_confirmation}
                                 />
                                 <button
                                     type="button"
                                     onClick={() => setShowConfirm((v) => !v)}
-                                    className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 rounded-md transition-colors hover:bg-[#f2f2f7]"
+                                    className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 rounded-md transition-colors hover:bg-neutral-50 text-neutral-400"
                                     aria-label={showConfirm ? 'Sembunyikan' : 'Tampilkan'}
                                 >
                                     {showConfirm
-                                        ? <EyeOff size={16} strokeWidth={1.5} style={{ color: '#8e8e93' }} />
-                                        : <Eye size={16} strokeWidth={1.5} style={{ color: '#8e8e93' }} />
+                                        ? <EyeOff size={16} strokeWidth={1.5} />
+                                        : <Eye size={16} strokeWidth={1.5} />
                                     }
                                 </button>
                             </div>
@@ -245,14 +240,13 @@ export default function ResetPassword() {
                                 type="submit"
                                 disabled={processing}
                                 className={cn(
-                                    'w-full flex items-center justify-center gap-2.5',
+                                    'w-full flex items-center justify-center gap-2.5 font-sans',
                                     'px-6 py-3.5 rounded-xl text-sm font-semibold text-white',
-                                    'transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#003f87]',
+                                    'transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-600',
                                     processing
-                                        ? 'opacity-75 cursor-not-allowed bg-[#003f87]'
-                                        : 'bg-[#003f87] hover:bg-[#002d6b] active:scale-[0.99] shadow-md shadow-[#003f87]/25',
+                                        ? 'opacity-75 cursor-not-allowed bg-primary-600'
+                                        : 'bg-primary-600 hover:bg-primary-800 active:scale-[0.99] shadow-md shadow-primary-600/25',
                                 )}
-                                style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
                             >
                                 {processing ? (
                                     <>
@@ -268,8 +262,7 @@ export default function ResetPassword() {
                     <motion.div variants={fadeInUp} className="pt-2 flex items-center justify-center">
                         <Link
                             href={route('login')}
-                            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-150 text-[#003f87] hover:bg-[#eef5fc]"
-                            style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+                            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-150 text-primary-600 hover:bg-primary-50 font-sans"
                         >
                             <ArrowLeft size={15} strokeWidth={1.5} />
                             Kembali ke halaman login
@@ -283,8 +276,7 @@ export default function ResetPassword() {
                     initial="hidden"
                     animate="visible"
                     transition={{ delay: 1 }}
-                    className="mt-12 text-center text-xs"
-                    style={{ color: '#aeaeb2', fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+                    className="mt-12 text-center text-xs text-neutral-300 font-sans"
                 >
                     © {new Date().getFullYear()} SMK Muhammadiyah Bligo. Hak cipta dilindungi.
                 </motion.p>
