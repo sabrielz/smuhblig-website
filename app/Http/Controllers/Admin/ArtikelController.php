@@ -193,7 +193,7 @@ class ArtikelController extends Controller
         });
 
         return Inertia::render('Admin/Artikel/Form', [
-            'article' => new ArtikelResource($artikel),
+            'article' => (new ArtikelResource($artikel))->resolve(),
             'categories' => $categories,
         ]);
     }
