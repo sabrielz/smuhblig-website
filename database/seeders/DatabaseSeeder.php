@@ -31,6 +31,7 @@ class DatabaseSeeder extends Seeder
                 GuruContohSeeder::class,
                 FasilitasContohSeeder::class,
                 EkstrakurikulerContohSeeder::class,
+                PrestasiContohSeeder::class,
             ]);
         }
     }
