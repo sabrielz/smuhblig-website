@@ -30,6 +30,7 @@ storage/logs/*.log
 #/public/build
 /public/hot
 /public/storage
+/bootstrap/ssr
 
 # Storage keys
 /storage/*.key
