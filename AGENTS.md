@@ -419,6 +419,19 @@ php artisan queue:listen   # Queue worker
 | `APP_LOCALE` | Default locale (`id`) |
 | `APP_AVAILABLE_LOCALES` | Comma-separated (`id,en`) |
 
+### Verifikasi Akhir Sesi
+
+Setiap akhir sesi diverifikasi menggunakan perintah tunggal:
+```bash
+npm run verify
+```
+Skrip ini menjalankan:
+1. `php vendor/bin/pint` pada berkas PHP yang berubah.
+2. `php vendor/bin/phpstan` pada berkas `app/` yang berubah.
+3. `npx eslint` pada berkas TS/TSX di `resources/js` yang berubah.
+4. `npx tsc --noEmit` untuk type check global.
+5. `npx vitest run --passWithNoTests` untuk pengujian frontend.
+
 ---
 
 ## 12. Database
