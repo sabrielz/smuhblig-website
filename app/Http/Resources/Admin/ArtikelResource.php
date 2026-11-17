@@ -51,6 +51,9 @@ class ArtikelResource extends JsonResource
             // EN translation status flags (for AI badge in editor)
             'en_ai_translated' => $translationEn ? (bool) $translationEn->ai_translated : false,
             'en_reviewed' => $translationEn ? (bool) $translationEn->reviewed : false,
+
+            // Tags
+            'tags' => $this->resource->tags ? $this->resource->tags->pluck('name')->toArray() : [],
         ];
     }
 }

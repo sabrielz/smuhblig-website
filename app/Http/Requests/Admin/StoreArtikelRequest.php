@@ -46,6 +46,10 @@ class StoreArtikelRequest extends FormRequest
             'title_en' => ['nullable', 'string', 'max:500'],
             'excerpt_en' => ['nullable', 'string'],
             'content_en' => ['nullable', 'string', 'required_with:title_en'],
+
+            // Tags (Maksimal 10 tag, setiap tag max 40 karakter)
+            'tags' => ['nullable', 'array', 'max:10'],
+            'tags.*' => ['string', 'max:40'],
         ];
     }
 }

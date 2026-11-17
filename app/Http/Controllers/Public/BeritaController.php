@@ -25,6 +25,9 @@ class BeritaController extends Controller
             ->when($request->filled('category'), function ($query) use ($request) {
                 $query->where('category_id', $request->category);
             })
+            ->when($request->filled('tag'), function ($query) use ($request) {
+                $query->withAnyTags([$request->tag]);
+            })
             ->when($request->filled('q'), function ($query) use ($request) {
                 // simple search by translation title
                 $query->whereHas('translations', function ($q) use ($request) {
@@ -70,7 +73,7 @@ class BeritaController extends Controller
         return Inertia::render('Public/Berita/Index', [
             'articles' => $articles,
             'categories' => $categories,
-            'filters' => $request->only(['category', 'q']),
+            'filters' => $request->only(['category', 'tag', 'q']),
         ]);
     }
 
@@ -83,7 +86,7 @@ class BeritaController extends Controller
 
         IncrementArticleViewCount::dispatch($article);
 
-        $article->load(['translations', 'category.translations', 'user', 'media']);
+        $article->load(['translations', 'category.translations', 'user', 'media', 'tags']);
 
         $relatedArticles = Article::query()
             ->terbit()
@@ -142,6 +145,13 @@ class BeritaController extends Controller
                 'avatar' => $article->user && method_exists($article->user, 'avatar_url') ? $article->user->avatar_url : 'https://ui-avatars.com/api/?name=Admin',
             ],
             'thumbnail' => $article->getFirstMediaUrl('thumbnail') ?: 'https://placehold.co/1200x600',
+            'tags' => array_map(function ($tag) {
+                return [
+                    'id' => is_array($tag) ? ($tag['id'] ?? 0) : ($tag->id ?? 0),
+                    'name' => is_array($tag) ? ($tag['name'] ?? '') : ($tag->name ?? ''),
+                    'slug' => is_array($tag) ? ($tag['slug'] ?? '') : ($tag->slug ?? ''),
+                ];
+            }, $article->tags->toArray()),
         ];
 
         SEOMeta::setTitle(($formattedArticle['title'] ?? 'Berita').' | SMK Muhammadiyah Bligo');

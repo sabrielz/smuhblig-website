@@ -148,6 +148,10 @@ class ArtikelController extends Controller
                 $article->addMediaFromRequest('thumbnail')->toMediaCollection('thumbnail');
             }
 
+            if ($request->has('tags')) {
+                $article->syncTags($validated['tags'] ?? []);
+            }
+
             DB::commit();
 
             // Auto-translate EN if conditions met
@@ -173,7 +177,7 @@ class ArtikelController extends Controller
     {
         Gate::authorize('update', $artikel);
 
-        $artikel->load(['translations', 'category', 'media']);
+        $artikel->load(['translations', 'category', 'media', 'tags']);
 
         $categories = Category::with(['translations' => function ($q) {
             $q->where('locale', 'id');
@@ -239,6 +243,10 @@ class ArtikelController extends Controller
             if ($request->hasFile('thumbnail')) {
                 $artikel->clearMediaCollection('thumbnail');
                 $artikel->addMediaFromRequest('thumbnail')->toMediaCollection('thumbnail');
+            }
+
+            if ($request->has('tags')) {
+                $artikel->syncTags($validated['tags'] ?? []);
             }
 
             DB::commit();
