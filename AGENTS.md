@@ -560,6 +560,22 @@ Setiap usulan fitur baru wajib lolos 3 pertanyaan berikut:
 - **`BR-005` Dukungan Bahasa (i18n)**:
   - Konten Bahasa Indonesia (`id`) bersifat wajib pada seluruh entitas multibahasa.
   - Konten Bahasa Inggris (`en`) bersifat opsional. Jika entitas tidak memiliki terjemahan EN, sistem wajib menampilkan fallback konten versi `id`.
+- **`BR-010` Guru & Tendik** *(Status: menunggu persetujuan)*:
+  - Tabel `guru`: `nama`, `gelar_depan` (nullable), `gelar_belakang` (nullable), `kelompok` (`guru`/`tendik`), `jurusan_id` (nullable FK `jurusans`), `urutan`, `is_active`.
+  - Translasi (`guru_translations`): `jabatan`, `mapel` (nullable).
+  - Media: `foto` (single). Tanpa NIP/NUPTK/kontak pribadi.
+- **`BR-011` Fasilitas** *(Status: menunggu persetujuan)*:
+  - Tabel `fasilitas`: `slug`, `kategori` (`ruang_praktik`/`umum`/`olahraga`/`ibadah`), `urutan`, `is_active`.
+  - Translasi (`fasilitas_translations`): `nama`, `deskripsi`.
+  - Media: `foto` (multiple, maks 8). Tanpa data inventaris.
+- **`BR-012` Ekstrakurikuler** *(Status: menunggu persetujuan)*:
+  - Tabel `ekstrakurikuler`: `slug`, `pembina_guru_id` (nullable FK `guru`), `urutan`, `is_active`.
+  - Translasi (`ekstrakurikuler_translations`): `nama`, `deskripsi`, `jadwal` (teks bebas).
+  - Media: `foto` (single). Tanpa pendaftaran anggota.
+- **`BR-013` Prestasi** *(Status: menunggu persetujuan)*:
+  - Tabel `prestasi`: `slug`, `tingkat` (`sekolah`/`kabupaten`/`provinsi`/`nasional`/`internasional`), `kategori` (`akademik`/`non_akademik`), `tahun` (smallint), `tanggal` (nullable date), `jurusan_id` (nullable FK `jurusans`), `is_active`.
+  - Translasi (`prestasi_translations`): `judul`, `ringkasan`.
+  - Media: `foto` (single).
 
 ---
 
