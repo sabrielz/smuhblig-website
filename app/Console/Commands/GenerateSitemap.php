@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\Agenda;
 use App\Models\Article;
+use App\Models\Fasilitas;
 use App\Models\Galeri;
 use App\Models\Jurusan;
 use App\Models\Pengaturan;
@@ -57,6 +58,7 @@ class GenerateSitemap extends Command
             // Static pages
             ->add($makeUrl('/tentang', 0.8, Url::CHANGE_FREQUENCY_WEEKLY))
             ->add($makeUrl('/guru', 0.8, Url::CHANGE_FREQUENCY_WEEKLY))
+            ->add($makeUrl('/fasilitas', 0.8, Url::CHANGE_FREQUENCY_WEEKLY))
             ->add($makeUrl('/jurusan', 0.8, Url::CHANGE_FREQUENCY_WEEKLY))
             ->add($makeUrl('/berita', 0.8, Url::CHANGE_FREQUENCY_DAILY))
             ->add($makeUrl('/agenda', 0.8, Url::CHANGE_FREQUENCY_WEEKLY))
@@ -68,6 +70,14 @@ class GenerateSitemap extends Command
         Jurusan::active()->get()->each(function (Jurusan $jurusan) use ($sitemap, $makeUrl) {
             $sitemap->add(
                 $makeUrl("/jurusan/{$jurusan->slug}", 0.9, Url::CHANGE_FREQUENCY_WEEKLY)
+            );
+        });
+
+        // Fasilitas pages
+        Fasilitas::active()->get()->each(function (Fasilitas $fasilitas) use ($sitemap, $makeUrl) {
+            $sitemap->add(
+                $makeUrl("/fasilitas/{$fasilitas->slug}", 0.7, Url::CHANGE_FREQUENCY_MONTHLY)
+                    ->setLastModificationDate($fasilitas->updated_at)
             );
         });
 

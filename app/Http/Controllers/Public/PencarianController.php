@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Public\PencarianRequest;
 use App\Models\Agenda;
 use App\Models\Article;
+use App\Models\Fasilitas;
 use App\Models\Guru;
 use App\Models\Jurusan;
 use App\Models\Pengumuman;
@@ -42,6 +43,7 @@ class PencarianController extends Controller
             'pengumuman' => [],
             'agenda' => [],
             'guru' => [],
+            'fasilitas' => [],
         ];
         $totalHasil = 0;
 
@@ -172,6 +174,39 @@ class PencarianController extends Controller
             });
 
             $totalHasil += $hasil['guru']->count();
+        }
+
+        // Search Fasilitas
+        if ($type === 'semua' || $type === 'fasilitas') {
+            $fasilitasQuery = Fasilitas::query()
+                ->active()
+                ->join('fasilitas_translations', function ($join) use ($locale) {
+                    $join->on('fasilitas.id', '=', 'fasilitas_translations.fasilitas_id')
+                        ->where('fasilitas_translations.locale', '=', $locale);
+                })
+                ->where(function ($query) use ($q, $operator) {
+                    $query->where('fasilitas_translations.nama', $operator, "%{$q}%")
+                        ->orWhere('fasilitas_translations.deskripsi', $operator, "%{$q}%");
+                })
+                ->select('fasilitas.*', 'fasilitas_translations.nama', 'fasilitas_translations.deskripsi')
+                ->with('media')
+                ->get();
+
+            $hasil['fasilitas'] = $fasilitasQuery->map(function ($f) use ($q) {
+                $firstMedia = $f->getFirstMedia('foto');
+
+                return [
+                    'id' => $f->id,
+                    'slug' => $f->slug,
+                    'kategori' => $f->kategori,
+                    'nama' => $this->highlight($f->nama ?? 'Fasilitas', $q),
+                    'deskripsi' => $this->highlight(strip_tags($f->deskripsi ?? ''), $q),
+                    'cover_url' => $firstMedia ? ($firstMedia->getUrl('medium') ?: $firstMedia->getUrl()) : null,
+                    'url' => route('fasilitas.show', $f->slug),
+                ];
+            });
+
+            $totalHasil += $hasil['fasilitas']->count();
         }
 
         // Search Artikel
@@ -336,6 +371,31 @@ class PencarianController extends Controller
                 ];
             });
 
+        // Limit Fasilitas 3
+        $fasilitas = Fasilitas::query()
+            ->active()
+            ->join('fasilitas_translations', function ($join) use ($locale) {
+                $join->on('fasilitas.id', '=', 'fasilitas_translations.fasilitas_id')
+                    ->where('fasilitas_translations.locale', '=', $locale);
+            })
+            ->where(function ($query) use ($q, $operator) {
+                $query->where('fasilitas_translations.nama', $operator, "%{$q}%")
+                    ->orWhere('fasilitas_translations.deskripsi', $operator, "%{$q}%");
+            })
+            ->select('fasilitas.id', 'fasilitas.slug', 'fasilitas_translations.nama')
+            ->orderBy('urutan')
+            ->limit(3)
+            ->get()
+            ->map(function ($f) use ($q) {
+                return [
+                    'id' => $f->id,
+                    'slug' => $f->slug,
+                    'title' => $this->highlight($f->nama ?? 'Fasilitas', $q),
+                    'type' => 'Fasilitas',
+                    'url' => route('fasilitas.show', $f->slug),
+                ];
+            });
+
         // Limit Artikel 5
         $artikel = Article::query()
             ->terbit()
@@ -363,6 +423,7 @@ class PencarianController extends Controller
 
         return response()->json([
             'jurusan' => $jurusan,
+            'fasilitas' => $fasilitas,
             'artikel' => $artikel,
             'pengumuman' => $pengumuman,
             'agenda' => $agenda,
