@@ -12,6 +12,7 @@ use App\Models\Guru;
 use App\Models\Jurusan;
 use App\Models\Pengumuman;
 use App\Models\Prestasi;
+use App\Models\Unduhan;
 use Artesaos\SEOTools\Facades\SEOMeta;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -48,6 +49,7 @@ class PencarianController extends Controller
             'fasilitas' => [],
             'ekstrakurikuler' => [],
             'prestasi' => [],
+            'unduhan' => [],
         ];
         $totalHasil = 0;
 
@@ -275,6 +277,40 @@ class PencarianController extends Controller
             });
 
             $totalHasil += $hasil['prestasi']->count();
+        }
+
+        // Search Unduhan
+        if ($type === 'semua' || $type === 'unduhan') {
+            $unduhanQuery = Unduhan::query()
+                ->active()
+                ->join('unduhan_translations', function ($join) use ($locale) {
+                    $join->on('unduhan.id', '=', 'unduhan_translations.unduhan_id')
+                        ->where('unduhan_translations.locale', '=', $locale);
+                })
+                ->where(function ($query) use ($q, $operator) {
+                    $query->where('unduhan_translations.judul', $operator, "%{$q}%")
+                        ->orWhere('unduhan_translations.deskripsi', $operator, "%{$q}%");
+                })
+                ->select('unduhan.*', 'unduhan_translations.judul', 'unduhan_translations.deskripsi')
+                ->with('media')
+                ->get();
+
+            $hasil['unduhan'] = $unduhanQuery->map(function ($u) use ($q) {
+                $media = $u->getFirstMedia('berkas');
+
+                return [
+                    'id' => $u->id,
+                    'slug' => $u->slug,
+                    'kategori' => $u->kategori,
+                    'judul' => $this->highlight($u->judul ?? 'Unduhan', $q),
+                    'deskripsi' => $this->highlight(strip_tags($u->deskripsi ?? ''), $q),
+                    'file_name' => $media?->file_name,
+                    'file_size' => $media?->human_readable_size,
+                    'url' => route('unduhan.index'),
+                ];
+            });
+
+            $totalHasil += $hasil['unduhan']->count();
         }
 
         // Search Artikel
@@ -514,6 +550,31 @@ class PencarianController extends Controller
                 ];
             });
 
+        // Limit Unduhan 3
+        $unduhan = Unduhan::query()
+            ->active()
+            ->join('unduhan_translations', function ($join) use ($locale) {
+                $join->on('unduhan.id', '=', 'unduhan_translations.unduhan_id')
+                    ->where('unduhan_translations.locale', '=', $locale);
+            })
+            ->where(function ($query) use ($q, $operator) {
+                $query->where('unduhan_translations.judul', $operator, "%{$q}%")
+                    ->orWhere('unduhan_translations.deskripsi', $operator, "%{$q}%");
+            })
+            ->select('unduhan.id', 'unduhan.slug', 'unduhan_translations.judul')
+            ->orderByDesc('tanggal_terbit')
+            ->limit(3)
+            ->get()
+            ->map(function ($u) use ($q) {
+                return [
+                    'id' => $u->id,
+                    'slug' => $u->slug,
+                    'title' => $this->highlight($u->judul ?? 'Unduhan', $q),
+                    'type' => 'Unduhan',
+                    'url' => route('unduhan.index'),
+                ];
+            });
+
         // Limit Artikel 5
         $artikel = Article::query()
             ->terbit()
@@ -544,6 +605,7 @@ class PencarianController extends Controller
             'fasilitas' => $fasilitas,
             'ekstrakurikuler' => $ekskul,
             'prestasi' => $prestasi,
+            'unduhan' => $unduhan,
             'artikel' => $artikel,
             'pengumuman' => $pengumuman,
             'agenda' => $agenda,
