@@ -19,6 +19,7 @@ const NAV_LINKS: NavLink[] = [
     { label: { id: 'Tentang', en: 'About' }, href: '/tentang' },
     { label: { id: 'Jurusan', en: 'Programs' }, href: '/jurusan' },
     { label: { id: 'Berita', en: 'News' }, href: '/berita' },
+    { label: { id: 'Pengumuman', en: 'Announcements' }, href: '/pengumuman' },
     { label: { id: 'Galeri', en: 'Gallery' }, href: '/galeri' },
     { label: { id: 'Agenda', en: 'Events' }, href: '/agenda' },
     { label: { id: 'Kontak', en: 'Contact' }, href: '/kontak' },
