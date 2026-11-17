@@ -74,6 +74,7 @@ Route::get('/agenda', [AgendaPublikController::class, 'index'])->name('agenda.in
 Route::get('/agenda/{agenda:slug}', [AgendaPublikController::class, 'show'])->name('agenda.show');
 
 use App\Http\Controllers\Admin\KategoriController;
+use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Public\PengumumanController as PublicPengumumanController;
 
 Route::get('/pengumuman', [PublicPengumumanController::class, 'index'])->name('pengumuman.index');
@@ -145,6 +146,11 @@ Route::middleware(['auth', EnsureHasCmsRole::class])
 
         // Kategori Artikel
         Route::resource('kategori', KategoriController::class)->except(['show']);
+
+        // Tag Artikel
+        Route::get('/tag', [TagController::class, 'index'])->name('tag.index');
+        Route::post('/tag/merge', [TagController::class, 'merge'])->name('tag.merge');
+        Route::delete('/tag/{tag}', [TagController::class, 'destroy'])->name('tag.destroy');
 
         // Galeri
         Route::get('/galeri', [App\Http\Controllers\Admin\GaleriController::class, 'index'])->name('galeri.index');

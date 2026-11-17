@@ -16,6 +16,7 @@ import {
     PencilLine,
     Mail,
     FolderTree,
+    Tag,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SharedProps } from "@/types";
@@ -66,7 +67,10 @@ export default function AdminSidebar({ isOpen, setIsOpen }: SidebarProps) {
             items: [
                 { label: 'Artikel', href: '/admin/artikel', icon: FileText, badge: null },
                 ...(user?.is_admin || user?.roles?.includes('editor')
-                    ? [{ label: 'Kategori', href: '/admin/kategori', icon: FolderTree, badge: null }]
+                    ? [
+                        { label: 'Kategori', href: '/admin/kategori', icon: FolderTree, badge: null },
+                        { label: 'Tag', href: '/admin/tag', icon: Tag, badge: null },
+                    ]
                     : []),
                 ...(user?.can?.kelola_galeri ? [{ label: 'Galeri', href: '/admin/galeri', icon: ImageIcon, badge: null }] : []),
                 ...(user?.can?.kelola_pengumuman ? [{ label: 'Pengumuman', href: '/admin/pengumuman', icon: Bell, badge: null }] : []),
