@@ -67,9 +67,9 @@ export default function Index({ settings, aiStats }: { settings: Record<string, 
         seo_google_analytics: settings.seo_google_analytics || '',
 
         // Tab Fitur
-        fitur_artikel_approval: settings.fitur_artikel_approval === 'true' || settings.fitur_artikel_approval === true,
-        fitur_artikel_ai_enabled: settings.fitur_artikel_ai_enabled === 'true' || settings.fitur_artikel_ai_enabled === true,
-        fitur_multibahasa_enabled: settings.fitur_multibahasa_enabled === 'true' || settings.fitur_multibahasa_enabled === true,
+        artikel_approval: settings.artikel_approval === 'true' || settings.artikel_approval === true,
+        artikel_ai_enabled: settings.artikel_ai_enabled === 'true' || settings.artikel_ai_enabled === true,
+        multibahasa_enabled: settings.multibahasa_enabled === 'true' || settings.multibahasa_enabled === true,
 
         // Tab AI
         ai_provider: settings.ai_provider || 'openai',
@@ -218,7 +218,7 @@ export default function Index({ settings, aiStats }: { settings: Record<string, 
                                 <h2 className="text-lg font-bold text-gray-900 mb-4 border-b pb-2">Toggle Fitur</h2>
 
                                 <div className="flex items-start gap-4 p-4 border rounded-xl border-gray-100 bg-gray-50/50">
-                                    <input type="checkbox" id="f1" checked={data.fitur_artikel_approval} onChange={e => setData('fitur_artikel_approval', e.target.checked)} className="mt-1 rounded border-gray-300 text-primary-navy focus:ring-primary-navy" />
+                                    <input type="checkbox" id="f1" checked={data.artikel_approval} onChange={e => setData('artikel_approval', e.target.checked)} className="mt-1 rounded border-gray-300 text-primary-navy focus:ring-primary-navy" />
                                     <div>
                                         <label htmlFor="f1" className="font-medium text-gray-900 block select-none">Persetujuan Editor (Approval)</label>
                                         <p className="text-sm text-gray-500 mt-1">Artikel yang ditulis oleh Author harus disetujui Editor atau Admin sebelum tampil.</p>
@@ -226,7 +226,7 @@ export default function Index({ settings, aiStats }: { settings: Record<string, 
                                 </div>
 
                                 <div className="flex items-start gap-4 p-4 border rounded-xl border-gray-100 bg-gray-50/50">
-                                    <input type="checkbox" id="f2" checked={data.fitur_multibahasa_enabled} onChange={e => setData('fitur_multibahasa_enabled', e.target.checked)} className="mt-1 rounded border-gray-300 text-primary-navy focus:ring-primary-navy" />
+                                    <input type="checkbox" id="f2" checked={data.multibahasa_enabled} onChange={e => setData('multibahasa_enabled', e.target.checked)} className="mt-1 rounded border-gray-300 text-primary-navy focus:ring-primary-navy" />
                                     <div>
                                         <label htmlFor="f2" className="font-medium text-gray-900 block select-none">Fitur Multibahasa (ID/EN)</label>
                                         <p className="text-sm text-gray-500 mt-1">Izinkan pengunjung untuk beralih bahasa antara Indonesia dan Inggris.</p>
@@ -234,7 +234,7 @@ export default function Index({ settings, aiStats }: { settings: Record<string, 
                                 </div>
 
                                 <div className="flex items-start gap-4 p-4 border rounded-xl border-gray-100 bg-gray-50/50">
-                                    <input type="checkbox" id="f3" checked={data.fitur_artikel_ai_enabled} onChange={e => setData('fitur_artikel_ai_enabled', e.target.checked)} className="mt-1 rounded border-gray-300 text-primary-navy focus:ring-primary-navy" />
+                                    <input type="checkbox" id="f3" checked={data.artikel_ai_enabled} onChange={e => setData('artikel_ai_enabled', e.target.checked)} className="mt-1 rounded border-gray-300 text-primary-navy focus:ring-primary-navy" />
                                     <div>
                                         <label htmlFor="f3" className="font-medium text-gray-900 block select-none">AI Writing Assistant</label>
                                         <p className="text-sm text-gray-500 mt-1">Aktifkan modul TipTap AI untuk mereview dan generate artikel secara otomatis.</p>
