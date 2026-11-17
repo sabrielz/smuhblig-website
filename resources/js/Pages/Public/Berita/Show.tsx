@@ -1,5 +1,6 @@
 import React from 'react';
 import { Head, Link } from '@inertiajs/react';
+import { useTranslation } from 'react-i18next';
 import PublicLayout from '@/Layouts/PublicLayout';
 import { ArticleCard } from '@/Components/UI/ArticleCard';
 import { Badge } from '@/Components/UI/Badge';
@@ -64,6 +65,8 @@ const GeometricPattern = () => (
 );
 
 export default function BeritaShow({ article, relatedArticles, categories, isPreview = false }: ShowProps) {
+    const { t } = useTranslation();
+
     // Estimasi waktu baca dari jumlah kata konten (asumsi 200 kata/menit)
     const getReadingTime = (content: string) => {
         const text = content.replace(/<[^>]+>/g, ' ');
@@ -77,11 +80,11 @@ export default function BeritaShow({ article, relatedArticles, categories, isPre
             {isPreview && (
                 <div className="bg-amber-500 text-white font-medium py-2.5 px-4 text-center text-sm shadow-md sticky top-0 z-50 flex items-center justify-center gap-2">
                     <span className="inline-block w-2 h-2 rounded-full bg-white animate-pulse" />
-                    <span>Mode Pratinjau — Artikel ini belum diterbitkan ke publik.</span>
+                    <span>{t('berita.preview_mode')}</span>
                 </div>
             )}
             <Head>
-                <title>{`${article.title} - Berita SMK Muhammadiyah Bligo`}</title>
+                <title>{`${article.title} - ${t('berita.page_title')} SMK Muhammadiyah Bligo`}</title>
                 <meta name="description" content={article.excerpt} />
                 <meta property="og:image" content={article.thumbnail} />
             </Head>
@@ -105,13 +108,13 @@ export default function BeritaShow({ article, relatedArticles, categories, isPre
                             variants={fadeInUp}
                             className="text-xs font-bold tracking-[0.25em] uppercase text-gold-500 mb-4"
                         >
-                            JENDELA INFORMASI
+                            {t('berita.detail_eyebrow')}
                         </motion.p>
                         <motion.h1
                             variants={fadeInUp}
                             className="font-serif text-4xl sm:text-5xl lg:text-5xl font-bold text-white leading-tight mb-6"
                         >
-                            Dinamika &amp; <span className="text-gold-500">Wawasan</span>
+                            {t('berita.detail_headline_1')} <span className="text-gold-500">{t('berita.detail_headline_2')}</span>
                         </motion.h1>
                         <motion.nav
                             variants={fadeInUp}
@@ -119,11 +122,11 @@ export default function BeritaShow({ article, relatedArticles, categories, isPre
                             className="flex items-center justify-center gap-2 text-sm text-white/60 mb-8"
                         >
                             <Link href={route('beranda')} className="hover:text-white transition-colors duration-200">
-                                Beranda
+                                {t('nav.home')}
                             </Link>
                             <ChevronRight size={14} className="text-white/40" />
                             <Link href={route('berita.index')} className="hover:text-white transition-colors duration-200">
-                                Berita
+                                {t('berita.breadcrumb')}
                             </Link>
                             <ChevronRight size={14} className="text-white/40" />
                             <span className="text-white/90 truncate max-w-[200px]" title={article.title}>
@@ -185,7 +188,7 @@ export default function BeritaShow({ article, relatedArticles, categories, isPre
                                             {article.author.name}
                                         </div>
                                         <div className="text-sm">
-                                            Penulis • {getReadingTime(article.content)} min read
+                                            {t('berita.author_title')} • {getReadingTime(article.content)} {t('berita.min_read')}
                                         </div>
                                     </div>
                                 </div>
@@ -203,7 +206,7 @@ export default function BeritaShow({ article, relatedArticles, categories, isPre
                                 {article.tags && article.tags.length > 0 && (
                                     <div className="mt-10 pt-6 border-t border-neutral-100 flex flex-wrap items-center gap-2">
                                         <span className="text-xs font-semibold uppercase tracking-wider text-neutral-400 mr-1">
-                                            Tags:
+                                            {t('berita.tags_label')}
                                         </span>
                                         {article.tags.map((tag) => (
                                             <Link
@@ -230,7 +233,7 @@ export default function BeritaShow({ article, relatedArticles, categories, isPre
                             <div className="bg-white rounded-3xl p-6 lg:p-8 shadow-sm border border-neutral-100">
                                 <h3 className="font-serif text-2xl font-bold text-neutral-900 mb-6 flex items-center">
                                     <div className="w-1.5 h-6 bg-primary-gold rounded-full mr-3"></div>
-                                    Artikel Terkait
+                                    {t('berita.related_news')}
                                 </h3>
                                 <div className="space-y-4">
                                     {relatedArticles.length > 0 ? (
@@ -238,7 +241,7 @@ export default function BeritaShow({ article, relatedArticles, categories, isPre
                                             <ArticleCard key={rel.id} article={rel} className="shadow-none border-neutral-50 bg-neutral-50/50 hover:bg-white" />
                                         ))
                                     ) : (
-                                        <p className="text-neutral-500 text-sm">Tidak ada artikel terkait.</p>
+                                        <p className="text-neutral-500 text-sm">{t('berita.no_related_news')}</p>
                                     )}
                                 </div>
                             </div>
@@ -247,7 +250,7 @@ export default function BeritaShow({ article, relatedArticles, categories, isPre
                             <div className="bg-white rounded-3xl p-6 lg:p-8 shadow-sm border border-neutral-100 sticky top-28">
                                 <h3 className="font-serif text-2xl font-bold text-neutral-900 mb-6 flex items-center">
                                     <div className="w-1.5 h-6 bg-primary-600 rounded-full mr-3"></div>
-                                    Kategori
+                                    {t('berita.categories_title')}
                                 </h3>
                                 <ul className="space-y-3">
                                     {categories.map((category) => (

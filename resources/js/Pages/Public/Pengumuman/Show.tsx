@@ -1,12 +1,12 @@
 import React from 'react';
-import { Head, Link, usePage } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
+import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Bell, Calendar, ChevronRight, Info, AlertTriangle, AlertCircle, ArrowLeft } from 'lucide-react';
 import PublicLayout from '@/Layouts/PublicLayout';
 import { Badge } from '@/Components/UI/Badge';
 import { formatDate } from '@/lib/utils';
 import { fadeInUp, staggerContainer } from '@/lib/motion';
-import type { SharedProps } from '@/types';
 
 interface PengumumanDetail {
     id: number;
@@ -43,7 +43,8 @@ const GeometricPattern = () => (
 );
 
 export default function PengumumanShow({ pengumuman, isPreview = false }: ShowProps) {
-    const { locale } = usePage<SharedProps>().props;
+    const { t, i18n } = useTranslation();
+    const currentLocale = (i18n.language || 'id') as 'id' | 'en';
 
     const getBadgeVariant = (tipe: string): 'info' | 'warning' | 'danger' => {
         if (tipe === 'urgent') return 'danger';
@@ -60,12 +61,12 @@ export default function PengumumanShow({ pengumuman, isPreview = false }: ShowPr
     const getTanggalRentang = () => {
         if (!pengumuman.tanggal_mulai && !pengumuman.tanggal_selesai) return null;
         if (pengumuman.tanggal_mulai && !pengumuman.tanggal_selesai) {
-            return `${locale === 'id' ? 'Berlaku mulai: ' : 'Effective from: '} ${formatDate(pengumuman.tanggal_mulai, locale as 'id' | 'en')}`;
+            return `${t('pengumuman.valid_from')} ${formatDate(pengumuman.tanggal_mulai, currentLocale)}`;
         }
         if (!pengumuman.tanggal_mulai && pengumuman.tanggal_selesai) {
-            return `${locale === 'id' ? 'Berlaku hingga: ' : 'Valid until: '} ${formatDate(pengumuman.tanggal_selesai, locale as 'id' | 'en')}`;
+            return `${t('pengumuman.valid_until')} ${formatDate(pengumuman.tanggal_selesai, currentLocale)}`;
         }
-        return `${formatDate(pengumuman.tanggal_mulai!, locale as 'id' | 'en')} - ${formatDate(pengumuman.tanggal_selesai!, locale as 'id' | 'en')}`;
+        return `${formatDate(pengumuman.tanggal_mulai!, currentLocale)} - ${formatDate(pengumuman.tanggal_selesai!, currentLocale)}`;
     };
 
     return (
@@ -73,10 +74,10 @@ export default function PengumumanShow({ pengumuman, isPreview = false }: ShowPr
             {isPreview && (
                 <div className="bg-amber-500 text-white font-medium py-2.5 px-4 text-center text-sm shadow-md sticky top-0 z-50 flex items-center justify-center gap-2">
                     <span className="inline-block w-2 h-2 rounded-full bg-white animate-pulse" />
-                    <span>Mode Pratinjau — Pengumuman ini belum diterbitkan ke publik.</span>
+                    <span>{t('pengumuman.preview_mode')}</span>
                 </div>
             )}
-            <Head title={`${pengumuman.judul} | ${locale === 'id' ? 'Pengumuman' : 'Announcement'}`} />
+            <Head title={`${pengumuman.judul} | ${t('pengumuman.page_title')}`} />
 
             {/* HERO SECTION */}
             <section className="relative bg-gradient-to-br from-primary-950 via-primary-900 to-primary-800 text-white pt-36 pb-20 overflow-hidden">
@@ -92,11 +93,11 @@ export default function PengumumanShow({ pengumuman, isPreview = false }: ShowPr
                         {/* Breadcrumbs */}
                         <motion.nav variants={fadeInUp} className="flex items-center space-x-2 text-sm text-white/60 mb-6" aria-label="Breadcrumb">
                             <Link href="/" className="hover:text-white transition-colors duration-200">
-                                {locale === 'id' ? 'Beranda' : 'Home'}
+                                {t('nav.home')}
                             </Link>
                             <ChevronRight size={14} className="text-white/40" />
                             <Link href={route('pengumuman.index')} className="hover:text-white transition-colors duration-200">
-                                {locale === 'id' ? 'Pengumuman' : 'Announcements'}
+                                {t('pengumuman.breadcrumb')}
                             </Link>
                             <ChevronRight size={14} className="text-white/40" />
                             <span className="text-white/90 truncate max-w-[240px]">
@@ -138,7 +139,7 @@ export default function PengumumanShow({ pengumuman, isPreview = false }: ShowPr
                             className="inline-flex items-center text-sm font-semibold text-primary-600 hover:text-primary-700 transition-colors"
                         >
                             <ArrowLeft className="w-4 h-4 mr-1.5" />
-                            <span>{locale === 'id' ? 'Kembali ke Semua Pengumuman' : 'Back to All Announcements'}</span>
+                            <span>{t('pengumuman.back_to_all')}</span>
                         </Link>
                     </div>
 
@@ -155,11 +156,11 @@ export default function PengumumanShow({ pengumuman, isPreview = false }: ShowPr
                         {/* Footer Pengumuman */}
                         <div className="mt-12 pt-6 border-t border-neutral-100 flex flex-col sm:flex-row items-start sm:items-center justify-between text-xs text-neutral-400 gap-2">
                             <span>
-                                {locale === 'id' ? 'Dipublikasikan oleh Sekretariat SMK Muhammadiyah Bligo' : 'Published by Secretariat of SMK Muhammadiyah Bligo'}
+                                {t('pengumuman.published_by')}
                             </span>
                             {pengumuman.created_at && (
                                 <span>
-                                    {locale === 'id' ? 'Dibuat pada: ' : 'Posted on: '} {formatDate(pengumuman.created_at, locale as 'id' | 'en')}
+                                    {t('pengumuman.created_at')} {formatDate(pengumuman.created_at, currentLocale)}
                                 </span>
                             )}
                         </div>

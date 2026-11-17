@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Head, Link, usePage } from '@inertiajs/react';
+import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import * as Icons from 'lucide-react';
 import {
@@ -75,6 +76,7 @@ function EmptyState({ title, className = '' }: { title: string, className?: stri
 }
 
 export default function JurusanShow({ jurusan: response, jurusanLain, pengaturan }: Props) {
+    const { t } = useTranslation();
     const { pengaturan: globalSettings } = usePage<SharedProps>().props;
     const jurusan = response.data;
 
@@ -156,9 +158,9 @@ export default function JurusanShow({ jurusan: response, jurusanLain, pengaturan
 
                 {/* Breadcrumb Sticky Navbar Offset */}
                 <nav className="absolute top-24 left-4 lg:left-8 z-20 flex items-center text-xs lg:text-sm text-white/60">
-                    <Link href="/" className="hover:text-white transition">Beranda</Link>
+                    <Link href="/" className="hover:text-white transition">{t('nav.home')}</Link>
                     <span className="mx-2">/</span>
-                    <Link href="/jurusan" className="hover:text-white transition">Jurusan</Link>
+                    <Link href="/jurusan" className="hover:text-white transition">{t('jurusan.show_breadcrumb')}</Link>
                     <span className="mx-2">/</span>
                     <span className="text-white/80">{jurusan.nama}</span>
                 </nav>
@@ -199,13 +201,13 @@ export default function JurusanShow({ jurusan: response, jurusanLain, pengaturan
                                     className="px-6 py-3 rounded-lg font-semibold border border-transparent shadow-lg text-white hover:-translate-y-1 transition-all"
                                     style={{ backgroundColor: jurusan.color_start, color: 'white' }}
                                 >
-                                    Daftar Sekarang
+                                    {t('jurusan.register_now')}
                                 </a>
                                 <button
                                     disabled
                                     className="px-6 py-3 rounded-lg font-semibold border-2 border-white/30 text-white hover:bg-white/10 transition-all opacity-50 cursor-not-allowed hidden sm:inline-flex"
                                 >
-                                    Unduh Brosur
+                                    {t('jurusan.download_brochure')}
                                 </button>
                             </motion.div>
                         </motion.div>
@@ -243,10 +245,10 @@ export default function JurusanShow({ jurusan: response, jurusanLain, pengaturan
                         <div className="lg:col-span-7 order-2 lg:order-1">
                             <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true }}>
                                 <motion.span variants={fadeInUp} className="text-sm font-semibold tracking-widest text-neutral-400 uppercase mb-4 block">
-                                    Tentang Program
+                                    {t('jurusan.about_program')}
                                 </motion.span>
                                 <motion.h2 variants={fadeInUp} className="text-3xl lg:text-4xl font-serif font-bold text-primary-900 mb-8">
-                                    Apa itu {jurusan.nama}?
+                                    {t('jurusan.what_is')} {jurusan.nama}?
                                 </motion.h2>
 
                                 {jurusan.deskripsi_lengkap ? (
@@ -325,10 +327,10 @@ export default function JurusanShow({ jurusan: response, jurusanLain, pengaturan
                 <div className="container mx-auto px-4 lg:px-8 max-w-7xl">
                     <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }} className="mb-12">
                         <span className="text-sm font-semibold tracking-widest text-gold-500 uppercase mb-4 block">
-                            Yang Akan Dipelajari
+                            {t('jurusan.competencies_badge')}
                         </span>
                         <h2 className="text-3xl lg:text-4xl font-serif font-bold text-primary-900">
-                            Kompetensi Keahlian
+                            {t('jurusan.competencies_heading')}
                         </h2>
                     </motion.div>
 
@@ -355,7 +357,7 @@ export default function JurusanShow({ jurusan: response, jurusanLain, pengaturan
                             ))}
                         </motion.div>
                     ) : (
-                        <EmptyState title="Konten kompetensi sedang disiapkan." />
+                        <EmptyState title={t('jurusan.competencies_empty')} />
                     )}
                 </div>
             </section>
@@ -366,10 +368,10 @@ export default function JurusanShow({ jurusan: response, jurusanLain, pengaturan
                 <div className="container mx-auto px-4 lg:px-8 max-w-7xl relative z-10">
                     <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }} className="mb-12">
                         <span className="text-sm font-semibold tracking-widest text-white/50 uppercase mb-4 block">
-                            Setelah Lulus
+                            {t('jurusan.careers_badge')}
                         </span>
                         <h2 className="text-3xl lg:text-4xl font-serif font-bold text-white">
-                            Prospek Karir Lulusan
+                            {t('jurusan.careers_heading')}
                         </h2>
                     </motion.div>
 
@@ -395,7 +397,7 @@ export default function JurusanShow({ jurusan: response, jurusanLain, pengaturan
                             ))}
                         </motion.div>
                     ) : (
-                        <EmptyState title="Konten prospek karir sedang disiapkan." className="border-white/20 text-white/50" />
+                        <EmptyState title={t('jurusan.careers_empty')} className="border-white/20 text-white/50" />
                     )}
                 </div>
             </section>
@@ -405,10 +407,10 @@ export default function JurusanShow({ jurusan: response, jurusanLain, pengaturan
                 <div className="container mx-auto px-4 lg:px-8 max-w-7xl">
                     <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }} className="mb-12">
                         <span className="text-sm font-semibold tracking-widest text-gold-500 uppercase mb-4 block">
-                            Fasilitas
+                            {t('jurusan.facilities_badge')}
                         </span>
                         <h2 className="text-3xl lg:text-4xl font-serif font-bold text-primary-900">
-                            Sarana & Prasarana Pembelajaran
+                            {t('jurusan.facilities_heading')}
                         </h2>
                     </motion.div>
 
@@ -424,7 +426,7 @@ export default function JurusanShow({ jurusan: response, jurusanLain, pengaturan
                             ))}
                         </div>
                     ) : (
-                        <EmptyState title="Konten fasilitas sedang disiapkan." />
+                        <EmptyState title={t('jurusan.facilities_empty')} />
                     )}
                 </div>
             </section>
@@ -435,10 +437,10 @@ export default function JurusanShow({ jurusan: response, jurusanLain, pengaturan
                     <div className="container mx-auto px-4 lg:px-8 max-w-7xl">
                         <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }} className="mb-12">
                             <span className="text-sm font-semibold tracking-widest text-gold-500 uppercase mb-4 block">
-                                Galeri
+                                {t('jurusan.gallery_badge')}
                             </span>
                             <h2 className="text-3xl lg:text-4xl font-serif font-bold text-primary-900">
-                                Suasana Pembelajaran
+                                {t('jurusan.gallery_heading')}
                             </h2>
                         </motion.div>
 
@@ -464,13 +466,13 @@ export default function JurusanShow({ jurusan: response, jurusanLain, pengaturan
                     <div className="container mx-auto px-4 lg:px-8 max-w-7xl">
                         <div className="text-center max-w-2xl mx-auto mb-12">
                             <span className="text-xs font-mono tracking-widest uppercase text-primary-600 block mb-2">
-                                KERJA SAMA INDUSTRI
+                                {t('jurusan.partners_badge')}
                             </span>
                             <h2 className="text-2xl lg:text-3xl font-serif font-bold text-neutral-900">
-                                Mitra Industri Rekanan {jurusan.kode}
+                                {t('jurusan.partners_heading')} {jurusan.kode}
                             </h2>
                             <p className="text-neutral-500 text-sm mt-3">
-                                Perusahaan rekanan yang bekerja sama dalam praktik kerja lapangan (PKL), uji kompetensi, dan rekrutmen kerja lulusan.
+                                {t('jurusan.partners_desc')}
                             </p>
                         </div>
 
@@ -486,7 +488,7 @@ export default function JurusanShow({ jurusan: response, jurusanLain, pengaturan
                     <div className="flex justify-between items-end mb-10">
                         <div>
                             <h2 className="text-2xl lg:text-3xl font-serif font-bold text-primary-900">
-                                Program Keahlian Lainnya
+                                {t('jurusan.other_programs_heading')}
                             </h2>
                         </div>
                     </div>
@@ -508,10 +510,10 @@ export default function JurusanShow({ jurusan: response, jurusanLain, pengaturan
                     <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full blur-3xl translate-x-1/3 -translate-y-1/3 pointer-events-none"></div>
                     <div className="container mx-auto px-4 lg:px-8 max-w-4xl text-center relative z-10">
                         <h2 className="text-3xl md:text-5xl font-serif font-bold text-white mb-6 leading-tight">
-                            Siap Bergabung di <br className="hidden md:block"/>{jurusan.nama}?
+                            {t('jurusan.cta_ready')} <br className="hidden md:block"/>{jurusan.nama}?
                         </h2>
                         <p className="text-white/80 text-lg md:text-xl mb-10 max-w-2xl mx-auto">
-                            Tentukan karir masa depanmu bersama kami dan jadilah generasi unggul yang siap kerja.
+                            {t('jurusan.cta_ready_desc')}
                         </p>
                         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                             <a
@@ -520,13 +522,13 @@ export default function JurusanShow({ jurusan: response, jurusanLain, pengaturan
                                 rel="noreferrer"
                                 className="w-full sm:w-auto px-8 py-4 bg-gold-500 hover:bg-gold-600 text-white text-lg font-bold rounded-xl shadow-xl transition-all hover:-translate-y-1"
                             >
-                                Daftar Sekarang
+                                {t('jurusan.register_now')}
                             </a>
                             <Link
                                 href="/kontak"
                                 className="w-full sm:w-auto px-8 py-4 border-2 border-white/30 hover:bg-white/10 text-white text-lg font-bold rounded-xl transition-all"
                             >
-                                Hubungi Kami
+                                {t('jurusan.contact_us')}
                             </Link>
                         </div>
                     </div>

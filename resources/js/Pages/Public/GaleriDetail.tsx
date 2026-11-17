@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Head, Link, usePage } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
+import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { ChevronRight, Calendar, ArrowLeft, Image as ImageIcon, Eye } from 'lucide-react';
 import PublicLayout from '@/Layouts/PublicLayout';
 import { Lightbox } from '@/Components/UI/Lightbox';
 import { fadeInUp, staggerContainer } from '@/lib/motion';
-import type { SharedProps } from '@/types';
 
 interface AlbumDetail {
     id: number;
@@ -42,7 +42,7 @@ const GeometricPattern = () => (
 );
 
 export default function GaleriDetail({ album }: DetailProps) {
-    const { locale } = usePage<SharedProps>().props;
+    const { t } = useTranslation();
     const [lightboxOpen, setLightboxOpen] = useState(false);
     const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -53,7 +53,7 @@ export default function GaleriDetail({ album }: DetailProps) {
 
     return (
         <PublicLayout>
-            <Head title={`${album.title} | ${locale === 'id' ? 'Galeri Foto' : 'Photo Gallery'}`} />
+            <Head title={`${album.title} | ${t('galeri.detail_page_title')}`} />
 
             {/* HERO SECTION */}
             <section className="relative bg-gradient-to-br from-primary-950 via-primary-900 to-primary-800 text-white pt-36 pb-20 overflow-hidden">
@@ -70,11 +70,11 @@ export default function GaleriDetail({ album }: DetailProps) {
                         {/* Breadcrumbs */}
                         <motion.nav variants={fadeInUp} className="flex items-center space-x-2 text-sm text-white/60 mb-6" aria-label="Breadcrumb">
                             <Link href="/" className="hover:text-white transition-colors duration-200">
-                                {locale === 'id' ? 'Beranda' : 'Home'}
+                                {t('nav.home')}
                             </Link>
                             <ChevronRight size={14} className="text-white/40" />
                             <Link href={route('galeri')} className="hover:text-white transition-colors duration-200">
-                                {locale === 'id' ? 'Galeri' : 'Gallery'}
+                                {t('galeri.breadcrumb')}
                             </Link>
                             <ChevronRight size={14} className="text-white/40" />
                             <span className="text-white/90 truncate max-w-[240px]">
@@ -85,7 +85,7 @@ export default function GaleriDetail({ album }: DetailProps) {
                         <motion.div variants={fadeInUp} className="flex items-center gap-3 text-gold-400 text-sm font-medium mb-3">
                             <ImageIcon className="w-4 h-4 text-gold-400" />
                             <span>
-                                {album.photo_count} {locale === 'id' ? 'Foto Dokumentasi' : 'Photos'}
+                                {album.photo_count} {t('galeri.detail_photos_badge')}
                             </span>
                             {album.formatted_date && (
                                 <>
@@ -122,7 +122,7 @@ export default function GaleriDetail({ album }: DetailProps) {
                             className="inline-flex items-center text-sm font-semibold text-primary-600 hover:text-primary-700 transition-colors"
                         >
                             <ArrowLeft className="w-4 h-4 mr-1.5" />
-                            <span>{locale === 'id' ? 'Kembali ke Semua Album' : 'Back to All Albums'}</span>
+                            <span>{t('galeri.back_to_all')}</span>
                         </Link>
                     </div>
 
@@ -156,12 +156,10 @@ export default function GaleriDetail({ album }: DetailProps) {
                         <div className="text-center py-20 bg-white rounded-3xl border border-neutral-200 p-8">
                             <ImageIcon className="w-12 h-12 text-neutral-300 mx-auto mb-4" />
                             <h3 className="text-lg font-bold text-neutral-800 mb-1">
-                                {locale === 'id' ? 'Belum ada foto' : 'No photos available'}
+                                {t('galeri.empty_album_title')}
                             </h3>
                             <p className="text-neutral-500 text-sm">
-                                {locale === 'id'
-                                    ? 'Belum ada foto yang diunggah pada album ini.'
-                                    : 'There are no photos uploaded in this album yet.'}
+                                {t('galeri.empty_album_desc')}
                             </p>
                         </div>
                     )}
@@ -176,7 +174,7 @@ export default function GaleriDetail({ album }: DetailProps) {
                 currentIndex={currentIndex}
                 onIndexChange={setCurrentIndex}
                 title={album.title}
-                subtitle={`${album.photo_count} Foto • ${album.formatted_date ?? ''}`}
+                subtitle={`${album.photo_count} ${t('galeri.photos_count')} • ${album.formatted_date ?? ''}`}
             />
         </PublicLayout>
     );

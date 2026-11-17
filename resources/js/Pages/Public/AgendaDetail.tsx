@@ -1,8 +1,8 @@
-import { usePage, Link } from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
+import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
-import { ChevronRight, Calendar, MapPin, Clock, ArrowLeft, Download } from 'lucide-react';
+import { ChevronRight, Calendar, MapPin, ArrowLeft, Download } from 'lucide-react';
 import PublicLayout from '@/Layouts/PublicLayout';
-import type { SharedProps } from '@/types';
 import { fadeInUp, staggerContainer } from '@/lib/motion';
 import { format, parseISO, isSameDay } from 'date-fns';
 import { id as idLocale, enUS as enLocale } from 'date-fns/locale';
@@ -32,88 +32,66 @@ const GeometricPattern = () => (
     </svg>
 );
 
-const PageHero = ({ t, title }: { t: any; title: string }) => (
-    <section className="relative bg-primary-900 overflow-hidden min-h-[360px] flex items-center">
-        <GeometricPattern />
-        <div className="absolute inset-0 bg-gradient-to-br from-primary-600/60 via-transparent to-primary-900" />
+const PageHero = ({ title }: { title: string }) => {
+    const { t } = useTranslation();
+    return (
+        <section className="relative bg-primary-900 overflow-hidden min-h-[360px] flex items-center">
+            <GeometricPattern />
+            <div className="absolute inset-0 bg-gradient-to-br from-primary-600/60 via-transparent to-primary-900" />
 
-        {/* Decorative Elements */}
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gold-500/20 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2" />
+            {/* Decorative Elements */}
+            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gold-500/20 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2" />
 
-        <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-24 lg:py-32">
-            <motion.div
-                variants={staggerContainer}
-                initial="hidden"
-                animate="visible"
-                className="w-full max-w-4xl mx-auto text-center flex flex-col items-center mt-6"
-            >
-                <motion.p
-                    variants={fadeInUp}
-                    className="text-xs font-bold tracking-[0.25em] uppercase text-gold-500 mb-4"
+            <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-24 lg:py-32">
+                <motion.div
+                    variants={staggerContainer}
+                    initial="hidden"
+                    animate="visible"
+                    className="w-full max-w-4xl mx-auto text-center flex flex-col items-center mt-6"
                 >
-                    {t.hero_subtitle}
-                </motion.p>
-                <motion.h1
-                    variants={fadeInUp}
-                    className="font-serif text-4xl sm:text-5xl lg:text-5xl font-bold text-white leading-tight mb-6"
-                >
-                    Detail <span className="text-gold-500">Agenda</span>
-                </motion.h1>
-                <motion.nav
-                    variants={fadeInUp}
-                    aria-label="Breadcrumb"
-                    className="flex items-center justify-center gap-2 text-sm text-white/60 mb-8"
-                >
-                    <Link href="/" className="hover:text-white transition-colors duration-200">
-                        {t.beranda}
-                    </Link>
-                    <ChevronRight size={14} className="text-white/40" />
-                    <Link href={route('agenda.index')} className="hover:text-white transition-colors duration-200">
-                        {t.agenda}
-                    </Link>
-                    <ChevronRight size={14} className="text-white/40" />
-                    <span className="text-white/90 truncate max-w-[200px]" title={title}>
-                        {title}
-                    </span>
-                </motion.nav>
-            </motion.div>
-        </div>
-        <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white to-transparent" />
-    </section>
-);
+                    <motion.p
+                        variants={fadeInUp}
+                        className="text-xs font-bold tracking-[0.25em] uppercase text-gold-500 mb-4"
+                    >
+                        {t('agenda.hero_subtitle')}
+                    </motion.p>
+                    <motion.h1
+                        variants={fadeInUp}
+                        className="font-serif text-4xl sm:text-5xl lg:text-5xl font-bold text-white leading-tight mb-6"
+                    >
+                        {t('agenda.detail_hero_1')} <span className="text-gold-500">{t('agenda.detail_hero_2')}</span>
+                    </motion.h1>
+                    <motion.nav
+                        variants={fadeInUp}
+                        aria-label="Breadcrumb"
+                        className="flex items-center justify-center gap-2 text-sm text-white/60 mb-8"
+                    >
+                        <Link href="/" className="hover:text-white transition-colors duration-200">
+                            {t('nav.home')}
+                        </Link>
+                        <ChevronRight size={14} className="text-white/40" />
+                        <Link href={route('agenda.index')} className="hover:text-white transition-colors duration-200">
+                            {t('agenda.breadcrumb')}
+                        </Link>
+                        <ChevronRight size={14} className="text-white/40" />
+                        <span className="text-white/90 truncate max-w-[200px]" title={title}>
+                            {title}
+                        </span>
+                    </motion.nav>
+                </motion.div>
+            </div>
+            <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white to-transparent" />
+        </section>
+    );
+};
 
 export default function AgendaDetail({ agenda }: AgendaDetailProps) {
-    const { locale } = usePage<SharedProps>().props;
+    const { t, i18n } = useTranslation();
+    const currentLocale = (i18n.language || 'id') as 'id' | 'en';
+    const dateFnsLocale = currentLocale === 'en' ? enLocale : idLocale;
     const data = agenda.data || agenda; // From API Resource
 
-    const TEXT = {
-        id: {
-            kembali: 'Kembali ke Agenda',
-            detail_kegiatan: 'Detail Kegiatan',
-            lokasi: 'Lokasi',
-            waktu: 'Waktu Pelaksanaan',
-            deskripsi: 'Deskripsi Kegiatan',
-            tipe: 'Kategori Agenda',
-            hero_subtitle: 'KALENDER AKADEMIK',
-            beranda: 'Beranda',
-            agenda: 'Agenda'
-        },
-        en: {
-            kembali: 'Back to Events',
-            detail_kegiatan: 'Event Details',
-            lokasi: 'Location',
-            waktu: 'Date & Time',
-            deskripsi: 'Event Description',
-            tipe: 'Event Category',
-            hero_subtitle: 'ACADEMIC CALENDAR',
-            beranda: 'Home',
-            agenda: 'Events'
-        }
-    };
-
-    const t = (TEXT as Record<string, typeof TEXT.id>)[locale] ?? TEXT.id;
-
-    const translation = locale === 'en' && data.translations?.en
+    const translation = currentLocale === 'en' && data.translations?.en
         ? data.translations.en
         : data.translations?.id || {};
 
@@ -123,7 +101,7 @@ export default function AgendaDetail({ agenda }: AgendaDetailProps) {
 
     return (
         <PublicLayout>
-            <PageHero t={t} title={translation.judul || data.judul_id} />
+            <PageHero title={translation.judul || data.judul_id} />
 
             <section className="bg-neutral-50 pb-20 min-h-screen z-2">
                 <div className="container mx-auto px-4 max-w-4xl -mt-[100px] relative z-10">
@@ -132,7 +110,7 @@ export default function AgendaDetail({ agenda }: AgendaDetailProps) {
                         className="inline-flex items-center text-sm font-medium text-white/80 hover:text-white mb-6 transition-colors shadow-sm bg-black/20 px-4 py-2 rounded-full backdrop-blur-sm w-fit"
                     >
                         <ArrowLeft className="w-4 h-4 mr-2" />
-                        {t.kembali}
+                        {t('agenda.back_to_all')}
                     </Link>
 
                     <motion.div
@@ -152,7 +130,7 @@ export default function AgendaDetail({ agenda }: AgendaDetailProps) {
                                         {format(startDate, 'd')}
                                     </span>
                                     <span className="relative text-sm font-medium uppercase tracking-widest opacity-90">
-                                        {format(startDate, 'MMM', { locale: locale === 'en' ? enLocale : idLocale })}
+                                        {format(startDate, 'MMM', { locale: dateFnsLocale })}
                                     </span>
                                 </div>
                             </div>
@@ -179,14 +157,14 @@ export default function AgendaDetail({ agenda }: AgendaDetailProps) {
                                             <Calendar className="w-5 h-5" />
                                         </div>
                                         <div>
-                                            <p className="text-xs font-bold uppercase tracking-wider text-neutral-400 mb-1">{t.waktu}</p>
+                                            <p className="text-xs font-bold uppercase tracking-wider text-neutral-400 mb-1">{t('agenda.time_label')}</p>
                                             <p className="text-sm font-medium text-neutral-800">
-                                                {format(startDate, 'EEEE, d MMMM yyyy', { locale: locale === 'en' ? enLocale : idLocale })}
+                                                {format(startDate, 'EEEE, d MMMM yyyy', { locale: dateFnsLocale })}
                                                 {!isSingleDay && endDate && (
                                                     <>
                                                         <span className="mx-2 text-neutral-400">-</span>
                                                         <br className="sm:hidden" />
-                                                        {format(endDate, 'EEEE, d MMMM yyyy', { locale: locale === 'en' ? enLocale : idLocale })}
+                                                        {format(endDate, 'EEEE, d MMMM yyyy', { locale: dateFnsLocale })}
                                                     </>
                                                 )}
                                             </p>
@@ -199,7 +177,7 @@ export default function AgendaDetail({ agenda }: AgendaDetailProps) {
                                                 <MapPin className="w-5 h-5" />
                                             </div>
                                             <div>
-                                                <p className="text-xs font-bold uppercase tracking-wider text-neutral-400 mb-1">{t.lokasi}</p>
+                                                <p className="text-xs font-bold uppercase tracking-wider text-neutral-400 mb-1">{t('agenda.location')}</p>
                                                 <p className="text-sm font-medium text-neutral-800">{translation.lokasi}</p>
                                             </div>
                                         </div>
@@ -214,13 +192,13 @@ export default function AgendaDetail({ agenda }: AgendaDetailProps) {
                                         className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary-600 hover:bg-primary-700 text-white font-semibold text-sm transition-colors shadow-sm"
                                     >
                                         <Download className="w-4 h-4" />
-                                        <span>{locale === 'en' ? 'Add to Calendar (.ics)' : 'Tambah ke Kalender (.ics)'}</span>
+                                        <span>{t('agenda.add_to_calendar')}</span>
                                     </a>
                                 </div>
 
                                 {translation.deskripsi && (
                                     <div className="pt-8 border-t border-neutral-100">
-                                        <h3 className="text-lg font-bold text-neutral-900 mb-4">{t.deskripsi}</h3>
+                                        <h3 className="text-lg font-bold text-neutral-900 mb-4">{t('agenda.desc_label')}</h3>
                                         <div className="prose prose-neutral max-w-none text-neutral-600 leading-relaxed whitespace-pre-wrap">
                                             {translation.deskripsi}
                                         </div>

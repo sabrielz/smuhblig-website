@@ -1,4 +1,5 @@
 import { Head, Link, usePage } from '@inertiajs/react';
+import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { ArrowRight, BookOpen, ChevronRight } from 'lucide-react';
 import PublicLayout from '@/Layouts/PublicLayout';
@@ -37,6 +38,7 @@ const GeometricPattern = () => (
 
 // ─── Hero Section ─────────────────────────────────────────────────────────────
 function HeroSection() {
+    const { t } = useTranslation();
     return (
         <section className="relative min-h-[52vh] flex items-center bg-primary-900 overflow-hidden">
             <GeometricPattern />
@@ -68,17 +70,17 @@ function HeroSection() {
                             href="/"
                             className="hover:text-white/80 transition-colors duration-200"
                         >
-                            Beranda
+                            {t('nav.home')}
                         </Link>
                         <ChevronRight className="w-4 h-4 flex-shrink-0" strokeWidth={1.5} />
-                        <span className="text-white/80">Program Keahlian</span>
+                        <span className="text-white/80">{t('jurusan.index_breadcrumb')}</span>
                     </motion.nav>
 
                     {/* Eyebrow */}
                     <motion.div variants={fadeInUp} className="flex items-center gap-3 mb-6">
                         <div className="w-8 h-px bg-gold-500" />
                         <span className="text-gold-500 text-sm font-semibold tracking-widest uppercase font-sans">
-                            SMK Muhammadiyah Bligo
+                            {t('jurusan.index_school')}
                         </span>
                     </motion.div>
 
@@ -87,7 +89,7 @@ function HeroSection() {
                         variants={fadeInUp}
                         className="font-serif text-display-lg lg:text-display-xl font-bold text-white leading-tight mb-6"
                     >
-                        Program Keahlian
+                        {t('jurusan.index_title')}
                     </motion.h1>
 
                     {/* Sub */}
@@ -95,7 +97,7 @@ function HeroSection() {
                         variants={fadeInUp}
                         className="text-lg lg:text-xl text-white/70 font-sans leading-relaxed max-w-xl"
                     >
-                        Lima program keahlian pilihan untuk masa depan Anda
+                        {t('jurusan.index_subtitle')}
                     </motion.p>
                 </motion.div>
             </div>
@@ -109,6 +111,7 @@ interface GridSectionProps {
 }
 
 function GridJurusanSection({ jurusan }: GridSectionProps) {
+    const { t } = useTranslation();
     return (
         <section className="py-20 lg:py-28 bg-neutral-50">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
@@ -121,14 +124,13 @@ function GridJurusanSection({ jurusan }: GridSectionProps) {
                     className="text-center mb-14"
                 >
                     <span className="inline-block text-gold-500 text-sm font-semibold tracking-widest uppercase mb-4">
-                        Pilihan Program
+                        {t('jurusan.index_programs_badge')}
                     </span>
                     <h2 className="font-serif text-display-md lg:text-display-lg font-bold text-primary-900 mb-4">
-                        Temukan Keahlian Anda
+                        {t('jurusan.index_programs_heading')}
                     </h2>
                     <p className="text-neutral-500 text-lg max-w-xl mx-auto leading-relaxed">
-                        Setiap program dirancang untuk menghasilkan lulusan yang kompeten,
-                        siap kerja, dan berakhlak mulia.
+                        {t('jurusan.index_programs_desc')}
                     </p>
                 </motion.div>
 
@@ -172,7 +174,7 @@ function GridJurusanSection({ jurusan }: GridSectionProps) {
                             strokeWidth={1.5}
                         />
                         <p className="text-neutral-500 text-lg">
-                            Program keahlian belum tersedia.
+                            {t('jurusan.index_empty')}
                         </p>
                     </motion.div>
                 )}
@@ -183,6 +185,7 @@ function GridJurusanSection({ jurusan }: GridSectionProps) {
 
 // ─── CTA Section ─────────────────────────────────────────────────────────────
 function CTASection() {
+    const { t } = useTranslation();
     return (
         <section className="py-20 lg:py-28 bg-primary-900 relative overflow-hidden">
             <GeometricPattern />
@@ -210,7 +213,7 @@ function CTASection() {
                     <motion.div variants={fadeInUp} className="flex items-center justify-center gap-3 mb-6">
                         <div className="w-8 h-px bg-gold-500" />
                         <span className="text-gold-500 text-sm font-semibold tracking-widest uppercase">
-                            Butuh Bantuan?
+                            {t('jurusan.index_need_help')}
                         </span>
                         <div className="w-8 h-px bg-gold-500" />
                     </motion.div>
@@ -219,15 +222,14 @@ function CTASection() {
                         variants={fadeInUp}
                         className="font-serif text-display-md lg:text-display-lg font-bold text-white mb-4 leading-tight"
                     >
-                        Belum yakin pilih jurusan?
+                        {t('jurusan.index_cta_heading')}
                     </motion.h2>
 
                     <motion.p
                         variants={fadeInUp}
                         className="text-white/70 text-lg leading-relaxed mb-10"
                     >
-                        Konsultasikan pilihan jurusan Anda dengan tim kami. Kami siap
-                        membimbing Anda menemukan program yang tepat.
+                        {t('jurusan.index_cta_desc')}
                     </motion.p>
 
                     <motion.div
@@ -241,7 +243,7 @@ function CTASection() {
                                        font-semibold rounded-xl hover:bg-gold-600 transition-all duration-200
                                        shadow-lg shadow-gold-500/20 hover:shadow-gold-500/30 hover:-translate-y-0.5 min-h-11"
                         >
-                            Hubungi Kami
+                            {t('jurusan.index_cta_button')}
                             <ArrowRight className="w-5 h-5" strokeWidth={1.5} />
                         </Link>
                     </motion.div>

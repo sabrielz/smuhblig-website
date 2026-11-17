@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Head, router, Link } from '@inertiajs/react';
+import { useTranslation } from 'react-i18next';
 import PublicLayout from '@/Layouts/PublicLayout';
 import { ArticleCard } from '@/Components/UI/ArticleCard';
 import { EmptyState } from '@/Components/UI/EmptyState';
@@ -54,6 +55,7 @@ const GeometricPattern = () => (
 );
 
 export default function BeritaIndex({ articles, categories, filters }: IndexProps) {
+    const { t } = useTranslation();
     const [searchQuery, setSearchQuery] = useState(filters?.q || '');
 
     const handleSearch = (e: React.FormEvent) => {
@@ -82,7 +84,7 @@ export default function BeritaIndex({ articles, categories, filters }: IndexProp
 
     return (
         <PublicLayout>
-            <Head title="Berita & Informasi" />
+            <Head title={t('berita.page_title')} />
 
             {/* SECTION 1: Page Hero */}
             <section className="relative bg-primary-900 overflow-hidden min-h-[360px] flex items-center">
@@ -104,13 +106,13 @@ export default function BeritaIndex({ articles, categories, filters }: IndexProp
                             variants={fadeInUp}
                             className="text-xs font-bold tracking-[0.25em] uppercase text-gold-500 mb-4"
                         >
-                            INFO KAMPUS
+                            {t('berita.eyebrow')}
                         </motion.p>
                         <motion.h1
                             variants={fadeInUp}
                             className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6"
                         >
-                            Berita &amp; <span className="text-gold-500">Informasi</span>
+                            {t('berita.headline_1')} <span className="text-gold-500">{t('berita.headline_2')}</span>
                         </motion.h1>
                         <motion.nav
                             variants={fadeInUp}
@@ -118,26 +120,26 @@ export default function BeritaIndex({ articles, categories, filters }: IndexProp
                             className="flex items-center justify-center gap-2 text-sm text-white/60 mb-8"
                         >
                             <Link href="/" className="hover:text-white transition-colors duration-200">
-                                Beranda
+                                {t('nav.home')}
                             </Link>
                             <ChevronRight size={14} className="text-white/40" />
-                            <span className="text-white/90">Berita</span>
+                            <span className="text-white/90">{t('berita.breadcrumb')}</span>
                         </motion.nav>
                         <motion.p variants={fadeInUp} className="text-lg sm:text-xl text-white/80 mb-12 max-w-2xl mx-auto leading-relaxed">
-                            Ikuti perkembangan terbaru, kegiatan sekolah, dan prestasi siswa-siswi SMK Muhammadiyah Bligo.
+                            {t('berita.hero_desc')}
                         </motion.p>
 
                         <motion.form variants={fadeInUp} onSubmit={handleSearch} className="w-full max-w-2xl relative flex items-center mx-auto shadow-2xl">
                             <Input
                                 type="text"
-                                placeholder="Cari berita..."
+                                placeholder={t('berita.search_placeholder')}
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                                 className="w-full pl-14 pr-32 py-5 rounded-full bg-white/10 border-white/20 text-white placeholder:text-white/50 focus:bg-white focus:text-neutral-900 focus:border-white transition-all backdrop-blur-md text-base"
                             />
                             <Search className={cn("absolute left-5 w-6 h-6", searchQuery ? 'text-primary-600' : 'text-white/50')} />
                             <Button type="submit" variant="primary" className="absolute right-2 rounded-full px-8 py-3 bg-gold-500 hover:bg-gold-600 text-white border-none font-semibold transition-all">
-                                Cari
+                                {t('berita.search_button')}
                             </Button>
                         </motion.form>
                     </motion.div>
@@ -159,7 +161,7 @@ export default function BeritaIndex({ articles, categories, filters }: IndexProp
                                     : "bg-white text-neutral-600 border-neutral-200 hover:border-primary-navy hover:text-primary-navy"
                             )}
                         >
-                            Semua Berita
+                            {t('berita.all_news')}
                         </button>
 
                         {categories.map((category) => (
@@ -181,7 +183,7 @@ export default function BeritaIndex({ articles, categories, filters }: IndexProp
                     {/* Tag Filter Badge */}
                     {filters.tag && (
                         <div className="mb-8 flex items-center gap-2">
-                            <span className="text-sm text-neutral-500">Menampilkan topik:</span>
+                            <span className="text-sm text-neutral-500">{t('berita.topic_showing')}</span>
                             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-50 text-primary-700 text-xs font-semibold border border-primary-200">
                                 <Tag className="w-3.5 h-3.5" />
                                 #{filters.tag}
@@ -191,7 +193,7 @@ export default function BeritaIndex({ articles, categories, filters }: IndexProp
                                         ...(filters.q ? { q: filters.q } : {}),
                                     })}
                                     className="p-0.5 rounded-full hover:bg-primary-200 text-primary-700 transition-colors ml-0.5"
-                                    aria-label="Hapus filter tag"
+                                    aria-label={t('berita.remove_tag_filter')}
                                 >
                                     <X className="w-3.5 h-3.5" />
                                 </Link>
@@ -209,10 +211,10 @@ export default function BeritaIndex({ articles, categories, filters }: IndexProp
                     ) : (
                         <EmptyState
                             icon={<Newspaper className="w-10 h-10 text-neutral-400" />}
-                            title="Tidak Ada Berita"
-                            description="Belum ada berita yang diterbitkan untuk kategori atau pencarian ini."
+                            title={t('berita.empty_title')}
+                            description={t('berita.empty_desc')}
                             action={filters.category || filters.q ? {
-                                label: "Hapus Filter",
+                                label: t('berita.remove_filter'),
                                 onClick: () => router.get(route('berita.index'))
                             } : undefined}
                             className="bg-white rounded-2xl border border-neutral-100 shadow-sm py-20"

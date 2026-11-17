@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { usePage, Link } from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
+import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { ChevronRight, Eye, Play, ImageIcon, Video as VideoIcon, ExternalLink } from 'lucide-react';
 import PublicLayout from '@/Layouts/PublicLayout';
-import type { SharedProps, Pengaturan } from '@/types';
+import type { Pengaturan } from '@/types';
 import {
     fadeInUp,
     staggerContainer,
@@ -58,58 +59,62 @@ const GeometricPattern = () => (
 );
 
 // Page Hero
-const PageHero = () => (
-    <section className="relative min-h-[45vh] flex flex-col justify-center overflow-hidden bg-primary-dark">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary-900 via-primary-dark to-primary-900" />
-        <GeometricPattern />
-        <div className="absolute inset-0 bg-gradient-to-br from-primary-600/60 via-transparent to-primary-900" />
+const PageHero = () => {
+    const { t } = useTranslation();
+    return (
+        <section className="relative min-h-[45vh] flex flex-col justify-center overflow-hidden bg-primary-dark">
+            <div className="absolute inset-0 bg-gradient-to-br from-primary-900 via-primary-dark to-primary-900" />
+            <GeometricPattern />
+            <div className="absolute inset-0 bg-gradient-to-br from-primary-600/60 via-transparent to-primary-900" />
 
-        {/* Decorative Elements */}
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gold-500/20 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2" />
+            {/* Decorative Elements */}
+            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gold-500/20 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2" />
 
-        <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl pt-24 pb-16">
-            <motion.div
-                variants={staggerContainer}
-                initial="initial"
-                animate="animate"
-                className="max-w-3xl"
-            >
-                <motion.div variants={fadeInUp} className="flex items-center space-x-2 text-gold-500 text-sm font-semibold mb-4 tracking-wider uppercase">
-                    <span>Dokumentasi</span>
-                    <span className="w-8 h-[1px] bg-gold-500" />
-                    <span>Kegiatan</span>
+            <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl pt-24 pb-16">
+                <motion.div
+                    variants={staggerContainer}
+                    initial="initial"
+                    animate="animate"
+                    className="max-w-3xl"
+                >
+                    <motion.div variants={fadeInUp} className="flex items-center space-x-2 text-gold-500 text-sm font-semibold mb-4 tracking-wider uppercase">
+                        <span>{t('galeri.hero_eyebrow_1')}</span>
+                        <span className="w-8 h-[1px] bg-gold-500" />
+                        <span>{t('galeri.hero_eyebrow_2')}</span>
+                    </motion.div>
+
+                    <motion.h1
+                        variants={fadeInUp}
+                        className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-tight mb-6"
+                    >
+                        {t('galeri.hero_title_1')} <span className="text-gold-500 italic">{t('galeri.hero_title_2')}</span>
+                    </motion.h1>
+
+                    {/* Breadcrumbs */}
+                    <motion.nav variants={fadeInUp} className="flex items-center space-x-2 text-sm text-white/60 mb-6" aria-label="Breadcrumb">
+                        <Link href="/" className="hover:text-white transition-colors duration-200">
+                            {t('nav.home')}
+                        </Link>
+                        <ChevronRight size={14} className="text-white/40" />
+                        <span className="text-white/90">{t('galeri.breadcrumb')}</span>
+                    </motion.nav>
+
+                    <motion.p
+                        variants={fadeInUp}
+                        className="text-white/80 text-base sm:text-lg leading-relaxed max-w-2xl font-light"
+                    >
+                        {t('galeri.hero_desc')}
+                    </motion.p>
                 </motion.div>
+            </div>
 
-                <motion.h1
-                    variants={fadeInUp}
-                    className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-tight mb-6"
-                >
-                    Galeri <span className="text-gold-500 italic">Sekolah</span>
-                </motion.h1>
-
-                {/* Breadcrumbs */}
-                <motion.nav variants={fadeInUp} className="flex items-center space-x-2 text-sm text-white/60 mb-6" aria-label="Breadcrumb">
-                    <Link href="/" className="hover:text-white transition-colors duration-200">
-                        Beranda
-                    </Link>
-                    <ChevronRight size={14} className="text-white/40" />
-                    <span className="text-white/90">Galeri</span>
-                </motion.nav>
-
-                <motion.p
-                    variants={fadeInUp}
-                    className="text-white/80 text-base sm:text-lg leading-relaxed max-w-2xl font-light"
-                >
-                    Merekam jejak langkah prestasi, keceriaan, dan dedikasi seluruh civitas akademika SMK Muhammadiyah Bligo melalui foto dan video dokumentasi.
-                </motion.p>
-            </motion.div>
-        </div>
-
-        <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white to-transparent" />
-    </section>
-);
+            <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white to-transparent" />
+        </section>
+    );
+};
 
 export default function Galeri({ galleries, videos = [] }: GaleriProps) {
+    const { t } = useTranslation();
     const [activeTab, setActiveTab] = useState<'foto' | 'video'>('foto');
 
     return (
@@ -130,7 +135,7 @@ export default function Galeri({ galleries, videos = [] }: GaleriProps) {
                             }`}
                         >
                             <ImageIcon className="w-4 h-4" />
-                            <span>Album Foto ({galleries.length})</span>
+                            <span>{t('galeri.tab_photos')} ({galleries.length})</span>
                         </button>
                         <button
                             type="button"
@@ -142,7 +147,7 @@ export default function Galeri({ galleries, videos = [] }: GaleriProps) {
                             }`}
                         >
                             <VideoIcon className="w-4 h-4 text-red-600" />
-                            <span>Galeri Video ({videos.length})</span>
+                            <span>{t('galeri.tab_videos')} ({videos.length})</span>
                         </button>
                     </div>
                 </div>
@@ -155,7 +160,7 @@ export default function Galeri({ galleries, videos = [] }: GaleriProps) {
                         /* Album Foto */
                         galleries.length === 0 ? (
                             <div className="text-center text-neutral-500 py-16">
-                                Belum ada album galeri foto yang dipublikasikan.
+                                {t('galeri.empty_photos')}
                             </div>
                         ) : (
                             <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">
@@ -180,11 +185,11 @@ export default function Galeri({ galleries, videos = [] }: GaleriProps) {
                                                 <div className="translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
                                                     <div className="flex items-center justify-between mb-2">
                                                         <span className="text-xs font-semibold text-gold-500 uppercase tracking-wider">
-                                                            {album.formatted_date || 'Tanpa Tanggal'}
+                                                            {album.formatted_date || t('galeri.no_date')}
                                                         </span>
                                                         <span className="flex items-center gap-1.5 text-xs text-white/80 bg-black/30 backdrop-blur-sm px-2.5 py-1 rounded-full">
                                                             <Eye size={12} />
-                                                            {album.photo_count} Foto
+                                                            {album.photo_count} {t('galeri.photos_count')}
                                                         </span>
                                                     </div>
                                                     <h3 className="text-white font-serif text-lg font-bold leading-tight">
@@ -205,7 +210,7 @@ export default function Galeri({ galleries, videos = [] }: GaleriProps) {
                         /* Galeri Video YouTube (ADR-006 Opsi a: Thumbnail i.ytimg.com + Tautan Resmi YouTube) */
                         videos.length === 0 ? (
                             <div className="text-center text-neutral-500 py-16">
-                                Belum ada video yang dipublikasikan.
+                                {t('galeri.empty_videos')}
                             </div>
                         ) : (
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
@@ -253,7 +258,7 @@ export default function Galeri({ galleries, videos = [] }: GaleriProps) {
                                                 rel="noopener noreferrer"
                                                 className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-neutral-100 hover:bg-red-50 text-neutral-700 hover:text-red-700 text-xs font-semibold transition-colors"
                                             >
-                                                <span>Tonton di YouTube</span>
+                                                <span>{t('galeri.watch_youtube')}</span>
                                                 <ExternalLink className="w-3.5 h-3.5" />
                                             </a>
                                         </div>

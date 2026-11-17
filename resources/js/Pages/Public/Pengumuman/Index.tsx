@@ -1,5 +1,6 @@
 import React from 'react';
-import { Head, Link, router, usePage } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
+import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Bell, Calendar, ChevronRight, Info, AlertTriangle, AlertCircle, ArrowRight } from 'lucide-react';
 import PublicLayout from '@/Layouts/PublicLayout';
@@ -7,7 +8,6 @@ import { Badge } from '@/Components/UI/Badge';
 import { Pagination } from '@/Components/UI/Pagination';
 import { formatDate } from '@/lib/utils';
 import { fadeInUp, staggerContainer } from '@/lib/motion';
-import type { SharedProps } from '@/types';
 
 interface PengumumanItem {
     id: number;
@@ -51,13 +51,14 @@ const GeometricPattern = () => (
 );
 
 export default function PengumumanIndex({ pengumuman, filters }: IndexProps) {
-    const { locale } = usePage<SharedProps>().props;
+    const { t, i18n } = useTranslation();
+    const currentLocale = (i18n.language || 'id') as 'id' | 'en';
 
     const filterOptions = [
-        { value: '', label_id: 'Semua', label_en: 'All' },
-        { value: 'info', label_id: 'Info', label_en: 'Info' },
-        { value: 'penting', label_id: 'Penting', label_en: 'Important' },
-        { value: 'urgent', label_id: 'Urgent', label_en: 'Urgent' },
+        { value: '', labelKey: 'pengumuman.filter_all' },
+        { value: 'info', labelKey: 'pengumuman.filter_info' },
+        { value: 'penting', labelKey: 'pengumuman.filter_important' },
+        { value: 'urgent', labelKey: 'pengumuman.filter_urgent' },
     ];
 
     const getBadgeVariant = (tipe: string): 'info' | 'warning' | 'danger' => {
@@ -74,7 +75,7 @@ export default function PengumumanIndex({ pengumuman, filters }: IndexProps) {
 
     return (
         <PublicLayout>
-            <Head title={locale === 'id' ? 'Pengumuman Resmi' : 'Official Announcements'} />
+            <Head title={t('pengumuman.page_title')} />
 
             {/* HERO SECTION */}
             <section className="relative bg-gradient-to-br from-primary-950 via-primary-900 to-primary-800 text-white pt-36 pb-20 overflow-hidden">
@@ -91,28 +92,26 @@ export default function PengumumanIndex({ pengumuman, filters }: IndexProps) {
                         <motion.div variants={fadeInUp} className="flex items-center space-x-2 text-gold-400 text-sm font-medium mb-3">
                             <Bell className="w-4 h-4 text-gold-400" />
                             <span className="uppercase tracking-wider">
-                                {locale === 'id' ? 'Pusat Informasi' : 'Information Center'}
+                                {t('pengumuman.eyebrow')}
                             </span>
                         </motion.div>
 
                         <motion.h1 variants={fadeInUp} className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-4">
-                            {locale === 'id' ? 'Pengumuman Resmi' : 'Official Announcements'}
+                            {t('pengumuman.headline')}
                         </motion.h1>
 
                         <motion.p variants={fadeInUp} className="text-white/80 text-lg max-w-2xl leading-relaxed">
-                            {locale === 'id'
-                                ? 'Informasi penting, edaran resmi, dan pemberitahuan terkini seputar kegiatan SMK Muhammadiyah Bligo.'
-                                : 'Important official information, announcements, and notices regarding SMK Muhammadiyah Bligo activities.'}
+                            {t('pengumuman.hero_desc')}
                         </motion.p>
 
                         {/* Breadcrumbs */}
                         <motion.nav variants={fadeInUp} className="flex items-center space-x-2 text-sm text-white/60 mt-8" aria-label="Breadcrumb">
                             <Link href="/" className="hover:text-white transition-colors duration-200">
-                                {locale === 'id' ? 'Beranda' : 'Home'}
+                                {t('nav.home')}
                             </Link>
                             <ChevronRight size={14} className="text-white/40" />
                             <span className="text-white/90">
-                                {locale === 'id' ? 'Pengumuman' : 'Announcements'}
+                                {t('pengumuman.breadcrumb')}
                             </span>
                         </motion.nav>
                     </motion.div>
@@ -139,7 +138,7 @@ export default function PengumumanIndex({ pengumuman, filters }: IndexProps) {
                                             : 'bg-white text-neutral-600 hover:bg-neutral-100 border border-neutral-200'
                                     }`}
                                 >
-                                    {locale === 'id' ? opt.label_id : opt.label_en}
+                                    {t(opt.labelKey)}
                                 </Link>
                             );
                         })}
@@ -170,7 +169,7 @@ export default function PengumumanIndex({ pengumuman, filters }: IndexProps) {
                                                 {item.tanggal_mulai && (
                                                     <div className="flex items-center text-xs text-neutral-500">
                                                         <Calendar className="w-3.5 h-3.5 mr-1 text-neutral-400" />
-                                                        <span>{formatDate(item.tanggal_mulai, locale as 'id' | 'en')}</span>
+                                                        <span>{formatDate(item.tanggal_mulai, currentLocale)}</span>
                                                     </div>
                                                 )}
                                             </div>
@@ -191,7 +190,7 @@ export default function PengumumanIndex({ pengumuman, filters }: IndexProps) {
                                                 href={route('pengumuman.show', { pengumuman: item.slug })}
                                                 className="text-primary-600 font-semibold text-sm inline-flex items-center gap-1.5 hover:gap-2.5 transition-all group"
                                             >
-                                                <span>{locale === 'id' ? 'Baca Selengkapnya' : 'Read Announcement'}</span>
+                                                <span>{t('pengumuman.read_more')}</span>
                                                 <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
                                             </Link>
                                         </div>
@@ -222,12 +221,10 @@ export default function PengumumanIndex({ pengumuman, filters }: IndexProps) {
                         <div className="text-center py-20 bg-white rounded-3xl border border-neutral-200 p-8">
                             <Bell className="w-12 h-12 text-neutral-300 mx-auto mb-4" />
                             <h3 className="text-lg font-bold text-neutral-800 mb-1">
-                                {locale === 'id' ? 'Belum ada pengumuman' : 'No announcements found'}
+                                {t('pengumuman.empty_title')}
                             </h3>
                             <p className="text-neutral-500 text-sm">
-                                {locale === 'id'
-                                    ? 'Tidak ada pengumuman aktif untuk kategori ini.'
-                                    : 'There are no active announcements in this category.'}
+                                {t('pengumuman.empty_desc')}
                             </p>
                         </div>
                     )}
