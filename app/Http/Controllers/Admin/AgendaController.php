@@ -102,7 +102,7 @@ class AgendaController extends Controller
         $agenda->load('translations');
 
         return Inertia::render('Admin/Agenda/Form', [
-            'agenda' => new AgendaResource($agenda),
+            'agenda' => (new AgendaResource($agenda))->resolve(),
             'isEdit' => true,
         ]);
     }
