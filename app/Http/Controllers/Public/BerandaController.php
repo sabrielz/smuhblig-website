@@ -10,6 +10,7 @@ use App\Models\HalamanKonten;
 use App\Models\Jurusan;
 use App\Models\Pengaturan;
 use App\Models\Pengumuman;
+use App\Models\Prestasi;
 use App\Models\Statistik;
 use Artesaos\SEOTools\Facades\OpenGraph;
 use Artesaos\SEOTools\Facades\SEOMeta;
@@ -79,11 +80,35 @@ class BerandaController extends Controller
                     ];
                 });
 
+            // ── 3 Prestasi terbaru ───────────────────────────────────────
+            $prestasiTerbaru = Prestasi::query()
+                ->active()
+                ->ordered()
+                ->limit(3)
+                ->with(['translations' => fn ($q) => $q->whereIn('locale', [$locale, 'id']), 'media'])
+                ->get()
+                ->map(function (Prestasi $p) use ($locale) {
+                    $translation = $p->translation($locale);
+
+                    return [
+                        'id' => $p->id,
+                        'slug' => $p->slug,
+                        'tingkat' => $p->tingkat->value,
+                        'tingkat_label' => $p->tingkat->label($locale),
+                        'kategori' => $p->kategori->value,
+                        'tahun' => $p->tahun,
+                        'judul' => $translation ? $translation->judul : $p->slug,
+                        'ringkasan' => $translation ? ($translation->ringkasan ?? '') : '',
+                        'foto_url' => $p->getFirstMediaUrl('foto', 'medium') ?: $p->getFirstMediaUrl('foto') ?: null,
+                    ];
+                });
+
             // ── Pengaturan ─────────────────────────────────────────────────────
             $settings = Pengaturan::getAllSettings();
 
             return [
                 'jurusan' => $jurusan,
+                'prestasiTerbaru' => $prestasiTerbaru,
                 'beritaTerbaru' => $beritaTerbaru,
                 'pengaturan' => [
                     'site_name' => $settings['site_name'] ?? 'SMK Muhammadiyah Bligo',

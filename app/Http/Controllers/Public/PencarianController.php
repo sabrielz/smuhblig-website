@@ -11,6 +11,7 @@ use App\Models\Fasilitas;
 use App\Models\Guru;
 use App\Models\Jurusan;
 use App\Models\Pengumuman;
+use App\Models\Prestasi;
 use Artesaos\SEOTools\Facades\SEOMeta;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -46,6 +47,7 @@ class PencarianController extends Controller
             'guru' => [],
             'fasilitas' => [],
             'ekstrakurikuler' => [],
+            'prestasi' => [],
         ];
         $totalHasil = 0;
 
@@ -241,6 +243,38 @@ class PencarianController extends Controller
             });
 
             $totalHasil += $hasil['ekstrakurikuler']->count();
+        }
+
+        // Search Prestasi
+        if ($type === 'semua' || $type === 'prestasi') {
+            $prestasiQuery = Prestasi::query()
+                ->active()
+                ->join('prestasi_translations', function ($join) use ($locale) {
+                    $join->on('prestasi.id', '=', 'prestasi_translations.prestasi_id')
+                        ->where('prestasi_translations.locale', '=', $locale);
+                })
+                ->where(function ($query) use ($q, $operator) {
+                    $query->where('prestasi_translations.judul', $operator, "%{$q}%")
+                        ->orWhere('prestasi_translations.ringkasan', $operator, "%{$q}%");
+                })
+                ->select('prestasi.*', 'prestasi_translations.judul', 'prestasi_translations.ringkasan')
+                ->with('media')
+                ->get();
+
+            $hasil['prestasi'] = $prestasiQuery->map(function ($p) use ($q, $locale) {
+                return [
+                    'id' => $p->id,
+                    'slug' => $p->slug,
+                    'tingkat' => $p->tingkat->label($locale),
+                    'tahun' => $p->tahun,
+                    'judul' => $this->highlight($p->judul ?? 'Prestasi', $q),
+                    'ringkasan' => $this->highlight(strip_tags($p->ringkasan ?? ''), $q),
+                    'foto_url' => $p->getFirstMediaUrl('foto', 'medium') ?: $p->getFirstMediaUrl('foto') ?: null,
+                    'url' => route('prestasi.show', $p->slug),
+                ];
+            });
+
+            $totalHasil += $hasil['prestasi']->count();
         }
 
         // Search Artikel
@@ -455,6 +489,31 @@ class PencarianController extends Controller
                 ];
             });
 
+        // Limit Prestasi 3
+        $prestasi = Prestasi::query()
+            ->active()
+            ->join('prestasi_translations', function ($join) use ($locale) {
+                $join->on('prestasi.id', '=', 'prestasi_translations.prestasi_id')
+                    ->where('prestasi_translations.locale', '=', $locale);
+            })
+            ->where(function ($query) use ($q, $operator) {
+                $query->where('prestasi_translations.judul', $operator, "%{$q}%")
+                    ->orWhere('prestasi_translations.ringkasan', $operator, "%{$q}%");
+            })
+            ->select('prestasi.id', 'prestasi.slug', 'prestasi_translations.judul')
+            ->orderByDesc('tahun')
+            ->limit(3)
+            ->get()
+            ->map(function ($p) use ($q) {
+                return [
+                    'id' => $p->id,
+                    'slug' => $p->slug,
+                    'title' => $this->highlight($p->judul ?? 'Prestasi', $q),
+                    'type' => 'Prestasi',
+                    'url' => route('prestasi.show', $p->slug),
+                ];
+            });
+
         // Limit Artikel 5
         $artikel = Article::query()
             ->terbit()
@@ -484,6 +543,7 @@ class PencarianController extends Controller
             'jurusan' => $jurusan,
             'fasilitas' => $fasilitas,
             'ekstrakurikuler' => $ekskul,
+            'prestasi' => $prestasi,
             'artikel' => $artikel,
             'pengumuman' => $pengumuman,
             'agenda' => $agenda,

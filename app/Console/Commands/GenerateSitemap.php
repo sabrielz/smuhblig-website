@@ -10,6 +10,7 @@ use App\Models\Galeri;
 use App\Models\Jurusan;
 use App\Models\Pengaturan;
 use App\Models\Pengumuman;
+use App\Models\Prestasi;
 use Illuminate\Console\Command;
 use Spatie\Sitemap\Sitemap;
 use Spatie\Sitemap\Tags\Url;
@@ -61,6 +62,7 @@ class GenerateSitemap extends Command
             ->add($makeUrl('/guru', 0.8, Url::CHANGE_FREQUENCY_WEEKLY))
             ->add($makeUrl('/fasilitas', 0.8, Url::CHANGE_FREQUENCY_WEEKLY))
             ->add($makeUrl('/ekstrakurikuler', 0.8, Url::CHANGE_FREQUENCY_WEEKLY))
+            ->add($makeUrl('/prestasi', 0.8, Url::CHANGE_FREQUENCY_WEEKLY))
             ->add($makeUrl('/jurusan', 0.8, Url::CHANGE_FREQUENCY_WEEKLY))
             ->add($makeUrl('/berita', 0.8, Url::CHANGE_FREQUENCY_DAILY))
             ->add($makeUrl('/agenda', 0.8, Url::CHANGE_FREQUENCY_WEEKLY))
@@ -88,6 +90,14 @@ class GenerateSitemap extends Command
             $sitemap->add(
                 $makeUrl("/ekstrakurikuler/{$ekskul->slug}", 0.7, Url::CHANGE_FREQUENCY_MONTHLY)
                     ->setLastModificationDate($ekskul->updated_at)
+            );
+        });
+
+        // Prestasi pages
+        Prestasi::active()->get()->each(function (Prestasi $prestasi) use ($sitemap, $makeUrl) {
+            $sitemap->add(
+                $makeUrl("/prestasi/{$prestasi->slug}", 0.7, Url::CHANGE_FREQUENCY_MONTHLY)
+                    ->setLastModificationDate($prestasi->updated_at)
             );
         });
 
