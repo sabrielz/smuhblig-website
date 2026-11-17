@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Public;
 use App\Http\Controllers\Controller;
 use App\Models\Galeri;
 use App\Models\Video;
+use App\Services\AnalitikService;
 use Artesaos\SEOTools\Facades\OpenGraph;
 use Artesaos\SEOTools\Facades\SEOMeta;
 use Artesaos\SEOTools\Facades\TwitterCard;
@@ -116,6 +117,8 @@ class GaleriController extends Controller
             'thumbnail_url' => $thumbnailUrl,
             'photos' => $photoUrls,
         ];
+
+        AnalitikService::catat(request(), 'galeri', $galeri->id);
 
         SEOMeta::setTitle($album['title'].' | Galeri SMK Muhammadiyah Bligo');
         SEOMeta::setDescription($album['description'] ?: 'Dokumentasi foto kegiatan '.$album['title']);

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Public;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Public\PengumumanResource;
 use App\Models\Pengumuman;
+use App\Services\AnalitikService;
 use Artesaos\SEOTools\Facades\OpenGraph;
 use Artesaos\SEOTools\Facades\SEOMeta;
 use Illuminate\Http\Request;
@@ -64,6 +65,7 @@ class PengumumanController extends Controller
         }
 
         $pengumuman->load('translations');
+        AnalitikService::catat(request(), 'pengumuman', $pengumuman->id);
         $resource = (new PengumumanResource($pengumuman))->resolve();
 
         SEOMeta::setTitle(($resource['judul'] ?? 'Pengumuman').' | SMK Muhammadiyah Bligo');

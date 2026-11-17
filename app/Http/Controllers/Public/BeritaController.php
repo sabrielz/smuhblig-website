@@ -8,6 +8,7 @@ use App\Http\Resources\Public\BeritaDetailResource;
 use App\Jobs\IncrementArticleViewCount;
 use App\Models\Article;
 use App\Models\Category;
+use App\Services\AnalitikService;
 use Artesaos\SEOTools\Facades\OpenGraph;
 use Artesaos\SEOTools\Facades\SEOMeta;
 use Artesaos\SEOTools\Facades\TwitterCard;
@@ -86,6 +87,7 @@ class BeritaController extends Controller
         }
 
         IncrementArticleViewCount::dispatch($article);
+        AnalitikService::catat(request(), 'article', $article->id);
 
         $article->load(['translations', 'category.translations', 'user', 'media', 'tags']);
 

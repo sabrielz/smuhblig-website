@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Public;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\AgendaResource;
 use App\Models\Agenda;
+use App\Services\AnalitikService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
@@ -77,6 +78,7 @@ class AgendaPublikController extends Controller
         }
 
         $agenda->load('translations');
+        AnalitikService::catat(request(), 'agenda', $agenda->id);
 
         return Inertia::render('Public/AgendaDetail', [
             'agenda' => new AgendaResource($agenda),
