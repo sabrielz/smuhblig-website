@@ -114,13 +114,11 @@ class Ekstrakurikuler extends Model implements HasMedia
     {
         $this->addMediaConversion('thumb')
             ->width(400)
-            ->height(300)
             ->format('webp')
             ->quality(80);
 
-        $this->addMediaConversion('medium')
-            ->width(800)
-            ->height(600)
+        $this->addMediaConversion('large')
+            ->width(1200)
             ->format('webp')
             ->quality(85);
     }

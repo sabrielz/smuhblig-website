@@ -43,7 +43,11 @@ class BeritaDetailResource extends JsonResource
                 'name' => $author ? $author->name : 'Admin',
                 'avatar' => $author ? $author->avatar_url : 'https://ui-avatars.com/api/?name=Admin',
             ],
-            'thumbnail' => $this->getFirstMediaUrl('thumbnail') ?: 'https://placehold.co/1200x600',
+            'thumbnail' => $this->getFirstMediaUrl('thumbnail', 'large') ?: ($this->getFirstMediaUrl('thumbnail') ?: 'https://placehold.co/1200x600'),
+            'thumbnail_srcset' => $this->getFirstMedia('thumbnail')?->hasGeneratedConversion('thumb')
+                ? "{$this->getFirstMediaUrl('thumbnail', 'thumb')} 400w, {$this->getFirstMediaUrl('thumbnail', 'large')} 1200w"
+                : null,
+            'thumbnail_alt' => $translation?->title ?: 'Thumbnail Berita',
             'tags' => array_map(function ($tag) {
                 return [
                     'id' => is_array($tag) ? ($tag['id'] ?? 0) : ($tag->id ?? 0),

@@ -402,7 +402,10 @@ export default function Beranda({
 
     return (
         <PublicLayout>
-            <Head title="Beranda — SMK Muhammadiyah Bligo" />
+            <Head>
+                <title>Beranda — SMK Muhammadiyah Bligo</title>
+                <link rel="preload" as="image" href="/smuhblig/smk.jpg" fetchPriority="high" />
+            </Head>
 
             <AnnouncementBanner announcement={pengumumanUrgent} />
 

@@ -6,6 +6,7 @@ import { ArticleCard } from '@/Components/UI/ArticleCard';
 import { Badge } from '@/Components/UI/Badge';
 import { CalendarIcon, ChevronRight } from 'lucide-react';
 import { ShareButtons } from '@/Components/UI/ShareButtons';
+import { ResponsiveImage } from '@/Components/UI/ResponsiveImage';
 import { motion } from 'framer-motion';
 import { fadeInUp, staggerContainer } from '@/lib/motion';
 interface ShowProps {
@@ -148,9 +149,13 @@ export default function BeritaShow({ article, relatedArticles, categories, jsonL
                             <article className="bg-white rounded-3xl p-6 lg:p-10 shadow-sm border border-neutral-100">
                                 {/* Thumbnail */}
                                 <div className="aspect-video w-full overflow-hidden rounded-2xl mb-10 bg-neutral-100">
-                                    <img
+                                    <ResponsiveImage
                                         src={article.thumbnail}
+                                        srcset={(article as any).thumbnail_srcset}
                                         alt={article.title}
+                                        width={1200}
+                                        height={675}
+                                        aspectRatio="16/9"
                                         className="w-full h-full object-cover"
                                     />
                                 </div>

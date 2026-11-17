@@ -75,14 +75,14 @@ class Mitra extends Model implements HasMedia
             ->useDisk('public')
             ->registerMediaConversions(function (Media $media) {
                 $this->addMediaConversion('thumb')
-                    ->width(200)
-                    ->height(100)
-                    ->format('webp');
-
-                $this->addMediaConversion('webp')
                     ->width(400)
-                    ->height(200)
-                    ->format('webp');
+                    ->format('webp')
+                    ->quality(80);
+
+                $this->addMediaConversion('large')
+                    ->width(1200)
+                    ->format('webp')
+                    ->quality(85);
             });
     }
 }

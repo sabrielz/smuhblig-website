@@ -101,9 +101,13 @@ class Fasilitas extends Model implements HasMedia
 
         $this->addMediaConversion('thumb')
             ->width(400)
-            ->height(300)
             ->format('webp')
             ->quality(80);
+
+        $this->addMediaConversion('large')
+            ->width(1200)
+            ->format('webp')
+            ->quality(85);
     }
 
     public function scopeActive(Builder $query): Builder

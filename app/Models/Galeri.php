@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class Galeri extends Model implements HasMedia
 {
@@ -46,6 +47,24 @@ class Galeri extends Model implements HasMedia
             ?? $this->translations->first();
     }
 
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('photos');
+    }
+
+    public function registerMediaConversions(?Media $media = null): void
+    {
+        $this->addMediaConversion('thumb')
+            ->width(400)
+            ->format('webp')
+            ->quality(80);
+
+        $this->addMediaConversion('large')
+            ->width(1200)
+            ->format('webp')
+            ->quality(85);
+    }
+
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('is_active', true);
@@ -54,10 +73,5 @@ class Galeri extends Model implements HasMedia
     public function scopeFeatured(Builder $query): Builder
     {
         return $query->where('is_featured', true);
-    }
-
-    public function registerMediaCollections(): void
-    {
-        $this->addMediaCollection('photos');
     }
 }
