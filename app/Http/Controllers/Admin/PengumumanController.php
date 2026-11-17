@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\StorePengumumanRequest;
+use App\Http\Requests\Admin\UpdatePengumumanRequest;
 use App\Models\Pengumuman;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -62,20 +64,11 @@ class PengumumanController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(StorePengumumanRequest $request)
     {
         Gate::authorize('create', Pengumuman::class);
 
-        $validated = $request->validate([
-            'judul_id' => 'required|string|max:255',
-            'judul_en' => 'nullable|string|max:255',
-            'konten_id' => 'nullable|string',
-            'konten_en' => 'nullable|string',
-            'tipe' => 'required|in:info,penting,urgent',
-            'tanggal_mulai' => 'nullable|date',
-            'tanggal_selesai' => 'nullable|date|after_or_equal:tanggal_mulai',
-            'is_active' => 'boolean',
-        ]);
+        $validated = $request->validated();
 
         $pengumuman = Pengumuman::create([
             'user_id' => request()->user()?->id ?? 1, // Fallback safely
@@ -124,20 +117,11 @@ class PengumumanController extends Controller
         ]);
     }
 
-    public function update(Request $request, Pengumuman $pengumuman)
+    public function update(UpdatePengumumanRequest $request, Pengumuman $pengumuman)
     {
         Gate::authorize('update', $pengumuman);
 
-        $validated = $request->validate([
-            'judul_id' => 'required|string|max:255',
-            'judul_en' => 'nullable|string|max:255',
-            'konten_id' => 'nullable|string',
-            'konten_en' => 'nullable|string',
-            'tipe' => 'required|in:info,penting,urgent',
-            'tanggal_mulai' => 'nullable|date',
-            'tanggal_selesai' => 'nullable|date|after_or_equal:tanggal_mulai',
-            'is_active' => 'boolean',
-        ]);
+        $validated = $request->validated();
 
         $pengumuman->update([
             'tipe' => $validated['tipe'],

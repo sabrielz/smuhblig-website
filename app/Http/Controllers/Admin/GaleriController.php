@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\StoreGaleriRequest;
+use App\Http\Requests\Admin\UpdateGaleriRequest;
+use App\Http\Requests\Admin\UploadFotoGaleriRequest;
 use App\Models\Galeri;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -47,19 +50,11 @@ class GaleriController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(StoreGaleriRequest $request)
     {
         Gate::authorize('create', Galeri::class);
 
-        $validated = $request->validate([
-            'judul_id' => 'required|string|max:255',
-            'judul_en' => 'nullable|string|max:255',
-            'deskripsi_id' => 'nullable|string',
-            'deskripsi_en' => 'nullable|string',
-            'event_date' => 'nullable|date',
-            'is_active' => 'boolean',
-            'is_featured' => 'boolean',
-        ]);
+        $validated = $request->validated();
 
         $galeri = Galeri::create([
             'slug' => Str::slug($validated['judul_id']),
@@ -139,19 +134,11 @@ class GaleriController extends Controller
         ]);
     }
 
-    public function update(Request $request, Galeri $galeri)
+    public function update(UpdateGaleriRequest $request, Galeri $galeri)
     {
         Gate::authorize('update', $galeri);
 
-        $validated = $request->validate([
-            'judul_id' => 'required|string|max:255',
-            'judul_en' => 'nullable|string|max:255',
-            'deskripsi_id' => 'nullable|string',
-            'deskripsi_en' => 'nullable|string',
-            'event_date' => 'nullable|date',
-            'is_active' => 'boolean',
-            'is_featured' => 'boolean',
-        ]);
+        $validated = $request->validated();
 
         $galeri->update([
             'slug' => Str::slug($validated['judul_id']),
@@ -189,18 +176,16 @@ class GaleriController extends Controller
             ->with('success', 'Album galeri berhasil dihapus.');
     }
 
-    public function uploadFoto(Request $request, Galeri $galeri)
+    public function uploadFoto(UploadFotoGaleriRequest $request, Galeri $galeri)
     {
         Gate::authorize('update', $galeri);
 
-        $request->validate([
-            'photos' => 'required|array|max:20',
-            'photos.*' => 'required|file|mimes:jpg,jpeg,png,webp|mimetypes:image/jpeg,image/png,image/webp|max:20480', // 20MB max sesuai BR-004
-        ]);
-
-        foreach ($request->file('photos') as $photo) {
-            $galeri->addMedia($photo)
-                ->toMediaCollection('photos');
+        $photos = $request->file('photos');
+        if (is_array($photos)) {
+            foreach ($photos as $photo) {
+                $galeri->addMedia($photo)
+                    ->toMediaCollection('photos');
+            }
         }
 
         return redirect()->back()->with('success', 'Foto berhasil diupload.');
