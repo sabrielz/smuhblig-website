@@ -219,25 +219,19 @@ parameters:
 		-
 			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$avatar_url\.$#'
 			identifier: property.notFound
-			count: 3
+			count: 2
 			path: app/Http/Controllers/Public/BeritaController.php
 
 		-
 			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$name\.$#'
 			identifier: property.notFound
-			count: 3
-			path: app/Http/Controllers/Public/BeritaController.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$slug\.$#'
-			identifier: property.notFound
-			count: 1
+			count: 2
 			path: app/Http/Controllers/Public/BeritaController.php
 
 		-
 			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:translation\(\)\.$#'
 			identifier: method.notFound
-			count: 3
+			count: 2
 			path: app/Http/Controllers/Public/BeritaController.php
 
 		-
@@ -587,12 +581,6 @@ parameters:
 			identifier: property.notFound
 			count: 1
 			path: app/Models/Pengaturan.php
-
-		-
-			message: '#^Using nullsafe property access "\?\-\>title" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
-			identifier: nullsafe.neverNull
-			count: 1
-			path: app/Observers/ArticleObserver.php
 
 		-
 			message: '#^Unsafe call to private method App\\Services\\EmailConfigService\:\:guessEncryption\(\) through static\:\:\.$#'
