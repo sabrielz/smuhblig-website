@@ -87,11 +87,11 @@ export function AiPanel({
                         className="fixed top-0 right-0 h-screen z-50 w-[400px] bg-white shadow-2xl border-l border-neutral-100 flex flex-col overflow-hidden"
                     >
                         {/* ── Header ── */}
-                        <div className="bg-gradient-to-r from-[#001f4d] to-[#003f87] px-5 py-4 flex-shrink-0">
+                        <div className="bg-gradient-to-r from-primary-900 to-primary-600 px-5 py-4 flex-shrink-0">
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-2.5">
                                     <div className="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center">
-                                        <Sparkles className="w-3.5 h-3.5 text-[#c9a84c]" strokeWidth={1.5} />
+                                        <Sparkles className="w-3.5 h-3.5 text-gold-500" strokeWidth={1.5} />
                                     </div>
                                     <div>
                                         <h2 className="text-white font-semibold text-sm leading-tight">
@@ -113,8 +113,8 @@ export function AiPanel({
 
                             {/* Summary badge */}
                             {summary && (
-                                <div className="mt-3 px-3 py-1.5 bg-[#c9a84c]/15 rounded-lg border border-[#c9a84c]/20">
-                                    <p className="text-[#c9a84c] text-xs font-semibold">{summary}</p>
+                                <div className="mt-3 px-3 py-1.5 bg-gold-500/15 rounded-lg border border-gold-500/20">
+                                    <p className="text-gold-500 text-xs font-semibold">{summary}</p>
                                 </div>
                             )}
                         </div>
@@ -125,11 +125,11 @@ export function AiPanel({
                             {isLoading && (
                                 <div className="flex flex-col items-center justify-center h-full gap-4 p-8">
                                     <div className="relative">
-                                        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#001f4d] to-[#003f87] flex items-center justify-center shadow-lg shadow-[#003f87]/30">
-                                            <Sparkles className="w-6 h-6 text-[#c9a84c]" strokeWidth={1.5} />
+                                        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary-900 to-primary-600 flex items-center justify-center shadow-lg shadow-primary-600/30">
+                                            <Sparkles className="w-6 h-6 text-gold-500" strokeWidth={1.5} />
                                         </div>
                                         <Loader2
-                                            className="absolute -top-1 -right-1 w-5 h-5 text-[#003f87] animate-spin"
+                                            className="absolute -top-1 -right-1 w-5 h-5 text-primary-600 animate-spin"
                                             strokeWidth={2}
                                         />
                                     </div>
@@ -154,7 +154,7 @@ export function AiPanel({
                                                     delay: i * 0.2,
                                                     ease: 'easeInOut',
                                                 }}
-                                                className="w-2 h-2 rounded-full bg-[#003f87]"
+                                                className="w-2 h-2 rounded-full bg-primary-600"
                                             />
                                         ))}
                                     </div>
@@ -177,7 +177,7 @@ export function AiPanel({
                                         <button
                                             type="button"
                                             onClick={onRetry}
-                                            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#003f87] text-white text-sm font-semibold hover:bg-[#002a6b] transition-colors"
+                                            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary-600 text-white text-sm font-semibold hover:bg-primary-800 transition-colors"
                                         >
                                             <RefreshCw className="w-3.5 h-3.5" strokeWidth={1.5} />
                                             Coba Lagi
@@ -196,13 +196,12 @@ export function AiPanel({
                                         className={cn(
                                             'rounded-xl border border-neutral-100 bg-neutral-50 p-5 text-sm text-neutral-700 leading-relaxed overflow-auto',
                                             'prose prose-sm prose-neutral max-w-none',
-                                            '[&_h2]:text-[#003f87] [&_h2]:font-bold [&_h2]:text-base [&_h2]:mt-4 [&_h2]:mb-2',
-                                            '[&_h3]:text-[#003f87] [&_h3]:font-semibold [&_h3]:mt-3 [&_h3]:mb-1.5',
+                                            '[&_h2]:text-primary-600 [&_h2]:font-bold [&_h2]:text-base [&_h2]:mt-4 [&_h2]:mb-2',
+                                            '[&_h3]:text-primary-600 [&_h3]:font-semibold [&_h3]:mt-3 [&_h3]:mb-1.5',
                                             '[&_p]:mb-2.5 [&_p]:leading-relaxed',
                                             '[&_ul]:list-disc [&_ul]:pl-5 [&_ul]:mb-3',
                                             '[&_li]:mb-1',
                                         )}
-                                        // eslint-disable-next-line react/no-danger
                                         dangerouslySetInnerHTML={{ __html: result }}
                                     />
                                 </div>
@@ -217,9 +216,9 @@ export function AiPanel({
                                     onClick={() => onAccept(result)}
                                     className={cn(
                                         'flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold text-white transition-all',
-                                        'bg-gradient-to-r from-[#001f4d] to-[#003f87]',
-                                        'hover:from-[#002a6b] hover:to-[#0050b0]',
-                                        'shadow-md shadow-[#003f87]/20 hover:shadow-lg hover:shadow-[#003f87]/30',
+                                        'bg-gradient-to-r from-primary-900 to-primary-600',
+                                        'hover:from-primary-800 hover:to-primary-500',
+                                        'shadow-md shadow-primary-600/20 hover:shadow-lg hover:shadow-primary-600/30',
                                         'active:scale-[0.98]',
                                     )}
                                 >

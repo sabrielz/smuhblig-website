@@ -222,12 +222,12 @@ export function AiBubble({
                     // Don't hide bubble on mousedown inside it
                     onMouseDown={(e) => e.stopPropagation()}
                 >
-                    <div className="bg-gradient-to-br from-[#001f4d] to-[#003f87] rounded-2xl shadow-2xl shadow-[#001f4d]/40 border border-white/10 p-3 flex flex-col gap-2">
+                    <div className="bg-gradient-to-br from-primary-900 to-primary-600 rounded-2xl shadow-2xl shadow-primary-900/40 border border-white/10 p-3 flex flex-col gap-2">
 
                         {/* ── Loading state ── */}
                         {isRevising && (
                             <div className="flex items-center gap-2 px-1 min-w-[160px]">
-                                <Loader2 className="w-3.5 h-3.5 text-[#c9a84c] animate-spin shrink-0" strokeWidth={1.5} />
+                                <Loader2 className="w-3.5 h-3.5 text-gold-500 animate-spin shrink-0" strokeWidth={1.5} />
                                 <span className="text-white/70 text-xs">AI sedang merevisi...</span>
                             </div>
                         )}
@@ -277,12 +277,12 @@ export function AiBubble({
                                                     value={customInstruction}
                                                     onChange={(e) => setCustomInstruction(e.target.value)}
                                                     placeholder="Instruksi revisi..."
-                                                    className="flex-1 bg-white/10 text-white placeholder:text-white/40 text-xs rounded-lg px-3 py-2 outline-none focus:ring-1 focus:ring-[#c9a84c]/50 border border-white/10 focus:border-[#c9a84c]/40 transition-all"
+                                                    className="flex-1 bg-white/10 text-white placeholder:text-white/40 text-xs rounded-lg px-3 py-2 outline-none focus:ring-1 focus:ring-gold-500/50 border border-white/10 focus:border-gold-500/40 transition-all"
                                                 />
                                                 <button
                                                     type="submit"
                                                     disabled={!customInstruction.trim()}
-                                                    className="px-3 py-2 bg-[#c9a84c] disabled:bg-[#c9a84c]/40 text-[#001f4d] rounded-lg text-xs font-bold transition-colors"
+                                                    className="px-3 py-2 bg-gold-500 disabled:bg-gold-500/40 text-primary-900 rounded-lg text-xs font-bold transition-colors"
                                                 >
                                                     <Sparkles className="w-3.5 h-3.5" strokeWidth={1.5} />
                                                 </button>
@@ -296,7 +296,7 @@ export function AiBubble({
 
                     {/* Caret arrow */}
                     <div
-                        className="absolute left-1/2 -translate-x-1/2 -bottom-1.5 w-3 h-3 bg-[#003f87] rotate-45 border-r border-b border-white/10"
+                        className="absolute left-1/2 -translate-x-1/2 -bottom-1.5 w-3 h-3 bg-primary-600 rotate-45 border-r border-b border-white/10"
                         style={{ zIndex: -1 }}
                     />
                 </motion.div>
@@ -326,7 +326,7 @@ function QuickActionBtn({ label, onClick, active }: QuickActionBtnProps) {
             className={cn(
                 'flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all duration-150 whitespace-nowrap select-none',
                 active
-                    ? 'bg-[#c9a84c] text-[#001f4d]'
+                    ? 'bg-gold-500 text-primary-900'
                     : 'bg-white/10 text-white/80 hover:bg-white/20 hover:text-white',
             )}
         >

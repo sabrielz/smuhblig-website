@@ -37,14 +37,14 @@ function NotifItem({
                 'flex items-start gap-3 px-4 py-3 transition-colors cursor-pointer',
                 notif.dibaca
                     ? 'hover:bg-neutral-50'
-                    : 'bg-[#eef5fc] hover:bg-[#dbeafb]',
+                    : 'bg-primary-50 hover:bg-primary-100',
             )}
         >
             <div
                 className={cn(
                     'w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5',
-                    notif.tipe === 'artikel_pending' && 'bg-[#003f87]/10 text-[#003f87]',
-                    notif.tipe === 'pesan_kontak' && 'bg-[#c9a84c]/10 text-[#a8821f]',
+                    notif.tipe === 'artikel_pending' && 'bg-primary-600/10 text-primary-600',
+                    notif.tipe === 'pesan_kontak' && 'bg-gold-500/10 text-gold-600',
                     !['artikel_pending', 'pesan_kontak'].includes(notif.tipe) &&
                         'bg-neutral-100 text-neutral-500',
                 )}
@@ -63,7 +63,7 @@ function NotifItem({
                 <p className="text-xs text-neutral-400 mt-0.5">{notif.created_at}</p>
             </div>
             {!notif.dibaca && (
-                <span className="w-2 h-2 rounded-full bg-[#003f87] mt-1.5 flex-shrink-0" />
+                <span className="w-2 h-2 rounded-full bg-primary-600 mt-1.5 flex-shrink-0" />
             )}
         </div>
     );
@@ -217,7 +217,7 @@ export default function AdminTopbar({ title, onMenuClick }: AdminTopbarProps) {
                             className={cn(
                                 'relative p-2 rounded-lg transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center',
                                 open
-                                    ? 'bg-[#eef5fc] text-[#003f87]'
+                                    ? 'bg-primary-50 text-primary-600'
                                     : 'text-neutral-500 hover:text-neutral-800 hover:bg-neutral-100',
                             )}
                         >
@@ -250,7 +250,7 @@ export default function AdminTopbar({ title, onMenuClick }: AdminTopbarProps) {
                                         <button
                                             type="button"
                                             onClick={handleReadAll}
-                                            className="flex items-center gap-1.5 text-xs font-medium text-[#003f87] hover:text-[#002d6b] transition-colors"
+                                            className="flex items-center gap-1.5 text-xs font-medium text-primary-600 hover:text-primary-800 transition-colors"
                                         >
                                             <Check className="w-3.5 h-3.5" strokeWidth={2} />
                                             Tandai semua dibaca
@@ -262,7 +262,7 @@ export default function AdminTopbar({ title, onMenuClick }: AdminTopbarProps) {
                                 <div className="overflow-y-auto" style={{ maxHeight: 320 }}>
                                     {loading ? (
                                         <div className="flex items-center justify-center py-10">
-                                            <div className="w-5 h-5 rounded-full border-2 border-[#003f87] border-t-transparent animate-spin" />
+                                            <div className="w-5 h-5 rounded-full border-2 border-primary-600 border-t-transparent animate-spin" />
                                         </div>
                                     ) : notifs.length === 0 ? (
                                         <div className="flex flex-col items-center justify-center gap-2 py-10 text-neutral-400">
@@ -283,7 +283,7 @@ export default function AdminTopbar({ title, onMenuClick }: AdminTopbarProps) {
                                     <Link
                                         href="/admin/notifikasi"
                                         onClick={() => setOpen(false)}
-                                        className="block text-center text-xs font-semibold text-[#003f87] hover:text-[#002d6b] transition-colors"
+                                        className="block text-center text-xs font-semibold text-primary-600 hover:text-primary-800 transition-colors"
                                     >
                                         Lihat Semua Notifikasi →
                                     </Link>
@@ -317,7 +317,7 @@ export default function AdminTopbar({ title, onMenuClick }: AdminTopbarProps) {
                                             <button
                                                 type="button"
                                                 onClick={handleReadAll}
-                                                className="flex items-center gap-1.5 text-xs font-medium text-[#003f87]"
+                                                className="flex items-center gap-1.5 text-xs font-medium text-primary-600"
                                             >
                                                 <Check className="w-3.5 h-3.5" strokeWidth={2} />
                                                 Tandai semua dibaca
@@ -327,7 +327,7 @@ export default function AdminTopbar({ title, onMenuClick }: AdminTopbarProps) {
                                     <div className="flex-1 overflow-y-auto divide-y divide-neutral-100">
                                         {loading ? (
                                             <div className="flex items-center justify-center py-10">
-                                                <div className="w-5 h-5 rounded-full border-2 border-[#003f87] border-t-transparent animate-spin" />
+                                                <div className="w-5 h-5 rounded-full border-2 border-primary-600 border-t-transparent animate-spin" />
                                             </div>
                                         ) : notifs.length === 0 ? (
                                             <div className="flex flex-col items-center justify-center gap-2 py-10 text-neutral-400">
@@ -344,7 +344,7 @@ export default function AdminTopbar({ title, onMenuClick }: AdminTopbarProps) {
                                         <Link
                                             href="/admin/notifikasi"
                                             onClick={() => setOpen(false)}
-                                            className="block text-center text-sm font-semibold text-[#003f87]"
+                                            className="block text-center text-sm font-semibold text-primary-600"
                                         >
                                             Lihat Semua Notifikasi →
                                         </Link>
@@ -367,8 +367,8 @@ export default function AdminTopbar({ title, onMenuClick }: AdminTopbarProps) {
                                 className="w-9 h-9 sm:w-10 sm:h-10 rounded-full object-cover ring-2 ring-neutral-100 shrink-0"
                             />
                         ) : (
-                            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#eef5fc] flex items-center justify-center ring-2 ring-neutral-100 shrink-0">
-                                <span className="text-[#003f87] font-medium">{user?.name?.charAt(0) || 'A'}</span>
+                            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-primary-50 flex items-center justify-center ring-2 ring-neutral-100 shrink-0">
+                                <span className="text-primary-600 font-medium">{user?.name?.charAt(0) || 'A'}</span>
                             </div>
                         )}
                     </div>

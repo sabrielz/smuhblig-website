@@ -54,10 +54,10 @@ function SeoGauge({ score }: { score: number }) {
 
     const colorClass =
         clampedScore >= 75
-            ? '#22c55e'  // green
+            ? 'var(--color-success)'
             : clampedScore >= 50
-              ? '#f59e0b' // amber
-              : '#ef4444'; // red
+              ? 'var(--color-warning)'
+              : 'var(--color-error)';
 
     const label =
         clampedScore >= 75 ? 'Baik' : clampedScore >= 50 ? 'Cukup' : 'Perlu Perbaikan';
@@ -69,7 +69,7 @@ function SeoGauge({ score }: { score: number }) {
                 <circle
                     cx="50" cy="50" r={radius}
                     fill="none"
-                    stroke="#e5e7eb"
+                    stroke="var(--color-neutral-100)"
                     strokeWidth="10"
                 />
                 {/* Progress */}
@@ -174,8 +174,8 @@ export function SeoPanel({
                     disabled={isAnalyzing}
                     className={cn(
                         'flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all',
-                        'bg-gradient-to-r from-[#001f4d] to-[#003f87] text-white',
-                        'hover:from-[#002a6b] hover:to-[#0050b0] shadow-md shadow-[#003f87]/20',
+                        'bg-gradient-to-r from-primary-900 to-primary-600 text-white',
+                        'hover:from-primary-800 hover:to-primary-500 shadow-md shadow-primary-600/20',
                         'disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none',
                         'active:scale-95',
                     )}
@@ -203,7 +203,7 @@ export function SeoPanel({
                     maxLength={80}
                     className={cn(
                         'w-full px-3.5 py-2.5 rounded-xl border text-sm text-neutral-800 placeholder:text-neutral-400',
-                        'focus:outline-none focus:ring-2 focus:ring-[#003f87]/30 focus:border-[#003f87] transition-all',
+                        'focus:outline-none focus:ring-2 focus:ring-primary-600/30 focus:border-primary-600 transition-all',
                         errors?.meta_title ? 'border-red-400 bg-red-50/40' : 'border-neutral-200',
                     )}
                 />
@@ -238,7 +238,7 @@ export function SeoPanel({
                     maxLength={200}
                     className={cn(
                         'w-full px-3.5 py-2.5 rounded-xl border text-sm text-neutral-800 placeholder:text-neutral-400 resize-none',
-                        'focus:outline-none focus:ring-2 focus:ring-[#003f87]/30 focus:border-[#003f87] transition-all',
+                        'focus:outline-none focus:ring-2 focus:ring-primary-600/30 focus:border-primary-600 transition-all',
                         errors?.meta_description ? 'border-red-400 bg-red-50/40' : 'border-neutral-200',
                     )}
                 />
@@ -271,9 +271,9 @@ export function SeoPanel({
                     >
                         {/* Loading */}
                         {isAnalyzing && jobStatus !== 'done' && (
-                            <div className="flex items-center gap-2 py-3 px-4 rounded-xl bg-[#003f87]/5 border border-[#003f87]/10">
-                                <Loader2 className="w-4 h-4 text-[#003f87] animate-spin shrink-0" strokeWidth={1.5} />
-                                <span className="text-sm text-[#003f87] font-medium">Menganalisis SEO...</span>
+                            <div className="flex items-center gap-2 py-3 px-4 rounded-xl bg-primary-600/5 border border-primary-600/10">
+                                <Loader2 className="w-4 h-4 text-primary-600 animate-spin shrink-0" strokeWidth={1.5} />
+                                <span className="text-sm text-primary-600 font-medium">Menganalisis SEO...</span>
                             </div>
                         )}
 
@@ -307,7 +307,7 @@ export function SeoPanel({
                                             {analysisResult.kata_kunci_utama.map((kw) => (
                                                 <span
                                                     key={kw}
-                                                    className="px-2 py-1 bg-[#003f87]/8 text-[#003f87] rounded-lg text-[11px] font-medium"
+                                                    className="px-2 py-1 bg-primary-600/8 text-primary-600 rounded-lg text-[11px] font-medium"
                                                 >
                                                     {kw}
                                                 </span>

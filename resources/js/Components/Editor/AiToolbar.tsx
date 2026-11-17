@@ -76,9 +76,9 @@ function GenerateModal({ open, onClose, onSubmit, locale }: GenerateModalProps) 
                             onClick={(e) => e.stopPropagation()}
                         >
                             {/* Header */}
-                            <div className="bg-gradient-to-r from-[#001f4d] to-[#003f87] px-6 py-4 flex items-center justify-between">
+                            <div className="bg-gradient-to-r from-primary-900 to-primary-600 px-6 py-4 flex items-center justify-between">
                                 <div className="flex items-center gap-2">
-                                    <Sparkles className="w-4 h-4 text-[#c9a84c]" strokeWidth={1.5} />
+                                    <Sparkles className="w-4 h-4 text-gold-500" strokeWidth={1.5} />
                                     <h2 className="text-white font-semibold text-base">Generate Draft Artikel</h2>
                                 </div>
                                 <button
@@ -102,7 +102,7 @@ function GenerateModal({ open, onClose, onSubmit, locale }: GenerateModalProps) 
                                         value={topic}
                                         onChange={(e) => setTopic(e.target.value)}
                                         placeholder="Contoh: Peluncuran Program Beasiswa SMK Muhammadiyah Bligo 2025"
-                                        className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 text-sm text-neutral-800 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-[#003f87]/30 focus:border-[#003f87] transition-all"
+                                        className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 text-sm text-neutral-800 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-600/30 focus:border-primary-600 transition-all"
                                         required
                                     />
                                 </div>
@@ -118,7 +118,7 @@ function GenerateModal({ open, onClose, onSubmit, locale }: GenerateModalProps) 
                                         onChange={(e) => setPoints(e.target.value)}
                                         placeholder="Satu poin per baris. Contoh:&#10;- Latar belakang program&#10;- Persyaratan pendaftaran&#10;- Cara mendaftar"
                                         rows={4}
-                                        className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 text-sm text-neutral-800 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-[#003f87]/30 focus:border-[#003f87] transition-all resize-none"
+                                        className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 text-sm text-neutral-800 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-600/30 focus:border-primary-600 transition-all resize-none"
                                     />
                                 </div>
 
@@ -130,7 +130,7 @@ function GenerateModal({ open, onClose, onSubmit, locale }: GenerateModalProps) 
                                             <select
                                                 value={tone}
                                                 onChange={(e) => setTone(e.target.value as GenerateDraftParams['tone'])}
-                                                className="w-full appearance-none px-3.5 py-2.5 pr-9 rounded-xl border border-neutral-200 text-sm text-neutral-800 bg-white focus:outline-none focus:ring-2 focus:ring-[#003f87]/30 focus:border-[#003f87] transition-all cursor-pointer"
+                                                className="w-full appearance-none px-3.5 py-2.5 pr-9 rounded-xl border border-neutral-200 text-sm text-neutral-800 bg-white focus:outline-none focus:ring-2 focus:ring-primary-600/30 focus:border-primary-600 transition-all cursor-pointer"
                                             >
                                                 <option value="formal">Formal</option>
                                                 <option value="semi_formal">Semi-formal</option>
@@ -146,7 +146,7 @@ function GenerateModal({ open, onClose, onSubmit, locale }: GenerateModalProps) 
                                             <select
                                                 value={targetLocale}
                                                 onChange={(e) => setTargetLocale(e.target.value as 'id' | 'en')}
-                                                className="w-full appearance-none px-3.5 py-2.5 pr-9 rounded-xl border border-neutral-200 text-sm text-neutral-800 bg-white focus:outline-none focus:ring-2 focus:ring-[#003f87]/30 focus:border-[#003f87] transition-all cursor-pointer"
+                                                className="w-full appearance-none px-3.5 py-2.5 pr-9 rounded-xl border border-neutral-200 text-sm text-neutral-800 bg-white focus:outline-none focus:ring-2 focus:ring-primary-600/30 focus:border-primary-600 transition-all cursor-pointer"
                                             >
                                                 <option value="id">Indonesia</option>
                                                 <option value="en">English</option>
@@ -175,8 +175,8 @@ function GenerateModal({ open, onClose, onSubmit, locale }: GenerateModalProps) 
                                         disabled={!topic.trim()}
                                         className={cn(
                                             'flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-all',
-                                            'bg-gradient-to-r from-[#001f4d] to-[#003f87] hover:from-[#002a6b] hover:to-[#0050b0]',
-                                            'shadow-md shadow-[#003f87]/20 hover:shadow-lg hover:shadow-[#003f87]/30',
+                                            'bg-gradient-to-r from-primary-900 to-primary-600 hover:from-primary-800 hover:to-primary-500',
+                                            'shadow-md shadow-primary-600/20 hover:shadow-lg hover:shadow-primary-600/30',
                                             'disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-none',
                                         )}
                                     >
@@ -208,13 +208,13 @@ function InlineConfirm({ message, onConfirm, onCancel }: InlineConfirmProps) {
             initial={{ opacity: 0, y: -4 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -4 }}
-            className="flex items-center gap-3 bg-[#001f4d]/95 backdrop-blur rounded-xl px-4 py-2.5 shadow-lg border border-white/10"
+            className="flex items-center gap-3 bg-primary-900/95 backdrop-blur rounded-xl px-4 py-2.5 shadow-lg border border-white/10"
         >
             <span className="text-sm text-white/90">{message}</span>
             <button
                 type="button"
                 onClick={onConfirm}
-                className="px-3 py-1 rounded-lg bg-[#c9a84c] text-[#001f4d] text-xs font-bold hover:bg-[#d4b55f] transition-colors"
+                className="px-3 py-1 rounded-lg bg-gold-500 text-primary-900 text-xs font-bold hover:bg-gold-400 transition-colors"
             >
                 Ya, Lanjutkan
             </button>
@@ -251,7 +251,7 @@ export function AiToolbar({
     return (
         <>
             {/* Toolbar Strip */}
-            <div className="relative flex items-center gap-1.5 bg-gradient-to-r from-[#001f4d] to-[#003f87] px-4 py-2.5 border-b border-white/10 overflow-x-auto custom-scrollbar flex-nowrap shrink-0">
+            <div className="relative flex items-center gap-1.5 bg-gradient-to-r from-primary-900 to-primary-600 px-4 py-2.5 border-b border-white/10 overflow-x-auto custom-scrollbar flex-nowrap shrink-0">
                 <span className="text-white/40 text-xs font-medium mr-1.5 tracking-widest uppercase shrink-0">AI</span>
 
                 {/* ── Generate Draft ── visible only when editor empty */}

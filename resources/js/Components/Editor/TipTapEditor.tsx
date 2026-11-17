@@ -73,7 +73,7 @@ function ToolbarButton({
             className={cn(
                 "flex items-center justify-center w-10 h-10 md:w-8 md:h-8 rounded-md transition-all duration-150 select-none",
                 isActive
-                    ? "bg-[#003f87] text-white shadow-sm"
+                    ? "bg-primary-600 text-white shadow-sm"
                     : "text-neutral-600 hover:bg-neutral-200 hover:text-neutral-900",
                 disabled && "opacity-40 cursor-not-allowed pointer-events-none",
                 className
@@ -167,7 +167,7 @@ export function TipTapEditor({
                 HTMLAttributes: {
                     target: "_blank",
                     rel: "noopener noreferrer",
-                    class: "text-[#003f87] underline underline-offset-2 hover:text-[#c9a84c] transition-colors",
+                    class: "text-primary-600 underline underline-offset-2 hover:text-gold-500 transition-colors",
                 },
             }),
             Placeholder.configure({
@@ -410,14 +410,14 @@ export function TipTapEditor({
                     "[&_.ProseMirror]:min-h-[400px] [&_.ProseMirror]:p-6 [&_.ProseMirror]:outline-none",
                     "[&_.ProseMirror]:prose [&_.ProseMirror]:prose-neutral [&_.ProseMirror]:max-w-none",
                     // Heading colors
-                    "[&_.ProseMirror_h2]:text-[#003f87] [&_.ProseMirror_h2]:font-bold [&_.ProseMirror_h2]:text-xl [&_.ProseMirror_h2]:mt-6 [&_.ProseMirror_h2]:mb-3",
-                    "[&_.ProseMirror_h3]:text-[#003f87] [&_.ProseMirror_h3]:font-semibold [&_.ProseMirror_h3]:text-lg [&_.ProseMirror_h3]:mt-5 [&_.ProseMirror_h3]:mb-2",
+                    "[&_.ProseMirror_h2]:text-primary-600 [&_.ProseMirror_h2]:font-bold [&_.ProseMirror_h2]:text-xl [&_.ProseMirror_h2]:mt-6 [&_.ProseMirror_h2]:mb-3",
+                    "[&_.ProseMirror_h3]:text-primary-600 [&_.ProseMirror_h3]:font-semibold [&_.ProseMirror_h3]:text-lg [&_.ProseMirror_h3]:mt-5 [&_.ProseMirror_h3]:mb-2",
                     // Paragraph
                     "[&_.ProseMirror_p]:text-neutral-700 [&_.ProseMirror_p]:leading-relaxed [&_.ProseMirror_p]:mb-3",
                     // Blockquote
-                    "[&_.ProseMirror_blockquote]:border-l-4 [&_.ProseMirror_blockquote]:border-[#c9a84c] [&_.ProseMirror_blockquote]:pl-4 [&_.ProseMirror_blockquote]:italic [&_.ProseMirror_blockquote]:text-neutral-500 [&_.ProseMirror_blockquote]:my-4",
+                    "[&_.ProseMirror_blockquote]:border-l-4 [&_.ProseMirror_blockquote]:border-gold-500 [&_.ProseMirror_blockquote]:pl-4 [&_.ProseMirror_blockquote]:italic [&_.ProseMirror_blockquote]:text-neutral-500 [&_.ProseMirror_blockquote]:my-4",
                     // Code
-                    "[&_.ProseMirror_code]:bg-neutral-100 [&_.ProseMirror_code]:rounded [&_.ProseMirror_code]:px-1.5 [&_.ProseMirror_code]:py-0.5 [&_.ProseMirror_code]:text-sm [&_.ProseMirror_code]:font-mono [&_.ProseMirror_code]:text-[#c9a84c]",
+                    "[&_.ProseMirror_code]:bg-neutral-100 [&_.ProseMirror_code]:rounded [&_.ProseMirror_code]:px-1.5 [&_.ProseMirror_code]:py-0.5 [&_.ProseMirror_code]:text-sm [&_.ProseMirror_code]:font-mono [&_.ProseMirror_code]:text-gold-500",
                     "[&_.ProseMirror_pre]:bg-neutral-900 [&_.ProseMirror_pre]:rounded-lg [&_.ProseMirror_pre]:p-4 [&_.ProseMirror_pre]:text-sm [&_.ProseMirror_pre]:overflow-x-auto [&_.ProseMirror_pre]:my-4",
                     "[&_.ProseMirror_pre_code]:bg-transparent [&_.ProseMirror_pre_code]:text-neutral-200 [&_.ProseMirror_pre_code]:p-0",
                     // Lists
