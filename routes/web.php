@@ -76,6 +76,7 @@ Route::get('/agenda', [AgendaPublikController::class, 'index'])->name('agenda.in
 Route::get('/agenda/{agenda:slug}', [AgendaPublikController::class, 'show'])->name('agenda.show');
 Route::get('/agenda/{agenda:slug}/ics', [AgendaPublikController::class, 'ics'])->name('agenda.ics');
 
+use App\Http\Controllers\Admin\FasilitasController;
 use App\Http\Controllers\Admin\GuruController;
 use App\Http\Controllers\Admin\KategoriController;
 use App\Http\Controllers\Admin\ProfilController;
@@ -184,6 +185,10 @@ Route::middleware(['auth', EnsureHasCmsRole::class])
         // Guru & Tenaga Kependidikan
         Route::post('/guru/reorder', [GuruController::class, 'reorder'])->name('guru.reorder');
         Route::resource('guru', GuruController::class)->except(['show']);
+
+        // Fasilitas
+        Route::post('/fasilitas/reorder', [FasilitasController::class, 'reorder'])->name('fasilitas.reorder');
+        Route::resource('fasilitas', FasilitasController::class)->except(['show']);
 
         // Jurusan (Edit 5 existing only)
         Route::get('/jurusan', [App\Http\Controllers\Admin\JurusanController::class, 'index'])->name('jurusan.index');

@@ -256,3 +256,32 @@ export interface Guru {
     };
     created_at?: string;
 }
+
+export interface FasilitasMedia {
+    id: number;
+    url: string;
+    thumb_url: string;
+    file_name: string;
+    size: number;
+}
+
+export interface Fasilitas {
+    id: number;
+    slug: string;
+    kategori: 'ruang_praktik' | 'umum' | 'olahraga' | 'ibadah';
+    urutan: number;
+    is_active: boolean;
+    media: FasilitasMedia[];
+    cover_url: string | null;
+    translations: {
+        id: {
+            nama: string;
+            deskripsi: string | null;
+        };
+        en: {
+            nama: string | null;
+            deskripsi: string | null;
+        };
+    };
+    created_at?: string;
+}
