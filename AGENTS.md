@@ -591,22 +591,22 @@ Setiap usulan fitur baru wajib lolos 3 pertanyaan berikut:
   - Tabel `prestasi`: `slug`, `tingkat` (`sekolah`/`kabupaten`/`provinsi`/`nasional`/`internasional`), `kategori` (`akademik`/`non_akademik`), `tahun` (smallint), `tanggal` (nullable date), `jurusan_id` (nullable FK `jurusans`), `is_active`.
   - Translasi (`prestasi_translations`): `judul`, `ringkasan`.
   - Media: `foto` (single).
-- **`BR-020` Unduhan** *(Status: menunggu persetujuan)*:
+- **`BR-020` Unduhan** *(Status: disetujui)*:
   - Tabel `unduhan`: `slug`, `kategori` (`brosur`/`kalender`/`formulir`/`sk`/`lainnya`), `tanggal_terbit`, `jumlah_unduh` (default 0), `is_active`.
   - Translasi (`unduhan_translations`): `judul`, `deskripsi`.
   - Media: `berkas` (single; pdf/docx/xlsx; maks 10 MB). Disimpan di storage disk lokal non-publik.
-- **`BR-021` FAQ** *(Status: menunggu persetujuan)*:
+- **`BR-021` FAQ** *(Status: disetujui)*:
   - Tabel `faq`: `kategori` (`umum`/`pendaftaran`/`akademik`/`fasilitas`), `urutan`, `is_active`.
   - Translasi (`faq_translations`): `pertanyaan`, `jawaban`.
-- **`BR-022` Testimoni** *(Status: menunggu persetujuan)*:
+- **`BR-022` Testimoni** *(Status: disetujui)*:
   - Tabel `testimoni`: `nama`, `peran` (`alumni`/`orang_tua`/`mitra`), `keterangan` (mis. "Alumni TKJ 2022"), `persetujuan_tampil` (bool, wajib true agar bisa aktif), `is_active`, `urutan`.
   - Translasi (`testimoni_translations`): `kutipan`.
   - Media: `foto` (single).
-- **`BR-023` Mitra Industri** *(Status: menunggu persetujuan)*:
+- **`BR-023` Mitra Industri** *(Status: disetujui)*:
   - Tabel `mitra`: `nama`, `bidang`, `url` (nullable), `urutan`, `is_active`.
   - Pivot: `jurusan_mitra` (`jurusan_id`, `mitra_id`).
   - Media: `logo` (single).
-- **`BR-024` Video** *(Status: menunggu persetujuan)*:
+- **`BR-024` Video** *(Status: disetujui)*:
   - Tabel `video`: `youtube_id` (11 karakter), `urutan`, `is_active`, `galeri_id` (nullable FK `galeris`).
   - Translasi (`video_translations`): `judul`.
 
@@ -619,8 +619,8 @@ Setiap usulan fitur baru wajib lolos 3 pertanyaan berikut:
 - **`ADR-003` Pemisahan CMS dan Portal Sekolah**: Repositori ini didedikasikan secara eksklusif sebagai portal profil publik (landing page) dan CMS pengelola konten. Modul layanan internal sekolah disediakan terpisah lewat halaman Portal tautan cepat.
 - **`ADR-004` Notifikasi Dashboard Operator**: Pembaruan notifikasi admin dan jumlah pesan baru menggunakan mekanisme interval polling yang efisien, tanpa server WebSocket/SSE eksternal.
 - **`ADR-005` Larangan Test PHP Selama Mode Override**: Mengacu pada §0, dilarang menjalankan suite test PHP/Pest/PHPUnit. Penjaminan mutu backend dilakukan dengan `vendor/bin/pint` dan analisis statis `vendor/bin/phpstan`, frontend diverifikasi via TypeScript compiler `tsc` dan `vitest`.
-- **`ADR-006` Video Galeri & Integrasi YouTube** *(Status: menunggu persetujuan)*:
-  - Menggunakan opsi (a): thumbnail `i.ytimg.com` dengan tautan keluar ke YouTube resmi (lebih ringan, ramah privasi, dan tidak membebani performa browser pengguna dengan iframe besar) ATAU opsi (b): embed `youtube-nocookie.com` setelah klik pengguna. Usulan default: opsi (a).
+- **`ADR-006` Video Galeri & Integrasi YouTube** *(Status: disetujui)*:
+  - Menggunakan opsi (a): thumbnail `i.ytimg.com` dengan tautan keluar ke YouTube resmi (lebih ringan, ramah privasi, dan tidak membebani performa browser pengguna dengan iframe besar).
 
 ---
 
