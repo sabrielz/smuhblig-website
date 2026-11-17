@@ -49,6 +49,7 @@ interface PageProps {
     halaman: string;
     halamanValid: string[];
     kontenGrouped: KontenGrouped;
+    [key: string]: unknown;
 }
 
 type LocaleValues = Record<string, Record<string, Record<string, string>>>;

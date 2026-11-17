@@ -31,6 +31,7 @@ const IslamicPattern = () => (
 
 interface PageProps {
     status?: string;
+    [key: string]: unknown;
 }
 
 export default function LupaPassword() {

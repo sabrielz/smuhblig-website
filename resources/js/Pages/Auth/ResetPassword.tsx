@@ -28,6 +28,7 @@ const IslamicPattern = () => (
 interface PageProps {
     token: string;
     email: string;
+    [key: string]: unknown;
 }
 
 export default function ResetPassword() {

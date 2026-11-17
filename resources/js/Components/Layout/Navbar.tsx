@@ -271,7 +271,7 @@ function SearchOverlay({ isOpen, onClose, locale }: SearchOverlayProps) {
     const [loading, setLoading] = useState(false);
     const [results, setResults] = useState<{ artikel: any[]; jurusan: any[] }>({ artikel: [], jurusan: [] });
     const inputRef = useRef<HTMLInputElement>(null);
-    const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
+    const debounceTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     // Focus on open
     useEffect(() => {
