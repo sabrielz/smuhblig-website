@@ -90,6 +90,7 @@ use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\FasilitasController;
 use App\Http\Controllers\Admin\GuruController;
 use App\Http\Controllers\Admin\KategoriController;
+use App\Http\Controllers\Admin\MediaController;
 use App\Http\Controllers\Admin\MitraController;
 use App\Http\Controllers\Admin\PrestasiController;
 use App\Http\Controllers\Admin\ProfilController;
@@ -289,6 +290,13 @@ Route::middleware(['auth', EnsureHasCmsRole::class])
         Route::middleware(['role:admin'])->group(function () {
             Route::post('/konten/{halaman}', [KontenHalamanController::class, 'update'])->name('konten.update');
             Route::post('/konten/{halaman}/translate', [KontenHalamanController::class, 'translateAll'])->name('konten.translate');
+        });
+
+        // Pustaka Media — editor & admin
+        Route::middleware(['role:admin|editor'])->prefix('media')->name('media.')->group(function () {
+            Route::get('/', [MediaController::class, 'index'])->name('index');
+            Route::put('/{medium}', [MediaController::class, 'update'])->name('update');
+            Route::delete('/{medium}', [MediaController::class, 'destroy'])->name('destroy');
         });
 
         // Media Upload (TipTap inline images) — semua role CMS bisa upload
