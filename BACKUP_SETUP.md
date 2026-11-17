@@ -1,80 +1,100 @@
-# Panduan Setup Backup SMK Muhammadiyah Bligo
+# Panduan Setup Backup & Restore — SMK Muhammadiyah Bligo
 
-Dokumen ini berisi instruksi dan prosedur untuk melakukan backup dan restore production web aplikasi SMK Muhammadiyah Bligo.
+Dokumen ini berisi instruksi dan prosedur resmi untuk melakukan backup otomatis dan pemulihan (restore) database MySQL 8 serta penyimpanan berkas aplikasi SMK Muhammadiyah Bligo.
 
-## 1. Database Backup (PostgreSQL)
+---
 
-Karena kita menggunakan PostgreSQL di production, backup harian dapat dilakukan dengan `pg_dump` dan diatur berjalan via Cron Job.
+## 1. Keamanan Kredensial MySQL (`~/.my.cnf`)
 
-**Contoh shell script (`/backup/scripts/db_backup.sh`):**
+Untuk mencegah adanya password literal dalam skrip shell atau crontab, gunakan file opsi bawaan MySQL client.
 
+Buat atau sunting file `~/.my.cnf` pada user server (misalnya user `www-data` atau user deployment):
+
+```ini
+[client]
+user=smkuser
+password="PASSWORD_DATABASE_ANDA"
+host=localhost
+```
+
+Pastikan hak akses file dikunci ke permission `600`:
 ```bash
-#!/bin/bash
-BACKUP_DIR="/backup/db"
-DATE=$(date +%Y%m%d)
-DB_USER="postgres"
-DB_NAME="smuhbligo_db"
-
-# Menjalankan pg_dump dan kompresi
-pg_dump -U $DB_USER $DB_NAME | gzip > $BACKUP_DIR/$DATE.sql.gz
-
-# Menghapus file backup yang lebih tua dari 30 hari (Retention)
-find $BACKUP_DIR -type f -name "*.sql.gz" -mtime +30 -exec rm {} \;
+chmod 600 ~/.my.cnf
 ```
 
-**Konfigurasi Cron Job (`crontab -e`):**
-Jalankan setiap hari jam 02:00 pagi.
+---
+
+## 2. Backup Otomatis Database (MySQL 8)
+
+Skrip backup berada di `deploy/backup/backup_db.sh`. Skrip ini melakukan:
+1. `mysqldump` dengan `--defaults-extra-file="$MYSQL_OPTS"` (tanpa password di command line).
+2. Opsi `--single-transaction --routines --triggers --default-character-set=utf8mb4` agar transaksi data konsisten tanpa locking berlebih.
+3. Kompresi output langsung ke format `.sql.gz`.
+4. Rotasi retensi otomatis: menghapus backup yang berumur lebih dari 30 hari.
+
+**Menjadwalkan Cron Job (`crontab -e`):**
+Jalankan setiap hari pukul 02:00 WIB:
 
 ```cron
-0 2 * * * /bin/bash /backup/scripts/db_backup.sh >/dev/null 2>&1
+0 2 * * * /bin/bash /var/www/smkmuhbligo/deploy/backup/backup_db.sh >> /var/log/smk-backup-db.log 2>&1
 ```
 
-_(Catatan: Sesuaikan akses password PostgreSQL pada file `~/.pgpass` jika diperlukan, agar tidak prompt password saat cron berjalan)._
+---
 
-## 2. Storage Backup (Foto, Media, dll)
+## 3. Backup Penyimpanan Berkas (Public & Private Storage)
 
-Folder `storage/app/public` berisi seluruh asset yang di-upload oleh user (gambar galeri, thumbnail berita). Folder ini perlu di-backup ke tempat yang aman (misalkan Offsite Storage seperti AWS S3, Google Drive, atau rsync ke server lain).
+Aplikasi memiliki dua direktori penyimpanan berkas utama di bawah `storage/app/`:
+1. `storage/app/public/`: Berkas media publik (foto galeri, cover artikel, avatar, logo).
+2. `storage/app/private/`: Berkas dokumen unduhan non-publik yang diamankan oleh autentikasi/controller.
 
-**Contoh cron sinkronisasi (Rsync ke Offsite / Another Server):**
+Skrip sinkronisasi berada di `deploy/backup/backup_storage.sh` menggunakan `rsync -az --delete` ke remote target offsite.
+
+**Menjadwalkan Cron Job (`crontab -e`):**
+Jalankan setiap hari pukul 03:00 WIB:
 
 ```cron
-0 3 * * * rsync -avz --delete /var/www/smuhbligo/storage/app/public/ user@backup-server:/backup/smuhbligo/storage/
+0 3 * * * BACKUP_REMOTE_TARGET="user@backup-host:/var/backups/smkmuhbligo/storage" /bin/bash /var/www/smkmuhbligo/deploy/backup/backup_storage.sh >> /var/log/smk-backup-storage.log 2>&1
 ```
 
-_(Menjalankan rsync setiap jam 03:00 pagi)._
+---
 
-## 3. Prosedur Restore
+## 4. Prosedur Pemulihan (Restore)
 
-Jika terjadi data hilang atau insiden pada sistem, berikut adalah langkah restore-nya:
+Jika terjadi insiden data hilang atau server failure, lakukan langkah berikut:
 
-**A. Restore Database:**
+### A. Restore Database MySQL
+1. Pastikan database target tersedia:
+   ```bash
+   mysql --defaults-extra-file=~/.my.cnf -e "CREATE DATABASE IF NOT EXISTS smkmuhbligo CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+   ```
+2. Dekompresi dan alirkan dump backup ke MySQL:
+   ```bash
+   gunzip -c /var/backups/smkmuhbligo/db/YYYYMMDD_HHMMSS.sql.gz | mysql --defaults-extra-file=~/.my.cnf smkmuhbligo
+   ```
+3. Verifikasi integritas tabel:
+   ```bash
+   mysql --defaults-extra-file=~/.my.cnf smkmuhbligo -e "SHOW TABLES; SELECT COUNT(*) FROM articles; SELECT COUNT(*) FROM users;"
+   ```
 
-1. Hapus (drop) database lama, lalu buat ulang, **atau** kosongkan tabel yang ada.
-2. Unzip file backup SQL.
-    ```bash
-    gunzip -c /backup/db/20260301.sql.gz > /tmp/restore.sql
-    ```
-3. Lakukan restore menggunakan `psql`.
-    ```bash
-    psql -U postgres -d smuhbligo_db < /tmp/restore.sql
-    ```
+### B. Restore Storage
+1. Sinkronkan kembali direktori dari backup offsite ke server:
+   ```bash
+   rsync -az user@backup-host:/var/backups/smkmuhbligo/storage/public/ /var/www/smkmuhbligo/storage/app/public/
+   rsync -az user@backup-host:/var/backups/smkmuhbligo/storage/private/ /var/www/smkmuhbligo/storage/app/private/
+   ```
+2. Pastikan kepemilikan dan permission berkas benar:
+   ```bash
+   chown -R www-data:www-data /var/www/smkmuhbligo/storage
+   chmod -R 775 /var/www/smkmuhbligo/storage
+   php /var/www/smkmuhbligo/artisan storage:link
+   ```
 
-**B. Restore Storage:**
+---
 
-1. Salin ulang file dari server backup ke dalam direktori aplikasi.
-    ```bash
-    rsync -avz user@backup-server:/backup/smuhbligo/storage/ /var/www/smuhbligo/storage/app/public/
-    ```
-2. Pastikan file ownership benar (misalkan `www-data:www-data`).
-    ```bash
-    chown -R www-data:www-data /var/www/smuhbligo/storage/app/public/
-    ```
+## 5. Verifikasi Berkala (Uji Coba Bulanan)
 
-## 4. Cara Verifikasi Backup (Test Restore)
-
-Setiap beberapa waktu (misal sebulan sekali), pastikan file backup yang dibuat dapat di-restore dengan valid:
-
-1. Unduh salah satu file `sql.gz` terbaru ke mesin staging / lokal.
-2. Lakukan command dekompresi dan restore ke database testing.
-3. Cek jumlah data / view data pada tabel utama (`users`, `artikel`, `galeri`) untuk memastikan integritas datanya.
-4. Lakukan pengecekan pada storage images, dan verifikasi url public-nya dapat dibuka (misalkan `/storage/galeri/foto.jpg`).
+Setiap satu bulan sekali pada hari kerja pertama:
+1. Salin satu file `sql.gz` terbaru ke server staging.
+2. Lakukan pemulihan data sesuai prosedur di atas ke database staging.
+3. Cocokkan jumlah record tabel utama (`users`, `articles`, `categories`, `jurusans`, `galeris`).
+4. Uji buka 5 URL berkas media acak untuk memastikan berkas storage terhubung sempurna.
