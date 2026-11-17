@@ -40,11 +40,12 @@ This is the **official website and CMS** for SMK Muhammadiyah Bligo — a vocati
 ## ✨ Features
 
 ### Public Website
-- 🏠 **Beranda** — Hero section, announcements, featured articles, statistics, gallery showcase
-- 📰 **Berita** — Full-featured news/blog with categories, search, and pagination
-- 🖼️ **Galeri** — Photo albums with lightbox viewer
+- 🏠 **Beranda** — Hero section, emergency announcement banner, featured articles, statistics, gallery showcase
+- 📰 **Berita** — Full-featured news/blog with categories, tags, share buttons, related articles, search, and pagination
+- 📢 **Pengumuman** — Public announcement directory and detail pages
+- 🖼️ **Galeri** — Photo albums, individual album pages with lightbox viewer
 - 🎓 **Jurusan** — 5 vocational programs with detailed descriptions and career prospects
-- 📅 **Agenda** — School events calendar with detail pages
+- 📅 **Agenda** — School events calendar with detail pages and iCalendar (.ics) export
 - 📨 **Kontak** — Contact form with rate-limiting and spam protection
 - 🔍 **Pencarian** — Search across Jurusan, Artikel, Pengumuman, and Agenda
 - 🔗 **Tautan** — Quick links portal
@@ -52,13 +53,14 @@ This is the **official website and CMS** for SMK Muhammadiyah Bligo — a vocati
 
 ### Admin CMS
 - 📊 **Dashboard** — Real-time statistics, recent activities, quick actions
-- ✍️ **Article Management** — Rich text editor (TipTap), draft/review/publish workflow
+- ✍️ **Article Management** — Rich text editor (TipTap), tags & category management, draft/review/publish workflow, live draft preview
 - 🤖 **AI Writing Tools** — Content generation, revision, grammar correction, SEO analysis, auto-translation
-- 📢 **Pengumuman** — Announcement management with urgency levels (info, penting, urgent)
+- 📢 **Pengumuman** — Announcement management with urgency levels (info, penting, urgent), TipTap editor, live preview
 - 🖼️ **Galeri Management** — Album CRUD with drag-and-drop photo upload
-- 📅 **Agenda** — Event management with date ranges
+- 📅 **Agenda** — Event management with date ranges and TipTap editor
 - 🏫 **Jurusan** — Edit vocational program details with multilingual support
 - 📝 **Konten Halaman** — CMS-managed static page content
+- 👤 **Profil Saya** — Self-service profile, avatar, and password management for all CMS staff
 - 👥 **User Management** — Role-based access (admin, editor, author)
 - ⚙️ **Settings** — Site configuration, SMTP setup, AI configuration
 - 🔔 **Notifications** — Polling-based in-app notifications

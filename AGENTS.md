@@ -161,9 +161,13 @@ All routes are in `routes/web.php` (~214 lines). Two groups:
 | `/jurusan/{slug}` | `JurusanController@show` | `jurusan.show` |
 | `/berita` | `BeritaController@index` | `berita.index` |
 | `/berita/{slug}` | `BeritaController@show` | `berita.show` |
+| `/pengumuman` | `PengumumanController@index` | `pengumuman.index` |
+| `/pengumuman/{slug}` | `PengumumanController@show` | `pengumuman.show` |
 | `/galeri` | `GaleriController@index` | `galeri` |
+| `/galeri/{slug}` | `GaleriController@show` | `galeri.show` |
 | `/agenda` | `AgendaPublikController@index` | `agenda.index` |
 | `/agenda/{slug}` | `AgendaPublikController@show` | `agenda.show` |
+| `/agenda/{slug}/ics` | `AgendaPublikController@ics` | `agenda.ics` |
 | `/tentang` | `TentangController@index` | `tentang` |
 | `/kontak` | `KontakController@index` | `kontak` |
 | `/pencarian` | `PencarianController@index` | `pencarian.index` |
@@ -174,12 +178,15 @@ All routes are in `routes/web.php` (~214 lines). Two groups:
 | Module | Controller | Access |
 |--------|-----------|--------|
 | Dashboard | `DashboardController` | All CMS roles |
-| Artikel | `ArtikelController` (resource) | All CMS roles |
-| Galeri | `GaleriController` | All CMS roles |
-| Pengumuman | `PengumumanController` | All CMS roles |
+| Artikel | `ArtikelController` (resource + publish + preview) | All CMS roles |
+| Kategori | `KategoriController` (resource) | All CMS roles |
+| Tag | `TagController` (index + merge + delete) | All CMS roles |
+| Galeri | `GaleriController` (resource + foto CRUD) | All CMS roles |
+| Pengumuman | `PengumumanController` (resource + preview) | All CMS roles |
 | Agenda | `AgendaController` (resource) | All CMS roles |
 | Jurusan | `JurusanController` (edit only) | All CMS roles |
 | Notifikasi | `NotifikasiController` | All CMS roles |
+| Profil Saya | `ProfilController` (edit + update + password) | All CMS roles |
 | Pesan Kontak | `PesanKontakController` | All CMS roles (delete: admin only) |
 | Konten Halaman | `KontenHalamanController` | View: all, Update: admin only |
 | Media Upload | `MediaUploadController` | All CMS roles |
@@ -472,7 +479,7 @@ HalamanKontenSeeder → StatistikSeeder → StrukturOrganisasiSeeder
 - `hreflang` alternate links for `id` and `en`
 - Sitemap auto-generated at `/sitemap.xml` via `spatie/laravel-sitemap`
 - Semantic HTML5 elements throughout
-- **Security Note:** CSP middleware telah aktif dengan nonce script & frame-ancestors none. Fitur pencarian mencakup Jurusan, Artikel, Pengumuman, dan Agenda. Seluruh toggle pengaturan (`artikel_ai_enabled`, `multibahasa_enabled`, `ai_translate_auto`, `artikel_approval`) telah berefek penuh di backend dan frontend. Status artikel menggunakan enum `ArticleStatus` (Draft, PendingReview, Published, Archived). Seeder lengkap 11 seeder dengan placeholder SVG lokal (bebas dependensi eksternal picsum). Seluruh validasi controller menggunakan FormRequest dan props admin menggunakan Resource. Class styling bersih menggunakan token Tailwind v4 tanpa arbitrary hex di JSX.
+- **Security Note:** CSP middleware telah aktif dengan nonce script & frame-ancestors none. Fitur pencarian mencakup Jurusan, Artikel, Pengumuman, dan Agenda. Seluruh toggle pengaturan (`artikel_ai_enabled`, `multibahasa_enabled`, `ai_translate_auto`, `artikel_approval`) telah berefek penuh di backend dan frontend. Status artikel menggunakan enum `ArticleStatus` (Draft, PendingReview, Published, Archived). Seeder lengkap 11 seeder dengan placeholder SVG lokal (bebas dependensi eksternal picsum). Seluruh validasi controller menggunakan FormRequest dan props admin menggunakan Resource. Class styling bersih menggunakan token Tailwind v4 tanpa arbitrary hex di JSX. Modul Kategori & Tag telah terintegrasi penuh pada penulisan artikel dan filter publik/pengelolaan admin. Pengumuman publik memiliki halaman index/show dan banner darurat di Beranda. Galeri mendukung detail album per slug. Agenda mendukung unduhan kalender iCalendar (.ics). Editor TipTap aktif untuk konten Pengumuman dan Agenda. Fitur pratinjau draft aktif untuk artikel dan pengumuman.
 
 ---
 
