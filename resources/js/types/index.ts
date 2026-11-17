@@ -126,6 +126,24 @@ export interface Category {
     };
 }
 
+export interface ArticleRevisionItem {
+    id: number;
+    user: { id: number; name: string } | null;
+    snapshot: {
+        status?: string;
+        category_id?: number | null;
+        meta_title?: string | null;
+        meta_description?: string | null;
+        translations?: {
+            id?: { title: string; excerpt: string; content: string };
+            en?: { title: string; excerpt: string; content: string };
+        };
+        tags?: string[];
+    };
+    created_at: string;
+    human_time: string;
+}
+
 export interface Tag {
     id: number;
     name: string;

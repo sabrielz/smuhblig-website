@@ -13,6 +13,7 @@ import { AiBubble } from '@/Components/Editor/AiBubble';
 import { AiPanel } from '@/Components/Editor/AiPanel';
 import { SeoPanel } from '@/Components/Editor/SeoPanel';
 import { AiStatusBadge } from '@/Components/Editor/AiStatusBadge';
+import { RevisionPanel } from '@/Components/Admin/RevisionPanel';
 import { Save, Send, ArrowLeft, Sparkles, ExternalLink } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { useAiJob } from '@/hooks/useAiJob';
@@ -71,6 +72,7 @@ interface ArticleData {
     en_ai_translated?: boolean;
     en_reviewed?: boolean;
     tags?: string[];
+    revisions?: import('@/types').ArticleRevisionItem[];
 }
 
 interface Props {
@@ -745,6 +747,16 @@ export default function Form({ article, categories }: Props) {
                             jobError={seoJob.error}
                         />
                     </div>
+
+                    {/* Riwayat Revisi (Sesi 6-07) */}
+                    {isEdit && article?.id && (
+                        <RevisionPanel
+                            articleId={article.id}
+                            revisions={article.revisions ?? []}
+                            currentTitle={data.title_id}
+                            currentContent={data.content_id}
+                        />
+                    )}
 
                 </div>
             </div>
