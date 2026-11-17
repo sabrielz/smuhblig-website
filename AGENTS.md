@@ -666,7 +666,7 @@ Setiap usulan fitur baru wajib lolos 3 pertanyaan berikut:
   - Menggunakan paket `spatie/laravel-activitylog` untuk mencatat audit trail perubahan konten dan riwayat otentikasi operator secara terstruktur.
 - **`ADR-008` Autentikasi Dua Faktor (2FA TOTP)** *(Status: disetujui)*:
   - Menggunakan kombinasi `pragmarx/google2fa` + `bacon/bacon-qr-code` untuk implementasi TOTP 2FA ringan yang disematkan langsung pada alur otentikasi login CMS.
-- **`ADR-009` Strategi Internasionalisasi (i18n)** *(Status: menunggu persetujuan)*:
+- **`ADR-009` Strategi Internasionalisasi (i18n)** *(Status: disetujui)*:
   - Teks UI **publik** (frontend pengunjung) distandarisasi menggunakan `react-i18next` dengan berkas terjemahan JSON di `resources/js/locales/{id,en}.json`, menggantikan pola percabangan inline `locale === 'id' ? ... : ...`.
   - UI **admin CMS** tetap menggunakan Bahasa Indonesia secara konsisten untuk memudahkan operator lokal.
 
