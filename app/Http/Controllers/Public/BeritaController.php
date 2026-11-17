@@ -88,11 +88,20 @@ class BeritaController extends Controller
 
         $article->load(['translations', 'category.translations', 'user', 'media', 'tags']);
 
+        $tagNames = $article->tags->pluck('name')->toArray();
+
         $relatedArticles = Article::query()
             ->terbit()
             ->byLocale()
-            ->where('category_id', $article->category_id)
             ->where('id', '!=', $article->id)
+            ->where(function ($query) use ($article, $tagNames) {
+                $query->where('category_id', $article->category_id);
+                if (! empty($tagNames)) {
+                    $query->orWhere(function ($q) use ($tagNames) {
+                        $q->withAnyTags($tagNames);
+                    });
+                }
+            })
             ->with(['translations', 'category.translations', 'user', 'media'])
             ->orderByDesc('published_at')
             ->limit(3)

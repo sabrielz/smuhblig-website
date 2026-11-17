@@ -3,7 +3,8 @@ import { Head, Link } from '@inertiajs/react';
 import PublicLayout from '@/Layouts/PublicLayout';
 import { ArticleCard } from '@/Components/UI/ArticleCard';
 import { Badge } from '@/Components/UI/Badge';
-import { CalendarIcon, Share2, Facebook, Twitter, MessageCircle, Link as LinkIcon, ChevronRight } from 'lucide-react';
+import { CalendarIcon, ChevronRight } from 'lucide-react';
+import { ShareButtons } from '@/Components/UI/ShareButtons';
 import { motion } from 'framer-motion';
 import { fadeInUp, staggerContainer } from '@/lib/motion';
 interface ShowProps {
@@ -68,17 +69,6 @@ export default function BeritaShow({ article, relatedArticles, categories }: Sho
         const wordCount = text.trim().split(/\s+/).length;
         const time = Math.ceil(wordCount / 200);
         return time < 1 ? 1 : time;
-    };
-
-    const handleCopyLink = () => {
-        navigator.clipboard.writeText(window.location.href);
-        // Toast notification idealnya dipanggil disini
-        alert('Tautan disalin ke clipboard');
-    };
-
-    const handleShareWA = () => {
-        const url = `https://wa.me/?text=${encodeURIComponent(article.title + ' ' + window.location.href)}`;
-        window.open(url, '_blank');
     };
 
     return (
@@ -222,44 +212,7 @@ export default function BeritaShow({ article, relatedArticles, categories }: Sho
 
                                 {/* Share Buttons */}
                                 <div className="mt-16 pt-8 border-t border-neutral-100">
-                                    <h3 className="font-semibold text-lg mb-4 flex items-center">
-                                        <Share2 className="w-5 h-5 mr-2 text-primary-navy" />
-                                        Bagikan Artikel
-                                    </h3>
-                                    <div className="flex flex-wrap gap-2 sm:gap-3">
-                                        <button
-                                            onClick={handleCopyLink}
-                                            className="flex-1 sm:flex-none justify-center inline-flex items-center px-4 py-2.5 bg-neutral-100 hover:bg-neutral-200 text-neutral-700 rounded-full text-xs sm:text-sm font-medium transition-colors min-h-11"
-                                        >
-                                            <LinkIcon className="w-4 h-4 mr-1 sm:mr-2" />
-                                            Salin <span className="hidden sm:inline">&nbsp;Tautan</span>
-                                        </button>
-                                        <button
-                                            onClick={handleShareWA}
-                                            className="flex-1 sm:flex-none justify-center inline-flex items-center px-4 py-2.5 bg-brand-whatsapp/10 hover:bg-brand-whatsapp/20 text-brand-whatsapp rounded-full text-xs sm:text-sm font-medium transition-colors min-h-11"
-                                        >
-                                            <MessageCircle className="w-4 h-4 mr-1 sm:mr-2" />
-                                            WhatsApp
-                                        </button>
-                                        <a
-                                            href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="flex-1 sm:flex-none justify-center inline-flex items-center px-4 py-2.5 bg-brand-facebook/10 hover:bg-brand-facebook/20 text-brand-facebook rounded-full text-xs sm:text-sm font-medium transition-colors min-h-11"
-                                        >
-                                            <Facebook className="w-4 h-4 mr-1 sm:mr-2" />
-                                            Facebook
-                                        </a>
-                                        <a
-                                            href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(article.title)}`}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="flex-1 sm:flex-none justify-center inline-flex items-center px-4 py-2.5 bg-brand-twitter/10 hover:bg-brand-twitter/20 text-brand-twitter rounded-full text-xs sm:text-sm font-medium transition-colors min-h-11"
-                                        >
-                                            <Twitter className="w-4 h-4 mr-1 sm:mr-2" />
-                                            Twitter
-                                        </a>
-                                    </div>
+                                    <ShareButtons title={article.title} />
                                 </div>
                             </article>
                         </div>
