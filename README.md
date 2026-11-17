@@ -40,14 +40,18 @@ This is the **official website and CMS** for SMK Muhammadiyah Bligo — a vocati
 ## ✨ Features
 
 ### Public Website
-- 🏠 **Beranda** — Hero section, emergency announcement banner, featured articles, statistics, gallery showcase
+- 🏠 **Beranda** — Hero section, emergency announcement banner, featured articles, statistics, top 3 student achievements, gallery showcase
 - 📰 **Berita** — Full-featured news/blog with categories, tags, share buttons, related articles, search, and pagination
 - 📢 **Pengumuman** — Public announcement directory and detail pages
 - 🖼️ **Galeri** — Photo albums, individual album pages with lightbox viewer
 - 🎓 **Jurusan** — 5 vocational programs with detailed descriptions and career prospects
+- 👨‍🏫 **Guru & Tendik** — Faculty and administrative staff directory with division tabs and program filters
+- 🏢 **Fasilitas** — School campus infrastructure and workshop facilities with photo lightbox galleries
+- 🏃 **Ekstrakurikuler** — Student activities, Hizbul Wathan scouting, martial arts, and talent clubs
+- 🏆 **Prestasi** — Academic and non-academic awards and student achievements directory
 - 📅 **Agenda** — School events calendar with detail pages and iCalendar (.ics) export
 - 📨 **Kontak** — Contact form with rate-limiting and spam protection
-- 🔍 **Pencarian** — Search across Jurusan, Artikel, Pengumuman, and Agenda
+- 🔍 **Pencarian** — Comprehensive search across all public content modules
 - 🔗 **Tautan** — Quick links portal
 - 🌐 **Bilingual** — Full Indonesian/English content with locale switcher
 

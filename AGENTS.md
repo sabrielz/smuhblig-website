@@ -159,6 +159,13 @@ All routes are in `routes/web.php` (~214 lines). Two groups:
 | `/` | `BerandaController` | `beranda` |
 | `/jurusan` | `JurusanController@index` | `jurusan.index` |
 | `/jurusan/{slug}` | `JurusanController@show` | `jurusan.show` |
+| `/guru` | `Public\GuruController@index` | `guru.index` |
+| `/fasilitas` | `Public\FasilitasController@index` | `fasilitas.index` |
+| `/fasilitas/{slug}` | `Public\FasilitasController@show` | `fasilitas.show` |
+| `/ekstrakurikuler` | `Public\EkstrakurikulerController@index` | `ekstrakurikuler.index` |
+| `/ekstrakurikuler/{slug}` | `Public\EkstrakurikulerController@show` | `ekstrakurikuler.show` |
+| `/prestasi` | `Public\PrestasiController@index` | `prestasi.index` |
+| `/prestasi/{slug}` | `Public\PrestasiController@show` | `prestasi.show` |
 | `/berita` | `BeritaController@index` | `berita.index` |
 | `/berita/{slug}` | `BeritaController@show` | `berita.show` |
 | `/pengumuman` | `PengumumanController@index` | `pengumuman.index` |
@@ -185,6 +192,10 @@ All routes are in `routes/web.php` (~214 lines). Two groups:
 | Pengumuman | `PengumumanController` (resource + preview) | All CMS roles |
 | Agenda | `AgendaController` (resource) | All CMS roles |
 | Jurusan | `JurusanController` (edit only) | All CMS roles |
+| Guru & Tendik | `GuruController` (resource + reorder) | Admin & Editor |
+| Fasilitas | `FasilitasController` (resource + reorder) | Admin & Editor |
+| Ekstrakurikuler | `EkstrakurikulerController` (resource + reorder) | Admin & Editor |
+| Prestasi | `PrestasiController` (resource) | Admin & Editor |
 | Notifikasi | `NotifikasiController` | All CMS roles |
 | Profil Saya | `ProfilController` (edit + update + password) | All CMS roles |
 | Pesan Kontak | `PesanKontakController` | All CMS roles (delete: admin only) |
@@ -201,7 +212,7 @@ All routes are in `routes/web.php` (~214 lines). Two groups:
 
 ## 5. Data Model Summary
 
-**22 Eloquent models** across the domain:
+**26 Eloquent models** across the domain:
 
 | Model | Translation Table | Spatie Packages | Notes |
 |-------|------------------|-----------------|-------|
@@ -209,6 +220,10 @@ All routes are in `routes/web.php` (~214 lines). Two groups:
 | `Article` | `ArticleTranslation` | Sluggable, Tags, MediaLibrary, Translatable | Statuses: draft, pending_review, published, archived |
 | `Category` | `CategoryTranslation` | Translatable | Article categories |
 | `Jurusan` | `JurusanTranslation` | Sluggable, Translatable | 5 fixed programs (edit only, no create/delete) |
+| `Guru` | `GuruTranslation` | MediaLibrary | Guru & Tenaga Kependidikan |
+| `Fasilitas` | `FasilitasTranslation` | Sluggable, MediaLibrary | Sarana & prasarana sekolah (multiple photos) |
+| `Ekstrakurikuler` | `EkstrakurikulerTranslation` | Sluggable, MediaLibrary | Kegiatan minat & bakat siswa |
+| `Prestasi` | `PrestasiTranslation` | Sluggable, MediaLibrary | Penghargaan & kejuaraan siswa |
 | `Galeri` | `GaleriTranslation` | Sluggable, MediaLibrary, Translatable | Photo albums |
 | `Pengumuman` | `PengumumanTranslation` | Sluggable, Translatable | Types: info, penting, urgent |
 | `Agenda` | `AgendaTranslation` | Sluggable, Translatable | School events/calendar |
@@ -479,7 +494,7 @@ HalamanKontenSeeder → StatistikSeeder → StrukturOrganisasiSeeder
 - `hreflang` alternate links for `id` and `en`
 - Sitemap auto-generated at `/sitemap.xml` via `spatie/laravel-sitemap`
 - Semantic HTML5 elements throughout
-- **Security Note:** CSP middleware telah aktif dengan nonce script & frame-ancestors none. Fitur pencarian mencakup Jurusan, Artikel, Pengumuman, dan Agenda. Seluruh toggle pengaturan (`artikel_ai_enabled`, `multibahasa_enabled`, `ai_translate_auto`, `artikel_approval`) telah berefek penuh di backend dan frontend. Status artikel menggunakan enum `ArticleStatus` (Draft, PendingReview, Published, Archived). Seeder lengkap 11 seeder dengan placeholder SVG lokal (bebas dependensi eksternal picsum). Seluruh validasi controller menggunakan FormRequest dan props admin menggunakan Resource. Class styling bersih menggunakan token Tailwind v4 tanpa arbitrary hex di JSX. Modul Kategori & Tag telah terintegrasi penuh pada penulisan artikel dan filter publik/pengelolaan admin. Pengumuman publik memiliki halaman index/show dan banner darurat di Beranda. Galeri mendukung detail album per slug. Agenda mendukung unduhan kalender iCalendar (.ics). Editor TipTap aktif untuk konten Pengumuman dan Agenda. Fitur pratinjau draft aktif untuk artikel dan pengumuman.
+- **Security Note:** CSP middleware telah aktif dengan nonce script & frame-ancestors none. Fitur pencarian mencakup Jurusan, Artikel, Pengumuman, Agenda, Guru & Tendik, Fasilitas, Ekstrakurikuler, dan Prestasi. Seluruh toggle pengaturan (`artikel_ai_enabled`, `multibahasa_enabled`, `ai_translate_auto`, `artikel_approval`) telah berefek penuh di backend dan frontend. Status artikel menggunakan enum `ArticleStatus` (Draft, PendingReview, Published, Archived). Seeder lengkap dengan placeholder SVG lokal (bebas dependensi eksternal picsum). Seluruh validasi controller menggunakan FormRequest dan props admin menggunakan Resource. Class styling bersih menggunakan token Tailwind v4 tanpa arbitrary hex di JSX. Modul Kategori & Tag telah terintegrasi penuh pada penulisan artikel dan filter publik/pengelolaan admin. Pengumuman publik memiliki halaman index/show dan banner darurat di Beranda. Galeri mendukung detail album per slug. Agenda mendukung unduhan kalender iCalendar (.ics). Modul Profil Sekolah lengkap: Guru & Tendik (publik, admin, reorder), Fasilitas (publik, admin, reorder, galeri foto s/d 8 foto), Ekstrakurikuler (publik, admin, reorder), Prestasi (publik, admin, section beranda), serta Navigasi dropdown/accordion Profil yang aksesibel. Editor TipTap aktif untuk konten Pengumuman, Agenda, Fasilitas, Ekstrakurikuler, dan Prestasi. Fitur pratinjau draft aktif untuk artikel dan pengumuman.
 
 ---
 
