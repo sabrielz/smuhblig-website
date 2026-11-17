@@ -65,6 +65,8 @@ export interface SharedProps {
     flash: FlashMessages;
     notifikasi_count: number;
     pesan_baru_count: number;
+    seo?: string;
+    csp_nonce?: string;
     [key: string]: unknown;
 }
 

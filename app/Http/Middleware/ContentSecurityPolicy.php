@@ -39,7 +39,10 @@ class ContentSecurityPolicy
 
         $csp = $this->buildCspHeader($nonce, $isAiRoute);
 
-        $response->headers->set('Content-Security-Policy', $csp);
+        $isReportOnly = config('csp.report_only', true);
+        $headerName = $isReportOnly ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy';
+
+        $response->headers->set($headerName, $csp);
 
         // Tambahan security headers
         $response->headers->set('X-Content-Type-Options', 'nosniff');

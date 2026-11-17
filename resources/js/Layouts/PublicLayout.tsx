@@ -4,6 +4,7 @@ import parse from 'html-react-parser';
 import Navbar from '@/Components/Layout/Navbar';
 import Footer from '@/Components/Layout/Footer';
 import { GlobalToast } from '@/Components/UI/GlobalToast';
+import { SharedProps } from '@/types';
 
 // ---------------------------------------------------------------------------
 // Props
@@ -16,7 +17,7 @@ interface PublicLayoutProps {
 // PublicLayout
 // ---------------------------------------------------------------------------
 export default function PublicLayout({ children }: PublicLayoutProps) {
-    const { seo, pengaturan, url } = usePage<any>().props;
+    const { seo, pengaturan, csp_nonce } = usePage<SharedProps>().props;
     const { url: currentUrl } = usePage();
     const currentPath = currentUrl.split('?')[0];
 
@@ -53,7 +54,7 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                 )}
                 <link rel="alternate" hrefLang="id" href={`${baseUrl}${currentPath}?lang=id`} />
                 <link rel="alternate" hrefLang="en" href={`${baseUrl}${currentPath}?lang=en`} />
-                <script type="application/ld+json">
+                <script type="application/ld+json" nonce={csp_nonce}>
                     {JSON.stringify(jsonLd)}
                 </script>
             </Head>
