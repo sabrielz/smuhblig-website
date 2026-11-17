@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Public\PencarianRequest;
 use App\Models\Agenda;
 use App\Models\Article;
+use App\Models\Ekstrakurikuler;
 use App\Models\Fasilitas;
 use App\Models\Guru;
 use App\Models\Jurusan;
@@ -44,6 +45,7 @@ class PencarianController extends Controller
             'agenda' => [],
             'guru' => [],
             'fasilitas' => [],
+            'ekstrakurikuler' => [],
         ];
         $totalHasil = 0;
 
@@ -207,6 +209,38 @@ class PencarianController extends Controller
             });
 
             $totalHasil += $hasil['fasilitas']->count();
+        }
+
+        // Search Ekstrakurikuler
+        if ($type === 'semua' || $type === 'ekstrakurikuler') {
+            $ekskulQuery = Ekstrakurikuler::query()
+                ->active()
+                ->join('ekstrakurikuler_translations', function ($join) use ($locale) {
+                    $join->on('ekstrakurikuler.id', '=', 'ekstrakurikuler_translations.ekstrakurikuler_id')
+                        ->where('ekstrakurikuler_translations.locale', '=', $locale);
+                })
+                ->where(function ($query) use ($q, $operator) {
+                    $query->where('ekstrakurikuler_translations.nama', $operator, "%{$q}%")
+                        ->orWhere('ekstrakurikuler_translations.deskripsi', $operator, "%{$q}%")
+                        ->orWhere('ekstrakurikuler_translations.jadwal', $operator, "%{$q}%");
+                })
+                ->select('ekstrakurikuler.*', 'ekstrakurikuler_translations.nama', 'ekstrakurikuler_translations.deskripsi', 'ekstrakurikuler_translations.jadwal')
+                ->with('media')
+                ->get();
+
+            $hasil['ekstrakurikuler'] = $ekskulQuery->map(function ($e) use ($q) {
+                return [
+                    'id' => $e->id,
+                    'slug' => $e->slug,
+                    'nama' => $this->highlight($e->nama ?? 'Ekstrakurikuler', $q),
+                    'deskripsi' => $this->highlight(strip_tags($e->deskripsi ?? ''), $q),
+                    'jadwal' => $this->highlight($e->jadwal ?? '', $q),
+                    'foto_url' => $e->getFirstMediaUrl('foto', 'medium') ?: $e->getFirstMediaUrl('foto') ?: null,
+                    'url' => route('ekstrakurikuler.show', $e->slug),
+                ];
+            });
+
+            $totalHasil += $hasil['ekstrakurikuler']->count();
         }
 
         // Search Artikel
@@ -396,6 +430,31 @@ class PencarianController extends Controller
                 ];
             });
 
+        // Limit Ekstrakurikuler 3
+        $ekskul = Ekstrakurikuler::query()
+            ->active()
+            ->join('ekstrakurikuler_translations', function ($join) use ($locale) {
+                $join->on('ekstrakurikuler.id', '=', 'ekstrakurikuler_translations.ekstrakurikuler_id')
+                    ->where('ekstrakurikuler_translations.locale', '=', $locale);
+            })
+            ->where(function ($query) use ($q, $operator) {
+                $query->where('ekstrakurikuler_translations.nama', $operator, "%{$q}%")
+                    ->orWhere('ekstrakurikuler_translations.deskripsi', $operator, "%{$q}%");
+            })
+            ->select('ekstrakurikuler.id', 'ekstrakurikuler.slug', 'ekstrakurikuler_translations.nama')
+            ->orderBy('urutan')
+            ->limit(3)
+            ->get()
+            ->map(function ($e) use ($q) {
+                return [
+                    'id' => $e->id,
+                    'slug' => $e->slug,
+                    'title' => $this->highlight($e->nama ?? 'Ekstrakurikuler', $q),
+                    'type' => 'Ekstrakurikuler',
+                    'url' => route('ekstrakurikuler.show', $e->slug),
+                ];
+            });
+
         // Limit Artikel 5
         $artikel = Article::query()
             ->terbit()
@@ -424,6 +483,7 @@ class PencarianController extends Controller
         return response()->json([
             'jurusan' => $jurusan,
             'fasilitas' => $fasilitas,
+            'ekstrakurikuler' => $ekskul,
             'artikel' => $artikel,
             'pengumuman' => $pengumuman,
             'agenda' => $agenda,

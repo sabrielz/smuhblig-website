@@ -19,7 +19,7 @@ class PencarianRequest extends FormRequest
     {
         return [
             'q' => ['required', 'string', 'min:2', 'max:100'],
-            'type' => ['nullable', 'in:artikel,jurusan,pengumuman,agenda,guru,fasilitas,semua'],
+            'type' => ['nullable', 'in:artikel,jurusan,pengumuman,agenda,guru,fasilitas,ekstrakurikuler,semua'],
         ];
     }
 }

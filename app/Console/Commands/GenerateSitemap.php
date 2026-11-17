@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\Agenda;
 use App\Models\Article;
+use App\Models\Ekstrakurikuler;
 use App\Models\Fasilitas;
 use App\Models\Galeri;
 use App\Models\Jurusan;
@@ -59,6 +60,7 @@ class GenerateSitemap extends Command
             ->add($makeUrl('/tentang', 0.8, Url::CHANGE_FREQUENCY_WEEKLY))
             ->add($makeUrl('/guru', 0.8, Url::CHANGE_FREQUENCY_WEEKLY))
             ->add($makeUrl('/fasilitas', 0.8, Url::CHANGE_FREQUENCY_WEEKLY))
+            ->add($makeUrl('/ekstrakurikuler', 0.8, Url::CHANGE_FREQUENCY_WEEKLY))
             ->add($makeUrl('/jurusan', 0.8, Url::CHANGE_FREQUENCY_WEEKLY))
             ->add($makeUrl('/berita', 0.8, Url::CHANGE_FREQUENCY_DAILY))
             ->add($makeUrl('/agenda', 0.8, Url::CHANGE_FREQUENCY_WEEKLY))
@@ -78,6 +80,14 @@ class GenerateSitemap extends Command
             $sitemap->add(
                 $makeUrl("/fasilitas/{$fasilitas->slug}", 0.7, Url::CHANGE_FREQUENCY_MONTHLY)
                     ->setLastModificationDate($fasilitas->updated_at)
+            );
+        });
+
+        // Ekstrakurikuler pages
+        Ekstrakurikuler::active()->get()->each(function (Ekstrakurikuler $ekskul) use ($sitemap, $makeUrl) {
+            $sitemap->add(
+                $makeUrl("/ekstrakurikuler/{$ekskul->slug}", 0.7, Url::CHANGE_FREQUENCY_MONTHLY)
+                    ->setLastModificationDate($ekskul->updated_at)
             );
         });
 
