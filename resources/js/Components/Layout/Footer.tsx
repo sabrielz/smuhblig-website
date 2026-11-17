@@ -17,8 +17,11 @@ const NAV_LINKS = [
     { label: { id: 'Prestasi', en: 'Achievements' }, href: '/prestasi' },
     { label: { id: 'Jurusan', en: 'Programs' }, href: '/jurusan' },
     { label: { id: 'Berita', en: 'News' }, href: '/berita' },
-    { label: { id: 'Galeri', en: 'Gallery' }, href: '/galeri' },
+    { label: { id: 'Pengumuman', en: 'Announcements' }, href: '/pengumuman' },
     { label: { id: 'Agenda', en: 'Events' }, href: '/agenda' },
+    { label: { id: 'Unduhan', en: 'Downloads' }, href: '/unduhan' },
+    { label: { id: 'FAQ', en: 'FAQ' }, href: '/faq' },
+    { label: { id: 'Galeri', en: 'Gallery' }, href: '/galeri' },
     { label: { id: 'Kontak', en: 'Contact' }, href: '/kontak' },
 ];
 

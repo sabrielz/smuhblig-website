@@ -609,6 +609,17 @@ Setiap usulan fitur baru wajib lolos 3 pertanyaan berikut:
 - **`BR-024` Video** *(Status: disetujui)*:
   - Tabel `video`: `youtube_id` (11 karakter), `urutan`, `is_active`, `galeri_id` (nullable FK `galeris`).
   - Translasi (`video_translations`): `judul`.
+- **`BR-025` Urutan Section Beranda** *(Status: disetujui)*:
+  - Urutan section pada halaman Beranda publik secara berurutan:
+    1. Hero (`#beranda-hero`)
+    2. Pengumuman Urgent (`AnnouncementBanner`)
+    3. Statistik (`#beranda-statistik`)
+    4. Jurusan (`#beranda-jurusan`)
+    5. Prestasi (`#beranda-prestasi`)
+    6. Berita (`#beranda-berita`)
+    7. Testimoni (`#beranda-testimoni`)
+    8. Mitra Industri (`#beranda-mitra`)
+    9. CTA Akhir (`#beranda-cta`)
 
 ---
 
