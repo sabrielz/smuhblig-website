@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\NotifikasiAdmin;
-use Illuminate\Http\Request;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -29,13 +29,13 @@ class NotifikasiController extends Controller
         }
 
         $notifikasi = $query->paginate(20)->through(fn ($n) => [
-            'id'         => $n->id,
-            'tipe'       => $n->tipe,
-            'judul'      => $n->judul,
-            'pesan'      => $n->pesan,
-            'url'        => $n->url,
-            'dibaca'     => !is_null($n->dibaca_at),
-            'dibaca_at'  => $n->dibaca_at?->diffForHumans(),
+            'id' => $n->id,
+            'tipe' => $n->tipe,
+            'judul' => $n->judul,
+            'pesan' => $n->pesan,
+            'url' => $n->url,
+            'dibaca' => ! is_null($n->dibaca_at),
+            'dibaca_at' => $n->dibaca_at?->diffForHumans(),
             'created_at' => $n->created_at->diffForHumans(),
         ]);
 
@@ -44,8 +44,8 @@ class NotifikasiController extends Controller
             ->count();
 
         return Inertia::render('Admin/Notifikasi/Index', [
-            'notifikasi'      => $notifikasi,
-            'activeFilter'    => $filter,
+            'notifikasi' => $notifikasi,
+            'activeFilter' => $filter,
             'belumDibacaCount' => $belumDibacaCount,
         ]);
     }
@@ -113,7 +113,7 @@ class NotifikasiController extends Controller
 
         return response()->json([
             'success' => true,
-            'count'   => 0,
+            'count' => 0,
         ]);
     }
 
@@ -127,12 +127,12 @@ class NotifikasiController extends Controller
             ->take(10)
             ->get()
             ->map(fn ($n) => [
-                'id'         => $n->id,
-                'tipe'       => $n->tipe,
-                'judul'      => $n->judul,
-                'pesan'      => $n->pesan,
-                'url'        => $n->url,
-                'dibaca'     => !is_null($n->dibaca_at),
+                'id' => $n->id,
+                'tipe' => $n->tipe,
+                'judul' => $n->judul,
+                'pesan' => $n->pesan,
+                'url' => $n->url,
+                'dibaca' => ! is_null($n->dibaca_at),
                 'created_at' => $n->created_at->diffForHumans(),
             ]);
 

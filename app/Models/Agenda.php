@@ -5,9 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
-use Illuminate\Support\Carbon;
 
 class Agenda extends Model
 {
@@ -41,7 +41,8 @@ class Agenda extends Model
     public function getJudulAttribute()
     {
         $translation = $this->translation('id') ?? $this->translations()->first();
-        return $translation ? $translation->judul : 'Agenda-' . mt_rand(1000, 9999);
+
+        return $translation ? $translation->judul : 'Agenda-'.mt_rand(1000, 9999);
     }
 
     public function getSlugOptions(): SlugOptions
@@ -65,6 +66,6 @@ class Agenda extends Model
     public function scopeByBulan(Builder $query, $bulan, $tahun): Builder
     {
         return $query->whereMonth('tanggal_mulai', $bulan)
-                     ->whereYear('tanggal_mulai', $tahun);
+            ->whereYear('tanggal_mulai', $tahun);
     }
 }

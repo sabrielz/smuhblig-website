@@ -26,7 +26,9 @@ class TranslateHalamanKonten implements ShouldQueue
     use SerializesModels;
 
     public int $tries = 3;
+
     public int $timeout = 300;
+
     public array $backoff = [15, 60, 120];
 
     public function __construct(
@@ -44,7 +46,7 @@ class TranslateHalamanKonten implements ShouldQueue
 
         Log::info('[TranslateHalamanKonten] Starting', [
             'ai_job_id' => $this->aiJob->id,
-            'halaman'   => $this->halaman,
+            'halaman' => $this->halaman,
         ]);
 
         try {
@@ -56,13 +58,14 @@ class TranslateHalamanKonten implements ShouldQueue
                 ->get();
 
             $translatedCount = 0;
-            $skippedCount    = 0;
+            $skippedCount = 0;
 
             foreach ($kontenItems as $konten) {
                 // Ambil nilai bahasa Indonesia
                 $translationId = $konten->translations->firstWhere('locale', 'id');
-                if (!$translationId || empty($translationId->value)) {
+                if (! $translationId || empty($translationId->value)) {
                     $skippedCount++;
+
                     continue;
                 }
 
@@ -70,12 +73,14 @@ class TranslateHalamanKonten implements ShouldQueue
                 $translationEn = $konten->translations->firstWhere('locale', 'en');
                 if ($translationEn && $translationEn->reviewed === true) {
                     $skippedCount++;
+
                     continue; // Jangan timpa yang sudah direview
                 }
 
                 // Skip tipe boolean, number, url, image — tidak perlu diterjemahkan
                 if (in_array($konten->type, ['boolean', 'number', 'image', 'url'], true)) {
                     $skippedCount++;
+
                     continue;
                 }
 
@@ -92,12 +97,12 @@ class TranslateHalamanKonten implements ShouldQueue
                     HalamanKontenTranslation::updateOrCreate(
                         [
                             'halaman_konten_id' => $konten->id,
-                            'locale'            => 'en',
+                            'locale' => 'en',
                         ],
                         [
-                            'value'        => $translatedValue,
+                            'value' => $translatedValue,
                             'ai_translated' => true,
-                            'reviewed'     => false,
+                            'reviewed' => false,
                         ]
                     );
 
@@ -105,8 +110,8 @@ class TranslateHalamanKonten implements ShouldQueue
                 } catch (Throwable $e) {
                     Log::warning('[TranslateHalamanKonten] Failed to translate individual item', [
                         'konten_id' => $konten->id,
-                        'key'       => $konten->key,
-                        'error'     => $e->getMessage(),
+                        'key' => $konten->key,
+                        'error' => $e->getMessage(),
                     ]);
                     // Lanjut ke item berikutnya, jangan stop semua
                 }
@@ -116,34 +121,34 @@ class TranslateHalamanKonten implements ShouldQueue
 
             $summary = json_encode([
                 'translated' => $translatedCount,
-                'skipped'    => $skippedCount,
-                'halaman'    => $this->halaman,
+                'skipped' => $skippedCount,
+                'halaman' => $this->halaman,
             ], JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE);
 
             $this->aiJob->update([
-                'status'      => 'done',
-                'output'      => $summary,
+                'status' => 'done',
+                'output' => $summary,
                 'duration_ms' => $durationMs,
             ]);
 
             Log::info('[TranslateHalamanKonten] Completed', [
-                'ai_job_id'   => $this->aiJob->id,
-                'translated'  => $translatedCount,
-                'skipped'     => $skippedCount,
+                'ai_job_id' => $this->aiJob->id,
+                'translated' => $translatedCount,
+                'skipped' => $skippedCount,
                 'duration_ms' => $durationMs,
             ]);
         } catch (Throwable $e) {
             $durationMs = (int) ((hrtime(true) - $startTime) / 1_000_000);
 
             $this->aiJob->update([
-                'status'        => 'failed',
+                'status' => 'failed',
                 'error_message' => mb_substr($e->getMessage(), 0, 2000),
-                'duration_ms'   => $durationMs,
+                'duration_ms' => $durationMs,
             ]);
 
             Log::error('[TranslateHalamanKonten] Failed', [
                 'ai_job_id' => $this->aiJob->id,
-                'error'     => $e->getMessage(),
+                'error' => $e->getMessage(),
             ]);
 
             throw $e;
@@ -191,13 +196,13 @@ PROMPT;
     public function failed(Throwable $exception): void
     {
         $this->aiJob->update([
-            'status'        => 'failed',
+            'status' => 'failed',
             'error_message' => mb_substr($exception->getMessage(), 0, 2000),
         ]);
 
         Log::error('[TranslateHalamanKonten] Permanently failed', [
             'ai_job_id' => $this->aiJob->id,
-            'error'     => $exception->getMessage(),
+            'error' => $exception->getMessage(),
         ]);
     }
 }

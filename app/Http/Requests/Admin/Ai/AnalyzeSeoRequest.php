@@ -17,8 +17,8 @@ class AnalyzeSeoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title'            => ['required', 'string', 'max:500'],
-            'content'          => ['required', 'string', 'max:100000'],
+            'title' => ['required', 'string', 'max:500'],
+            'content' => ['required', 'string', 'max:100000'],
             'meta_description' => ['nullable', 'string', 'max:500'],
         ];
     }

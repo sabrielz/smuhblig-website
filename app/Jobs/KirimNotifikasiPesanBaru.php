@@ -2,9 +2,9 @@
 
 namespace App\Jobs;
 
-use App\Models\PesanKontak;
-use App\Models\Pengaturan;
 use App\Mail\PesanKontakMasukMail;
+use App\Models\Pengaturan;
+use App\Models\PesanKontak;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -49,6 +49,7 @@ class KirimNotifikasiPesanBaru implements ShouldQueue
             Log::info('[KirimNotifikasiPesanBaru] Notifikasi email dinonaktifkan.', [
                 'pesan_id' => $this->pesanKontak->id,
             ]);
+
             return;
         }
 
@@ -58,6 +59,7 @@ class KirimNotifikasiPesanBaru implements ShouldQueue
             Log::warning('[KirimNotifikasiPesanBaru] email_admin_address tidak dikonfigurasi.', [
                 'pesan_id' => $this->pesanKontak->id,
             ]);
+
             return;
         }
 
@@ -66,7 +68,7 @@ class KirimNotifikasiPesanBaru implements ShouldQueue
 
         Log::info('[KirimNotifikasiPesanBaru] Email notifikasi terkirim.', [
             'pesan_id' => $this->pesanKontak->id,
-            'to'       => $emailAdmin,
+            'to' => $emailAdmin,
         ]);
     }
 
@@ -77,7 +79,7 @@ class KirimNotifikasiPesanBaru implements ShouldQueue
     {
         Log::error('[KirimNotifikasiPesanBaru] Gagal mengirim email notifikasi.', [
             'pesan_id' => $this->pesanKontak->id,
-            'error'    => $exception->getMessage(),
+            'error' => $exception->getMessage(),
         ]);
     }
 }

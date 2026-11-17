@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Builder;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
@@ -52,7 +52,7 @@ class Jurusan extends Model implements HasMedia
         });
 
         // Jika tidak ada, fallback ke 'id'
-        if (!$translation && $locale !== 'id') {
+        if (! $translation && $locale !== 'id') {
             $translation = $this->translations->firstWhere('locale', 'id');
         }
 

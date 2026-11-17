@@ -2,10 +2,9 @@
 
 namespace App\Jobs;
 
+use App\Models\Article;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
-
-use App\Models\Article;
 
 class IncrementArticleViewCount implements ShouldQueue
 {
@@ -14,9 +13,7 @@ class IncrementArticleViewCount implements ShouldQueue
     /**
      * Create a new job instance.
      */
-    public function __construct(public Article $article)
-    {
-    }
+    public function __construct(public Article $article) {}
 
     /**
      * Execute the job.

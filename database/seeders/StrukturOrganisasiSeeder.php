@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\StrukturOrganisasi;
 use Illuminate\Database\Seeder;
 
 class StrukturOrganisasiSeeder extends Seeder
@@ -12,7 +12,7 @@ class StrukturOrganisasiSeeder extends Seeder
      */
     public function run(): void
     {
-        $kepsek = \App\Models\StrukturOrganisasi::updateOrCreate(
+        $kepsek = StrukturOrganisasi::updateOrCreate(
             ['jabatan' => 'Kepala Sekolah'],
             [
                 'nama' => '[Nama Kepala Sekolah]',
@@ -31,7 +31,7 @@ class StrukturOrganisasiSeeder extends Seeder
 
         $wakasekModels = [];
         foreach ($wakasek as $data) {
-            $wakasekModels[$data['jabatan']] = \App\Models\StrukturOrganisasi::updateOrCreate(
+            $wakasekModels[$data['jabatan']] = StrukturOrganisasi::updateOrCreate(
                 ['jabatan' => $data['jabatan']],
                 array_merge($data, [
                     'parent_id' => $kepsek->id,
@@ -51,7 +51,7 @@ class StrukturOrganisasiSeeder extends Seeder
         $wakasekKurikulum = $wakasekModels['Wakasek Kurikulum'] ?? null;
         if ($wakasekKurikulum) {
             foreach ($kajur as $data) {
-                \App\Models\StrukturOrganisasi::updateOrCreate(
+                StrukturOrganisasi::updateOrCreate(
                     ['jabatan' => $data['jabatan']],
                     array_merge($data, [
                         'parent_id' => $wakasekKurikulum->id,

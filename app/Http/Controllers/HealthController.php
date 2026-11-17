@@ -46,7 +46,7 @@ class HealthController extends Controller
         // 3. Storage Check
         $storageStatus = 'ok';
         $isWritable = is_writable(storage_path('app'));
-        if (!$isWritable) {
+        if (! $isWritable) {
             $storageStatus = 'down';
             $status = 'degraded';
         }
@@ -74,7 +74,7 @@ class HealthController extends Controller
         return response()->json([
             'status' => $status,
             'timestamp' => now()->toIso8601String(),
-            'checks' => $checks
+            'checks' => $checks,
         ], $statusCode);
     }
 }

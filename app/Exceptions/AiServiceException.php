@@ -33,7 +33,7 @@ class AiServiceException extends RuntimeException
         parent::__construct($message, $code, $previous);
 
         $this->responseBody = $responseBody;
-        $this->httpStatus   = $httpStatus;
+        $this->httpStatus = $httpStatus;
     }
 
     /**
@@ -66,7 +66,7 @@ class AiServiceException extends RuntimeException
     public static function networkError(Throwable $previous): self
     {
         return new self(
-            message: 'Failed to reach Anthropic API: ' . $previous->getMessage(),
+            message: 'Failed to reach Anthropic API: '.$previous->getMessage(),
             previous: $previous,
         );
     }

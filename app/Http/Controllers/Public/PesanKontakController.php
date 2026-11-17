@@ -26,14 +26,14 @@ class PesanKontakController extends Controller
 
         // Create the message record
         $pesan = PesanKontak::create([
-            'nama'           => $validated['nama'],
-            'email'          => $validated['email'],
-            'nomor_telepon'  => $validated['nomor_telepon'] ?? null,
-            'subjek'         => $validated['subjek'],
-            'pesan'          => $validated['pesan'],
-            'status'         => 'baru',
-            'ip_address'     => $request->ip(),
-            'user_agent'     => $request->userAgent(),
+            'nama' => $validated['nama'],
+            'email' => $validated['email'],
+            'nomor_telepon' => $validated['nomor_telepon'] ?? null,
+            'subjek' => $validated['subjek'],
+            'pesan' => $validated['pesan'],
+            'status' => 'baru',
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
         ]);
 
         // Dispatch email notification job to default queue
@@ -44,11 +44,11 @@ class PesanKontakController extends Controller
         foreach ($admins as $admin) {
             NotifikasiAdmin::create([
                 'user_id' => $admin->id,
-                'tipe'    => 'pesan_kontak',
-                'judul'   => 'Pesan baru dari ' . $pesan->nama,
-                'konten'  => 'Subjek: ' . $pesan->subjek,
-                'url'     => '/admin/pesan/' . $pesan->id,
-                'data'    => ['pesan_id' => $pesan->id],
+                'tipe' => 'pesan_kontak',
+                'judul' => 'Pesan baru dari '.$pesan->nama,
+                'konten' => 'Subjek: '.$pesan->subjek,
+                'url' => '/admin/pesan/'.$pesan->id,
+                'data' => ['pesan_id' => $pesan->id],
             ]);
         }
 

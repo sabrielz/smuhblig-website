@@ -18,9 +18,9 @@ class TranslateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title'         => ['required', 'string', 'max:500'],
-            'excerpt'       => ['nullable', 'string', 'max:1000'],
-            'content'       => ['required', 'string', 'max:100000'],
+            'title' => ['required', 'string', 'max:500'],
+            'excerpt' => ['nullable', 'string', 'max:1000'],
+            'content' => ['required', 'string', 'max:100000'],
             'target_locale' => ['required', Rule::in(['id', 'en'])],
         ];
     }

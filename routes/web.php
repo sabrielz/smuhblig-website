@@ -1,12 +1,12 @@
 <?php
 
-use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Public\BerandaController;
 use App\Http\Controllers\Public\JurusanController;
-use App\Http\Controllers\Public\TentangController;
 use App\Http\Controllers\Public\KontakController;
 use App\Http\Controllers\Public\PesanKontakController as PublicPesanKontakController;
+use App\Http\Controllers\Public\TentangController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -16,8 +16,8 @@ use Inertia\Inertia;
 |--------------------------------------------------------------------------
 */
 
-Route::get('/health', [\App\Http\Controllers\HealthController::class, 'check'])
-    ->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class])
+Route::get('/health', [HealthController::class, 'check'])
+    ->withoutMiddleware([VerifyCsrfToken::class])
     ->middleware('throttle:60,1')
     ->name('health');
 
@@ -34,24 +34,47 @@ Route::post('/kontak/kirim', [PublicPesanKontakController::class, 'store'])->mid
 
 // Berita & Informasi
 use App\Http\Controllers\Public\BeritaController;
+
 Route::get('/berita', [BeritaController::class, 'index'])->name('berita.index');
 Route::get('/berita/{article:slug}', [BeritaController::class, 'show'])->name('berita.show');
-Route::get('/galeri', [\App\Http\Controllers\Public\GaleriController::class, 'index'])->name('galeri');
-Route::get('/tautan', [\App\Http\Controllers\Public\TautanController::class, 'index'])->name('tautan');
+Route::get('/galeri', [GaleriController::class, 'index'])->name('galeri');
+Route::get('/tautan', [TautanController::class, 'index'])->name('tautan');
 Route::get('/portal', function () {
     return Inertia::render('Portal');
 })->name('portal');
 
 use App\Http\Controllers\Public\PencarianController;
+
 Route::get('/pencarian', [PencarianController::class, 'index'])->middleware('throttle:pencarian-cepat')->name('pencarian.index');
 Route::get('/api/pencarian/cepat', [PencarianController::class, 'cepat'])->middleware('throttle:pencarian-cepat')->name('pencarian.cepat');
 
+use App\Http\Controllers\Admin\AgendaController;
+use App\Http\Controllers\Admin\AiController;
+use App\Http\Controllers\Admin\ArtikelController;
+use App\Http\Controllers\Admin\KontenHalamanController;
+use App\Http\Controllers\Admin\MediaUploadController;
+use App\Http\Controllers\Admin\NotifikasiController;
+use App\Http\Controllers\Admin\PengaturanController;
+use App\Http\Controllers\Admin\PenggunaController;
+use App\Http\Controllers\Admin\PengumumanController;
+use App\Http\Controllers\Admin\PesanKontakController;
+use App\Http\Controllers\Admin\StatistikController;
+use App\Http\Controllers\Admin\StrukturOrganisasiController;
+use App\Http\Controllers\HealthController;
 use App\Http\Controllers\Public\AgendaPublikController;
+use App\Http\Controllers\Public\GaleriController;
+use App\Http\Controllers\Public\TautanController;
+use App\Http\Middleware\EnsureHasCmsRole;
+use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
+
 Route::get('/agenda', [AgendaPublikController::class, 'index'])->name('agenda.index');
 Route::get('/agenda/{agenda:slug}', [AgendaPublikController::class, 'show'])->name('agenda.show');
 
 Route::get('/sitemap.xml', function () {
-    \Illuminate\Support\Facades\Artisan::call('sitemap:generate');
+    Artisan::call('sitemap:generate');
+
     return response()->file(public_path('sitemap.xml'));
 });
 
@@ -61,7 +84,7 @@ Route::get('/sitemap.xml', function () {
 |--------------------------------------------------------------------------
 */
 
-Route::post('/locale', function (\Illuminate\Http\Request $request) {
+Route::post('/locale', function (Request $request) {
     $locale = $request->input('locale', 'id');
 
     if (in_array($locale, config('app.available_locales', ['id', 'en']))) {
@@ -100,7 +123,7 @@ Route::get('/logout', [LoginController::class, 'destroy']);
 |--------------------------------------------------------------------------
 */
 
-Route::middleware(['auth', \App\Http\Middleware\EnsureHasCmsRole::class])
+Route::middleware(['auth', EnsureHasCmsRole::class])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
@@ -110,104 +133,103 @@ Route::middleware(['auth', \App\Http\Middleware\EnsureHasCmsRole::class])
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
         // Artikel
-        Route::post('/artikel/{artikel}/publish', [\App\Http\Controllers\Admin\ArtikelController::class, 'publish'])->name('artikel.publish');
-        Route::patch('/artikel/{artikel}/translation/reviewed', [\App\Http\Controllers\Admin\ArtikelController::class, 'markTranslationReviewed'])->name('artikel.translation.reviewed');
-        Route::resource('artikel', \App\Http\Controllers\Admin\ArtikelController::class)->except(['show']);
+        Route::post('/artikel/{artikel}/publish', [ArtikelController::class, 'publish'])->name('artikel.publish');
+        Route::patch('/artikel/{artikel}/translation/reviewed', [ArtikelController::class, 'markTranslationReviewed'])->name('artikel.translation.reviewed');
+        Route::resource('artikel', ArtikelController::class)->except(['show']);
 
         // Galeri
-        Route::get('/galeri', [\App\Http\Controllers\Admin\GaleriController::class, 'index'])->name('galeri.index');
-        Route::get('/galeri/buat', [\App\Http\Controllers\Admin\GaleriController::class, 'create'])->name('galeri.create');
-        Route::post('/galeri', [\App\Http\Controllers\Admin\GaleriController::class, 'store'])->name('galeri.store');
-        Route::get('/galeri/{galeri}', [\App\Http\Controllers\Admin\GaleriController::class, 'show'])->name('galeri.show');
-        Route::get('/galeri/{galeri}/edit', [\App\Http\Controllers\Admin\GaleriController::class, 'edit'])->name('galeri.edit');
-        Route::put('/galeri/{galeri}', [\App\Http\Controllers\Admin\GaleriController::class, 'update'])->name('galeri.update');
-        Route::delete('/galeri/{galeri}', [\App\Http\Controllers\Admin\GaleriController::class, 'destroy'])->name('galeri.destroy');
-        Route::post('/galeri/{galeri}/foto', [\App\Http\Controllers\Admin\GaleriController::class, 'uploadFoto'])->name('galeri.uploadFoto');
-        Route::delete('/galeri/foto/{mediaId}', [\App\Http\Controllers\Admin\GaleriController::class, 'deleteFoto'])->name('galeri.deleteFoto');
+        Route::get('/galeri', [App\Http\Controllers\Admin\GaleriController::class, 'index'])->name('galeri.index');
+        Route::get('/galeri/buat', [App\Http\Controllers\Admin\GaleriController::class, 'create'])->name('galeri.create');
+        Route::post('/galeri', [App\Http\Controllers\Admin\GaleriController::class, 'store'])->name('galeri.store');
+        Route::get('/galeri/{galeri}', [App\Http\Controllers\Admin\GaleriController::class, 'show'])->name('galeri.show');
+        Route::get('/galeri/{galeri}/edit', [App\Http\Controllers\Admin\GaleriController::class, 'edit'])->name('galeri.edit');
+        Route::put('/galeri/{galeri}', [App\Http\Controllers\Admin\GaleriController::class, 'update'])->name('galeri.update');
+        Route::delete('/galeri/{galeri}', [App\Http\Controllers\Admin\GaleriController::class, 'destroy'])->name('galeri.destroy');
+        Route::post('/galeri/{galeri}/foto', [App\Http\Controllers\Admin\GaleriController::class, 'uploadFoto'])->name('galeri.uploadFoto');
+        Route::delete('/galeri/foto/{mediaId}', [App\Http\Controllers\Admin\GaleriController::class, 'deleteFoto'])->name('galeri.deleteFoto');
 
         // Pengumuman
-        Route::get('/pengumuman', [\App\Http\Controllers\Admin\PengumumanController::class, 'index'])->name('pengumuman.index');
-        Route::get('/pengumuman/buat', [\App\Http\Controllers\Admin\PengumumanController::class, 'create'])->name('pengumuman.create');
-        Route::post('/pengumuman', [\App\Http\Controllers\Admin\PengumumanController::class, 'store'])->name('pengumuman.store');
-        Route::get('/pengumuman/{pengumuman}/edit', [\App\Http\Controllers\Admin\PengumumanController::class, 'edit'])->name('pengumuman.edit');
-        Route::put('/pengumuman/{pengumuman}', [\App\Http\Controllers\Admin\PengumumanController::class, 'update'])->name('pengumuman.update');
-        Route::delete('/pengumuman/{pengumuman}', [\App\Http\Controllers\Admin\PengumumanController::class, 'destroy'])->name('pengumuman.destroy');
+        Route::get('/pengumuman', [PengumumanController::class, 'index'])->name('pengumuman.index');
+        Route::get('/pengumuman/buat', [PengumumanController::class, 'create'])->name('pengumuman.create');
+        Route::post('/pengumuman', [PengumumanController::class, 'store'])->name('pengumuman.store');
+        Route::get('/pengumuman/{pengumuman}/edit', [PengumumanController::class, 'edit'])->name('pengumuman.edit');
+        Route::put('/pengumuman/{pengumuman}', [PengumumanController::class, 'update'])->name('pengumuman.update');
+        Route::delete('/pengumuman/{pengumuman}', [PengumumanController::class, 'destroy'])->name('pengumuman.destroy');
 
         // Agenda
-        Route::resource('agenda', \App\Http\Controllers\Admin\AgendaController::class)->except(['show']);
+        Route::resource('agenda', AgendaController::class)->except(['show']);
 
         // Jurusan (Edit 5 existing only)
-        Route::get('/jurusan', [\App\Http\Controllers\Admin\JurusanController::class, 'index'])->name('jurusan.index');
-        Route::get('/jurusan/{jurusan}/edit', [\App\Http\Controllers\Admin\JurusanController::class, 'edit'])->name('jurusan.edit');
-        Route::put('/jurusan/{jurusan}', [\App\Http\Controllers\Admin\JurusanController::class, 'update'])->name('jurusan.update');
+        Route::get('/jurusan', [App\Http\Controllers\Admin\JurusanController::class, 'index'])->name('jurusan.index');
+        Route::get('/jurusan/{jurusan}/edit', [App\Http\Controllers\Admin\JurusanController::class, 'edit'])->name('jurusan.edit');
+        Route::put('/jurusan/{jurusan}', [App\Http\Controllers\Admin\JurusanController::class, 'update'])->name('jurusan.update');
 
         // Tautan CRUD — admin only (pengaturan link penting)
         Route::middleware(['role:admin'])->group(function () {
-            Route::resource('tautan', \App\Http\Controllers\Admin\TautanController::class);
+            Route::resource('tautan', App\Http\Controllers\Admin\TautanController::class);
         });
 
         // Pengaturan — admin only (konfigurasi sensitif: SMTP, API keys, dll)
         Route::middleware(['role:admin'])->group(function () {
-            Route::get('/pengaturan', [\App\Http\Controllers\Admin\PengaturanController::class, 'index'])->name('pengaturan.index');
-            Route::post('/pengaturan', [\App\Http\Controllers\Admin\PengaturanController::class, 'store'])->name('pengaturan.store');
-            Route::post('/pengaturan/test-email', [\App\Http\Controllers\Admin\PengaturanController::class, 'testEmail'])->name('pengaturan.test-email');
+            Route::get('/pengaturan', [PengaturanController::class, 'index'])->name('pengaturan.index');
+            Route::post('/pengaturan', [PengaturanController::class, 'store'])->name('pengaturan.store');
+            Route::post('/pengaturan/test-email', [PengaturanController::class, 'testEmail'])->name('pengaturan.test-email');
         });
 
         // Notifikasi Admin — semua role CMS bisa akses notifikasi mereka sendiri
         Route::prefix('notifikasi')->name('notifikasi.')->group(function () {
-            Route::get('/',                [\App\Http\Controllers\Admin\NotifikasiController::class, 'index'])->name('index');
-            Route::post('/baca-semua',     [\App\Http\Controllers\Admin\NotifikasiController::class, 'bacaSemua'])->name('baca-semua');
-            Route::post('/{notifikasi}/baca', [\App\Http\Controllers\Admin\NotifikasiController::class, 'baca'])->name('baca');
-            Route::delete('/{notifikasi}', [\App\Http\Controllers\Admin\NotifikasiController::class, 'hapus'])->name('hapus');
+            Route::get('/', [NotifikasiController::class, 'index'])->name('index');
+            Route::post('/baca-semua', [NotifikasiController::class, 'bacaSemua'])->name('baca-semua');
+            Route::post('/{notifikasi}/baca', [NotifikasiController::class, 'baca'])->name('baca');
+            Route::delete('/{notifikasi}', [NotifikasiController::class, 'hapus'])->name('hapus');
             // AJAX endpoints
-            Route::get('/recent',              [\App\Http\Controllers\Admin\NotifikasiController::class, 'recent'])->name('recent');
-            Route::post('/ajax/baca-semua',    [\App\Http\Controllers\Admin\NotifikasiController::class, 'bacaSemuaAjax'])->name('ajax.baca-semua');
-            Route::post('/ajax/{notifikasi}/baca', [\App\Http\Controllers\Admin\NotifikasiController::class, 'bacaAjax'])->name('ajax.baca');
+            Route::get('/recent', [NotifikasiController::class, 'recent'])->name('recent');
+            Route::post('/ajax/baca-semua', [NotifikasiController::class, 'bacaSemuaAjax'])->name('ajax.baca-semua');
+            Route::post('/ajax/{notifikasi}/baca', [NotifikasiController::class, 'bacaAjax'])->name('ajax.baca');
         });
 
         // Statistik — admin only
         Route::middleware(['role:admin'])->group(function () {
-            Route::get('/statistik', [\App\Http\Controllers\Admin\StatistikController::class, 'index'])->name('statistik.index');
-            Route::put('/statistik/{statistik}', [\App\Http\Controllers\Admin\StatistikController::class, 'update'])->name('statistik.update');
-            Route::post('/statistik/reorder', [\App\Http\Controllers\Admin\StatistikController::class, 'reorder'])->name('statistik.reorder');
+            Route::get('/statistik', [StatistikController::class, 'index'])->name('statistik.index');
+            Route::put('/statistik/{statistik}', [StatistikController::class, 'update'])->name('statistik.update');
+            Route::post('/statistik/reorder', [StatistikController::class, 'reorder'])->name('statistik.reorder');
 
             // Struktur Organisasi — admin only
-            Route::post('/struktur-organisasi/reorder', [\App\Http\Controllers\Admin\StrukturOrganisasiController::class, 'reorder'])->name('struktur-organisasi.reorder');
-            Route::resource('struktur-organisasi', \App\Http\Controllers\Admin\StrukturOrganisasiController::class)->except(['show']);
+            Route::post('/struktur-organisasi/reorder', [StrukturOrganisasiController::class, 'reorder'])->name('struktur-organisasi.reorder');
+            Route::resource('struktur-organisasi', StrukturOrganisasiController::class)->except(['show']);
 
             // Pengguna CRUD — hanya admin
-            Route::resource('pengguna', \App\Http\Controllers\Admin\PenggunaController::class);
+            Route::resource('pengguna', PenggunaController::class);
         });
 
         // AI Features (async via queue)
         Route::middleware(['throttle:ai'])->prefix('ai')->name('ai.')->group(function () {
-            Route::post('/generate',  [\App\Http\Controllers\Admin\AiController::class, 'generate'])->name('generate');
-            Route::post('/revise',    [\App\Http\Controllers\Admin\AiController::class, 'revise'])->name('revise');
-            Route::post('/correct',   [\App\Http\Controllers\Admin\AiController::class, 'correct'])->name('correct');
-            Route::post('/translate', [\App\Http\Controllers\Admin\AiController::class, 'translate'])->name('translate');
-            Route::post('/seo',       [\App\Http\Controllers\Admin\AiController::class, 'analyzeSeo'])->name('seo');
-            Route::get('/jobs/{aiJob}/status', [\App\Http\Controllers\Admin\AiController::class, 'jobStatus'])->name('job.status');
+            Route::post('/generate', [AiController::class, 'generate'])->name('generate');
+            Route::post('/revise', [AiController::class, 'revise'])->name('revise');
+            Route::post('/correct', [AiController::class, 'correct'])->name('correct');
+            Route::post('/translate', [AiController::class, 'translate'])->name('translate');
+            Route::post('/seo', [AiController::class, 'analyzeSeo'])->name('seo');
+            Route::get('/jobs/{aiJob}/status', [AiController::class, 'jobStatus'])->name('job.status');
         });
 
         // Konten Halaman Publik (CMS teks dinamis) — admin only untuk update
-        Route::get('/konten/{halaman}/data', [\App\Http\Controllers\Admin\KontenHalamanController::class, 'show'])->name('konten.show');
-        Route::get('/konten/{halaman}', [\App\Http\Controllers\Admin\KontenHalamanController::class, 'edit'])->name('konten.edit');
+        Route::get('/konten/{halaman}/data', [KontenHalamanController::class, 'show'])->name('konten.show');
+        Route::get('/konten/{halaman}', [KontenHalamanController::class, 'edit'])->name('konten.edit');
         Route::middleware(['role:admin'])->group(function () {
-            Route::post('/konten/{halaman}', [\App\Http\Controllers\Admin\KontenHalamanController::class, 'update'])->name('konten.update');
-            Route::post('/konten/{halaman}/translate', [\App\Http\Controllers\Admin\KontenHalamanController::class, 'translateAll'])->name('konten.translate');
+            Route::post('/konten/{halaman}', [KontenHalamanController::class, 'update'])->name('konten.update');
+            Route::post('/konten/{halaman}/translate', [KontenHalamanController::class, 'translateAll'])->name('konten.translate');
         });
 
         // Media Upload (TipTap inline images) — semua role CMS bisa upload
-        Route::post('/media/upload', [\App\Http\Controllers\Admin\MediaUploadController::class, 'upload'])->name('media.upload');
+        Route::post('/media/upload', [MediaUploadController::class, 'upload'])->name('media.upload');
 
         // Pesan Kontak (CMS Inbox)
-        Route::get('/pesan', [\App\Http\Controllers\Admin\PesanKontakController::class, 'index'])->name('pesan.index');
-        Route::post('/pesan/bulk-arsip', [\App\Http\Controllers\Admin\PesanKontakController::class, 'bulkArsip'])->name('pesan.bulk-arsip');
-        Route::get('/pesan/{pesanKontak}', [\App\Http\Controllers\Admin\PesanKontakController::class, 'show'])->name('pesan.show');
-        Route::patch('/pesan/{pesanKontak}/arsip', [\App\Http\Controllers\Admin\PesanKontakController::class, 'arsip'])->name('pesan.arsip');
+        Route::get('/pesan', [PesanKontakController::class, 'index'])->name('pesan.index');
+        Route::post('/pesan/bulk-arsip', [PesanKontakController::class, 'bulkArsip'])->name('pesan.bulk-arsip');
+        Route::get('/pesan/{pesanKontak}', [PesanKontakController::class, 'show'])->name('pesan.show');
+        Route::patch('/pesan/{pesanKontak}/arsip', [PesanKontakController::class, 'arsip'])->name('pesan.arsip');
         // Hapus pesan — admin only
         Route::middleware(['role:admin'])->group(function () {
-            Route::delete('/pesan/{pesanKontak}', [\App\Http\Controllers\Admin\PesanKontakController::class, 'destroy'])->name('pesan.destroy');
+            Route::delete('/pesan/{pesanKontak}', [PesanKontakController::class, 'destroy'])->name('pesan.destroy');
         });
     });
-

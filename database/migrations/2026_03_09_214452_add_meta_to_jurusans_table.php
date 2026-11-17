@@ -33,7 +33,7 @@ return new class extends Migration
                 'lama_pendidikan',
                 'highlight_1_icon',
                 'highlight_2_icon',
-                'highlight_3_icon'
+                'highlight_3_icon',
             ]);
         });
     }

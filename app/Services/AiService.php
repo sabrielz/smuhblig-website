@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Exceptions\AiServiceException;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -16,17 +17,21 @@ use Illuminate\Support\Facades\Log;
 class AiService
 {
     protected string $apiKey;
+
     protected string $model;
+
     protected string $apiUrl;
+
     protected string $apiVersion;
+
     protected int $defaultMaxTokens;
 
     public function __construct()
     {
-        $this->apiKey          = config('ai.anthropic.api_key', '');
-        $this->model           = config('ai.anthropic.model', 'claude-sonnet-4-20250514');
-        $this->apiUrl          = config('ai.anthropic.api_url', 'https://api.anthropic.com/v1/messages');
-        $this->apiVersion      = config('ai.anthropic.version', '2023-06-01');
+        $this->apiKey = config('ai.anthropic.api_key', '');
+        $this->model = config('ai.anthropic.model', 'claude-sonnet-4-20250514');
+        $this->apiUrl = config('ai.anthropic.api_url', 'https://api.anthropic.com/v1/messages');
+        $this->apiVersion = config('ai.anthropic.version', '2023-06-01');
         $this->defaultMaxTokens = config('ai.max_tokens', 4096);
     }
 
@@ -47,30 +52,30 @@ class AiService
         $maxTokens = $maxTokens > 0 ? $maxTokens : $this->defaultMaxTokens;
 
         Log::info('[AiService] Calling Anthropic API', [
-            'model'      => $this->model,
+            'model' => $this->model,
             'max_tokens' => $maxTokens,
             'prompt_len' => mb_strlen($userPrompt),
         ]);
 
         try {
             $response = Http::withHeaders([
-                'x-api-key'         => $this->apiKey,
+                'x-api-key' => $this->apiKey,
                 'anthropic-version' => $this->apiVersion,
-                'content-type'      => 'application/json',
+                'content-type' => 'application/json',
             ])
-            ->timeout(120)
-            ->post($this->apiUrl, [
-                'model'      => $this->model,
-                'max_tokens' => $maxTokens,
-                'system'     => $systemPrompt,
-                'messages'   => [
-                    [
-                        'role'    => 'user',
-                        'content' => $userPrompt,
+                ->timeout(120)
+                ->post($this->apiUrl, [
+                    'model' => $this->model,
+                    'max_tokens' => $maxTokens,
+                    'system' => $systemPrompt,
+                    'messages' => [
+                        [
+                            'role' => 'user',
+                            'content' => $userPrompt,
+                        ],
                     ],
-                ],
-            ]);
-        } catch (\Illuminate\Http\Client\ConnectionException $e) {
+                ]);
+        } catch (ConnectionException $e) {
             Log::error('[AiService] Network error', ['error' => $e->getMessage()]);
             throw AiServiceException::networkError($e);
         }
@@ -79,7 +84,7 @@ class AiService
             $body = $response->body();
             Log::error('[AiService] API returned error', [
                 'status' => $response->status(),
-                'body'   => mb_substr($body, 0, 500),
+                'body' => mb_substr($body, 0, 500),
             ]);
             throw AiServiceException::apiError(
                 $response->json('error.message', 'Unknown error'),
@@ -99,7 +104,7 @@ class AiService
 
         Log::info('[AiService] API call succeeded', [
             'response_len' => mb_strlen($text),
-            'usage'        => $response->json('usage'),
+            'usage' => $response->json('usage'),
         ]);
 
         return $text;
@@ -112,8 +117,9 @@ class AiService
     /**
      * Parse a JSON string that may be wrapped in markdown code fences.
      *
-     * @throws AiServiceException
      * @return array<string, mixed>
+     *
+     * @throws AiServiceException
      */
     public function parseJsonResponse(string $response): array
     {
@@ -141,13 +147,13 @@ class AiService
     /**
      * Generate a full article draft.
      *
-     * @param array{judul: string, poin?: string|null, nada?: string, locale?: string} $params
+     * @param  array{judul: string, poin?: string|null, nada?: string, locale?: string}  $params
      */
     public function generateArticle(array $params): string
     {
-        $judul  = $params['judul'];
-        $poin   = $params['poin'] ?? '';
-        $nada   = $params['nada'] ?? 'Semi-formal';
+        $judul = $params['judul'];
+        $poin = $params['poin'] ?? '';
+        $nada = $params['nada'] ?? 'Semi-formal';
         $locale = $params['locale'] ?? 'Indonesia';
 
         $systemPrompt = 'Kamu adalah asisten penulis konten profesional untuk website sekolah SMK Muhammadiyah Bligo, sebuah Sekolah Menengah Kejuruan Islam di Indonesia. Tulis konten yang informatif, engaging, dan sesuai dengan nilai-nilai Islam dan pendidikan.';
@@ -219,17 +225,17 @@ PROMPT;
     /**
      * Translate content to a target locale.
      *
-     * @param  array{title: string, excerpt?: string|null, content: string} $content
+     * @param  array{title: string, excerpt?: string|null, content: string}  $content
      * @return array{title: string, excerpt: string, content: string}
      */
     public function translateContent(array $content, string $targetLocale): array
     {
-        $title   = $content['title'];
+        $title = $content['title'];
         $excerpt = $content['excerpt'] ?? '';
-        $html    = $content['content'];
+        $html = $content['content'];
 
         $sourceLang = ($targetLocale === 'en') ? 'Bahasa Indonesia' : 'Bahasa Inggris';
-        $targetLang = ($targetLocale === 'en') ? 'Bahasa Inggris'   : 'Bahasa Indonesia';
+        $targetLang = ($targetLocale === 'en') ? 'Bahasa Inggris' : 'Bahasa Indonesia';
 
         $systemPrompt = "Kamu adalah penerjemah profesional {$sourceLang}-{$targetLang} yang berspesialisasi dalam konten pendidikan dan institusi. Terjemahkan dengan natural, tidak kaku, dan pertahankan nuansa dan tone dari teks asli.";
 
@@ -258,13 +264,13 @@ PROMPT;
     /**
      * Run SEO analysis on article data.
      *
-     * @param  array{title: string, content: string, meta_description?: string|null} $articleData
+     * @param  array{title: string, content: string, meta_description?: string|null}  $articleData
      * @return array{skor: int, meta_description_saran: string, kata_kunci_utama: string[], saran: array<int, array{tipe: string, pesan: string}>, keterbacaan: string, estimasi_baca: string}
      */
     public function analyzeSeo(array $articleData): array
     {
-        $title           = $articleData['title'];
-        $contentPlain    = strip_tags($articleData['content']);
+        $title = $articleData['title'];
+        $contentPlain = strip_tags($articleData['content']);
         $metaDescription = $articleData['meta_description'] ?? '';
 
         $systemPrompt = 'Kamu adalah SEO specialist. Analisis konten dan berikan saran yang actionable dan spesifik.';

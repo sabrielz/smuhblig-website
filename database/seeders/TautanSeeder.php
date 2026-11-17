@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Tautan;
+use Illuminate\Database\Seeder;
 
 class TautanSeeder extends Seeder
 {
@@ -67,7 +67,7 @@ class TautanSeeder extends Seeder
                 'kategori' => 'lainnya',
                 'is_active' => true,
                 'sort_order' => 5,
-            ]
+            ],
         ];
 
         foreach ($tautans as $tautan) {

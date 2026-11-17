@@ -10,12 +10,12 @@ class NotifikasiService
     /**
      * Kirim notifikasi in-app ke banyak user.
      *
-     * @param  array<int>       $userIds   Array of user IDs yang akan menerima notifikasi
-     * @param  string           $tipe      e.g. 'artikel_pending', 'pesan_kontak', 'ai_selesai'
-     * @param  string           $judul     Judul singkat notifikasi
-     * @param  string|null      $pesan     Pesan detail (opsional)
-     * @param  string|null      $url       URL navigasi saat notif diklik (opsional)
-     * @param  array|null       $data      Data tambahan dalam JSON (opsional)
+     * @param  array<int>  $userIds  Array of user IDs yang akan menerima notifikasi
+     * @param  string  $tipe  e.g. 'artikel_pending', 'pesan_kontak', 'ai_selesai'
+     * @param  string  $judul  Judul singkat notifikasi
+     * @param  string|null  $pesan  Pesan detail (opsional)
+     * @param  string|null  $url  URL navigasi saat notif diklik (opsional)
+     * @param  array|null  $data  Data tambahan dalam JSON (opsional)
      */
     public static function kirim(
         array $userIds,
@@ -30,19 +30,19 @@ class NotifikasiService
 
         foreach (array_unique($userIds) as $userId) {
             $records[] = [
-                'user_id'    => $userId,
-                'tipe'       => $tipe,
-                'judul'      => $judul,
-                'pesan'      => $pesan,
-                'url'        => $url,
-                'data'       => $data ? json_encode($data) : null,
-                'dibaca_at'  => null,
+                'user_id' => $userId,
+                'tipe' => $tipe,
+                'judul' => $judul,
+                'pesan' => $pesan,
+                'url' => $url,
+                'data' => $data ? json_encode($data) : null,
+                'dibaca_at' => null,
                 'created_at' => $now,
                 'updated_at' => $now,
             ];
         }
 
-        if (!empty($records)) {
+        if (! empty($records)) {
             NotifikasiAdmin::insert($records);
         }
     }

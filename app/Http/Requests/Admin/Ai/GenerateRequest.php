@@ -18,9 +18,9 @@ class GenerateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'judul'  => ['required', 'string', 'max:500'],
-            'poin'   => ['nullable', 'string', 'max:2000'],
-            'nada'   => ['nullable', Rule::in(['Formal', 'Semi-formal', 'Informatif'])],
+            'judul' => ['required', 'string', 'max:500'],
+            'poin' => ['nullable', 'string', 'max:2000'],
+            'nada' => ['nullable', Rule::in(['Formal', 'Semi-formal', 'Informatif'])],
             'locale' => ['nullable', Rule::in(['Indonesia', 'English'])],
         ];
     }

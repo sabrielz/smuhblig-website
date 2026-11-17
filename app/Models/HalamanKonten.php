@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Cache;
 
 class HalamanKonten extends Model
 {
@@ -31,11 +32,12 @@ class HalamanKonten extends Model
             }])
             ->first();
 
-        if (!$konten) {
+        if (! $konten) {
             return $default;
         }
 
         $translation = $konten->translations->first();
+
         return $translation ? $translation->value : $default;
     }
 
@@ -57,9 +59,9 @@ class HalamanKonten extends Model
                 $translations = $item->translations->keyBy('locale');
                 $value = null;
 
-                if ($translations->has($locale) && !empty($translations->get($locale)->value)) {
+                if ($translations->has($locale) && ! empty($translations->get($locale)->value)) {
                     $value = $translations->get($locale)->value;
-                } elseif ($translations->has('id') && !empty($translations->get('id')->value)) {
+                } elseif ($translations->has('id') && ! empty($translations->get('id')->value)) {
                     $value = $translations->get('id')->value;
                 }
 
@@ -69,10 +71,10 @@ class HalamanKonten extends Model
             return $result;
         };
 
-        if (\Illuminate\Support\Facades\Cache::supportsTags()) {
-            return \Illuminate\Support\Facades\Cache::tags(["halaman_{$halaman}"])->remember($cacheKey, $cacheTime, $closure);
+        if (Cache::supportsTags()) {
+            return Cache::tags(["halaman_{$halaman}"])->remember($cacheKey, $cacheTime, $closure);
         }
 
-        return \Illuminate\Support\Facades\Cache::remember($cacheKey, $cacheTime, $closure);
+        return Cache::remember($cacheKey, $cacheTime, $closure);
     }
 }

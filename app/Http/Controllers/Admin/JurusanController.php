@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Jurusan;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use Inertia\Inertia;
 
 class JurusanController extends Controller
 {
@@ -22,7 +22,7 @@ class JurusanController extends Controller
                     'slug' => $jurusan->slug,
                     'kode' => $jurusan->kode,
                     'icon_name' => $jurusan->icon_name,
-                    'color_gradient' => 'linear-gradient(to right, ' . $jurusan->color_start . ', ' . $jurusan->color_end . ')',
+                    'color_gradient' => 'linear-gradient(to right, '.$jurusan->color_start.', '.$jurusan->color_end.')',
                     'is_active' => $jurusan->is_active,
                     'nama' => $jurusan->translation('id')?->nama ?: $jurusan->slug,
                     'cover_url' => $jurusan->getFirstMediaUrl('cover'),
@@ -90,8 +90,8 @@ class JurusanController extends Controller
                     'highlight_1_en' => $dataEn?->highlight_1_en ?? '',
                     'highlight_2_en' => $dataEn?->highlight_2_en ?? '',
                     'highlight_3_en' => $dataEn?->highlight_3_en ?? '',
-                ]
-            ]
+                ],
+            ],
         ]);
     }
 
@@ -167,7 +167,7 @@ class JurusanController extends Controller
             );
 
             // EN Translation
-            if (!empty($validated['en']['nama'])) {
+            if (! empty($validated['en']['nama'])) {
                 $jurusan->translations()->updateOrCreate(
                     ['locale' => 'en'],
                     $validated['en']
@@ -181,7 +181,7 @@ class JurusanController extends Controller
             }
 
             // Handle Deleted Gallery Images
-            if (!empty($validated['deleted_gallery_ids'])) {
+            if (! empty($validated['deleted_gallery_ids'])) {
                 $jurusan->media()->whereIn('id', $validated['deleted_gallery_ids'])->delete();
             }
 
@@ -199,4 +199,3 @@ class JurusanController extends Controller
         return redirect()->route('admin.jurusan.index')->with('success', 'Jurusan berhasil diperbarui');
     }
 }
-

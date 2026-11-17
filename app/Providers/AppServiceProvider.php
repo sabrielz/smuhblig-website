@@ -2,16 +2,16 @@
 
 namespace App\Providers;
 
+use App\Http\Middleware\SlowRequestLogger;
+use App\Models\AiJob;
 use App\Models\Article;
+use App\Observers\AiJobObserver;
 use App\Observers\ArticleObserver;
 use App\Services\EmailConfigService;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
-use App\Models\AiJob;
-use App\Observers\AiJobObserver;
-use App\Http\Middleware\SlowRequestLogger;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
@@ -127,4 +127,3 @@ class AppServiceProvider extends ServiceProvider
         });
     }
 }
-

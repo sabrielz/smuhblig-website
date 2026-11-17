@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
 use App\Models\Galeri;
+use Artesaos\SEOTools\Facades\OpenGraph;
+use Artesaos\SEOTools\Facades\SEOMeta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
@@ -25,7 +27,7 @@ class GaleriController extends Controller
                     },
                     'media' => function ($query) {
                         $query->where('collection_name', 'photos');
-                    }
+                    },
                 ])
                 ->orderBy('sort_order', 'asc')
                 ->get()
@@ -52,10 +54,10 @@ class GaleriController extends Controller
                 });
         });
 
-        \Artesaos\SEOTools\Facades\SEOMeta::setTitle('Galeri | SMK Muhammadiyah Bligo');
-        \Artesaos\SEOTools\Facades\SEOMeta::setDescription('Koleksi foto dan galeri kegiatan di SMK Muhammadiyah Bligo.');
-        \Artesaos\SEOTools\Facades\OpenGraph::setUrl(request()->url());
-        \Artesaos\SEOTools\Facades\OpenGraph::addProperty('type', 'website');
+        SEOMeta::setTitle('Galeri | SMK Muhammadiyah Bligo');
+        SEOMeta::setDescription('Koleksi foto dan galeri kegiatan di SMK Muhammadiyah Bligo.');
+        OpenGraph::setUrl(request()->url());
+        OpenGraph::addProperty('type', 'website');
 
         return Inertia::render('Public/Galeri', [
             'galleries' => $galleries,

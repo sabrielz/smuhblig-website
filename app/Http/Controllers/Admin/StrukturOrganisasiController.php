@@ -40,6 +40,7 @@ class StrukturOrganisasiController extends Controller
                 return $this->formatNode($child);
             })->values()->toArray();
         }
+
         return $data;
     }
 

@@ -26,9 +26,9 @@ class JurusanSeeder extends Seeder
                     'nama' => 'Akuntansi dan Keuangan Lembaga',
                     'tagline' => 'Mencetak Ahli Keuangan yang Profesional dan Berintegritas',
                     'deskripsi_singkat' => 'Jurusan yang mempersiapkan lulusan kompeten di bidang akuntansi, perpajakan, dan keuangan lembaga untuk siap kerja di era digital.',
-                    'kompetensi' => ["Akuntansi Dasar", "Perpajakan", "Komputer Akuntansi", "Perbankan", "Administrasi Keuangan"],
-                    'prospek_karir' => ["Staf Akuntansi", "Teller Bank", "Administrasi Keuangan", "Wirausaha", "Lanjut ke Perguruan Tinggi"],
-                ]
+                    'kompetensi' => ['Akuntansi Dasar', 'Perpajakan', 'Komputer Akuntansi', 'Perbankan', 'Administrasi Keuangan'],
+                    'prospek_karir' => ['Staf Akuntansi', 'Teller Bank', 'Administrasi Keuangan', 'Wirausaha', 'Lanjut ke Perguruan Tinggi'],
+                ],
             ],
             [
                 'kode' => 'FKK',
@@ -43,9 +43,9 @@ class JurusanSeeder extends Seeder
                     'nama' => 'Farmasi Klinis dan Komunitas',
                     'tagline' => 'Generasi Apoteker Muda yang Peduli Kesehatan Umat',
                     'deskripsi_singkat' => 'Jurusan yang menyiapkan tenaga farmasi terampil untuk pelayanan kesehatan di klinik, apotek, dan komunitas masyarakat.',
-                    'kompetensi' => ["Ilmu Farmasi Dasar", "Pelayanan Kefarmasian", "Peracikan Obat", "K3 Farmasi", "Farmakologi"],
-                    'prospek_karir' => ["Asisten Apoteker", "Staf Apotek", "Industri Farmasi", "Klinik & Puskesmas", "Wirausaha Apotek"],
-                ]
+                    'kompetensi' => ['Ilmu Farmasi Dasar', 'Pelayanan Kefarmasian', 'Peracikan Obat', 'K3 Farmasi', 'Farmakologi'],
+                    'prospek_karir' => ['Asisten Apoteker', 'Staf Apotek', 'Industri Farmasi', 'Klinik & Puskesmas', 'Wirausaha Apotek'],
+                ],
             ],
             [
                 'kode' => 'TKJ',
@@ -60,9 +60,9 @@ class JurusanSeeder extends Seeder
                     'nama' => 'Teknik Komputer dan Jaringan',
                     'tagline' => 'Membangun Infrastruktur Digital Indonesia',
                     'deskripsi_singkat' => 'Jurusan yang menghasilkan teknisi handal dalam instalasi, konfigurasi, dan pemeliharaan jaringan komputer serta sistem teknologi informasi.',
-                    'kompetensi' => ["Jaringan Komputer", "Sistem Operasi Linux", "Keamanan Jaringan", "Cloud Computing", "Troubleshooting Hardware"],
-                    'prospek_karir' => ["Network Engineer", "IT Support", "Teknisi Jaringan", "System Administrator", "Wirausaha IT"],
-                ]
+                    'kompetensi' => ['Jaringan Komputer', 'Sistem Operasi Linux', 'Keamanan Jaringan', 'Cloud Computing', 'Troubleshooting Hardware'],
+                    'prospek_karir' => ['Network Engineer', 'IT Support', 'Teknisi Jaringan', 'System Administrator', 'Wirausaha IT'],
+                ],
             ],
             [
                 'kode' => 'TKR',
@@ -77,9 +77,9 @@ class JurusanSeeder extends Seeder
                     'nama' => 'Teknik Kendaraan Ringan Otomotif',
                     'tagline' => 'Mekanik Handal, Berkarakter, Siap Industri',
                     'deskripsi_singkat' => 'Jurusan yang membekali siswa dengan keahlian perbaikan dan perawatan kendaraan ringan sesuai standar industri otomotif modern.',
-                    'kompetensi' => ["Mesin Otomotif", "Sistem Kelistrikan", "Transmisi & Kopling", "Sistem Rem & Suspensi", "Tune Up & Servis"],
-                    'prospek_karir' => ["Mekanik Bengkel Resmi", "Teknisi Otomotif", "Supervisor Bengkel", "Wirausaha Bengkel", "Industri Manufaktur"],
-                ]
+                    'kompetensi' => ['Mesin Otomotif', 'Sistem Kelistrikan', 'Transmisi & Kopling', 'Sistem Rem & Suspensi', 'Tune Up & Servis'],
+                    'prospek_karir' => ['Mekanik Bengkel Resmi', 'Teknisi Otomotif', 'Supervisor Bengkel', 'Wirausaha Bengkel', 'Industri Manufaktur'],
+                ],
             ],
             [
                 'kode' => 'TSM',
@@ -94,9 +94,9 @@ class JurusanSeeder extends Seeder
                     'nama' => 'Teknik dan Bisnis Sepeda Motor',
                     'tagline' => 'Ahli Sepeda Motor, Jiwa Wirausaha',
                     'deskripsi_singkat' => 'Jurusan yang mengkombinasikan keahlian teknik sepeda motor dengan jiwa kewirausahaan untuk mencetak mekanik profesional sekaligus pengusaha muda.',
-                    'kompetensi' => ["Sistem Mesin Sepeda Motor", "Kelistrikan Sepeda Motor", "Servis Berkala", "Balancing & Spooring", "Manajemen Bengkel"],
-                    'prospek_karir' => ["Mekanik Honda/Yamaha/Suzuki", "Kepala Mekanik", "Wirausaha Bengkel", "Instruktur Otomotif", "Industri Sepeda Motor"],
-                ]
+                    'kompetensi' => ['Sistem Mesin Sepeda Motor', 'Kelistrikan Sepeda Motor', 'Servis Berkala', 'Balancing & Spooring', 'Manajemen Bengkel'],
+                    'prospek_karir' => ['Mekanik Honda/Yamaha/Suzuki', 'Kepala Mekanik', 'Wirausaha Bengkel', 'Instruktur Otomotif', 'Industri Sepeda Motor'],
+                ],
             ],
         ];
 

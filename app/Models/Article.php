@@ -2,20 +2,20 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 use Spatie\Tags\HasTags;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Builder;
 
 class Article extends Model implements HasMedia
 {
-    use HasFactory, HasSlug, InteractsWithMedia, HasTags;
+    use HasFactory, HasSlug, HasTags, InteractsWithMedia;
 
     protected $fillable = [
         'user_id',
@@ -36,7 +36,7 @@ class Article extends Model implements HasMedia
         'published_at' => 'datetime',
     ];
 
-    public function getSlugOptions() : SlugOptions
+    public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
             ->generateSlugsFrom(function ($model) {
@@ -48,6 +48,7 @@ class Article extends Model implements HasMedia
                 }
 
                 $translation = $model->translation(app()->getLocale());
+
                 return $translation ? $translation->title : 'untitled';
             })
             ->saveSlugsTo('slug');
@@ -76,6 +77,7 @@ class Article extends Model implements HasMedia
     public function translation(?string $locale = null)
     {
         $locale = $locale ?? app()->getLocale();
+
         return $this->translations->first(function ($t) use ($locale) {
             return $t->locale === $locale && ($locale === 'id' || $t->reviewed);
         })
@@ -86,8 +88,8 @@ class Article extends Model implements HasMedia
     public function scopePublished(Builder $query): Builder
     {
         return $query->where('status', 'published')
-                     ->whereNotNull('published_at')
-                     ->where('published_at', '<=', now());
+            ->whereNotNull('published_at')
+            ->where('published_at', '<=', now());
     }
 
     public function scopeFeatured(Builder $query): Builder
@@ -95,9 +97,10 @@ class Article extends Model implements HasMedia
         return $query->where('is_featured', true);
     }
 
-    public function scopeByLocale(Builder $query, string $locale = null): Builder
+    public function scopeByLocale(Builder $query, ?string $locale = null): Builder
     {
         $locale = $locale ?? app()->getLocale();
+
         return $query->whereHas('translations', function ($q) use ($locale) {
             $q->where('locale', $locale);
             if ($locale !== 'id') {

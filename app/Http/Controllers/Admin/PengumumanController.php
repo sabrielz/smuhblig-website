@@ -5,8 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Pengumuman;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
+use Inertia\Inertia;
 
 class PengumumanController extends Controller
 {
@@ -22,7 +23,7 @@ class PengumumanController extends Controller
             } elseif ($status === 'kadaluarsa') {
                 $query->where(function ($q) use ($today) {
                     $q->where('is_active', false)
-                      ->orWhere('tanggal_selesai', '<', $today);
+                        ->orWhere('tanggal_selesai', '<', $today);
                 });
             }
         }
@@ -30,7 +31,7 @@ class PengumumanController extends Controller
         $pengumumans = $query->paginate(10)->through(function ($p) {
             $today = Carbon::today();
             $isExpired = $p->tanggal_selesai && $p->tanggal_selesai->lt($today);
-            $isActive = $p->is_active && !$isExpired;
+            $isActive = $p->is_active && ! $isExpired;
 
             return [
                 'id' => $p->id,
@@ -71,7 +72,7 @@ class PengumumanController extends Controller
 
         $pengumuman = Pengumuman::create([
             'user_id' => request()->user()?->id ?? 1, // Fallback safely
-            'slug' => \Illuminate\Support\Str::slug($validated['judul_id']),
+            'slug' => Str::slug($validated['judul_id']),
             'tipe' => $validated['tipe'],
             'tanggal_mulai' => $validated['tanggal_mulai'] ? Carbon::parse($validated['tanggal_mulai']) : null,
             'tanggal_selesai' => $validated['tanggal_selesai'] ? Carbon::parse($validated['tanggal_selesai']) : null,
@@ -88,7 +89,7 @@ class PengumumanController extends Controller
                 'locale' => 'en',
                 'judul' => $validated['judul_en'] ?? $validated['judul_id'],
                 'konten' => $validated['konten_en'] ?? $validated['konten_id'],
-            ]
+            ],
         ]);
 
         return redirect()->route('admin.pengumuman.index')
@@ -132,7 +133,7 @@ class PengumumanController extends Controller
             'tanggal_mulai' => $validated['tanggal_mulai'] ? Carbon::parse($validated['tanggal_mulai']) : null,
             'tanggal_selesai' => $validated['tanggal_selesai'] ? Carbon::parse($validated['tanggal_selesai']) : null,
             'is_active' => $validated['is_active'] ?? $pengumuman->is_active,
-            'slug' => \Illuminate\Support\Str::slug($validated['judul_id']),
+            'slug' => Str::slug($validated['judul_id']),
         ]);
 
         $pengumuman->translations()->where('locale', 'id')->update([

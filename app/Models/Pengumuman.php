@@ -7,9 +7,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
-use Illuminate\Support\Carbon;
 
 class Pengumuman extends Model
 {
@@ -47,7 +47,7 @@ class Pengumuman extends Model
                     return request()->input('judul');
                 }
 
-                return 'pengumuman-' . uniqid();
+                return 'pengumuman-'.uniqid();
             })
             ->saveSlugsTo('slug');
     }
@@ -70,14 +70,15 @@ class Pengumuman extends Model
     public function scopeActive(Builder $query): Builder
     {
         $today = Carbon::today();
+
         return $query->where('is_active', true)
-                     ->where(function ($q) use ($today) {
-                         $q->whereNull('tanggal_mulai')
-                           ->orWhere('tanggal_mulai', '<=', $today);
-                     })
-                     ->where(function ($q) use ($today) {
-                         $q->whereNull('tanggal_selesai')
-                           ->orWhere('tanggal_selesai', '>=', $today);
-                     });
+            ->where(function ($q) use ($today) {
+                $q->whereNull('tanggal_mulai')
+                    ->orWhere('tanggal_mulai', '<=', $today);
+            })
+            ->where(function ($q) use ($today) {
+                $q->whereNull('tanggal_selesai')
+                    ->orWhere('tanggal_selesai', '>=', $today);
+            });
     }
 }

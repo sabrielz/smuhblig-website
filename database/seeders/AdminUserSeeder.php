@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Str;
 
 class AdminUserSeeder extends Seeder
 {
@@ -29,7 +28,7 @@ class AdminUserSeeder extends Seeder
 
             $this->command->info('Admin user created successfully.');
             $this->command->info('Email: admin@smkmuhbligo.sch.id');
-            $this->command->warn('Password: ' . $password);
+            $this->command->warn('Password: '.$password);
 
             // Output to console directly in case $this->command isn't captured
             echo "\n----------------------------------------\n";

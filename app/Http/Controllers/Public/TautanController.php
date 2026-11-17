@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
 use App\Models\Tautan;
+use Artesaos\SEOTools\Facades\OpenGraph;
+use Artesaos\SEOTools\Facades\SEOMeta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
@@ -42,10 +44,10 @@ class TautanController extends Controller
             })->values()->toArray();
         });
 
-        \Artesaos\SEOTools\Facades\SEOMeta::setTitle('Tautan | SMK Muhammadiyah Bligo');
-        \Artesaos\SEOTools\Facades\SEOMeta::setDescription('Kumpulan tautan penting, aplikasi belajar, dan portal informasi SMK Muhammadiyah Bligo.');
-        \Artesaos\SEOTools\Facades\OpenGraph::setUrl(request()->url());
-        \Artesaos\SEOTools\Facades\OpenGraph::addProperty('type', 'website');
+        SEOMeta::setTitle('Tautan | SMK Muhammadiyah Bligo');
+        SEOMeta::setDescription('Kumpulan tautan penting, aplikasi belajar, dan portal informasi SMK Muhammadiyah Bligo.');
+        OpenGraph::setUrl(request()->url());
+        OpenGraph::addProperty('type', 'website');
 
         return Inertia::render('Public/Tautan', [
             'groupedLinks' => $groupedLinks,

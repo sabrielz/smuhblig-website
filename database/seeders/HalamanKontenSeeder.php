@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\HalamanKonten;
 use Illuminate\Database\Seeder;
 
 class HalamanKontenSeeder extends Seeder
@@ -230,7 +230,7 @@ class HalamanKontenSeeder extends Seeder
             $value_id = $item['value_id'];
             unset($item['value_id']);
 
-            $halamanKonten = \App\Models\HalamanKonten::updateOrCreate(
+            $halamanKonten = HalamanKonten::updateOrCreate(
                 [
                     'halaman' => $item['halaman'],
                     'section' => $item['section'],

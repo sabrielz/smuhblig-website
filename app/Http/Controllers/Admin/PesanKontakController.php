@@ -24,24 +24,24 @@ class PesanKontakController extends Controller
         }
 
         $pesans = $query->paginate(20)->withQueryString()->through(fn ($p) => [
-            'id'             => $p->id,
-            'nama'           => $p->nama,
-            'email'          => $p->email,
-            'nomor_telepon'  => $p->nomor_telepon,
-            'subjek'         => $p->subjek,
-            'status'         => $p->status,
-            'ip_address'     => $p->ip_address,
-            'dibaca_at'      => $p->dibaca_at?->toISOString(),
-            'dibaca_oleh'    => $p->pembaca?->name,
-            'created_at'     => $p->created_at->toISOString(),
+            'id' => $p->id,
+            'nama' => $p->nama,
+            'email' => $p->email,
+            'nomor_telepon' => $p->nomor_telepon,
+            'subjek' => $p->subjek,
+            'status' => $p->status,
+            'ip_address' => $p->ip_address,
+            'dibaca_at' => $p->dibaca_at?->toISOString(),
+            'dibaca_oleh' => $p->pembaca?->name,
+            'created_at' => $p->created_at->toISOString(),
         ]);
 
         $totalBaru = PesanKontak::baru()->count();
 
         return Inertia::render('Admin/PesanKontak/Index', [
-            'pesans'     => $pesans,
-            'filters'    => $request->only(['status']),
-            'totalBaru'  => $totalBaru,
+            'pesans' => $pesans,
+            'filters' => $request->only(['status']),
+            'totalBaru' => $totalBaru,
         ]);
     }
 
@@ -59,18 +59,18 @@ class PesanKontakController extends Controller
 
         return Inertia::render('Admin/PesanKontak/Show', [
             'pesan' => [
-                'id'             => $pesanKontak->id,
-                'nama'           => $pesanKontak->nama,
-                'email'          => $pesanKontak->email,
-                'nomor_telepon'  => $pesanKontak->nomor_telepon,
-                'subjek'         => $pesanKontak->subjek,
-                'pesan'          => $pesanKontak->pesan,
-                'status'         => $pesanKontak->status,
-                'ip_address'     => $pesanKontak->ip_address,
-                'user_agent'     => $pesanKontak->user_agent,
-                'dibaca_at'      => $pesanKontak->dibaca_at?->toISOString(),
-                'dibaca_oleh'    => $pesanKontak->pembaca?->name,
-                'created_at'     => $pesanKontak->created_at->toISOString(),
+                'id' => $pesanKontak->id,
+                'nama' => $pesanKontak->nama,
+                'email' => $pesanKontak->email,
+                'nomor_telepon' => $pesanKontak->nomor_telepon,
+                'subjek' => $pesanKontak->subjek,
+                'pesan' => $pesanKontak->pesan,
+                'status' => $pesanKontak->status,
+                'ip_address' => $pesanKontak->ip_address,
+                'user_agent' => $pesanKontak->user_agent,
+                'dibaca_at' => $pesanKontak->dibaca_at?->toISOString(),
+                'dibaca_oleh' => $pesanKontak->pembaca?->name,
+                'created_at' => $pesanKontak->created_at->toISOString(),
             ],
         ]);
     }
@@ -91,13 +91,13 @@ class PesanKontakController extends Controller
     public function bulkArsip(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'ids'   => ['required', 'array'],
+            'ids' => ['required', 'array'],
             'ids.*' => ['integer', 'exists:pesan_kontak,id'],
         ]);
 
         PesanKontak::whereIn('id', $validated['ids'])->update(['status' => 'diarsip']);
 
-        return back()->with('success', count($validated['ids']) . ' pesan berhasil diarsipkan.');
+        return back()->with('success', count($validated['ids']).' pesan berhasil diarsipkan.');
     }
 
     /**

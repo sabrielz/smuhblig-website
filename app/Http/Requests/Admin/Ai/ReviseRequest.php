@@ -17,7 +17,7 @@ class ReviseRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'text'        => ['required', 'string', 'max:50000'],
+            'text' => ['required', 'string', 'max:50000'],
             'instruction' => ['required', 'string', 'max:1000'],
         ];
     }

@@ -25,7 +25,7 @@ class TestEmailMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: '[Test] Konfigurasi Email – ' . $this->siteName,
+            subject: '[Test] Konfigurasi Email – '.$this->siteName,
         );
     }
 

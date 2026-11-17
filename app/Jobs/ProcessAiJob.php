@@ -61,7 +61,7 @@ class ProcessAiJob implements ShouldQueue
 
         Log::info('[ProcessAiJob] Starting', [
             'ai_job_id' => $this->aiJob->id,
-            'job_type'  => $this->aiJob->job_type,
+            'job_type' => $this->aiJob->job_type,
         ]);
 
         try {
@@ -69,16 +69,16 @@ class ProcessAiJob implements ShouldQueue
             $input = json_decode($this->aiJob->input ?? '{}', true, 512, JSON_THROW_ON_ERROR);
 
             $output = match ($this->aiJob->job_type) {
-                'generate'  => $aiService->generateArticle($input),
-                'revise'    => $aiService->reviseText(
+                'generate' => $aiService->generateArticle($input),
+                'revise' => $aiService->reviseText(
                     $input['text'] ?? '',
                     $input['instruction'] ?? '',
                 ),
-                'correct'   => $aiService->correctGrammar($input['html_content'] ?? ''),
+                'correct' => $aiService->correctGrammar($input['html_content'] ?? ''),
                 'translate' => json_encode(
                     $aiService->translateContent(
                         [
-                            'title'   => $input['title'] ?? '',
+                            'title' => $input['title'] ?? '',
                             'excerpt' => $input['excerpt'] ?? '',
                             'content' => $input['content'] ?? '',
                         ],
@@ -86,41 +86,41 @@ class ProcessAiJob implements ShouldQueue
                     ),
                     JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE,
                 ),
-                'seo'       => json_encode(
+                'seo' => json_encode(
                     $aiService->analyzeSeo([
-                        'title'            => $input['title'] ?? '',
-                        'content'          => $input['content'] ?? '',
+                        'title' => $input['title'] ?? '',
+                        'content' => $input['content'] ?? '',
                         'meta_description' => $input['meta_description'] ?? '',
                     ]),
                     JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE,
                 ),
-                default     => throw new AiServiceException("Unknown job type: {$this->aiJob->job_type}"),
+                default => throw new AiServiceException("Unknown job type: {$this->aiJob->job_type}"),
             };
 
             $durationMs = (int) ((hrtime(true) - $startTime) / 1_000_000);
 
             $this->aiJob->update([
-                'status'      => 'done',
-                'output'      => $output,
+                'status' => 'done',
+                'output' => $output,
                 'duration_ms' => $durationMs,
             ]);
 
             Log::info('[ProcessAiJob] Completed', [
-                'ai_job_id'   => $this->aiJob->id,
+                'ai_job_id' => $this->aiJob->id,
                 'duration_ms' => $durationMs,
             ]);
         } catch (Throwable $e) {
             $durationMs = (int) ((hrtime(true) - $startTime) / 1_000_000);
 
             $this->aiJob->update([
-                'status'        => 'failed',
+                'status' => 'failed',
                 'error_message' => mb_substr($e->getMessage(), 0, 2000),
-                'duration_ms'   => $durationMs,
+                'duration_ms' => $durationMs,
             ]);
 
             Log::error('[ProcessAiJob] Failed', [
                 'ai_job_id' => $this->aiJob->id,
-                'error'     => $e->getMessage(),
+                'error' => $e->getMessage(),
             ]);
 
             throw $e; // let the queue retry mechanism kick in
@@ -133,13 +133,13 @@ class ProcessAiJob implements ShouldQueue
     public function failed(Throwable $exception): void
     {
         $this->aiJob->update([
-            'status'        => 'failed',
+            'status' => 'failed',
             'error_message' => mb_substr($exception->getMessage(), 0, 2000),
         ]);
 
         Log::error('[ProcessAiJob] Permanently failed', [
             'ai_job_id' => $this->aiJob->id,
-            'error'     => $exception->getMessage(),
+            'error' => $exception->getMessage(),
         ]);
     }
 }

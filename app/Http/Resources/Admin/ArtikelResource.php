@@ -17,6 +17,7 @@ class ArtikelResource extends JsonResource
             'category_id' => $this->category_id,
             'category' => $this->whenLoaded('category', function () {
                 $catTrans = $this->category->translation('id');
+
                 return [
                     'id' => $this->category->id,
                     'name' => $catTrans ? $catTrans->name : $this->category->name,
@@ -49,7 +50,7 @@ class ArtikelResource extends JsonResource
 
             // EN translation status flags (for AI badge in editor)
             'en_ai_translated' => $translationEn ? (bool) $translationEn->ai_translated : false,
-            'en_reviewed'      => $translationEn ? (bool) $translationEn->reviewed : false,
+            'en_reviewed' => $translationEn ? (bool) $translationEn->reviewed : false,
         ];
     }
 }

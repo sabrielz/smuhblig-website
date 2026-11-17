@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Agenda;
 use App\Http\Requests\Admin\StoreAgendaRequest;
 use App\Http\Resources\Admin\AgendaResource;
+use App\Models\Agenda;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Inertia\Inertia;
 
 class AgendaController extends Controller
 {
@@ -66,7 +66,9 @@ class AgendaController extends Controller
             $agenda->saveQuietly();
 
             foreach ($validated['translations'] as $locale => $data) {
-                if ($locale === 'en' && empty($data['judul'])) continue;
+                if ($locale === 'en' && empty($data['judul'])) {
+                    continue;
+                }
 
                 $agenda->translations()->create([
                     'locale' => $locale,
@@ -126,6 +128,7 @@ class AgendaController extends Controller
 
                 if ($locale === 'en' && empty($data['judul'])) {
                     $agenda->translations()->where('locale', 'en')->delete();
+
                     continue;
                 }
 
@@ -153,6 +156,7 @@ class AgendaController extends Controller
     public function destroy(Agenda $agenda)
     {
         $agenda->delete();
+
         return redirect()->route('admin.agenda.index')->with('success', 'Agenda berhasil dihapus.');
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
@@ -16,11 +17,11 @@ class MediaUploadController extends Controller
      * MIME types yang diizinkan untuk upload.
      * GIF dan SVG dilarang keras karena potensi XSS/animasi exploit.
      *
-     * @var array<string, string>  key = mime type, value = extension
+     * @var array<string, string> key = mime type, value = extension
      */
     private const ALLOWED_MIMES = [
         'image/jpeg' => 'jpg',
-        'image/png'  => 'png',
+        'image/png' => 'png',
         'image/webp' => 'webp',
     ];
 
@@ -48,7 +49,7 @@ class MediaUploadController extends Controller
         // Validasi MIME type via magic bytes (finfo) — bukan hanya ekstensi/Content-Type header
         $detectedMime = $this->detectMimeType($file->getRealPath());
 
-        if (!array_key_exists($detectedMime, self::ALLOWED_MIMES)) {
+        if (! array_key_exists($detectedMime, self::ALLOWED_MIMES)) {
             throw ValidationException::withMessages([
                 'image' => 'Tipe file tidak diizinkan. Hanya JPEG, PNG, dan WebP yang diterima. GIF dan SVG dilarang.',
             ]);
@@ -59,15 +60,15 @@ class MediaUploadController extends Controller
 
         // Build namespaced UUID path: editor-uploads/2026/03/uuid.ext
         $yearMonth = now()->format('Y/m');
-        $filename  = Str::uuid() . '.' . $extension;
-        $path      = "editor-uploads/{$yearMonth}/{$filename}";
+        $filename = Str::uuid().'.'.$extension;
+        $path = "editor-uploads/{$yearMonth}/{$filename}";
 
         // Simpan ke public storage disk
         Storage::disk('public')->put($path, file_get_contents($file->getRealPath()));
 
-        /** @var \Illuminate\Filesystem\FilesystemAdapter $disk */
+        /** @var FilesystemAdapter $disk */
         $disk = Storage::disk('public');
-        $url  = $disk->url($path);
+        $url = $disk->url($path);
 
         return response()->json(['url' => $url]);
     }
@@ -82,6 +83,7 @@ class MediaUploadController extends Controller
             $finfo = finfo_open(FILEINFO_MIME_TYPE);
             $mime = finfo_file($finfo, $filePath);
             finfo_close($finfo);
+
             return $mime ?: 'application/octet-stream';
         }
 

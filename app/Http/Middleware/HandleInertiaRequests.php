@@ -2,8 +2,13 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\NotifikasiAdmin;
+use App\Models\Pengaturan;
+use App\Models\PesanKontak;
+use Artesaos\SEOTools\Facades\SEOTools;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Schema;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -36,35 +41,36 @@ class HandleInertiaRequests extends Middleware
 
             'auth' => fn () => [
                 'user' => $request->user() ? [
-                    'id'           => $request->user()->id,
-                    'name'         => $request->user()->name,
-                    'email'        => $request->user()->email,
-                    'avatar'       => $request->user()->avatar ?? null,
-                    'avatar_url'   => $request->user()->avatar_url,
-                    'role'         => $request->user()->roles?->first()?->name ?? null,
-                    'roles'        => $request->user()->roles?->pluck('name')->toArray() ?? [],
-                    'permissions'  => $request->user()->getAllPermissions()->pluck('name')->toArray(),
-                    'is_admin'     => $request->user()->isAdmin(),
-                    'is_editor'    => $request->user()->isEditor(),
-                    'is_author'    => $request->user()->isAuthor(),
+                    'id' => $request->user()->id,
+                    'name' => $request->user()->name,
+                    'email' => $request->user()->email,
+                    'avatar' => $request->user()->avatar ?? null,
+                    'avatar_url' => $request->user()->avatar_url,
+                    'role' => $request->user()->roles?->first()?->name ?? null,
+                    'roles' => $request->user()->roles?->pluck('name')->toArray() ?? [],
+                    'permissions' => $request->user()->getAllPermissions()->pluck('name')->toArray(),
+                    'is_admin' => $request->user()->isAdmin(),
+                    'is_editor' => $request->user()->isEditor(),
+                    'is_author' => $request->user()->isAuthor(),
                 ] : null,
             ],
 
             'notifikasi_count' => fn () => $request->user()
-                ? \App\Models\NotifikasiAdmin::untukUser($request->user()->id)->belumDibaca()->count()
+                ? NotifikasiAdmin::untukUser($request->user()->id)->belumDibaca()->count()
                 : 0,
 
             'pesan_baru_count' => fn () => $request->user()
-                ? \App\Models\PesanKontak::baru()->count()
+                ? PesanKontak::baru()->count()
                 : 0,
 
             'pengaturan' => fn () => Cache::remember('pengaturan.shared', 3600, function () {
-                if (!\Illuminate\Support\Facades\Schema::hasTable('pengaturan')) {
+                if (! Schema::hasTable('pengaturan')) {
                     return $this->defaultPengaturan();
                 }
 
                 try {
-                    $settings = \App\Models\Pengaturan::getAllSettings();
+                    $settings = Pengaturan::getAllSettings();
+
                     return array_merge($this->defaultPengaturan(), $settings);
                 } catch (\Exception $e) {
                     return $this->defaultPengaturan();
@@ -78,7 +84,7 @@ class HandleInertiaRequests extends Middleware
                 'info' => $request->session()->get('info'),
             ],
 
-            'seo' => fn () => \Artesaos\SEOTools\Facades\SEOTools::generate(),
+            'seo' => fn () => SEOTools::generate(),
         ]);
     }
 

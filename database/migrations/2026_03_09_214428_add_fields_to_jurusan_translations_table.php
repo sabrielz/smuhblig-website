@@ -4,7 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
@@ -34,7 +35,7 @@ return new class extends Migration {
                 'highlight_3_label',
                 'highlight_1_en',
                 'highlight_2_en',
-                'highlight_3_en'
+                'highlight_3_en',
             ]);
         });
     }

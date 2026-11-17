@@ -1,8 +1,16 @@
 <?php
 
+use App\Http\Middleware\HandleInertiaRequests;
+use App\Http\Middleware\SetLocale;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Spatie\Permission\Middleware\PermissionMiddleware;
+use Spatie\Permission\Middleware\RoleMiddleware;
+use Spatie\Permission\Middleware\RoleOrPermissionMiddleware;
+use Symfony\Component\HttpFoundation\Response;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -13,18 +21,18 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->web(append: [
             // \App\Http\Middleware\ContentSecurityPolicy::class,
-            \App\Http\Middleware\SetLocale::class,
-            \App\Http\Middleware\HandleInertiaRequests::class,
+            SetLocale::class,
+            HandleInertiaRequests::class,
         ]);
 
         $middleware->alias([
-            'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
-            'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
-            'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
+            'role' => RoleMiddleware::class,
+            'permission' => PermissionMiddleware::class,
+            'role_or_permission' => RoleOrPermissionMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        $exceptions->respond(function (\Symfony\Component\HttpFoundation\Response $response, \Throwable $exception, \Illuminate\Http\Request $request) {
+        $exceptions->respond(function (Response $response, Throwable $exception, Request $request) {
             if ($request->expectsJson()) {
                 return $response;
             }
@@ -36,11 +44,11 @@ return Application::configure(basePath: dirname(__DIR__))
             }
 
             if (in_array($status, [403, 404, 500])) {
-                return \Inertia\Inertia::render('Errors/' . $status, ['status' => $status])
+                return Inertia::render('Errors/'.$status, ['status' => $status])
                     ->toResponse($request)
                     ->setStatusCode($status);
             } elseif ($status >= 400 && $status < 600) {
-                return \Inertia\Inertia::render('Errors/Generic', ['status' => $status])
+                return Inertia::render('Errors/Generic', ['status' => $status])
                     ->toResponse($request)
                     ->setStatusCode($status);
             }

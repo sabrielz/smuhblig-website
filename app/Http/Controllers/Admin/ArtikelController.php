@@ -3,16 +3,17 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Article;
-use App\Models\Category;
 use App\Http\Requests\Admin\StoreArtikelRequest;
 use App\Http\Requests\Admin\UpdateArtikelRequest;
 use App\Http\Resources\Admin\ArtikelResource;
+use App\Models\Article;
+use App\Models\ArticleTranslation;
+use App\Models\Category;
 use App\Services\HtmlSanitizer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Inertia\Inertia;
 use Illuminate\Support\Facades\DB;
+use Inertia\Inertia;
 
 class ArtikelController extends Controller
 {
@@ -23,9 +24,9 @@ class ArtikelController extends Controller
 
         // Filter search by title matching translation ID
         if ($search = $request->input('search')) {
-            $query->whereHas('translations', function($q) use ($search) {
+            $query->whereHas('translations', function ($q) use ($search) {
                 $q->where('locale', 'id')
-                  ->where('title', 'like', "%{$search}%");
+                    ->where('title', 'like', "%{$search}%");
             });
         }
 
@@ -46,10 +47,11 @@ class ArtikelController extends Controller
 
         $articles = $query->paginate(15)->withQueryString();
 
-        $categories = Category::with(['translations' => function($q) {
+        $categories = Category::with(['translations' => function ($q) {
             $q->where('locale', 'id');
-        }])->get()->map(function (\App\Models\Category $cat) {
+        }])->get()->map(function (Category $cat) {
             $trans = $cat->translation('id');
+
             return [
                 'id' => $cat->id,
                 'name' => $trans ? $trans->name : $cat->name,
@@ -66,10 +68,11 @@ class ArtikelController extends Controller
 
     public function create()
     {
-        $categories = Category::with(['translations' => function($q) {
+        $categories = Category::with(['translations' => function ($q) {
             $q->where('locale', 'id');
-        }])->get()->map(function (\App\Models\Category $cat) {
+        }])->get()->map(function (Category $cat) {
             $trans = $cat->translation('id');
+
             return [
                 'id' => $cat->id,
                 'name' => $trans ? $trans->name : $cat->name,
@@ -113,7 +116,7 @@ class ArtikelController extends Controller
             ]);
 
             // Save EN translation if available
-            if (!empty($validated['title_en'])) {
+            if (! empty($validated['title_en'])) {
                 $article->translations()->create([
                     'locale' => 'en',
                     'title' => $validated['title_en'],
@@ -133,7 +136,8 @@ class ArtikelController extends Controller
             return redirect()->route('admin.artikel.index')->with('success', 'Artikel berhasil dibuat.');
         } catch (\Exception $e) {
             DB::rollBack();
-            return back()->with('error', 'Gagal membuat artikel: ' . $e->getMessage());
+
+            return back()->with('error', 'Gagal membuat artikel: '.$e->getMessage());
         }
     }
 
@@ -141,10 +145,11 @@ class ArtikelController extends Controller
     {
         $artikel->load(['translations', 'category', 'media']);
 
-        $categories = Category::with(['translations' => function($q) {
+        $categories = Category::with(['translations' => function ($q) {
             $q->where('locale', 'id');
-        }])->get()->map(function (\App\Models\Category $cat) {
+        }])->get()->map(function (Category $cat) {
             $trans = $cat->translation('id');
+
             return [
                 'id' => $cat->id,
                 'name' => $trans ? $trans->name : $cat->name,
@@ -185,7 +190,7 @@ class ArtikelController extends Controller
             );
 
             // Update, Create, or Delete EN translation
-            if (!empty($validated['title_en'])) {
+            if (! empty($validated['title_en'])) {
                 $artikel->translations()->updateOrCreate(
                     ['locale' => 'en'],
                     [
@@ -209,7 +214,8 @@ class ArtikelController extends Controller
             return redirect()->route('admin.artikel.index')->with('success', 'Artikel berhasil diperbarui.');
         } catch (\Exception $e) {
             DB::rollBack();
-            return back()->with('error', 'Gagal memperbarui artikel: ' . $e->getMessage());
+
+            return back()->with('error', 'Gagal memperbarui artikel: '.$e->getMessage());
         }
     }
 
@@ -225,7 +231,8 @@ class ArtikelController extends Controller
             return redirect()->route('admin.artikel.index')->with('success', 'Artikel berhasil dihapus.');
         } catch (\Exception $e) {
             DB::rollBack();
-            return back()->with('error', 'Gagal menghapus artikel: ' . $e->getMessage());
+
+            return back()->with('error', 'Gagal menghapus artikel: '.$e->getMessage());
         }
     }
 
@@ -242,7 +249,8 @@ class ArtikelController extends Controller
             return back()->with('success', 'Artikel berhasil dipublish.');
         } catch (\Exception $e) {
             DB::rollBack();
-            return back()->with('error', 'Gagal mempublish artikel: ' . $e->getMessage());
+
+            return back()->with('error', 'Gagal mempublish artikel: '.$e->getMessage());
         }
     }
 
@@ -252,10 +260,10 @@ class ArtikelController extends Controller
      */
     public function markTranslationReviewed(Article $artikel)
     {
-        /** @var \App\Models\ArticleTranslation|null $enTranslation */
+        /** @var ArticleTranslation|null $enTranslation */
         $enTranslation = $artikel->translations()->where('locale', 'en')->first();
 
-        if (!$enTranslation) {
+        if (! $enTranslation) {
             return response()->json(['message' => 'Terjemahan EN tidak ditemukan.'], 404);
         }
 
@@ -264,4 +272,3 @@ class ArtikelController extends Controller
         return back()->with('success', 'Terjemahan ditandai sudah direview.');
     }
 }
-

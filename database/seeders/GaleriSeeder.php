@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Galeri;
+use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
 
 class GaleriSeeder extends Seeder
@@ -34,8 +34,8 @@ class GaleriSeeder extends Seeder
                         'deskripsi' => 'Documentation of the solemnly conducted flag ceremony.',
                         'ai_translated' => true,
                         'reviewed' => true,
-                    ]
-                ]
+                    ],
+                ],
             ],
             [
                 'slug' => 'kunjungan-industri-tkj',
@@ -57,8 +57,8 @@ class GaleriSeeder extends Seeder
                         'deskripsi' => 'Photo album of the industrial visit by Computer Network Engineering students to local tech companies.',
                         'ai_translated' => true,
                         'reviewed' => true,
-                    ]
-                ]
+                    ],
+                ],
             ],
             [
                 'slug' => 'lomba-kompetensi-siswa-tingkat-provinsi',
@@ -80,9 +80,9 @@ class GaleriSeeder extends Seeder
                         'deskripsi' => 'Gallery of student participation from SMK Muhammadiyah Bligo in the Provincial Student Competency Competition.',
                         'ai_translated' => true,
                         'reviewed' => true,
-                    ]
-                ]
-            ]
+                    ],
+                ],
+            ],
         ];
 
         foreach ($galleries as $galleryData) {

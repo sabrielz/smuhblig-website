@@ -33,7 +33,7 @@ class AiController extends Controller
         $aiJob = $this->createAndDispatch('generate', $validated);
 
         return response()->json([
-            'jobId'  => $aiJob->id,
+            'jobId' => $aiJob->id,
             'status' => 'pending',
         ], 202);
     }
@@ -49,7 +49,7 @@ class AiController extends Controller
         $aiJob = $this->createAndDispatch('revise', $validated);
 
         return response()->json([
-            'jobId'  => $aiJob->id,
+            'jobId' => $aiJob->id,
             'status' => 'pending',
         ], 202);
     }
@@ -65,7 +65,7 @@ class AiController extends Controller
         $aiJob = $this->createAndDispatch('correct', $validated);
 
         return response()->json([
-            'jobId'  => $aiJob->id,
+            'jobId' => $aiJob->id,
             'status' => 'pending',
         ], 202);
     }
@@ -81,7 +81,7 @@ class AiController extends Controller
         $aiJob = $this->createAndDispatch('translate', $validated);
 
         return response()->json([
-            'jobId'  => $aiJob->id,
+            'jobId' => $aiJob->id,
             'status' => 'pending',
         ], 202);
     }
@@ -97,7 +97,7 @@ class AiController extends Controller
         $aiJob = $this->createAndDispatch('seo', $validated);
 
         return response()->json([
-            'jobId'  => $aiJob->id,
+            'jobId' => $aiJob->id,
             'status' => 'pending',
         ], 202);
     }
@@ -114,11 +114,11 @@ class AiController extends Controller
         }
 
         return response()->json([
-            'id'            => $aiJob->id,
-            'status'        => $aiJob->status,
-            'output'        => $aiJob->output,
+            'id' => $aiJob->id,
+            'status' => $aiJob->status,
+            'output' => $aiJob->output,
             'error_message' => $aiJob->error_message,
-            'job_type'      => $aiJob->job_type,
+            'job_type' => $aiJob->job_type,
         ]);
     }
 
@@ -129,16 +129,15 @@ class AiController extends Controller
     /**
      * Create an ai_jobs record and dispatch the queue job.
      *
-     * @param  string               $jobType
-     * @param  array<string, mixed> $input
+     * @param  array<string, mixed>  $input
      */
     private function createAndDispatch(string $jobType, array $input): AiJob
     {
         $aiJob = AiJob::create([
-            'user_id'  => Auth::id(),
+            'user_id' => Auth::id(),
             'job_type' => $jobType,
-            'input'    => json_encode($input, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE),
-            'status'   => 'pending',
+            'input' => json_encode($input, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE),
+            'status' => 'pending',
         ]);
 
         ProcessAiJob::dispatch($aiJob)->onQueue('ai');

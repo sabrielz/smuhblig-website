@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Public;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\JurusanResource;
 use App\Models\Jurusan;
+use Artesaos\SEOTools\Facades\OpenGraph;
+use Artesaos\SEOTools\Facades\SEOMeta;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -28,10 +31,10 @@ class JurusanController extends Controller
                 ->get();
         });
 
-        \Artesaos\SEOTools\Facades\SEOMeta::setTitle('Program Keahlian | SMK Muhammadiyah Bligo');
-        \Artesaos\SEOTools\Facades\SEOMeta::setDescription('Lima program keahlian unggulan SMK Muhammadiyah Bligo: AKL, FKK, TKJ, TKR, TSM. Pilih jurusan terbaik untuk masa depan Anda.');
-        \Artesaos\SEOTools\Facades\OpenGraph::setUrl(request()->url());
-        \Artesaos\SEOTools\Facades\OpenGraph::addProperty('type', 'website');
+        SEOMeta::setTitle('Program Keahlian | SMK Muhammadiyah Bligo');
+        SEOMeta::setDescription('Lima program keahlian unggulan SMK Muhammadiyah Bligo: AKL, FKK, TKJ, TKR, TSM. Pilih jurusan terbaik untuk masa depan Anda.');
+        OpenGraph::setUrl(request()->url());
+        OpenGraph::addProperty('type', 'website');
 
         return Inertia::render('Public/Jurusan/Index', [
             'jurusan' => JurusanResource::collection($jurusan)->resolve(),
@@ -58,12 +61,12 @@ class JurusanController extends Controller
         $translationTitle = $data->translation()?->nama ?? $data->kode;
         $translationDesc = $data->translation()?->deskripsi_singkat ?? '';
 
-        \Artesaos\SEOTools\Facades\SEOMeta::setTitle($translationTitle . ' | SMK Muhammadiyah Bligo');
-        \Artesaos\SEOTools\Facades\SEOMeta::setDescription(Str::limit($translationDesc, 155));
-        \Artesaos\SEOTools\Facades\OpenGraph::setUrl(request()->url());
-        \Artesaos\SEOTools\Facades\OpenGraph::addProperty('type', 'website');
+        SEOMeta::setTitle($translationTitle.' | SMK Muhammadiyah Bligo');
+        SEOMeta::setDescription(Str::limit($translationDesc, 155));
+        OpenGraph::setUrl(request()->url());
+        OpenGraph::addProperty('type', 'website');
         if ($data->getFirstMediaUrl('cover')) {
-            \Artesaos\SEOTools\Facades\OpenGraph::addImage($data->getFirstMediaUrl('cover'));
+            OpenGraph::addImage($data->getFirstMediaUrl('cover'));
         }
 
         // Ambil jurusan lain
@@ -81,7 +84,8 @@ class JurusanController extends Controller
             // Asumsi ada model Pengaturan, jika tidak ada, default to '#'
             // Kita coba pakai DB facade jika model tidak ada
             try {
-                $setting = \Illuminate\Support\Facades\DB::table('settings')->where('key', 'spmb_url')->first();
+                $setting = DB::table('settings')->where('key', 'spmb_url')->first();
+
                 return $setting ? $setting->value : '#';
             } catch (\Exception $e) {
                 return '#'; // Fallback
@@ -92,8 +96,8 @@ class JurusanController extends Controller
             'jurusan' => new JurusanResource($data),
             'jurusanLain' => JurusanResource::collection($jurusanLain)->resolve(),
             'pengaturan' => [
-                'spmb_url' => $pengaturan
-            ]
+                'spmb_url' => $pengaturan,
+            ],
         ]);
     }
 }

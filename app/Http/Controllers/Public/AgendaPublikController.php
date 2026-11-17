@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
-use App\Models\Agenda;
 use App\Http\Resources\Admin\AgendaResource;
+use App\Models\Agenda;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
@@ -41,6 +41,7 @@ class AgendaPublikController extends Controller
         $grouped = collect($agendas)->groupBy(function ($agenda) {
             try {
                 $date = Carbon::parse($agenda['tanggal_mulai']);
+
                 return $date->format('Y-m');
             } catch (\Exception $e) {
                 return 'unknown';
@@ -64,20 +65,20 @@ class AgendaPublikController extends Controller
         return Inertia::render('Public/Agenda', [
             'agendasGrouped' => $grouped,
             'filterOptions' => $filterOptions,
-            'activeFilter' => $bulanFilter && $tahunFilter ? "{$tahunFilter}-" . str_pad($bulanFilter, 2, '0', STR_PAD_LEFT) : null,
+            'activeFilter' => $bulanFilter && $tahunFilter ? "{$tahunFilter}-".str_pad($bulanFilter, 2, '0', STR_PAD_LEFT) : null,
         ]);
     }
 
     public function show(Agenda $agenda)
     {
-        if (!$agenda->is_active) {
+        if (! $agenda->is_active) {
             abort(404);
         }
 
         $agenda->load('translations');
 
         return Inertia::render('Public/AgendaDetail', [
-            'agenda' => new AgendaResource($agenda)
+            'agenda' => new AgendaResource($agenda),
         ]);
     }
 }

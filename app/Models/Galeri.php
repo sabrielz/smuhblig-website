@@ -37,6 +37,7 @@ class Galeri extends Model implements HasMedia
     public function translation(?string $locale = null)
     {
         $locale = $locale ?? app()->getLocale();
+
         return $this->translations->first(function ($t) use ($locale) {
             return $t->locale === $locale && ($locale === 'id' || $t->reviewed);
         })

@@ -4,10 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Galeri;
-use Illuminate\Http\Request;
-use Inertia\Inertia;
-use Illuminate\Support\Str;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Inertia\Inertia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class GaleriController extends Controller
 {
@@ -17,7 +18,7 @@ class GaleriController extends Controller
             ->orderBy('sort_order', 'asc')
             ->orderBy('created_at', 'desc')
             ->get()
-            ->map(function (\App\Models\Galeri $galeri) {
+            ->map(function (Galeri $galeri) {
                 return [
                     'id' => $galeri->id,
                     'judul' => $galeri->translation('id')?->judul ?? '-',
@@ -74,7 +75,7 @@ class GaleriController extends Controller
                 'judul' => $validated['judul_en'] ?? $validated['judul_id'],
                 'deskripsi' => $validated['deskripsi_en'] ?? $validated['deskripsi_id'],
                 'ai_translated' => empty($validated['judul_en']),
-                'reviewed' => !empty($validated['judul_en']),
+                'reviewed' => ! empty($validated['judul_en']),
             ],
         ]);
 
@@ -157,7 +158,7 @@ class GaleriController extends Controller
                 'judul' => $validated['judul_en'] ?? $validated['judul_id'],
                 'deskripsi' => $validated['deskripsi_en'] ?? $validated['deskripsi_id'],
                 'ai_translated' => empty($validated['judul_en']),
-                'reviewed' => !empty($validated['judul_en']),
+                'reviewed' => ! empty($validated['judul_en']),
             ]
         );
 
@@ -190,7 +191,7 @@ class GaleriController extends Controller
 
     public function deleteFoto(Request $request, int $mediaId)
     {
-        $media = \Spatie\MediaLibrary\MediaCollections\Models\Media::findOrFail($mediaId);
+        $media = Media::findOrFail($mediaId);
         $media->delete();
 
         return redirect()->back()->with('success', 'Foto berhasil dihapus.');

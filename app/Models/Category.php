@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
-use Spatie\Sluggable\HasSlug;
-use Spatie\Sluggable\SlugOptions;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Builder;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 
 class Category extends Model
 {
@@ -30,7 +30,7 @@ class Category extends Model
     /**
      * Get the options for generating the slug.
      */
-    public function getSlugOptions() : SlugOptions
+    public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
             ->generateSlugsFrom('name')
@@ -50,7 +50,8 @@ class Category extends Model
     public function translation(?string $locale = null)
     {
         $locale = $locale ?? app()->getLocale();
-        return $this->translations->where('locale', $locale)->first() 
+
+        return $this->translations->where('locale', $locale)->first()
             ?? $this->translations->where('locale', 'id')->first()
             ?? $this->translations->first();
     }

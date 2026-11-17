@@ -17,15 +17,15 @@ class ArticleObserver
         if ($article->wasChanged('status') && $article->status === 'pending_review') {
             $adminAndEditorIds = NotifikasiService::getAdminAndEditorIds();
 
-            if (!empty($adminAndEditorIds)) {
+            if (! empty($adminAndEditorIds)) {
                 $title = $article->translation('id')?->title ?? 'Artikel Baru';
 
                 NotifikasiService::kirim(
                     $adminAndEditorIds,
                     'artikel_pending',
-                    'Artikel menunggu review: ' . $title,
+                    'Artikel menunggu review: '.$title,
                     null,
-                    '/admin/artikel/' . $article->id . '/edit',
+                    '/admin/artikel/'.$article->id.'/edit',
                     ['article_id' => $article->id],
                 );
             }

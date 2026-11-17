@@ -43,6 +43,7 @@ class Pengaturan extends Model
     public static function get(string $key, mixed $default = null): mixed
     {
         $setting = self::where('key', $key)->first();
+
         return $setting ? $setting->value : $default;
     }
 
@@ -63,6 +64,7 @@ class Pengaturan extends Model
     public static function getGroup(string $group): array
     {
         $settings = self::where('group', $group)->get();
+
         return $settings->pluck('value', 'key')->toArray();
     }
 

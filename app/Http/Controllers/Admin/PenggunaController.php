@@ -5,10 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
-use Illuminate\Validation\Rules\Password;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
+use Inertia\Inertia;
 
 class PenggunaController extends Controller
 {
@@ -69,7 +69,7 @@ class PenggunaController extends Controller
                 'email' => $pengguna->email,
                 'role' => $pengguna->roles->first()?->name ?? 'author',
                 'is_active' => $pengguna->is_active,
-            ]
+            ],
         ]);
     }
 
@@ -77,7 +77,7 @@ class PenggunaController extends Controller
     {
         // Proteksi edit diri sendiri
         if (auth()->id() === $pengguna->id) {
-            if ($request->role !== $pengguna->roles->first()?->name || !$request->is_active) {
+            if ($request->role !== $pengguna->roles->first()?->name || ! $request->is_active) {
                 return back()->with('error', 'Tidak dapat mengubah role atau status diri sendiri.');
             }
         }

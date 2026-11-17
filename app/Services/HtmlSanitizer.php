@@ -13,28 +13,28 @@ class HtmlSanitizer
     /**
      * Tag HTML yang diizinkan dari TipTap StarterKit + Image + Link.
      *
-     * @var array<string, string[]>  key = tag, value = allowed attributes
+     * @var array<string, string[]> key = tag, value = allowed attributes
      */
     private static array $allowedTags = [
-        'p'          => [],
-        'br'         => [],
-        'strong'     => [],
-        'em'         => [],
-        'b'          => [],
-        'i'          => [],
-        's'          => [],
-        'u'          => [],
-        'h2'         => [],
-        'h3'         => [],
-        'ul'         => [],
-        'ol'         => [],
-        'li'         => [],
+        'p' => [],
+        'br' => [],
+        'strong' => [],
+        'em' => [],
+        'b' => [],
+        'i' => [],
+        's' => [],
+        'u' => [],
+        'h2' => [],
+        'h3' => [],
+        'ul' => [],
+        'ol' => [],
+        'li' => [],
         'blockquote' => [],
-        'code'       => [],
-        'pre'        => [],
-        'hr'         => [],
-        'img'        => ['src', 'alt', 'title', 'class', 'width', 'height'],
-        'a'          => ['href', 'title', 'target', 'rel', 'class'],
+        'code' => [],
+        'pre' => [],
+        'hr' => [],
+        'img' => ['src', 'alt', 'title', 'class', 'width', 'height'],
+        'a' => ['href', 'title', 'target', 'rel', 'class'],
     ];
 
     /**
@@ -67,7 +67,7 @@ class HtmlSanitizer
 
         // Wrap with charset meta so UTF-8 chars (emoji, etc.) survive
         $dom->loadHTML(
-            '<!DOCTYPE html><html><head><meta charset="UTF-8"/></head><body>' . $purifiedHtml . '</body></html>',
+            '<!DOCTYPE html><html><head><meta charset="UTF-8"/></head><body>'.$purifiedHtml.'</body></html>',
             LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD
         );
 
@@ -104,17 +104,17 @@ class HtmlSanitizer
                 $element = $child;
                 $tagName = strtolower($element->nodeName);
 
-                if (!array_key_exists($tagName, self::$allowedTags)) {
+                if (! array_key_exists($tagName, self::$allowedTags)) {
                     // Replace disallowed element with its text content
                     $toRemove[] = $element;
                 } else {
                     // Remove disallowed attributes
-                    $allowedAttrs  = self::$allowedTags[$tagName];
+                    $allowedAttrs = self::$allowedTags[$tagName];
                     $attrsToRemove = [];
 
                     foreach ($element->attributes as $attr) {
                         /** @var \DOMAttr $attr */
-                        if (!in_array($attr->name, $allowedAttrs, true)) {
+                        if (! in_array($attr->name, $allowedAttrs, true)) {
                             $attrsToRemove[] = $attr->name;
                         }
                     }
@@ -128,7 +128,7 @@ class HtmlSanitizer
                         $element->setAttribute('rel', 'noopener noreferrer');
                         // Only allow http/https/mailto hrefs
                         $href = $element->getAttribute('href');
-                        if (!preg_match('/^(https?:\/\/|mailto:)/i', $href)) {
+                        if (! preg_match('/^(https?:\/\/|mailto:)/i', $href)) {
                             $element->removeAttribute('href');
                         }
                     }
@@ -136,7 +136,7 @@ class HtmlSanitizer
                     // Ensure img src is a relative /storage path or absolute http(s)
                     if ($tagName === 'img') {
                         $src = $element->getAttribute('src');
-                        if (!preg_match('/^(https?:\/\/|\/storage\/)/i', $src)) {
+                        if (! preg_match('/^(https?:\/\/|\/storage\/)/i', $src)) {
                             $element->removeAttribute('src');
                         }
                     }

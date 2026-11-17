@@ -143,8 +143,8 @@ class ArticleSeeder extends Seeder
             // English translation
             $article->translations()->create([
                 'locale' => 'en',
-                'title' => $data['title'] . ' (EN)',
-                'excerpt' => $data['excerpt'] . ' (EN translation coming soon)',
+                'title' => $data['title'].' (EN)',
+                'excerpt' => $data['excerpt'].' (EN translation coming soon)',
                 'content' => '<p>English translation is not available yet.</p>',
                 'reviewed' => false,
             ]);

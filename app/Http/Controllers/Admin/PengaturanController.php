@@ -4,12 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Mail\TestEmailMail;
+use App\Models\AiJob;
 use App\Models\Pengaturan;
 use App\Services\EmailConfigService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 
@@ -21,21 +21,21 @@ class PengaturanController extends Controller
 
         // AI Statistics
         $aiStats = [
-            'total_jobs' => \App\Models\AiJob::whereMonth('created_at', now()->month)
-                                             ->whereYear('created_at', now()->year)
-                                             ->count(),
-            'completed' => \App\Models\AiJob::where('status', 'done')
-                                             ->whereMonth('created_at', now()->month)
-                                             ->whereYear('created_at', now()->year)
-                                             ->count(),
-            'failed' => \App\Models\AiJob::where('status', 'failed')
-                                          ->whereMonth('created_at', now()->month)
-                                          ->whereYear('created_at', now()->year)
-                                          ->count(),
-            'cost_estimate' => \App\Models\AiJob::where('status', 'done')
-                                                ->whereMonth('created_at', now()->month)
-                                                ->whereYear('created_at', now()->year)
-                                                ->sum('tokens_used') * 15, // Estimasi Rp15 / token
+            'total_jobs' => AiJob::whereMonth('created_at', now()->month)
+                ->whereYear('created_at', now()->year)
+                ->count(),
+            'completed' => AiJob::where('status', 'done')
+                ->whereMonth('created_at', now()->month)
+                ->whereYear('created_at', now()->year)
+                ->count(),
+            'failed' => AiJob::where('status', 'failed')
+                ->whereMonth('created_at', now()->month)
+                ->whereYear('created_at', now()->year)
+                ->count(),
+            'cost_estimate' => AiJob::where('status', 'done')
+                ->whereMonth('created_at', now()->month)
+                ->whereYear('created_at', now()->year)
+                ->sum('tokens_used') * 15, // Estimasi Rp15 / token
         ];
 
         return Inertia::render('Admin/Pengaturan/Index', [
@@ -54,12 +54,12 @@ class PengaturanController extends Controller
 
         if ($request->hasFile('site_logo_file')) {
             $path = $request->file('site_logo_file')->store('settings', 'public');
-            Pengaturan::set('app_logo', 'storage/' . $path);
+            Pengaturan::set('app_logo', 'storage/'.$path);
         }
 
         if ($request->hasFile('site_favicon_file')) {
             $path = $request->file('site_favicon_file')->store('settings', 'public');
-            Pengaturan::set('app_favicon', 'storage/' . $path);
+            Pengaturan::set('app_favicon', 'storage/'.$path);
         }
 
         // Clear application cache if settings are changed
@@ -92,12 +92,12 @@ class PengaturanController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Email test berhasil dikirim ke ' . $request->email,
+                'message' => 'Email test berhasil dikirim ke '.$request->email,
             ]);
         } catch (\Throwable $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Gagal mengirim email: ' . $e->getMessage(),
+                'message' => 'Gagal mengirim email: '.$e->getMessage(),
             ], 500);
         }
     }

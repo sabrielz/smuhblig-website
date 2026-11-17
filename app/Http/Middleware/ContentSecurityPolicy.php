@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Vite;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -29,7 +29,7 @@ class ContentSecurityPolicy
         $request->attributes->set('csp_nonce', $nonce);
 
         // Beritahu Vite untuk otomatis inject nonce ke tag <script> dan <style> bawaannya
-        \Illuminate\Support\Facades\Vite::useCspNonce($nonce);
+        Vite::useCspNonce($nonce);
 
         /** @var Response $response */
         $response = $next($request);
@@ -63,18 +63,18 @@ class ContentSecurityPolicy
         }
 
         $scriptSrc = "'self' 'nonce-{$nonce}' https://fonts.googleapis.com";
-        $styleSrc  = "'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com";
-        $imgSrc    = "'self' data: blob: https://picsum.photos https://*.googleusercontent.com";
+        $styleSrc = "'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com";
+        $imgSrc = "'self' data: blob: https://picsum.photos https://*.googleusercontent.com";
 
         // Tambahkan exception untuk Vite dev server hanya di development environment
         if ($isLocal) {
             $viteHosts = 'http://localhost:5173 http://127.0.0.1:5173 ws://localhost:5173 ws://127.0.0.1:5173';
 
             // Vite HMR memerlukan eval() dan koneksi local
-            $scriptSrc  .= " 'unsafe-eval' {$viteHosts}";
-            $styleSrc   .= " {$viteHosts}";
+            $scriptSrc .= " 'unsafe-eval' {$viteHosts}";
+            $styleSrc .= " {$viteHosts}";
             $connectSrc .= " {$viteHosts}";
-            $imgSrc     .= " {$viteHosts}";
+            $imgSrc .= " {$viteHosts}";
         }
 
         $directives = [
@@ -84,11 +84,11 @@ class ContentSecurityPolicy
             "font-src 'self' https://fonts.gstatic.com data:",
             "img-src {$imgSrc}",
             "connect-src {$connectSrc}",
-            "frame-src https://www.google.com/maps/",
+            'frame-src https://www.google.com/maps/',
             "object-src 'none'",
             "base-uri 'self'",
             "form-action 'self'",
-            "upgrade-insecure-requests",
+            'upgrade-insecure-requests',
         ];
 
         return implode('; ', $directives);

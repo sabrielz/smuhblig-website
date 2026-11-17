@@ -7,6 +7,7 @@ use App\Jobs\TranslateHalamanKonten;
 use App\Models\AiJob;
 use App\Models\HalamanKonten;
 use App\Models\HalamanKontenTranslation;
+use App\Models\User;
 use App\Services\HtmlSanitizer;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -41,9 +42,9 @@ class KontenHalamanController extends Controller
         $halaman = $this->resolveHalaman($halaman);
 
         return Inertia::render('Admin/KontenHalaman/Edit', [
-            'halaman'        => $halaman,
-            'halamanValid'   => self::HALAMAN_VALID,
-            'kontenGrouped'  => $this->getKontenGrouped($halaman),
+            'halaman' => $halaman,
+            'halamanValid' => self::HALAMAN_VALID,
+            'kontenGrouped' => $this->getKontenGrouped($halaman),
         ]);
     }
 
@@ -68,7 +69,7 @@ class KontenHalamanController extends Controller
         $halaman = $this->resolveHalaman($halaman);
 
         return response()->json([
-            'halaman'       => $halaman,
+            'halaman' => $halaman,
             'kontenGrouped' => $this->getKontenGrouped($halaman),
         ]);
     }
@@ -96,9 +97,9 @@ class KontenHalamanController extends Controller
         $halaman = $this->resolveHalaman($halaman);
 
         $payload = $request->validate([
-            '*'           => ['nullable', 'array'],
-            '*.*'         => ['nullable', 'array'],
-            '*.*.*'       => ['nullable', 'string'],
+            '*' => ['nullable', 'array'],
+            '*.*' => ['nullable', 'array'],
+            '*.*.*' => ['nullable', 'string'],
         ]);
 
         // Ambil semua konten halaman ini dengan translations → index by key
@@ -108,27 +109,27 @@ class KontenHalamanController extends Controller
             ->keyBy(fn ($item) => "{$item->section}.{$item->key}");
 
         foreach ($payload as $section => $keys) {
-            if (!is_array($keys)) {
+            if (! is_array($keys)) {
                 continue;
             }
 
             foreach ($keys as $key => $locales) {
-                if (!is_array($locales)) {
+                if (! is_array($locales)) {
                     continue;
                 }
 
                 $konten = $kontenItems->get("{$section}.{$key}");
-                if (!$konten) {
+                if (! $konten) {
                     continue;
                 }
 
                 foreach ($locales as $locale => $value) {
-                    if (!in_array($locale, ['id', 'en'], true)) {
+                    if (! in_array($locale, ['id', 'en'], true)) {
                         continue;
                     }
 
                     // Sanitasi HTML untuk konten richtext (dari TipTap editor)
-                    if ($konten->type === 'richtext' && !empty($value)) {
+                    if ($konten->type === 'richtext' && ! empty($value)) {
                         $value = HtmlSanitizer::clean($value);
                     }
 
@@ -136,7 +137,7 @@ class KontenHalamanController extends Controller
 
                     // Tentukan apakah nilai berubah dari nilai AI sebelumnya
                     $wasAiTranslated = $existingTranslation?->ai_translated ?? false;
-                    $valueChanged    = $existingTranslation
+                    $valueChanged = $existingTranslation
                         ? ($existingTranslation->value !== $value)
                         : true;
 
@@ -148,10 +149,10 @@ class KontenHalamanController extends Controller
                     HalamanKontenTranslation::updateOrCreate(
                         [
                             'halaman_konten_id' => $konten->id,
-                            'locale'            => $locale,
+                            'locale' => $locale,
                         ],
                         [
-                            'value'        => $value ?? '',
+                            'value' => $value ?? '',
                             'ai_translated' => $aiTranslated,
                         ]
                     );
@@ -179,25 +180,25 @@ class KontenHalamanController extends Controller
     {
         $halaman = $this->resolveHalaman($halaman);
 
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = Auth::user();
 
         $aiJob = AiJob::create([
-            'user_id'    => $user->id,
-            'job_type'   => 'translate_halaman',
+            'user_id' => $user->id,
+            'job_type' => 'translate_halaman',
             'model_type' => HalamanKonten::class,
-            'input'      => json_encode(
+            'input' => json_encode(
                 ['halaman' => $halaman],
                 JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE
             ),
-            'status'     => 'pending',
+            'status' => 'pending',
         ]);
 
         TranslateHalamanKonten::dispatch($aiJob, $halaman)->onQueue('ai');
 
         return response()->json([
-            'jobId'   => $aiJob->id,
-            'status'  => 'pending',
+            'jobId' => $aiJob->id,
+            'status' => 'pending',
             'message' => 'Terjemahan dimulai di background. Silakan polling status.',
         ], 202);
     }
@@ -213,7 +214,7 @@ class KontenHalamanController extends Controller
     {
         $halaman = strtolower(trim($halaman));
 
-        if (!in_array($halaman, self::HALAMAN_VALID, true)) {
+        if (! in_array($halaman, self::HALAMAN_VALID, true)) {
             abort(404, "Halaman '{$halaman}' tidak dikelola di CMS ini.");
         }
 
@@ -240,19 +241,19 @@ class KontenHalamanController extends Controller
             $translationsMap = [];
             foreach ($konten->translations as $translation) {
                 $translationsMap[$translation->locale] = [
-                    'id'           => $translation->id,
-                    'value'        => $translation->value,
+                    'id' => $translation->id,
+                    'value' => $translation->value,
                     'ai_translated' => (bool) $translation->ai_translated,
-                    'reviewed'     => (bool) $translation->reviewed,
+                    'reviewed' => (bool) $translation->reviewed,
                 ];
             }
 
             $grouped[$konten->section][] = [
-                'id'           => $konten->id,
-                'key'          => $konten->key,
-                'label'        => $konten->label ?? $konten->key,
-                'type'         => $konten->type,
-                'sort_order'   => $konten->sort_order,
+                'id' => $konten->id,
+                'key' => $konten->key,
+                'label' => $konten->label ?? $konten->key,
+                'type' => $konten->type,
+                'sort_order' => $konten->sort_order,
                 'translations' => $translationsMap,
             ];
         }

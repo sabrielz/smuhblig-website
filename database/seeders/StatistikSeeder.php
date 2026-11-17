@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Statistik;
 use Illuminate\Database\Seeder;
 
 class StatistikSeeder extends Seeder
@@ -52,7 +52,7 @@ class StatistikSeeder extends Seeder
         ];
 
         foreach ($statistik as $data) {
-            \App\Models\Statistik::updateOrCreate(
+            Statistik::updateOrCreate(
                 ['key' => $data['key']],
                 $data
             );
