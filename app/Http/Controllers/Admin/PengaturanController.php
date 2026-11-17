@@ -9,6 +9,7 @@ use App\Models\Pengaturan;
 use App\Services\EmailConfigService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
@@ -95,9 +96,11 @@ class PengaturanController extends Controller
                 'message' => 'Email test berhasil dikirim ke '.$request->email,
             ]);
         } catch (\Throwable $e) {
+            Log::error('Gagal mengirim email test', ['exception' => $e]);
+
             return response()->json([
                 'success' => false,
-                'message' => 'Gagal mengirim email: '.$e->getMessage(),
+                'message' => 'Terjadi kesalahan saat mengirim email, silakan coba lagi.',
             ], 500);
         }
     }

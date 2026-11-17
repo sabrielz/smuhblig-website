@@ -67,16 +67,9 @@ use App\Http\Controllers\Public\TautanController;
 use App\Http\Middleware\EnsureHasCmsRole;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Artisan;
 
 Route::get('/agenda', [AgendaPublikController::class, 'index'])->name('agenda.index');
 Route::get('/agenda/{agenda:slug}', [AgendaPublikController::class, 'show'])->name('agenda.show');
-
-Route::get('/sitemap.xml', function () {
-    Artisan::call('sitemap:generate');
-
-    return response()->file(public_path('sitemap.xml'));
-});
 
 /*
 |--------------------------------------------------------------------------
@@ -115,7 +108,6 @@ Route::middleware('guest')->group(function () {
 Route::post('/logout', [LoginController::class, 'destroy'])
     ->middleware('auth')
     ->name('logout');
-Route::get('/logout', [LoginController::class, 'destroy']);
 
 /*
 |--------------------------------------------------------------------------

@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class ArtikelController extends Controller
@@ -149,8 +150,9 @@ class ArtikelController extends Controller
             return redirect()->route('admin.artikel.index')->with('success', 'Artikel berhasil dibuat.');
         } catch (\Exception $e) {
             DB::rollBack();
+            Log::error('Gagal membuat artikel', ['exception' => $e]);
 
-            return back()->with('error', 'Gagal membuat artikel: '.$e->getMessage());
+            return back()->with('error', 'Terjadi kesalahan saat membuat artikel, silakan coba lagi.');
         }
     }
 
@@ -231,8 +233,9 @@ class ArtikelController extends Controller
             return redirect()->route('admin.artikel.index')->with('success', 'Artikel berhasil diperbarui.');
         } catch (\Exception $e) {
             DB::rollBack();
+            Log::error('Gagal memperbarui artikel', ['exception' => $e]);
 
-            return back()->with('error', 'Gagal memperbarui artikel: '.$e->getMessage());
+            return back()->with('error', 'Terjadi kesalahan saat memperbarui artikel, silakan coba lagi.');
         }
     }
 
@@ -250,8 +253,9 @@ class ArtikelController extends Controller
             return redirect()->route('admin.artikel.index')->with('success', 'Artikel berhasil dihapus.');
         } catch (\Exception $e) {
             DB::rollBack();
+            Log::error('Gagal menghapus artikel', ['exception' => $e]);
 
-            return back()->with('error', 'Gagal menghapus artikel: '.$e->getMessage());
+            return back()->with('error', 'Terjadi kesalahan saat menghapus artikel, silakan coba lagi.');
         }
     }
 
@@ -270,8 +274,9 @@ class ArtikelController extends Controller
             return back()->with('success', 'Artikel berhasil dipublish.');
         } catch (\Exception $e) {
             DB::rollBack();
+            Log::error('Gagal mempublish artikel', ['exception' => $e]);
 
-            return back()->with('error', 'Gagal mempublish artikel: '.$e->getMessage());
+            return back()->with('error', 'Terjadi kesalahan saat mempublish artikel, silakan coba lagi.');
         }
     }
 
