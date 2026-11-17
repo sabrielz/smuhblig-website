@@ -11,6 +11,10 @@ import type { SharedProps } from '@/types';
 const NAV_LINKS = [
     { label: { id: 'Beranda', en: 'Home' }, href: '/' },
     { label: { id: 'Tentang', en: 'About' }, href: '/tentang' },
+    { label: { id: 'Guru & Tendik', en: 'Teachers' }, href: '/guru' },
+    { label: { id: 'Fasilitas', en: 'Facilities' }, href: '/fasilitas' },
+    { label: { id: 'Ekstrakurikuler', en: 'Extracurricular' }, href: '/ekstrakurikuler' },
+    { label: { id: 'Prestasi', en: 'Achievements' }, href: '/prestasi' },
     { label: { id: 'Jurusan', en: 'Programs' }, href: '/jurusan' },
     { label: { id: 'Berita', en: 'News' }, href: '/berita' },
     { label: { id: 'Galeri', en: 'Gallery' }, href: '/galeri' },

@@ -2,21 +2,35 @@ import type { Variants, Easing } from 'framer-motion';
 import { useState, useEffect, useRef } from 'react';
 import { Link, router, usePage } from '@inertiajs/react';
 import { motion, AnimatePresence, useScroll } from 'framer-motion';
-import { Menu, X, GraduationCap, ChevronRight, Search, Loader2, ArrowRight } from 'lucide-react';
+import { Menu, X, GraduationCap, ChevronRight, ChevronDown, Search, Loader2, ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { SharedProps } from '@/types';
+import { NavDropdown } from '@/Components/Layout/NavDropdown';
 
 // ---------------------------------------------------------------------------
 // Nav links definition
 // ---------------------------------------------------------------------------
-interface NavLink {
+export interface NavItem {
     label: { id: string; en: string };
-    href: string;
+    href?: string;
+    children?: Array<{
+        label: { id: string; en: string };
+        href: string;
+    }>;
 }
 
-const NAV_LINKS: NavLink[] = [
+const NAV_LINKS: NavItem[] = [
     { label: { id: 'Beranda', en: 'Home' }, href: '/' },
-    { label: { id: 'Tentang', en: 'About' }, href: '/tentang' },
+    {
+        label: { id: 'Profil', en: 'Profile' },
+        children: [
+            { label: { id: 'Tentang Sekolah', en: 'About School' }, href: '/tentang' },
+            { label: { id: 'Guru & Tendik', en: 'Teachers & Staff' }, href: '/guru' },
+            { label: { id: 'Fasilitas', en: 'Facilities' }, href: '/fasilitas' },
+            { label: { id: 'Ekstrakurikuler', en: 'Extracurricular' }, href: '/ekstrakurikuler' },
+            { label: { id: 'Prestasi', en: 'Achievements' }, href: '/prestasi' },
+        ],
+    },
     { label: { id: 'Jurusan', en: 'Programs' }, href: '/jurusan' },
     { label: { id: 'Berita', en: 'News' }, href: '/berita' },
     { label: { id: 'Pengumuman', en: 'Announcements' }, href: '/pengumuman' },
@@ -121,7 +135,7 @@ interface MobileMenuProps {
     isOpen: boolean;
     onClose: () => void;
     locale: string;
-    navLinks: NavLink[];
+    navLinks: NavItem[];
     currentPath: string;
     pengaturanName: string;
     spmbUrl?: string;
@@ -132,6 +146,7 @@ function MobileMenu({ isOpen, onClose, locale, navLinks, currentPath, pengaturan
     const easeOut: Easing = 'easeOut';
     const cubicBezierOpen: Easing = [0.25, 0.46, 0.45, 0.94];
     const cubicBezierClose: Easing = [0.55, 0, 1, 0.45];
+    const [accordionOpen, setAccordionOpen] = useState(false);
 
     const overlayVariants: Variants = {
         hidden: { opacity: 0, x: '100%' },
@@ -201,10 +216,74 @@ function MobileMenu({ isOpen, onClose, locale, navLinks, currentPath, pengaturan
                         {/* Nav links */}
                         <nav className="flex flex-1 flex-col gap-1 overflow-y-auto px-4 py-6">
                             {navLinks.map((link, i) => {
+                                if (link.children) {
+                                    const isChildActive = link.children.some((c) =>
+                                        c.href === '/' ? currentPath === '/' : currentPath.startsWith(c.href)
+                                    );
+                                    return (
+                                        <motion.div
+                                            key={`group-${i}`}
+                                            custom={i}
+                                            variants={linkVariants}
+                                            initial="hidden"
+                                            animate="visible"
+                                            className="rounded-xl overflow-hidden"
+                                        >
+                                            <button
+                                                type="button"
+                                                onClick={() => setAccordionOpen(!accordionOpen)}
+                                                className={cn(
+                                                    'w-full flex items-center justify-between px-4 py-4 text-lg font-medium transition-all duration-200 rounded-xl',
+                                                    isChildActive || accordionOpen
+                                                        ? 'bg-white/10 text-white'
+                                                        : 'text-white/70 hover:bg-white/5 hover:text-white'
+                                                )}
+                                            >
+                                                <span>{locale === 'id' ? link.label.id : link.label.en}</span>
+                                                <ChevronDown
+                                                    className={cn(
+                                                        'h-5 w-5 transition-transform duration-200',
+                                                        accordionOpen ? 'rotate-180 text-gold-500' : 'text-white/60'
+                                                    )}
+                                                />
+                                            </button>
+
+                                            {accordionOpen && (
+                                                <div className="pl-4 pr-2 py-2 space-y-1 bg-white/5 rounded-b-xl">
+                                                    {link.children.map((child) => {
+                                                        const isItemActive =
+                                                            child.href === '/'
+                                                                ? currentPath === '/'
+                                                                : currentPath.startsWith(child.href);
+                                                        return (
+                                                            <Link
+                                                                key={child.href}
+                                                                href={child.href}
+                                                                onClick={onClose}
+                                                                className={cn(
+                                                                    'flex items-center justify-between rounded-lg px-3 py-2.5 text-base font-medium transition-colors',
+                                                                    isItemActive
+                                                                        ? 'text-gold-400 font-semibold'
+                                                                        : 'text-white/70 hover:text-white'
+                                                                )}
+                                                            >
+                                                                <span>{locale === 'id' ? child.label.id : child.label.en}</span>
+                                                                {isItemActive && (
+                                                                    <ChevronRight className="h-4 w-4 text-gold-500" />
+                                                                )}
+                                                            </Link>
+                                                        );
+                                                    })}
+                                                </div>
+                                            )}
+                                        </motion.div>
+                                    );
+                                }
+
                                 const isActive =
                                     link.href === '/'
                                         ? currentPath === '/'
-                                        : currentPath.startsWith(link.href);
+                                        : currentPath.startsWith(link.href || '');
                                 return (
                                     <motion.div
                                         key={link.href}
@@ -214,7 +293,7 @@ function MobileMenu({ isOpen, onClose, locale, navLinks, currentPath, pengaturan
                                         animate="visible"
                                     >
                                         <Link
-                                            href={link.href}
+                                            href={link.href || '/'}
                                             onClick={onClose}
                                             className={cn(
                                                 'group flex items-center justify-between rounded-xl px-4 py-4 text-lg font-medium transition-all duration-200',
@@ -545,15 +624,28 @@ export default function Navbar() {
                         aria-label="Navigasi utama"
                         className="hidden lg:flex items-center gap-6"
                     >
-                        {NAV_LINKS.map((link) => {
+                        {NAV_LINKS.map((link, idx) => {
+                            if (link.children) {
+                                return (
+                                    <NavDropdown
+                                        key={`dropdown-${idx}`}
+                                        label={link.label}
+                                        locale={locale}
+                                        items={link.children}
+                                        currentPath={currentPath}
+                                        isScrolled={isScrolled}
+                                    />
+                                );
+                            }
+
                             const isActive =
                                 link.href === '/'
                                     ? currentPath === '/'
-                                    : currentPath.startsWith(link.href);
+                                    : currentPath.startsWith(link.href || '');
                             return (
                                 <DesktopNavLink
                                     key={link.href}
-                                    href={link.href}
+                                    href={link.href || '/'}
                                     label={locale === 'id' ? link.label.id : link.label.en}
                                     isScrolled={isScrolled}
                                     isActive={isActive}
