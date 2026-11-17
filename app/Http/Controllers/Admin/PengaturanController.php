@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\StorePengaturanRequest;
 use App\Mail\TestEmailMail;
 use App\Models\AiJob;
 use App\Models\Pengaturan;
@@ -45,11 +46,15 @@ class PengaturanController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(StorePengaturanRequest $request)
     {
-        $data = $request->except(['_token', 'site_logo_file', 'site_favicon_file']);
+        $validated = $request->validated();
+        $fileKeys = ['site_logo_file', 'site_favicon_file'];
 
-        foreach ($data as $key => $value) {
+        foreach ($validated as $key => $value) {
+            if (in_array($key, $fileKeys, true)) {
+                continue;
+            }
             Pengaturan::set($key, $value);
         }
 
