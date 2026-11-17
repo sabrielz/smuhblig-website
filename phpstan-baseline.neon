@@ -175,9 +175,9 @@ parameters:
 			path: app/Http/Controllers/Public/BerandaController.php
 
 		-
-			message: '#^Parameter \#3 \$callback of static method Illuminate\\Cache\\Repository\:\:remember\(\) contains unresolvable type\.$#'
+			message: '#^Parameter \#3 \$callback of (static )?method Illuminate\\Cache\\Repository\:\:remember\(\) contains unresolvable type\.$#'
 			identifier: argument.unresolvableType
-			count: 1
+			count: 2
 			path: app/Http/Controllers/Public/BerandaController.php
 
 		-

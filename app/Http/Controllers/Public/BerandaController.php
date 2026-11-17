@@ -26,7 +26,7 @@ class BerandaController extends Controller
     {
         $locale = app()->getLocale();
 
-        $data = Cache::remember("beranda:{$locale}", now()->addMinutes(30), function () use ($locale) {
+        $cacheCallback = function () use ($locale) {
             // ── Jurusan aktif dengan translation locale aktif ──────────────────
             $jurusan = Jurusan::query()
                 ->where('is_active', true)
@@ -160,7 +160,13 @@ class BerandaController extends Controller
                     ...$settings,
                 ],
             ];
-        });
+        };
+
+        if (Cache::supportsTags()) {
+            $data = Cache::tags(['publik', 'beranda'])->remember("beranda:{$locale}", now()->addMinutes(30), $cacheCallback);
+        } else {
+            $data = Cache::remember("beranda:{$locale}", now()->addMinutes(30), $cacheCallback);
+        }
 
         $kontenHero = HalamanKonten::getSection('beranda', 'hero', $locale);
         $kontenStatistik = HalamanKonten::getSection('beranda', 'statistik', $locale);

@@ -4,10 +4,26 @@ namespace App\Providers;
 
 use App\Http\Middleware\SlowRequestLogger;
 use App\Listeners\CatatLogin;
+use App\Models\Agenda;
 use App\Models\AiJob;
 use App\Models\Article;
+use App\Models\Ekstrakurikuler;
+use App\Models\Faq;
+use App\Models\Fasilitas;
+use App\Models\Galeri;
+use App\Models\Guru;
+use App\Models\Jurusan;
+use App\Models\Mitra;
+use App\Models\Pengumuman;
+use App\Models\Prestasi;
+use App\Models\Statistik;
+use App\Models\StrukturOrganisasi;
+use App\Models\Testimoni;
+use App\Models\Unduhan;
+use App\Models\Video;
 use App\Observers\AiJobObserver;
 use App\Observers\ArticleObserver;
+use App\Observers\PublicCacheObserver;
 use App\Services\EmailConfigService;
 use Illuminate\Auth\Events\Failed;
 use Illuminate\Auth\Events\Login;
@@ -40,6 +56,29 @@ class AppServiceProvider extends ServiceProvider
         // 2. Daftarkan observer untuk Article & AiJob
         Article::observe(ArticleObserver::class);
         AiJob::observe(AiJobObserver::class);
+
+        // 2.0 Daftarkan PublicCacheObserver untuk model-model publik
+        $publicModels = [
+            Article::class,
+            Agenda::class,
+            Ekstrakurikuler::class,
+            Fasilitas::class,
+            Faq::class,
+            Galeri::class,
+            Guru::class,
+            Jurusan::class,
+            Mitra::class,
+            Pengumuman::class,
+            Prestasi::class,
+            Statistik::class,
+            StrukturOrganisasi::class,
+            Testimoni::class,
+            Unduhan::class,
+            Video::class,
+        ];
+        foreach ($publicModels as $modelClass) {
+            $modelClass::observe(PublicCacheObserver::class);
+        }
 
         // 2.1 Daftarkan listener login untuk audit trail aktivitas (Sesi 6-04)
         Event::listen(Login::class, [CatatLogin::class, 'handle']);
