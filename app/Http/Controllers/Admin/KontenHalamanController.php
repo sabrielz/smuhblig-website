@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\UpdateKontenHalamanRequest;
 use App\Jobs\TranslateHalamanKonten;
 use App\Models\AiJob;
 use App\Models\HalamanKonten;
@@ -92,15 +93,11 @@ class KontenHalamanController extends Controller
      *   }
      * }
      */
-    public function update(Request $request, string $halaman): JsonResponse
+    public function update(UpdateKontenHalamanRequest $request, string $halaman): JsonResponse
     {
         $halaman = $this->resolveHalaman($halaman);
 
-        $payload = $request->validate([
-            '*' => ['nullable', 'array'],
-            '*.*' => ['nullable', 'array'],
-            '*.*.*' => ['nullable', 'string'],
-        ]);
+        $payload = $request->validated();
 
         // Ambil semua konten halaman ini dengan translations → index by key
         $kontenItems = HalamanKonten::where('halaman', $halaman)

@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\UploadMediaRequest;
 use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -37,18 +37,8 @@ class MediaUploadController extends Controller
      * - Max 5MB per file
      * - Filename di-UUID-kan oleh Spatie; di sini manual UUID
      */
-    public function upload(Request $request): JsonResponse
+    public function upload(UploadMediaRequest $request): JsonResponse
     {
-        $request->validate([
-            'image' => [
-                'required',
-                'file',
-                'mimes:jpg,jpeg,png,webp',
-                'mimetypes:image/jpeg,image/png,image/webp',
-                'max:2048',
-            ],
-        ]);
-
         /** @var UploadedFile $file */
         $file = $request->file('image');
 
