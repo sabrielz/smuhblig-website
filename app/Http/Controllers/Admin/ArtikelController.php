@@ -9,18 +9,29 @@ use App\Http\Resources\Admin\ArtikelResource;
 use App\Models\Article;
 use App\Models\ArticleTranslation;
 use App\Models\Category;
+use App\Models\User;
 use App\Services\HtmlSanitizer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 
 class ArtikelController extends Controller
 {
     public function index(Request $request)
     {
+        Gate::authorize('viewAny', Article::class);
+
         $query = Article::query()
             ->with(['translations', 'category.translations', 'user', 'media']);
+
+        // Author can only see their own articles
+        /** @var User $user */
+        $user = Auth::user();
+        if ($user->isAuthor()) {
+            $query->where('user_id', $user->id);
+        }
 
         // Filter search by title matching translation ID
         if ($search = $request->input('search')) {
@@ -68,6 +79,8 @@ class ArtikelController extends Controller
 
     public function create()
     {
+        Gate::authorize('create', Article::class);
+
         $categories = Category::with(['translations' => function ($q) {
             $q->where('locale', 'id');
         }])->get()->map(function (Category $cat) {
@@ -143,6 +156,8 @@ class ArtikelController extends Controller
 
     public function edit(Article $artikel)
     {
+        Gate::authorize('update', $artikel);
+
         $artikel->load(['translations', 'category', 'media']);
 
         $categories = Category::with(['translations' => function ($q) {
@@ -165,6 +180,8 @@ class ArtikelController extends Controller
 
     public function update(UpdateArtikelRequest $request, Article $artikel)
     {
+        Gate::authorize('update', $artikel);
+
         $validated = $request->validated();
 
         DB::beginTransaction();
@@ -221,6 +238,8 @@ class ArtikelController extends Controller
 
     public function destroy(Article $artikel)
     {
+        Gate::authorize('delete', $artikel);
+
         DB::beginTransaction();
         try {
             $artikel->translations()->delete();
@@ -238,6 +257,8 @@ class ArtikelController extends Controller
 
     public function publish(Request $request, Article $artikel)
     {
+        Gate::authorize('publish', $artikel);
+
         DB::beginTransaction();
         try {
             $artikel->update([
@@ -260,6 +281,8 @@ class ArtikelController extends Controller
      */
     public function markTranslationReviewed(Article $artikel)
     {
+        Gate::authorize('markTranslationReviewed', $artikel);
+
         /** @var ArticleTranslation|null $enTranslation */
         $enTranslation = $artikel->translations()->where('locale', 'en')->first();
 

@@ -2,6 +2,9 @@
 
 namespace App\Http\Requests\Admin;
 
+use App\Models\Article;
+use App\Models\User;
+use App\Support\ArticleWorkflow;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -9,14 +12,20 @@ class StoreArtikelRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true;
+        /** @var User|null $user */
+        $user = $this->user();
+
+        return $user !== null && $user->can('create', Article::class);
     }
 
     public function rules(): array
     {
+        /** @var User $user */
+        $user = $this->user();
+
         return [
             'category_id' => ['required', 'exists:categories,id'],
-            'status' => ['required', Rule::in(['draft', 'pending_review', 'published', 'archived'])],
+            'status' => ['required', Rule::in(ArticleWorkflow::allowedStatuses($user))],
             'published_at' => ['nullable', 'date'],
             'meta_title' => ['nullable', 'string', 'max:255'],
             'meta_description' => ['nullable', 'string'],

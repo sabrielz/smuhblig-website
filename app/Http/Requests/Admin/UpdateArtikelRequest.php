@@ -2,6 +2,9 @@
 
 namespace App\Http\Requests\Admin;
 
+use App\Models\Article;
+use App\Models\User;
+use App\Support\ArticleWorkflow;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -9,14 +12,24 @@ class UpdateArtikelRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true;
+        /** @var User|null $user */
+        $user = $this->user();
+        /** @var Article|null $artikel */
+        $artikel = $this->route('artikel');
+
+        return $user !== null && $artikel !== null && $user->can('update', $artikel);
     }
 
     public function rules(): array
     {
+        /** @var User $user */
+        $user = $this->user();
+        /** @var Article|null $artikel */
+        $artikel = $this->route('artikel');
+
         return [
             'category_id' => ['required', 'exists:categories,id'],
-            'status' => ['required', Rule::in(['draft', 'pending_review', 'published', 'archived'])],
+            'status' => ['required', Rule::in(ArticleWorkflow::allowedStatuses($user, $artikel))],
             'published_at' => ['nullable', 'date'],
             'meta_title' => ['nullable', 'string', 'max:255'],
             'meta_description' => ['nullable', 'string'],
