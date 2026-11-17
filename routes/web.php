@@ -73,6 +73,7 @@ use Illuminate\Http\Request;
 Route::get('/agenda', [AgendaPublikController::class, 'index'])->name('agenda.index');
 Route::get('/agenda/{agenda:slug}', [AgendaPublikController::class, 'show'])->name('agenda.show');
 
+use App\Http\Controllers\Admin\KategoriController;
 use App\Http\Controllers\Public\PengumumanController as PublicPengumumanController;
 
 Route::get('/pengumuman', [PublicPengumumanController::class, 'index'])->name('pengumuman.index');
@@ -141,6 +142,9 @@ Route::middleware(['auth', EnsureHasCmsRole::class])
         Route::post('/artikel/{artikel}/publish', [ArtikelController::class, 'publish'])->name('artikel.publish');
         Route::patch('/artikel/{artikel}/translation/reviewed', [ArtikelController::class, 'markTranslationReviewed'])->name('artikel.translation.reviewed');
         Route::resource('artikel', ArtikelController::class)->except(['show']);
+
+        // Kategori Artikel
+        Route::resource('kategori', KategoriController::class)->except(['show']);
 
         // Galeri
         Route::get('/galeri', [App\Http\Controllers\Admin\GaleriController::class, 'index'])->name('galeri.index');
