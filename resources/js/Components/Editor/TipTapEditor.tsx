@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { useEditor, EditorContent, Editor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
@@ -7,6 +7,7 @@ import Placeholder from "@tiptap/extension-placeholder";
 import CharacterCount from "@tiptap/extension-character-count";
 import Typography from "@tiptap/extension-typography";
 import { cn } from "@/lib/utils";
+import { MediaPicker } from "@/Components/Editor/MediaPicker";
 import {
     Bold,
     Italic,
@@ -18,6 +19,7 @@ import {
     ListOrdered,
     Link as LinkIcon,
     Image as ImageIcon,
+    FolderOpen,
     Undo2,
     Redo2,
     Sparkles,
@@ -149,6 +151,7 @@ export function TipTapEditor({
     aiEnabled = true,
 }: TipTapEditorProps) {
     const fileInputRef = useRef<HTMLInputElement | null>(null);
+    const [isMediaPickerOpen, setIsMediaPickerOpen] = useState(false);
 
     const editor = useEditor({
         extensions: [
@@ -370,12 +373,20 @@ export function TipTapEditor({
 
                     {/* Image Upload */}
                     <ToolbarButton
-                        title="Insert Image"
+                        title="Upload Gambar"
                         onClick={() =>
                             uploadAndInsertImage(editor, fileInputRef)
                         }
                     >
                         <ImageIcon className="w-4 h-4" strokeWidth={1.5} />
+                    </ToolbarButton>
+
+                    {/* Image from Library */}
+                    <ToolbarButton
+                        title="Dari Pustaka Media"
+                        onClick={() => setIsMediaPickerOpen(true)}
+                    >
+                        <FolderOpen className="w-4 h-4 text-primary-600" strokeWidth={1.5} />
                     </ToolbarButton>
 
                     <ToolbarDivider />
@@ -456,6 +467,19 @@ export function TipTapEditor({
                     {error}
                 </p>
             )}
+
+            {/* Media Picker Modal */}
+            <MediaPicker
+                isOpen={isMediaPickerOpen}
+                onClose={() => setIsMediaPickerOpen(false)}
+                onSelect={({ url, alt }) => {
+                    editor
+                        .chain()
+                        .focus()
+                        .setImage({ src: url, alt })
+                        .run();
+                }}
+            />
         </div>
     );
 }

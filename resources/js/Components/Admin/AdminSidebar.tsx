@@ -86,6 +86,9 @@ export default function AdminSidebar({ isOpen, setIsOpen }: SidebarProps) {
                     { label: 'Galeri Foto', href: '/admin/galeri', icon: ImageIcon, badge: null },
                     { label: 'Galeri Video', href: '/admin/video', icon: Video, badge: null },
                 ] : []),
+                ...(user?.is_admin || user?.roles?.includes('editor')
+                    ? [{ label: 'Pustaka Media', href: '/admin/media', icon: ImageIcon, badge: null }]
+                    : []),
                 ...(user?.can?.kelola_pengumuman ? [{ label: 'Pengumuman', href: '/admin/pengumuman', icon: Bell, badge: null }] : []),
                 { label: 'Konten Halaman', href: '/admin/konten/beranda', icon: PencilLine, badge: null },
                 {

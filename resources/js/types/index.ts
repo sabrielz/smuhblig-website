@@ -461,3 +461,23 @@ export interface VideoItem {
     created_at?: string;
     updated_at?: string;
 }
+
+export interface MediaLibraryItem {
+    id: number;
+    uuid: string;
+    name: string;
+    file_name: string;
+    mime_type: string;
+    disk: string;
+    size: number;
+    human_size: string;
+    collection_name: string;
+    model_type: string | null;
+    model_id: number | null;
+    url: string | null;
+    alt: string;
+    custom_properties: Record<string, any>;
+    is_used: boolean;
+    created_at: string | null;
+}
+
