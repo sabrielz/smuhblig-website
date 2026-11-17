@@ -37,6 +37,7 @@ class UpdateTestimoniRequest extends FormRequest
             'translations.en' => ['nullable', 'array'],
             'translations.en.kutipan' => ['nullable', 'string', 'max:1000'],
             'foto' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:3072'],
+            'foto_alt' => ['required_with:foto', 'nullable', 'string', 'max:150'],
             'hapus_foto' => ['nullable', 'boolean'],
         ];
     }

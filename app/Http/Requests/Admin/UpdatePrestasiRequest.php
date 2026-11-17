@@ -28,6 +28,7 @@ class UpdatePrestasiRequest extends FormRequest
             'jurusan_id' => ['nullable', 'exists:jurusans,id'],
             'is_active' => ['boolean'],
             'foto' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
+            'foto_alt' => ['required_with:foto', 'nullable', 'string', 'max:150'],
             'hapus_foto' => ['nullable', 'boolean'],
             'translations' => ['required', 'array'],
             'translations.id' => ['required', 'array'],

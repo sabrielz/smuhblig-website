@@ -83,7 +83,10 @@ class MitraController extends Controller
             }
 
             if ($request->hasFile('logo')) {
-                $mitra->addMediaFromRequest('logo')->toMediaCollection('logo');
+                $alt = $request->input('logo_alt') ?: ('Logo '.$mitra->nama);
+                $mitra->addMediaFromRequest('logo')
+                    ->withCustomProperties(['alt' => $alt])
+                    ->toMediaCollection('logo');
             }
         });
 
@@ -132,8 +135,11 @@ class MitraController extends Controller
             if ($request->boolean('hapus_logo')) {
                 $mitra->clearMediaCollection('logo');
             } elseif ($request->hasFile('logo')) {
+                $alt = $request->input('logo_alt') ?: ('Logo '.$mitra->nama);
                 $mitra->clearMediaCollection('logo');
-                $mitra->addMediaFromRequest('logo')->toMediaCollection('logo');
+                $mitra->addMediaFromRequest('logo')
+                    ->withCustomProperties(['alt' => $alt])
+                    ->toMediaCollection('logo');
             }
         });
 

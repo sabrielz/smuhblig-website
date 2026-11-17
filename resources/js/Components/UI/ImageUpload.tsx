@@ -11,6 +11,10 @@ export interface ImageUploadProps {
     error?: string;
     accept?: string;
     maxSizeMB?: number;
+    altValue?: string;
+    onAltChange?: (alt: string) => void;
+    altError?: string;
+    altRequired?: boolean;
 }
 
 export function ImageUpload({
@@ -22,6 +26,10 @@ export function ImageUpload({
     error,
     accept = 'image/jpeg, image/png, image/webp',
     maxSizeMB = 2,
+    altValue = '',
+    onAltChange,
+    altError,
+    altRequired = false,
 }: ImageUploadProps) {
     const [preview, setPreview] = useState<string | null>(value || null);
     const [isDragging, setIsDragging] = useState(false);
@@ -158,6 +166,36 @@ export function ImageUpload({
 
             {displayError && (
                 <p className="mt-1.5 text-sm text-red-600">{displayError}</p>
+            )}
+
+            {/* Alt Text Field (BR-031) */}
+            {onAltChange && (
+                <div className="mt-3">
+                    <label className="block text-xs font-semibold text-neutral-700 mb-1">
+                        Alt Text (Aksesibilitas / Deskripsi Gambar)
+                        {altRequired && <span className="text-red-500 ml-0.5">*</span>}
+                    </label>
+                    <input
+                        type="text"
+                        maxLength={150}
+                        value={altValue}
+                        onChange={(e) => onAltChange(e.target.value)}
+                        placeholder="Deskripsi singkat gambar untuk pembaca layar (maks 150 karakter)..."
+                        className={cn(
+                            'block w-full rounded-lg border border-neutral-300 text-xs py-2 px-3 shadow-xs transition-colors',
+                            'focus:border-primary-600 focus:ring-1 focus:ring-primary-600',
+                            altError ? 'border-red-500' : ''
+                        )}
+                    />
+                    <div className="flex justify-between items-center mt-1 text-[11px] text-neutral-400">
+                        {altError ? (
+                            <span className="text-red-600 font-medium">{altError}</span>
+                        ) : (
+                            <span>Wajib diisi sesuai BR-031 untuk aksesibilitas web.</span>
+                        )}
+                        <span>{altValue.length}/150</span>
+                    </div>
+                </div>
             )}
         </div>
     );

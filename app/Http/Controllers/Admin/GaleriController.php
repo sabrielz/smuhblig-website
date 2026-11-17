@@ -171,9 +171,12 @@ class GaleriController extends Controller
         Gate::authorize('update', $galeri);
 
         $photos = $request->file('photos');
+        $judul = ($trans = $galeri->translation('id')) ? $trans->judul : 'Foto galeri';
+        $alt = (string) ($request->input('alt') ?: $judul);
         if (is_array($photos)) {
             foreach ($photos as $photo) {
                 $galeri->addMedia($photo)
+                    ->withCustomProperties(['alt' => $alt])
                     ->toMediaCollection('photos');
             }
         }

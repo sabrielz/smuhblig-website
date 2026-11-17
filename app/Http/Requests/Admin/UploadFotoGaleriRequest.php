@@ -30,6 +30,7 @@ class UploadFotoGaleriRequest extends FormRequest
                 'mimetypes:image/jpeg,image/png,image/webp',
                 'max:20480', // 20MB max sesuai BR-004
             ],
+            'alt' => ['nullable', 'string', 'max:150'],
         ];
     }
 }

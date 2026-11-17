@@ -30,6 +30,7 @@ class UpdateGuruRequest extends FormRequest
             'urutan' => ['nullable', 'integer'],
             'is_active' => ['boolean'],
             'foto' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+            'foto_alt' => ['required_with:foto', 'nullable', 'string', 'max:150'],
             'remove_foto' => ['nullable', 'boolean'],
 
             // Translasi ID (Wajib)

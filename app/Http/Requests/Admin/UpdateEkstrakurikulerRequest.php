@@ -22,6 +22,7 @@ class UpdateEkstrakurikulerRequest extends FormRequest
             'urutan' => ['nullable', 'integer', 'min:0'],
             'is_active' => ['boolean'],
             'foto' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
+            'foto_alt' => ['required_with:foto', 'nullable', 'string', 'max:150'],
             'hapus_foto' => ['nullable', 'boolean'],
             'translations' => ['required', 'array'],
             'translations.id' => ['required', 'array'],

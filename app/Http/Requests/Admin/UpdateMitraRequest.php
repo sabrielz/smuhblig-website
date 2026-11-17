@@ -25,6 +25,7 @@ class UpdateMitraRequest extends FormRequest
             'jurusan_ids' => ['nullable', 'array'],
             'jurusan_ids.*' => ['integer', 'exists:jurusans,id'],
             'logo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp,svg', 'max:2048'],
+            'logo_alt' => ['required_with:logo', 'nullable', 'string', 'max:150'],
             'hapus_logo' => ['nullable', 'boolean'],
         ];
     }

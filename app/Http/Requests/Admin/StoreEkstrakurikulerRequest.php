@@ -22,6 +22,7 @@ class StoreEkstrakurikulerRequest extends FormRequest
             'urutan' => ['nullable', 'integer', 'min:0'],
             'is_active' => ['boolean'],
             'foto' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
+            'foto_alt' => ['required_with:foto', 'nullable', 'string', 'max:150'],
             'translations' => ['required', 'array'],
             'translations.id' => ['required', 'array'],
             'translations.id.nama' => ['required', 'string', 'max:255'],

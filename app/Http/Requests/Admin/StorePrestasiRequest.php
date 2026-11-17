@@ -28,6 +28,7 @@ class StorePrestasiRequest extends FormRequest
             'jurusan_id' => ['nullable', 'exists:jurusans,id'],
             'is_active' => ['boolean'],
             'foto' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
+            'foto_alt' => ['required_with:foto', 'nullable', 'string', 'max:150'],
             'translations' => ['required', 'array'],
             'translations.id' => ['required', 'array'],
             'translations.id.judul' => ['required', 'string', 'max:255'],

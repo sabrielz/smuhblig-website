@@ -90,7 +90,10 @@ class TestimoniController extends Controller
             }
 
             if ($request->hasFile('foto')) {
-                $testimoni->addMediaFromRequest('foto')->toMediaCollection('foto');
+                $alt = $request->input('foto_alt') ?: ('Foto testimoni '.$testimoni->nama);
+                $testimoni->addMediaFromRequest('foto')
+                    ->withCustomProperties(['alt' => $alt])
+                    ->toMediaCollection('foto');
             }
         });
 
@@ -142,8 +145,11 @@ class TestimoniController extends Controller
             if ($request->boolean('hapus_foto')) {
                 $testimoni->clearMediaCollection('foto');
             } elseif ($request->hasFile('foto')) {
+                $alt = $request->input('foto_alt') ?: ('Foto testimoni '.$testimoni->nama);
                 $testimoni->clearMediaCollection('foto');
-                $testimoni->addMediaFromRequest('foto')->toMediaCollection('foto');
+                $testimoni->addMediaFromRequest('foto')
+                    ->withCustomProperties(['alt' => $alt])
+                    ->toMediaCollection('foto');
             }
         });
 

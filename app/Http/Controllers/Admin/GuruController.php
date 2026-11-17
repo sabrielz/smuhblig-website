@@ -120,7 +120,10 @@ class GuruController extends Controller
             }
 
             if ($request->hasFile('foto')) {
-                $guru->addMediaFromRequest('foto')->toMediaCollection('foto');
+                $alt = $request->input('foto_alt') ?: ('Foto '.$guru->nama);
+                $guru->addMediaFromRequest('foto')
+                    ->withCustomProperties(['alt' => $alt])
+                    ->toMediaCollection('foto');
             }
         });
 
@@ -189,7 +192,10 @@ class GuruController extends Controller
             }
 
             if ($request->hasFile('foto')) {
-                $guru->addMediaFromRequest('foto')->toMediaCollection('foto');
+                $alt = $request->input('foto_alt') ?: ('Foto '.$guru->nama);
+                $guru->addMediaFromRequest('foto')
+                    ->withCustomProperties(['alt' => $alt])
+                    ->toMediaCollection('foto');
             } elseif ($request->boolean('remove_foto')) {
                 $guru->clearMediaCollection('foto');
             }

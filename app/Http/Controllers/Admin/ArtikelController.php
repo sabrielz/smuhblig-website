@@ -146,7 +146,10 @@ class ArtikelController extends Controller
             }
 
             if ($request->hasFile('thumbnail')) {
-                $article->addMediaFromRequest('thumbnail')->toMediaCollection('thumbnail');
+                $alt = $request->input('thumbnail_alt') ?: ($validated['title_id'] ?? 'Thumbnail artikel');
+                $article->addMediaFromRequest('thumbnail')
+                    ->withCustomProperties(['alt' => $alt])
+                    ->toMediaCollection('thumbnail');
             }
 
             if ($request->has('tags')) {
@@ -242,8 +245,11 @@ class ArtikelController extends Controller
             }
 
             if ($request->hasFile('thumbnail')) {
+                $alt = $request->input('thumbnail_alt') ?: ($validated['title_id'] ?? 'Thumbnail artikel');
                 $artikel->clearMediaCollection('thumbnail');
-                $artikel->addMediaFromRequest('thumbnail')->toMediaCollection('thumbnail');
+                $artikel->addMediaFromRequest('thumbnail')
+                    ->withCustomProperties(['alt' => $alt])
+                    ->toMediaCollection('thumbnail');
             }
 
             if ($request->has('tags')) {

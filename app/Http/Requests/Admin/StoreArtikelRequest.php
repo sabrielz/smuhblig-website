@@ -36,6 +36,7 @@ class StoreArtikelRequest extends FormRequest
                 'mimetypes:image/jpeg,image/png,image/webp',
                 'max:2048',
             ], // max 2MB sesuai BR-004
+            'thumbnail_alt' => ['required_with:thumbnail', 'nullable', 'string', 'max:150'],
 
             // Translations (ID) - Wajib
             'title_id' => ['required', 'string', 'max:500'],

@@ -25,6 +25,7 @@ class UploadMediaRequest extends FormRequest
                 'mimetypes:image/jpeg,image/png,image/webp',
                 'max:2048',
             ],
+            'alt' => ['nullable', 'string', 'max:150'],
         ];
     }
 }

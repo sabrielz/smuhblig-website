@@ -134,7 +134,10 @@ class PrestasiController extends Controller
             }
 
             if ($request->hasFile('foto')) {
-                $prestasi->addMediaFromRequest('foto')->toMediaCollection('foto');
+                $alt = $request->input('foto_alt') ?: ('Foto prestasi '.($validated['translations']['id']['judul'] ?? ''));
+                $prestasi->addMediaFromRequest('foto')
+                    ->withCustomProperties(['alt' => $alt])
+                    ->toMediaCollection('foto');
             }
         });
 
@@ -215,7 +218,10 @@ class PrestasiController extends Controller
             if ($request->boolean('hapus_foto')) {
                 $prestasi->clearMediaCollection('foto');
             } elseif ($request->hasFile('foto')) {
-                $prestasi->addMediaFromRequest('foto')->toMediaCollection('foto');
+                $alt = $request->input('foto_alt') ?: ('Foto prestasi '.($validated['translations']['id']['judul'] ?? ''));
+                $prestasi->addMediaFromRequest('foto')
+                    ->withCustomProperties(['alt' => $alt])
+                    ->toMediaCollection('foto');
             }
         });
 

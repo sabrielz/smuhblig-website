@@ -104,7 +104,10 @@ class EkstrakurikulerController extends Controller
             }
 
             if ($request->hasFile('foto')) {
-                $ekskul->addMediaFromRequest('foto')->toMediaCollection('foto');
+                $alt = $request->input('foto_alt') ?: ('Foto ekstrakurikuler '.($validated['translations']['id']['nama'] ?? ''));
+                $ekskul->addMediaFromRequest('foto')
+                    ->withCustomProperties(['alt' => $alt])
+                    ->toMediaCollection('foto');
             }
         });
 
@@ -180,7 +183,10 @@ class EkstrakurikulerController extends Controller
             if ($request->boolean('hapus_foto')) {
                 $ekstrakurikuler->clearMediaCollection('foto');
             } elseif ($request->hasFile('foto')) {
-                $ekstrakurikuler->addMediaFromRequest('foto')->toMediaCollection('foto');
+                $alt = $request->input('foto_alt') ?: ('Foto ekstrakurikuler '.($validated['translations']['id']['nama'] ?? ''));
+                $ekstrakurikuler->addMediaFromRequest('foto')
+                    ->withCustomProperties(['alt' => $alt])
+                    ->toMediaCollection('foto');
             }
         });
 
