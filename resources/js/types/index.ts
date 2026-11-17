@@ -227,3 +227,32 @@ export interface PesanKontak {
     dibaca_oleh: string | null;
     created_at: string;
 }
+
+export interface Guru {
+    id: number;
+    nama: string;
+    nama_lengkap: string;
+    gelar_depan: string | null;
+    gelar_belakang: string | null;
+    kelompok: 'guru' | 'tendik';
+    jurusan_id: number | null;
+    jurusan?: {
+        id: number;
+        nama: string;
+        slug: string;
+    } | null;
+    urutan: number;
+    is_active: boolean;
+    foto_url: string | null;
+    translations: {
+        id: {
+            jabatan: string;
+            mapel: string | null;
+        };
+        en: {
+            jabatan: string;
+            mapel: string | null;
+        };
+    };
+    created_at?: string;
+}

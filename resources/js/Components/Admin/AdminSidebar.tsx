@@ -18,6 +18,7 @@ import {
     FolderTree,
     Tag,
     UserCircle,
+    GraduationCap,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SharedProps } from "@/types";
@@ -88,6 +89,9 @@ export default function AdminSidebar({ isOpen, setIsOpen }: SidebarProps) {
             label: "Sekolah",
             items: [
                 { label: "Jurusan", href: "/admin/jurusan", icon: BookOpen, badge: null },
+                ...(user?.is_admin || user?.roles?.includes('editor')
+                    ? [{ label: "Guru & Tendik", href: "/admin/guru", icon: GraduationCap, badge: null }]
+                    : []),
                 { label: "Struktur Organisasi", href: "/admin/struktur-organisasi", icon: Network, badge: null },
                 { label: "Statistik Beranda", href: "/admin/statistik", icon: BarChart3, badge: null },
                 ...(user?.can?.kelola_agenda ? [{ label: "Agenda", href: "/admin/agenda", icon: CalendarDays, badge: null }] : []),
