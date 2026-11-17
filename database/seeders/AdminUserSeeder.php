@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class AdminUserSeeder extends Seeder
 {
@@ -12,7 +13,7 @@ class AdminUserSeeder extends Seeder
      */
     public function run(): void
     {
-        $password = 'Go!ForIt@2003';
+        $password = env('ADMIN_INITIAL_PASSWORD') ?: Str::password(16);
 
         $admin = User::firstOrCreate(
             ['email' => 'admin@smkmuhbligo.sch.id'],
@@ -26,16 +27,17 @@ class AdminUserSeeder extends Seeder
         if ($admin->wasRecentlyCreated) {
             $admin->assignRole('admin');
 
-            $this->command->info('Admin user created successfully.');
-            $this->command->info('Email: admin@smkmuhbligo.sch.id');
-            $this->command->warn('Password: '.$password);
+            if (app()->environment('local')) {
+                $this->command->info('Admin user created successfully.');
+                $this->command->info('Email: admin@smkmuhbligo.sch.id');
+                $this->command->warn('Password: '.$password);
 
-            // Output to console directly in case $this->command isn't captured
-            echo "\n----------------------------------------\n";
-            echo "Admin user created successfully.\n";
-            echo "Email: admin@smkmuhbligo.sch.id\n";
-            echo "Password: {$password}\n";
-            echo "----------------------------------------\n";
+                echo "\n----------------------------------------\n";
+                echo "Admin user created successfully.\n";
+                echo "Email: admin@smkmuhbligo.sch.id\n";
+                echo "Password: {$password}\n";
+                echo "----------------------------------------\n";
+            }
         } else {
             $this->command->info('Admin user already exists.');
         }
