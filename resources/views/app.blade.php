@@ -15,7 +15,19 @@
 
     @php
         $cspNonce = request()->attributes->get('csp_nonce', '');
+        $gaId = \App\Models\Pengaturan::get('seo_google_analytics');
     @endphp
+
+    @if(!empty($gaId))
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id={{ $gaId }}" nonce="{{ $cspNonce }}"></script>
+        <script nonce="{{ $cspNonce }}">
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '{{ $gaId }}');
+        </script>
+    @endif
 
     @routes(null, $cspNonce)
     @viteReactRefresh

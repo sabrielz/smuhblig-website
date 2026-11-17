@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Pengaturan;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Vite;
@@ -68,6 +69,13 @@ class ContentSecurityPolicy
         $scriptSrc = "'self' 'nonce-{$nonce}' https://fonts.googleapis.com";
         $styleSrc = "'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com";
         $imgSrc = "'self' data: blob: https://picsum.photos https://*.googleusercontent.com";
+
+        $gaId = Pengaturan::get('seo_google_analytics');
+        if (! empty($gaId)) {
+            $scriptSrc .= ' https://www.googletagmanager.com';
+            $connectSrc .= ' https://*.google-analytics.com';
+            $imgSrc .= ' https://*.google-analytics.com';
+        }
 
         // Tambahkan exception untuk Vite dev server hanya di development environment
         if ($isLocal) {

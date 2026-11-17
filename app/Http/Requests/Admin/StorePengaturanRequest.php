@@ -48,7 +48,7 @@ class StorePengaturanRequest extends FormRequest
 
             // Group 'seo'
             'seo_meta_description' => ['nullable', 'string'],
-            'seo_google_analytics' => ['nullable', 'string', 'max:255'],
+            'seo_google_analytics' => ['nullable', 'string', 'max:50', 'regex:/^G-[A-Z0-9]+$/'],
 
             // Group 'ai'
             'ai_provider' => ['nullable', 'string', 'max:50'],
