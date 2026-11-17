@@ -80,7 +80,8 @@ interface Props {
    Component
    ───────────────────────────────────────────── */
 export default function Form({ article, categories }: Props) {
-    const { auth } = usePage<SharedProps>().props;
+    const { auth, pengaturan } = usePage<SharedProps>().props;
+    const aiEnabled = pengaturan?.artikel_ai_enabled ?? true;
     const allowedStatuses = auth.user?.artikel_status_options ?? ['draft', 'pending_review'];
     const isEdit = !!article;
     const [activeTab, setActiveTab] = useState<'id' | 'en'>('id');
@@ -401,29 +402,33 @@ export default function Form({ article, categories }: Props) {
             <Head title={isEdit ? 'Edit Artikel' : 'Tulis Artikel'} />
 
             {/* ── AiPanel overlay ── */}
-            <AiPanel
-                open={panelOpen}
-                mode={panelMode}
-                isLoading={panelLoading}
-                result={panelResult}
-                error={panelError}
-                summary={panelSummary}
-                onAccept={handlePanelAccept}
-                onClose={() => setPanelOpen(false)}
-                onRetry={() => {
-                    if (panelMode === 'correct') void handleCorrect();
-                }}
-            />
+            {aiEnabled && (
+                <AiPanel
+                    open={panelOpen}
+                    mode={panelMode}
+                    isLoading={panelLoading}
+                    result={panelResult}
+                    error={panelError}
+                    summary={panelSummary}
+                    onAccept={handlePanelAccept}
+                    onClose={() => setPanelOpen(false)}
+                    onRetry={() => {
+                        if (panelMode === 'correct') void handleCorrect();
+                    }}
+                />
+            )}
 
             {/* ── AiBubble (floating, portal-style via fixed positioning) ── */}
-            <AiBubble
-                editor={editorId}
-                onRevise={handleRevise}
-                revisionResult={revisionResult}
-                isRevising={isRevising}
-                onApply={handleApplyRevision}
-                onDiscard={handleDiscardRevision}
-            />
+            {aiEnabled && (
+                <AiBubble
+                    editor={editorId}
+                    onRevise={handleRevise}
+                    revisionResult={revisionResult}
+                    isRevising={isRevising}
+                    onApply={handleApplyRevision}
+                    onDiscard={handleDiscardRevision}
+                />
+            )}
 
             {/* ── Page Header ── */}
             <div className="mb-6 flex items-center justify-between">
@@ -502,14 +507,16 @@ export default function Form({ article, categories }: Props) {
                     <div className="bg-white rounded-2xl shadow-sm border border-neutral-100 overflow-hidden">
 
                         {/* ── AI Toolbar (between tab bar and editor) ── */}
-                        <AiToolbar
-                            onGenerate={(p) => void handleGenerate(p)}
-                            onCorrect={() => void handleCorrect()}
-                            onOpenSeo={handleOpenSeo}
-                            isLoading={isAnyLoading}
-                            editorEmpty={editorEmpty}
-                            locale={activeTab}
-                        />
+                        {aiEnabled && (
+                            <AiToolbar
+                                onGenerate={(p) => void handleGenerate(p)}
+                                onCorrect={() => void handleCorrect()}
+                                onOpenSeo={handleOpenSeo}
+                                isLoading={isAnyLoading}
+                                editorEmpty={editorEmpty}
+                                locale={activeTab}
+                            />
+                        )}
 
                         <div className="p-6 flex flex-col gap-6">
 
@@ -545,6 +552,7 @@ export default function Form({ article, categories }: Props) {
                                             placeholder="Mulai menulis artikel Anda di sini..."
                                             error={errors.content_id}
                                             onEditorReady={setEditorId}
+                                            aiEnabled={aiEnabled}
                                         />
                                     </div>
                                 </>
@@ -606,6 +614,7 @@ export default function Form({ article, categories }: Props) {
                                             placeholder="Start writing the article content here..."
                                             error={errors.content_en}
                                             onEditorReady={setEditorId}
+                                            aiEnabled={aiEnabled}
                                         />
                                     </div>
                                 </>

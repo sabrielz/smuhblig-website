@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { TipTapEditor } from '@/Components/Editor/TipTapEditor';
 import toast from 'react-hot-toast';
+import { SharedProps } from '@/types';
 
 /* ─────────────────────────────────────────────
    Types
@@ -166,9 +167,10 @@ interface FieldEditorProps {
     value: string;
     onChange: (section: string, key: string, locale: string, value: string) => void;
     section: string;
+    aiEnabled?: boolean;
 }
 
-function FieldEditor({ item, locale, value, onChange, section }: FieldEditorProps) {
+function FieldEditor({ item, locale, value, onChange, section, aiEnabled = true }: FieldEditorProps) {
     const baseInputClass = cn(
         'w-full rounded-lg border border-neutral-200 bg-white px-3 py-2',
         'text-sm text-neutral-800 placeholder:text-neutral-400',
@@ -199,6 +201,7 @@ function FieldEditor({ item, locale, value, onChange, section }: FieldEditorProp
                         value={value}
                         onChange={handleChange}
                         placeholder={`${item.label} (${locale.toUpperCase()})...`}
+                        aiEnabled={aiEnabled}
                     />
                 </div>
             );
@@ -279,9 +282,10 @@ interface SectionAccordionProps {
     items: KontenItem[];
     values: LocaleValues;
     onFieldChange: (section: string, key: string, locale: string, value: string) => void;
+    aiEnabled?: boolean;
 }
 
-function SectionAccordion({ sectionName, items, values, onFieldChange }: SectionAccordionProps) {
+function SectionAccordion({ sectionName, items, values, onFieldChange, aiEnabled = true }: SectionAccordionProps) {
     const [isOpen, setIsOpen] = useState(true);
 
     const displayName = sectionName
@@ -338,6 +342,7 @@ function SectionAccordion({ sectionName, items, values, onFieldChange }: Section
                                             value={currentIdValue}
                                             onChange={onFieldChange}
                                             section={sectionName}
+                                            aiEnabled={aiEnabled}
                                         />
                                     </div>
 
@@ -355,6 +360,7 @@ function SectionAccordion({ sectionName, items, values, onFieldChange }: Section
                                                 value={currentEnValue}
                                                 onChange={onFieldChange}
                                                 section={sectionName}
+                                                aiEnabled={aiEnabled}
                                             />
                                         ) : (
                                             <p className="text-xs text-neutral-400 italic py-2">
@@ -411,7 +417,8 @@ function initValues(kontenGrouped: KontenGrouped): LocaleValues {
    ───────────────────────────────────────────── */
 
 export default function KontenHalamanEdit() {
-    const { halaman, halamanValid, kontenGrouped } = usePage<PageProps>().props;
+    const { halaman, halamanValid, kontenGrouped, pengaturan } = usePage<PageProps & SharedProps>().props;
+    const aiEnabled = pengaturan?.artikel_ai_enabled ?? true;
 
     const [values, setValues] = useState<LocaleValues>(() => initValues(kontenGrouped));
     const [isSaving, setIsSaving] = useState(false);
@@ -676,6 +683,7 @@ export default function KontenHalamanEdit() {
                                 items={items}
                                 values={values}
                                 onFieldChange={handleFieldChange}
+                                aiEnabled={aiEnabled}
                             />
                         ))}
 

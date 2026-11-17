@@ -36,6 +36,8 @@ export interface TipTapEditorProps {
     error?: string;
     /** Called once with the Editor instance — useful for AiBubble */
     onEditorReady?: (editor: Editor | null) => void;
+    /** Whether AI features/indicators should be enabled */
+    aiEnabled?: boolean;
 }
 
 /* ─────────────────────────────────────────────
@@ -144,6 +146,7 @@ export function TipTapEditor({
     className,
     error,
     onEditorReady,
+    aiEnabled = true,
 }: TipTapEditorProps) {
     const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -439,10 +442,12 @@ export function TipTapEditor({
                 </div>
 
                 {/* AI Badge — informational */}
-                <div className="flex items-center gap-1 text-xs text-neutral-400 select-none">
-                    <Sparkles className="w-3 h-3" strokeWidth={1.5} />
-                    <span>AI-powered</span>
-                </div>
+                {aiEnabled && (
+                    <div className="flex items-center gap-1 text-xs text-neutral-400 select-none">
+                        <Sparkles className="w-3 h-3" strokeWidth={1.5} />
+                        <span>AI-powered</span>
+                    </div>
+                )}
             </div>
 
             {/* Error message */}

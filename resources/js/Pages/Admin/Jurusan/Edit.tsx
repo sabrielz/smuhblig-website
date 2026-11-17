@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, Link, useForm } from '@inertiajs/react';
+import { Head, Link, useForm, usePage } from '@inertiajs/react';
+import { SharedProps } from '@/types';
 import { Button } from '@/Components/UI/Button';
 import { Input } from '@/Components/UI/Input';
 import { Textarea } from '@/Components/UI/Textarea';
@@ -93,6 +94,8 @@ function DynamicList({ label, items, onChange, locale }: { label: string, items:
 }
 
 export default function Edit({ jurusan }: { jurusan: any }) {
+    const { pengaturan } = usePage<SharedProps>().props;
+    const aiEnabled = pengaturan?.artikel_ai_enabled ?? true;
     const [mainTab, setMainTab] = useState<'konten' | 'visual'>('konten');
     const [activeLocale, setActiveLocale] = useState<'id' | 'en'>('id');
     const galleryInputRef = useRef<HTMLInputElement>(null);
@@ -294,6 +297,7 @@ export default function Edit({ jurusan }: { jurusan: any }) {
                                             value={data[activeLocale].deskripsi_lengkap}
                                             onChange={(val) => setData(activeLocale, { ...data[activeLocale], deskripsi_lengkap: val })}
                                             error={errors[`${activeLocale}.deskripsi_lengkap` as keyof typeof errors]}
+                                            aiEnabled={aiEnabled}
                                         />
                                     </div>
 

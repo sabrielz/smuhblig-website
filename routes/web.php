@@ -64,6 +64,7 @@ use App\Http\Controllers\HealthController;
 use App\Http\Controllers\Public\AgendaPublikController;
 use App\Http\Controllers\Public\GaleriController;
 use App\Http\Controllers\Public\TautanController;
+use App\Http\Middleware\EnsureAiEnabled;
 use App\Http\Middleware\EnsureHasCmsRole;
 use App\Models\Pengaturan;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -202,7 +203,7 @@ Route::middleware(['auth', EnsureHasCmsRole::class])
         });
 
         // AI Features (async via queue)
-        Route::middleware(['throttle:ai'])->prefix('ai')->name('ai.')->group(function () {
+        Route::middleware(['throttle:ai', EnsureAiEnabled::class])->prefix('ai')->name('ai.')->group(function () {
             Route::post('/generate', [AiController::class, 'generate'])->name('generate');
             Route::post('/revise', [AiController::class, 'revise'])->name('revise');
             Route::post('/correct', [AiController::class, 'correct'])->name('correct');
