@@ -49,11 +49,11 @@ const GeometricPattern = () => (
 // Section 1 — Page Hero
 // ---------------------------------------------------------------------------
 const PageHero = ({ kontenHero }: { kontenHero?: Record<string, string> }) => (
-    <section className="relative bg-[#001f4d] overflow-hidden min-h-[360px] flex items-center">
+    <section className="relative bg-primary-900 overflow-hidden min-h-[360px] flex items-center">
         <GeometricPattern />
 
         {/* Radial glow */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#003f87]/60 via-transparent to-[#001f4d]" />
+        <div className="absolute inset-0 bg-gradient-to-br from-primary-600/60 via-transparent to-primary-900" />
 
         <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-24 lg:py-32">
             <motion.div
@@ -65,7 +65,7 @@ const PageHero = ({ kontenHero }: { kontenHero?: Record<string, string> }) => (
                 {/* Eyebrow */}
                 <motion.p
                     variants={fadeInUp}
-                    className="text-xs font-bold tracking-[0.25em] uppercase text-[#c9a84c] mb-4"
+                    className="text-xs font-bold tracking-[0.25em] uppercase text-gold-500 mb-4"
                 >
                     TENTANG KAMI
                 </motion.p>
@@ -74,7 +74,7 @@ const PageHero = ({ kontenHero }: { kontenHero?: Record<string, string> }) => (
                 <motion.h1
                     variants={fadeInUp}
                     className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6"
-                    dangerouslySetInnerHTML={{ __html: kontenHero?.headline || 'Sejarah, Visi, <span className="text-[#c9a84c]">dan Misi</span> Kami' }}
+                    dangerouslySetInnerHTML={{ __html: kontenHero?.headline || 'Sejarah, Visi, <span className="text-gold-500">dan Misi</span> Kami' }}
                 />
 
                 {/* Breadcrumb */}
@@ -118,14 +118,14 @@ const ProfilSection = ({ kontenProfil }: { kontenProfil?: Record<string, string>
                     viewport={{ once: true }}
                     className="order-2 lg:order-1"
                 >
-                    <p className="text-xs font-bold tracking-[0.2em] uppercase text-[#c9a84c] mb-3">
+                    <p className="text-xs font-bold tracking-[0.2em] uppercase text-gold-500 mb-3">
                         PROFIL SEKOLAH
                     </p>
-                    <h2 className="font-serif text-3xl lg:text-4xl font-bold text-[#003f87] mb-6 leading-tight">
+                    <h2 className="font-serif text-3xl lg:text-4xl font-bold text-primary-600 mb-6 leading-tight">
                         {kontenProfil?.headline || 'Mendidik Generasi Kompeten dan Berakhlak Mulia'}
                     </h2>
                     <div
-                        className="prose prose-lg prose-p:text-[#636366] prose-p:leading-relaxed max-w-none mb-8"
+                        className="prose prose-lg prose-p:text-neutral-500 prose-p:leading-relaxed max-w-none mb-8"
                         dangerouslySetInnerHTML={{ __html: kontenProfil?.konten || '' }}
                     />
 
@@ -140,10 +140,10 @@ const ProfilSection = ({ kontenProfil }: { kontenProfil?: Record<string, string>
                                 viewport={{ once: true }}
                                 className="flex items-start gap-3"
                             >
-                                <span className="mt-1 flex-shrink-0 w-5 h-5 rounded-full bg-[#c9a84c]/10 flex items-center justify-center">
-                                    <Check size={12} strokeWidth={2.5} className="text-[#c9a84c]" />
+                                <span className="mt-1 flex-shrink-0 w-5 h-5 rounded-full bg-gold-500/10 flex items-center justify-center">
+                                    <Check size={12} strokeWidth={2.5} className="text-gold-500" />
                                 </span>
-                                <span className="text-[#48484a] text-sm leading-relaxed">{point}</span>
+                                <span className="text-neutral-600 text-sm leading-relaxed">{point}</span>
                             </motion.li>
                         ))}
                     </ul>
@@ -157,7 +157,7 @@ const ProfilSection = ({ kontenProfil }: { kontenProfil?: Record<string, string>
                     viewport={{ once: true }}
                     className="relative order-1 lg:order-2"
                 >
-                    <div className="relative rounded-3xl overflow-hidden aspect-[4/3] bg-gradient-to-br from-[#003f87] to-[#001f4d] flex items-center justify-center shadow-2xl">
+                    <div className="relative rounded-3xl overflow-hidden aspect-[4/3] bg-gradient-to-br from-primary-600 to-primary-900 flex items-center justify-center shadow-2xl">
                         {/* Placeholder ilustrasi */}
                         <div className="text-center text-white/30 p-8">
                             <svg
@@ -181,13 +181,13 @@ const ProfilSection = ({ kontenProfil }: { kontenProfil?: Record<string, string>
 
                         {/* Decorative badge */}
                         <div className="absolute bottom-6 left-6 bg-white/90 backdrop-blur-sm rounded-2xl px-5 py-3 shadow-lg">
-                            <p className="text-[10px] uppercase tracking-widest text-[#636366] mb-1">Berdiri Sejak</p>
-                            <p className="text-2xl font-bold text-[#003f87] font-sans">1982</p>
+                            <p className="text-[10px] uppercase tracking-widest text-neutral-500 mb-1">Berdiri Sejak</p>
+                            <p className="text-2xl font-bold text-primary-600 font-sans">1982</p>
                         </div>
                     </div>
 
                     {/* Gold accent border */}
-                    <div className="absolute -bottom-4 -right-4 w-32 h-32 rounded-3xl border-2 border-[#c9a84c]/30 -z-10" />
+                    <div className="absolute -bottom-4 -right-4 w-32 h-32 rounded-3xl border-2 border-gold-500/30 -z-10" />
                 </motion.div>
             </div>
         </div>
@@ -206,7 +206,7 @@ const misiList = [
 ];
 
 const VisiMisiSection = ({ kontenVisiMisi }: { kontenVisiMisi?: Record<string, string> }) => (
-    <section className="py-20 lg:py-28 bg-[#f8f9fa]">
+    <section className="py-20 lg:py-28 bg-neutral-50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
             {/* Header */}
             <motion.div
@@ -216,10 +216,10 @@ const VisiMisiSection = ({ kontenVisiMisi }: { kontenVisiMisi?: Record<string, s
                 viewport={{ once: true }}
                 className="text-center mb-14"
             >
-                <p className="text-xs font-bold tracking-[0.2em] uppercase text-[#c9a84c] mb-3">
+                <p className="text-xs font-bold tracking-[0.2em] uppercase text-gold-500 mb-3">
                     ARAH DAN TUJUAN
                 </p>
-                <h2 className="font-serif text-3xl lg:text-4xl font-bold text-[#003f87]">
+                <h2 className="font-serif text-3xl lg:text-4xl font-bold text-primary-600">
                     Visi &amp; Misi Sekolah
                 </h2>
             </motion.div>
@@ -231,7 +231,7 @@ const VisiMisiSection = ({ kontenVisiMisi }: { kontenVisiMisi?: Record<string, s
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true }}
-                    className="relative bg-[#001f4d] rounded-3xl p-8 lg:p-10 overflow-hidden"
+                    className="relative bg-primary-900 rounded-3xl p-8 lg:p-10 overflow-hidden"
                 >
                     {/* Subtle pattern */}
                     <div className="absolute inset-0 opacity-[0.035]">
@@ -247,9 +247,9 @@ const VisiMisiSection = ({ kontenVisiMisi }: { kontenVisiMisi?: Record<string, s
                     </div>
 
                     <div className="relative z-10">
-                        <div className="inline-flex items-center gap-2 bg-[#c9a84c]/20 border border-[#c9a84c]/30 rounded-full px-4 py-1.5 mb-6">
-                            <Star size={14} strokeWidth={1.5} className="text-[#c9a84c]" />
-                            <span className="text-xs font-bold tracking-widest uppercase text-[#c9a84c]">VISI</span>
+                        <div className="inline-flex items-center gap-2 bg-gold-500/20 border border-gold-500/30 rounded-full px-4 py-1.5 mb-6">
+                            <Star size={14} strokeWidth={1.5} className="text-gold-500" />
+                            <span className="text-xs font-bold tracking-widest uppercase text-gold-500">VISI</span>
                         </div>
                         <blockquote
                             className="font-serif text-xl lg:text-2xl font-bold text-white leading-relaxed"
@@ -257,7 +257,7 @@ const VisiMisiSection = ({ kontenVisiMisi }: { kontenVisiMisi?: Record<string, s
                         />
 
                         {/* Decorative gold line */}
-                        <div className="mt-8 w-16 h-0.5 bg-[#c9a84c]" />
+                        <div className="mt-8 w-16 h-0.5 bg-gold-500" />
                     </div>
                 </motion.div>
 
@@ -267,11 +267,11 @@ const VisiMisiSection = ({ kontenVisiMisi }: { kontenVisiMisi?: Record<string, s
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true }}
-                    className="bg-white rounded-3xl p-8 lg:p-10 border border-[#e5e5ea]"
+                    className="bg-white rounded-3xl p-8 lg:p-10 border border-neutral-100"
                 >
-                    <div className="inline-flex items-center gap-2 bg-[#003f87]/10 border border-[#003f87]/20 rounded-full px-4 py-1.5 mb-6">
-                        <BookOpen size={14} strokeWidth={1.5} className="text-[#003f87]" />
-                        <span className="text-xs font-bold tracking-widest uppercase text-[#003f87]">MISI</span>
+                    <div className="inline-flex items-center gap-2 bg-primary-600/10 border border-primary-600/20 rounded-full px-4 py-1.5 mb-6">
+                        <BookOpen size={14} strokeWidth={1.5} className="text-primary-600" />
+                        <span className="text-xs font-bold tracking-widest uppercase text-primary-600">MISI</span>
                     </div>
 
                     <motion.div
@@ -279,7 +279,7 @@ const VisiMisiSection = ({ kontenVisiMisi }: { kontenVisiMisi?: Record<string, s
                         initial="hidden"
                         whileInView="visible"
                         viewport={{ once: true }}
-                        className="prose prose-p:text-[#48484a] prose-li:text-[#48484a] prose-ul:list-disc prose-ul:pl-5 space-y-2 max-w-none"
+                        className="prose prose-p:text-neutral-600 prose-li:text-neutral-600 prose-ul:list-disc prose-ul:pl-5 space-y-2 max-w-none"
                         dangerouslySetInnerHTML={{ __html: kontenVisiMisi?.misi || '' }}
                     />
                 </motion.div>
@@ -293,17 +293,17 @@ const VisiMisiSection = ({ kontenVisiMisi }: { kontenVisiMisi?: Record<string, s
 // ---------------------------------------------------------------------------
 const nilaiList = [
     {
-        icon: <Briefcase size={28} strokeWidth={1.5} className="text-[#c9a84c]" />,
+        icon: <Briefcase size={28} strokeWidth={1.5} className="text-gold-500" />,
         title: 'Amal Usaha',
         desc: 'Berkontribusi nyata untuk kemajuan umat dan bangsa melalui pendidikan vokasional yang berkualitas dan berdampak.',
     },
     {
-        icon: <Star size={28} strokeWidth={1.5} className="text-[#c9a84c]" />,
+        icon: <Star size={28} strokeWidth={1.5} className="text-gold-500" />,
         title: 'Fastabiqul Khairat',
         desc: 'Berlomba-lomba dalam kebaikan dan prestasi, mendorong seluruh warga sekolah untuk terus unggul dan berkompetisi secara sehat.',
     },
     {
-        icon: <RefreshCw size={28} strokeWidth={1.5} className="text-[#c9a84c]" />,
+        icon: <RefreshCw size={28} strokeWidth={1.5} className="text-gold-500" />,
         title: 'Tajdid',
         desc: 'Terus berinovasi dalam pendidikan berkualitas, mengadopsi metode pembelajaran modern tanpa kehilangan akar nilai-nilai Islam.',
     },
@@ -319,13 +319,13 @@ const NilaiSection = ({ kontenNilai }: { kontenNilai?: Record<string, string> })
                 viewport={{ once: true }}
                 className="text-center mb-14"
             >
-                <p className="text-xs font-bold tracking-[0.2em] uppercase text-[#c9a84c] mb-3">
+                <p className="text-xs font-bold tracking-[0.2em] uppercase text-gold-500 mb-3">
                     LANDASAN GERAK
                 </p>
-                <h2 className="font-serif text-3xl lg:text-4xl font-bold text-[#003f87] mb-4">
+                <h2 className="font-serif text-3xl lg:text-4xl font-bold text-primary-600 mb-4">
                     {kontenNilai?.headline || 'Nilai-Nilai Muhammadiyah'}
                 </h2>
-                <p className="text-[#636366] text-lg max-w-2xl mx-auto">
+                <p className="text-neutral-500 text-lg max-w-2xl mx-auto">
                     Setiap langkah kami dilandasi oleh tiga pilar utama yang menjadi DNA gerakan Muhammadiyah.
                 </p>
             </motion.div>
@@ -342,16 +342,16 @@ const NilaiSection = ({ kontenNilai }: { kontenNilai?: Record<string, string> })
                         key={i}
                         variants={scaleIn}
                         whileHover={{ y: -6, transition: { duration: 0.25, ease: 'easeOut' } }}
-                        className="relative bg-white rounded-3xl p-8 border border-[#c9a84c]/30 hover:border-[#c9a84c]/60 hover:shadow-xl transition-all duration-300 group"
+                        className="relative bg-white rounded-3xl p-8 border border-gold-500/30 hover:border-gold-500/60 hover:shadow-xl transition-all duration-300 group"
                     >
                         {/* Gold accent top bar */}
-                        <div className="absolute top-0 left-8 right-8 h-0.5 bg-gradient-to-r from-transparent via-[#c9a84c] to-transparent rounded-full" />
+                        <div className="absolute top-0 left-8 right-8 h-0.5 bg-gradient-to-r from-transparent via-gold-500 to-transparent rounded-full" />
 
-                        <div className="w-14 h-14 rounded-2xl bg-[#c9a84c]/10 border border-[#c9a84c]/20 flex items-center justify-center mb-6 group-hover:bg-[#c9a84c]/20 transition-colors duration-300">
+                        <div className="w-14 h-14 rounded-2xl bg-gold-500/10 border border-gold-500/20 flex items-center justify-center mb-6 group-hover:bg-gold-500/20 transition-colors duration-300">
                             {item.icon}
                         </div>
-                        <h3 className="font-serif text-xl font-bold text-[#003f87] mb-3">{item.title}</h3>
-                        <p className="text-[#636366] text-sm leading-relaxed">{item.desc}</p>
+                        <h3 className="font-serif text-xl font-bold text-primary-600 mb-3">{item.title}</h3>
+                        <p className="text-neutral-500 text-sm leading-relaxed">{item.desc}</p>
                     </motion.div>
                 ))}
             </motion.div>
@@ -370,31 +370,31 @@ const OrgNodeDesktop = ({ node, isRoot = false }: { node: any; isRoot?: boolean 
     return (
         <div className={`flex flex-col items-center ${!isRoot ? 'pt-6 relative' : ''} ${hideOnTabletClass}`}>
             {!isRoot && (
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-6 bg-[#c9a84c]/40 hidden md:block" />
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-6 bg-gold-500/40 hidden md:block" />
             )}
 
             <div className={`rounded-2xl px-5 py-4 w-60 xl:w-64 text-center border transition-all duration-200 relative z-10 ${
                 node.level === 0 || node.level === '0'
-                    ? 'bg-[#003f87] border-[#003f87] text-white shadow-lg shadow-[#003f87]/20'
-                    : 'bg-white border-[#e5e5ea] text-[#111111] hover:border-[#c9a84c]/50 hover:shadow-md'
+                    ? 'bg-primary-600 border-primary-600 text-white shadow-lg shadow-primary-600/20'
+                    : 'bg-white border-neutral-100 text-neutral-900 hover:border-gold-500/50 hover:shadow-md'
             }`}>
                 {node.foto_url && (
                     <img src={node.foto_url} alt={node.nama} className="w-16 h-16 rounded-full mx-auto mb-3 object-cover border-2 border-white/20 shadow-sm" />
                 )}
-                <p className={`text-[11px] font-semibold tracking-wide uppercase mb-1 ${node.level === 0 || node.level === '0' ? 'text-[#c9a84c]' : 'text-[#c9a84c]'}`}>
+                <p className={`text-[11px] font-semibold tracking-wide uppercase mb-1 ${node.level === 0 || node.level === '0' ? 'text-gold-500' : 'text-gold-500'}`}>
                     {node.jabatan}
                 </p>
-                <p className={`text-sm font-medium leading-snug ${node.level === 0 || node.level === '0' ? 'text-white' : 'text-[#48484a]'}`}>
+                <p className={`text-sm font-medium leading-snug ${node.level === 0 || node.level === '0' ? 'text-white' : 'text-neutral-600'}`}>
                     {node.nama}
                 </p>
             </div>
 
             {node.children && node.children.length > 0 && (
                 <div className={`hidden justify-center flex-wrap gap-4 relative pt-2 ${hideOnTabletClass}`}>
-                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-6 bg-[#c9a84c]/40 hidden md:block" />
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-6 bg-gold-500/40 hidden md:block" />
                     <div className="flex gap-4 lg:gap-6 w-full justify-center relative pt-6">
                         {node.children.length > 1 && (
-                            <div className="absolute top-6 h-px bg-[#c9a84c]/30 z-0 hidden md:block" style={{ left: '10%', right: '10%' }} />
+                            <div className="absolute top-6 h-px bg-gold-500/30 z-0 hidden md:block" style={{ left: '10%', right: '10%' }} />
                         )}
                         {node.children.map((child: any) => (
                             <OrgNodeDesktop key={child.id || child.jabatan} node={child} />
@@ -410,12 +410,12 @@ const OrgNodeMobile = ({ node }: { node: any }) => {
     if (!node) return null;
     const levelInt = parseInt(node.level || 0);
     return (
-        <div className={`flex flex-col text-left py-2 ${levelInt > 0 ? 'border-l-2 border-[#c9a84c]/30 pl-4 mt-2' : ''} w-full`}>
+        <div className={`flex flex-col text-left py-2 ${levelInt > 0 ? 'border-l-2 border-gold-500/30 pl-4 mt-2' : ''} w-full`}>
             {node.foto_url && (
                 <img src={node.foto_url} alt={node.nama} className="w-10 h-10 rounded-full mb-2 object-cover" />
             )}
-            <p className="text-[10px] font-semibold tracking-wider uppercase text-[#c9a84c] mb-0.5">{node.jabatan}</p>
-            <p className="text-sm font-medium leading-snug text-[#48484a]">{node.nama}</p>
+            <p className="text-[10px] font-semibold tracking-wider uppercase text-gold-500 mb-0.5">{node.jabatan}</p>
+            <p className="text-sm font-medium leading-snug text-neutral-600">{node.nama}</p>
 
             {node.children && node.children.length > 0 && (
                 <div className="mt-1 flex flex-col gap-1 w-full pl-2">
@@ -429,7 +429,7 @@ const OrgNodeMobile = ({ node }: { node: any }) => {
 };
 
 const StrukturSection = ({ strukturOrganisasi }: { strukturOrganisasi?: any }) => (
-    <section className="py-20 lg:py-28 bg-[#f8f9fa]">
+    <section className="py-20 lg:py-28 bg-neutral-50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
             <motion.div
                 variants={fadeInUp}
@@ -438,10 +438,10 @@ const StrukturSection = ({ strukturOrganisasi }: { strukturOrganisasi?: any }) =
                 viewport={{ once: true }}
                 className="text-center mb-14"
             >
-                <p className="text-xs font-bold tracking-[0.2em] uppercase text-[#c9a84c] mb-3">
+                <p className="text-xs font-bold tracking-[0.2em] uppercase text-gold-500 mb-3">
                     ORGANISASI
                 </p>
-                <h2 className="font-serif text-3xl lg:text-4xl font-bold text-[#003f87]">
+                <h2 className="font-serif text-3xl lg:text-4xl font-bold text-primary-600">
                     Struktur Organisasi
                 </h2>
             </motion.div>
@@ -458,12 +458,12 @@ const StrukturSection = ({ strukturOrganisasi }: { strukturOrganisasi?: any }) =
                         <div className="hidden md:flex flex-col items-center min-w-max mx-auto px-4">
                             <OrgNodeDesktop node={strukturOrganisasi} isRoot />
                         </div>
-                        <div className="flex md:hidden flex-col items-start w-full bg-white rounded-2xl p-6 shadow-sm border border-[#e5e5ea]">
+                        <div className="flex md:hidden flex-col items-start w-full bg-white rounded-2xl p-6 shadow-sm border border-neutral-100">
                             <OrgNodeMobile node={strukturOrganisasi} />
                         </div>
                     </>
                 ) : (
-                    <div className="text-center py-10 text-[#636366]">
+                    <div className="text-center py-10 text-neutral-500">
                         <p>Struktur organisasi belum dikonfigurasi.</p>
                     </div>
                 )}

@@ -68,9 +68,9 @@ const GeometricPattern = () => (
 // Section 1 — Page Hero
 // ---------------------------------------------------------------------------
 const PageHero = () => (
-    <section className="relative bg-[#001f4d] overflow-hidden min-h-[360px] flex items-center">
+    <section className="relative bg-primary-900 overflow-hidden min-h-[360px] flex items-center">
         <GeometricPattern />
-        <div className="absolute inset-0 bg-gradient-to-br from-[#003f87]/60 via-transparent to-[#001f4d]" />
+        <div className="absolute inset-0 bg-gradient-to-br from-primary-600/60 via-transparent to-primary-900" />
 
         <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-24 lg:py-32">
             <motion.div
@@ -81,7 +81,7 @@ const PageHero = () => (
             >
                 <motion.p
                     variants={fadeInUp}
-                    className="text-xs font-bold tracking-[0.25em] uppercase text-[#c9a84c] mb-4"
+                    className="text-xs font-bold tracking-[0.25em] uppercase text-gold-500 mb-4"
                 >
                     HUBUNGI KAMI
                 </motion.p>
@@ -90,7 +90,7 @@ const PageHero = () => (
                     className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6"
                 >
                     Kami Siap{' '}
-                    <span className="text-[#c9a84c]">Membantu</span> Anda
+                    <span className="text-gold-500">Membantu</span> Anda
                 </motion.h1>
                 <motion.nav
                     variants={fadeInUp}
@@ -121,12 +121,12 @@ interface InfoItemProps {
 
 const InfoItem = ({ icon, label, value }: InfoItemProps) => (
     <div className="flex items-start gap-4">
-        <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-[#003f87]/10 border border-[#003f87]/15 flex items-center justify-center">
+        <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-primary-600/10 border border-primary-600/15 flex items-center justify-center">
             {icon}
         </div>
         <div>
-            <p className="text-xs font-bold tracking-wide uppercase text-[#c9a84c] mb-1">{label}</p>
-            <div className="text-[#48484a] text-sm leading-relaxed">{value}</div>
+            <p className="text-xs font-bold tracking-wide uppercase text-gold-500 mb-1">{label}</p>
+            <div className="text-neutral-600 text-sm leading-relaxed">{value}</div>
         </div>
     </div>
 );
@@ -145,7 +145,7 @@ const SosmedLink = ({ href, icon, label }: SosmedLinkProps) => {
             target="_blank"
             rel="noopener noreferrer"
             aria-label={label}
-            className="w-10 h-10 rounded-xl bg-[#003f87]/10 border border-[#003f87]/15 flex items-center justify-center text-[#003f87] hover:bg-[#003f87] hover:text-white hover:border-[#003f87] transition-all duration-200"
+            className="w-10 h-10 rounded-xl bg-primary-600/10 border border-primary-600/15 flex items-center justify-center text-primary-600 hover:bg-primary-600 hover:text-white hover:border-primary-600 transition-all duration-200"
         >
             {icon}
         </a>
@@ -164,16 +164,16 @@ const InfoDanPeta = ({ pengaturan, kontenInfo }: { pengaturan: Pengaturan; konte
                     viewport={{ once: true }}
                     className="order-2 lg:order-1"
                 >
-                    <p className="text-xs font-bold tracking-[0.2em] uppercase text-[#c9a84c] mb-3">
+                    <p className="text-xs font-bold tracking-[0.2em] uppercase text-gold-500 mb-3">
                         INFORMASI KONTAK
                     </p>
-                    <h2 className="font-serif text-3xl lg:text-4xl font-bold text-[#003f87] mb-8 leading-tight">
+                    <h2 className="font-serif text-3xl lg:text-4xl font-bold text-primary-600 mb-8 leading-tight">
                         Temukan &amp; Hubungi Kami
                     </h2>
 
                     <div className="space-y-6 mb-10">
                         <InfoItem
-                            icon={<MapPin size={18} strokeWidth={1.5} className="text-[#003f87]" />}
+                            icon={<MapPin size={18} strokeWidth={1.5} className="text-primary-600" />}
                             label="Alamat"
                             value={
                                 <p>
@@ -182,42 +182,42 @@ const InfoDanPeta = ({ pengaturan, kontenInfo }: { pengaturan: Pengaturan; konte
                             }
                         />
                         <InfoItem
-                            icon={<Phone size={18} strokeWidth={1.5} className="text-[#003f87]" />}
+                            icon={<Phone size={18} strokeWidth={1.5} className="text-primary-600" />}
                             label="Telepon"
                             value={
                                 <a
                                     href={`tel:${pengaturan.site_phone}`}
-                                    className="hover:text-[#003f87] transition-colors"
+                                    className="hover:text-primary-600 transition-colors"
                                 >
                                     {pengaturan.site_phone || '+62 285 xxxxxxx'}
                                 </a>
                             }
                         />
                         <InfoItem
-                            icon={<Mail size={18} strokeWidth={1.5} className="text-[#003f87]" />}
+                            icon={<Mail size={18} strokeWidth={1.5} className="text-primary-600" />}
                             label="Email"
                             value={
                                 <a
                                     href={`mailto:${pengaturan.site_email}`}
-                                    className="hover:text-[#003f87] transition-colors"
+                                    className="hover:text-primary-600 transition-colors"
                                 >
                                     {pengaturan.site_email || 'info@smkmuhbligo.sch.id'}
                                 </a>
                             }
                         />
                         <InfoItem
-                            icon={<Clock size={18} strokeWidth={1.5} className="text-[#003f87]" />}
+                            icon={<Clock size={18} strokeWidth={1.5} className="text-primary-600" />}
                             label="Jam Operasional"
                             value={
                                 kontenInfo?.jam_operasional ? (
-                                    <div className="whitespace-pre-line text-[#48484a] text-sm leading-relaxed">
+                                    <div className="whitespace-pre-line text-neutral-600 text-sm leading-relaxed">
                                         {kontenInfo.jam_operasional}
                                     </div>
                                 ) : (
                                     <div className="space-y-0.5">
                                         <p>Senin – Jumat: 07.00 – 15.30 WIB</p>
                                         <p>Sabtu: 07.00 – 12.00 WIB</p>
-                                        <p className="text-[#8e8e93]">Minggu & Hari Libur: Tutup</p>
+                                        <p className="text-neutral-400">Minggu & Hari Libur: Tutup</p>
                                     </div>
                                 )
                             }
@@ -226,7 +226,7 @@ const InfoDanPeta = ({ pengaturan, kontenInfo }: { pengaturan: Pengaturan; konte
 
                     {/* Sosmed Links */}
                     <div>
-                        <p className="text-xs font-bold tracking-wide uppercase text-[#636366] mb-3">
+                        <p className="text-xs font-bold tracking-wide uppercase text-neutral-500 mb-3">
                             Media Sosial
                         </p>
                         <div className="flex items-center gap-3">
@@ -260,7 +260,7 @@ const InfoDanPeta = ({ pengaturan, kontenInfo }: { pengaturan: Pengaturan; konte
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true }}
-                    className="relative order-1 lg:order-2 rounded-3xl overflow-hidden shadow-2xl aspect-video bg-[#f8f9fa] border border-[#e5e5ea]"
+                    className="relative order-1 lg:order-2 rounded-3xl overflow-hidden shadow-2xl aspect-video bg-neutral-50 border border-neutral-100"
                 >
                     {kontenInfo?.maps_embed_url ? (
                         <iframe
@@ -276,14 +276,14 @@ const InfoDanPeta = ({ pengaturan, kontenInfo }: { pengaturan: Pengaturan; konte
                             className="w-full h-full"
                         />
                     ) : (
-                        <div className="w-full h-full flex flex-col items-center justify-center bg-[#f8f9fa] border border-[#e5e5ea] min-h-[300px]">
-                            <MapPin size={48} strokeWidth={1.5} className="text-[#003f87] mb-4 opacity-50" />
-                            <p className="text-[#636366] text-center px-4 mb-4">Peta belum dikonfigurasi</p>
+                        <div className="w-full h-full flex flex-col items-center justify-center bg-neutral-50 border border-neutral-100 min-h-[300px]">
+                            <MapPin size={48} strokeWidth={1.5} className="text-primary-600 mb-4 opacity-50" />
+                            <p className="text-neutral-500 text-center px-4 mb-4">Peta belum dikonfigurasi</p>
                             <a
                                 href={`https://maps.google.com/?q=${encodeURIComponent(pengaturan?.site_address || 'SMK Muhammadiyah Bligo')}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center gap-2 text-sm font-semibold text-[#003f87] hover:underline"
+                                className="inline-flex items-center gap-2 text-sm font-semibold text-primary-600 hover:underline"
                             >
                                 Buka di Google Maps
                                 <ExternalLink size={14} />
@@ -293,8 +293,8 @@ const InfoDanPeta = ({ pengaturan, kontenInfo }: { pengaturan: Pengaturan; konte
 
                     {/* Overlay badge */}
                     <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm rounded-xl px-4 py-2 shadow-md flex items-center gap-2">
-                        <MapPin size={14} strokeWidth={1.5} className="text-[#003f87]" />
-                        <span className="text-xs font-semibold text-[#003f87]">Bligo, Batang, Jawa Tengah</span>
+                        <MapPin size={14} strokeWidth={1.5} className="text-primary-600" />
+                        <span className="text-xs font-semibold text-primary-600">Bligo, Batang, Jawa Tengah</span>
                     </div>
                 </motion.div>
             </div>
@@ -328,20 +328,20 @@ const TautanCard = ({ tautan }: { tautan: Tautan }) => {
             rel={tautan.buka_tab_baru ? 'noopener noreferrer' : undefined}
             variants={scaleIn}
             whileHover={{ y: -4, transition: { duration: 0.2, ease: 'easeOut' } }}
-            className="group flex items-start gap-4 bg-white rounded-2xl p-5 border border-[#e5e5ea] hover:border-[#003f87]/30 hover:shadow-lg transition-all duration-300"
+            className="group flex items-start gap-4 bg-white rounded-2xl p-5 border border-neutral-100 hover:border-primary-600/30 hover:shadow-lg transition-all duration-300"
         >
             {/* Icon */}
-            <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-[#003f87]/10 border border-[#003f87]/15 flex items-center justify-center text-[#003f87] group-hover:bg-[#003f87] group-hover:text-white group-hover:border-[#003f87] transition-all duration-200">
+            <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-primary-600/10 border border-primary-600/15 flex items-center justify-center text-primary-600 group-hover:bg-primary-600 group-hover:text-white group-hover:border-primary-600 transition-all duration-200">
                 {icon}
             </div>
 
             {/* Content */}
             <div className="flex-1 min-w-0">
-                <p className="font-semibold text-[#111111] text-sm mb-0.5 truncate group-hover:text-[#003f87] transition-colors">
+                <p className="font-semibold text-neutral-900 text-sm mb-0.5 truncate group-hover:text-primary-600 transition-colors">
                     {tautan.label}
                 </p>
                 {tautan.deskripsi && (
-                    <p className="text-[#8e8e93] text-xs leading-relaxed line-clamp-2">{tautan.deskripsi}</p>
+                    <p className="text-neutral-400 text-xs leading-relaxed line-clamp-2">{tautan.deskripsi}</p>
                 )}
             </div>
 
@@ -349,7 +349,7 @@ const TautanCard = ({ tautan }: { tautan: Tautan }) => {
             <ArrowUpRight
                 size={16}
                 strokeWidth={1.5}
-                className="flex-shrink-0 mt-0.5 text-[#aeaeb2] group-hover:text-[#003f87] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-200"
+                className="flex-shrink-0 mt-0.5 text-neutral-300 group-hover:text-primary-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-200"
             />
         </motion.a>
     );
@@ -359,7 +359,7 @@ const TautanSection = ({ tautan }: { tautan: Tautan[] }) => {
     if (!tautan || tautan.length === 0) return null;
 
     return (
-        <section className="py-20 lg:py-28 bg-[#f8f9fa]">
+        <section className="py-20 lg:py-28 bg-neutral-50">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
                 <motion.div
                     variants={fadeInUp}
@@ -368,13 +368,13 @@ const TautanSection = ({ tautan }: { tautan: Tautan[] }) => {
                     viewport={{ once: true }}
                     className="text-center mb-12"
                 >
-                    <p className="text-xs font-bold tracking-[0.2em] uppercase text-[#c9a84c] mb-3">
+                    <p className="text-xs font-bold tracking-[0.2em] uppercase text-gold-500 mb-3">
                         NAVIGASI CEPAT
                     </p>
-                    <h2 className="font-serif text-3xl lg:text-4xl font-bold text-[#003f87] mb-4">
+                    <h2 className="font-serif text-3xl lg:text-4xl font-bold text-primary-600 mb-4">
                         Tautan Penting
                     </h2>
-                    <p className="text-[#636366] text-lg max-w-xl mx-auto">
+                    <p className="text-neutral-500 text-lg max-w-xl mx-auto">
                         Akses cepat ke halaman dan layanan yang sering dibutuhkan.
                     </p>
                 </motion.div>
@@ -418,13 +418,13 @@ interface FormData {
 }
 
 const inputClass = cn(
-    'w-full px-4 py-3 text-sm rounded-xl border border-[#e5e5ea]',
-    'bg-white text-[#111111] placeholder-[#aeaeb2]',
-    'outline-none focus:border-[#003f87] focus:ring-2 focus:ring-[#003f87]/15',
+    'w-full px-4 py-3 text-sm rounded-xl border border-neutral-100',
+    'bg-white text-neutral-900 placeholder-neutral-300',
+    'outline-none focus:border-primary-600 focus:ring-2 focus:ring-primary-600/15',
     'transition-all duration-200',
 );
 
-const labelClass = 'block text-xs font-bold uppercase tracking-wide text-[#636366] mb-2';
+const labelClass = 'block text-xs font-bold uppercase tracking-wide text-neutral-500 mb-2';
 
 const FieldError = ({ message }: { message?: string }) =>
     message ? (
@@ -460,7 +460,7 @@ const FormKontak = () => {
     const rateLimitError = (errors as Record<string, string>).rate_limit;
 
     return (
-        <section className="py-20 lg:py-28 bg-white border-t border-[#e5e5ea]">
+        <section className="py-20 lg:py-28 bg-white border-t border-neutral-100">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-start">
 
@@ -471,14 +471,14 @@ const FormKontak = () => {
                         whileInView="visible"
                         viewport={{ once: true }}
                     >
-                        <p className="text-xs font-bold tracking-[0.2em] uppercase text-[#c9a84c] mb-3">
+                        <p className="text-xs font-bold tracking-[0.2em] uppercase text-gold-500 mb-3">
                             FORMULIR KONTAK
                         </p>
-                        <h2 className="font-serif text-3xl lg:text-4xl font-bold text-[#003f87] mb-6 leading-tight">
+                        <h2 className="font-serif text-3xl lg:text-4xl font-bold text-primary-600 mb-6 leading-tight">
                             Kirim{' '}
-                            <span className="text-[#c9a84c]">Pesan</span>
+                            <span className="text-gold-500">Pesan</span>
                         </h2>
-                        <p className="text-[#636366] text-base leading-relaxed mb-8">
+                        <p className="text-neutral-500 text-base leading-relaxed mb-8">
                             Punya pertanyaan seputar PPDB, jurusan, fasilitas, atau kerjasama?
                             Tim kami siap membantu. Isi formulir ini dan kami akan merespons
                             secepatnya.
@@ -491,8 +491,8 @@ const FormKontak = () => {
                                 { icon: <Mail size={16} strokeWidth={1.5} />, text: 'Pastikan alamat email Anda aktif untuk menerima balasan.' },
                                 { icon: <PhoneCall size={16} strokeWidth={1.5} />, text: 'Untuk urusan mendesak, hubungi langsung via telepon.' },
                             ].map((tip, i) => (
-                                <div key={i} className="flex items-start gap-3 text-sm text-[#636366]">
-                                    <div className="w-7 h-7 rounded-lg bg-[#003f87]/8 flex items-center justify-center shrink-0 text-[#003f87] mt-0.5">
+                                <div key={i} className="flex items-start gap-3 text-sm text-neutral-500">
+                                    <div className="w-7 h-7 rounded-lg bg-primary-600/8 flex items-center justify-center shrink-0 text-primary-600 mt-0.5">
                                         {tip.icon}
                                     </div>
                                     {tip.text}
@@ -514,15 +514,15 @@ const FormKontak = () => {
                                 variants={scaleIn}
                                 initial="hidden"
                                 animate="visible"
-                                className="flex flex-col items-center justify-center text-center py-16 px-8 bg-[#f8f9fa] rounded-3xl border border-[#e5e5ea]"
+                                className="flex flex-col items-center justify-center text-center py-16 px-8 bg-neutral-50 rounded-3xl border border-neutral-100"
                             >
                                 <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mb-5">
                                     <CheckCircle size={32} strokeWidth={1.5} className="text-green-600" />
                                 </div>
-                                <h3 className="font-serif text-2xl font-bold text-[#003f87] mb-3">
+                                <h3 className="font-serif text-2xl font-bold text-primary-600 mb-3">
                                     Pesan Terkirim!
                                 </h3>
-                                <p className="text-[#636366] text-sm leading-relaxed max-w-sm">
+                                <p className="text-neutral-500 text-sm leading-relaxed max-w-sm">
                                     {flash.success}
                                     {' '}Tim kami akan segera menghubungi Anda melalui email yang terdaftar.
                                 </p>
@@ -531,7 +531,7 @@ const FormKontak = () => {
                             <form
                                 onSubmit={handleSubmit}
                                 noValidate
-                                className="bg-[#f8f9fa] rounded-3xl border border-[#e5e5ea] p-6 sm:p-8 space-y-5"
+                                className="bg-neutral-50 rounded-3xl border border-neutral-100 p-6 sm:p-8 space-y-5"
                             >
                                 {/* Rate limit error global */}
                                 {rateLimitError && (
@@ -551,7 +551,7 @@ const FormKontak = () => {
                                             <User
                                                 size={15}
                                                 strokeWidth={1.5}
-                                                className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#aeaeb2]"
+                                                className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-300"
                                             />
                                             <input
                                                 id="kontak-nama"
@@ -575,7 +575,7 @@ const FormKontak = () => {
                                             <Mail
                                                 size={15}
                                                 strokeWidth={1.5}
-                                                className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#aeaeb2]"
+                                                className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-300"
                                             />
                                             <input
                                                 id="kontak-email"
@@ -597,13 +597,13 @@ const FormKontak = () => {
                                     <div>
                                         <label htmlFor="kontak-telepon" className={labelClass}>
                                             Nomor Telepon
-                                            <span className="normal-case font-normal tracking-normal ml-1 text-[#aeaeb2]">(opsional)</span>
+                                            <span className="normal-case font-normal tracking-normal ml-1 text-neutral-300">(opsional)</span>
                                         </label>
                                         <div className="relative">
                                             <PhoneCall
                                                 size={15}
                                                 strokeWidth={1.5}
-                                                className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#aeaeb2]"
+                                                className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-300"
                                             />
                                             <input
                                                 id="kontak-telepon"
@@ -627,7 +627,7 @@ const FormKontak = () => {
                                             <FileText
                                                 size={15}
                                                 strokeWidth={1.5}
-                                                className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#aeaeb2]"
+                                                className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-300"
                                             />
                                             <input
                                                 id="kontak-subjek"
@@ -651,7 +651,7 @@ const FormKontak = () => {
                                         </label>
                                         <span className={cn(
                                             'text-xs font-medium',
-                                            pesanLength > 4500 ? 'text-red-500' : 'text-[#aeaeb2]'
+                                            pesanLength > 4500 ? 'text-red-500' : 'text-neutral-300'
                                         )}>
                                             {pesanLength.toLocaleString('id-ID')}/5.000
                                         </span>
@@ -693,9 +693,9 @@ const FormKontak = () => {
                                     className={cn(
                                         'w-full sm:w-auto flex items-center justify-center gap-2.5',
                                         'px-8 py-4 rounded-xl',
-                                        'bg-[#c9a84c] text-white text-sm font-bold',
-                                        'hover:bg-[#a8821f] transition-all duration-200',
-                                        'focus:outline-none focus:ring-2 focus:ring-[#c9a84c]/50',
+                                        'bg-gold-500 text-white text-sm font-bold',
+                                        'hover:bg-gold-600 transition-all duration-200',
+                                        'focus:outline-none focus:ring-2 focus:ring-gold-500/50',
                                         'disabled:opacity-60 disabled:cursor-not-allowed',
                                         'shadow-md hover:shadow-lg',
                                     )}
