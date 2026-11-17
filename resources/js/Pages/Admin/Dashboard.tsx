@@ -1,15 +1,41 @@
 import React from 'react';
 import AdminLayout from '@/Layouts/AdminLayout';
 import { Head, Link } from '@inertiajs/react';
-import { FileCheck, Images, Users, BookOpen, Plus, Edit } from 'lucide-react';
+import {
+    FileCheck,
+    Images,
+    Users,
+    BookOpen,
+    Plus,
+    Clock,
+    Bell,
+    Mail,
+    TrendingUp,
+    Sparkles,
+    Eye,
+} from 'lucide-react';
 import { Badge } from '@/Components/UI/Badge';
+import { MiniBarChart, type MiniBarChartData } from '@/Components/Admin/MiniBarChart';
 
-interface ArticleItem {
+interface AuthorArticleItem {
     id: number;
     title: string;
     status: string;
+    created_at: string;
+}
+
+interface PendingArticleItem {
+    id: number;
+    title: string;
     author: string;
     created_at: string;
+}
+
+interface PopularContentItem {
+    id: number;
+    title: string;
+    view_count: number;
+    slug: string;
 }
 
 interface AiJobItem {
@@ -20,32 +46,46 @@ interface AiJobItem {
 }
 
 interface DashboardProps {
-    totalArtikel: {
+    role: 'author' | 'editor' | 'admin';
+    authorStats?: {
         draft: number;
         pending: number;
         published: number;
         archived: number;
-        total: number;
-    };
-    totalGaleri: number;
-    totalPengguna: number;
-    totalJurusanAktif: number;
-    artikelTerbaru: ArticleItem[];
-    aiJobsTerbaru: AiJobItem[];
+    } | null;
+    authorArticles?: AuthorArticleItem[] | null;
+    editorStats?: {
+        pending_review: number;
+        pengumuman_aktif: number;
+        pesan_baru: number;
+    } | null;
+    pendingArticles?: PendingArticleItem[] | null;
+    adminStats?: {
+        total_artikel: number;
+        total_galeri: number;
+        total_pengguna: number;
+        total_jurusan: number;
+    } | null;
+    kunjungan30Hari?: MiniBarChartData[] | null;
+    kontenTerpopuler?: PopularContentItem[] | null;
+    aiJobsTerbaru?: AiJobItem[] | null;
 }
 
 export default function Dashboard({
-    totalArtikel,
-    totalGaleri,
-    totalPengguna,
-    totalJurusanAktif,
-    artikelTerbaru,
+    role,
+    authorStats,
+    authorArticles,
+    editorStats,
+    pendingArticles,
+    adminStats,
+    kunjungan30Hari,
+    kontenTerpopuler,
     aiJobsTerbaru,
 }: DashboardProps) {
     const getArticleStatusVariant = (status: string) => {
         switch (status) {
             case 'published': return 'success';
-            case 'pending': return 'warning';
+            case 'pending_review': return 'warning';
             case 'archived': return 'neutral';
             case 'draft': return 'neutral';
             default: return 'neutral';
@@ -64,162 +104,279 @@ export default function Dashboard({
 
     return (
         <AdminLayout title="Dashboard">
-            {/* Row 1: Stats Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                {/* Total Artikel Published */}
-                <div className="bg-white rounded-xl border border-neutral-200 p-6 flex items-center justify-between shadow-sm">
-                    <div>
-                        <p className="text-sm font-medium text-neutral-500 mb-1">Total Artikel Published</p>
-                        <p className="text-3xl font-bold text-neutral-900">{totalArtikel.published}</p>
+            <Head title="Dashboard" />
+
+            {/* ============================================================== */}
+            {/* 1. ADMIN STATS & KUNJUNGAN */}
+            {/* ============================================================== */}
+            {role === 'admin' && adminStats && (
+                <div className="space-y-6 mb-8">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                        <div className="bg-white rounded-xl border border-neutral-200 p-5 flex items-center justify-between shadow-xs">
+                            <div>
+                                <p className="text-xs font-medium text-neutral-500 mb-1">Total Artikel</p>
+                                <p className="text-2xl font-bold text-neutral-900">{adminStats.total_artikel}</p>
+                            </div>
+                            <div className="h-11 w-11 rounded-xl bg-primary-50 text-primary-600 flex items-center justify-center">
+                                <FileCheck className="h-5 w-5" />
+                            </div>
+                        </div>
+
+                        <div className="bg-white rounded-xl border border-neutral-200 p-5 flex items-center justify-between shadow-xs">
+                            <div>
+                                <p className="text-xs font-medium text-neutral-500 mb-1">Total Galeri</p>
+                                <p className="text-2xl font-bold text-neutral-900">{adminStats.total_galeri}</p>
+                            </div>
+                            <div className="h-11 w-11 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                                <Images className="h-5 w-5" />
+                            </div>
+                        </div>
+
+                        <div className="bg-white rounded-xl border border-neutral-200 p-5 flex items-center justify-between shadow-xs">
+                            <div>
+                                <p className="text-xs font-medium text-neutral-500 mb-1">Total Pengguna</p>
+                                <p className="text-2xl font-bold text-neutral-900">{adminStats.total_pengguna}</p>
+                            </div>
+                            <div className="h-11 w-11 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center">
+                                <Users className="h-5 w-5" />
+                            </div>
+                        </div>
+
+                        <div className="bg-white rounded-xl border border-neutral-200 p-5 flex items-center justify-between shadow-xs">
+                            <div>
+                                <p className="text-xs font-medium text-neutral-500 mb-1">Jurusan Aktif</p>
+                                <p className="text-2xl font-bold text-neutral-900">{adminStats.total_jurusan}</p>
+                            </div>
+                            <div className="h-11 w-11 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+                                <BookOpen className="h-5 w-5" />
+                            </div>
+                        </div>
                     </div>
-                    <div className="h-12 w-12 rounded-xl bg-primary-600/10 flex items-center justify-center">
-                        <FileCheck className="h-6 w-6 text-primary-600" />
+
+                    {/* Grafik Kunjungan 30 Hari */}
+                    <div className="bg-white rounded-xl border border-neutral-200 p-6 shadow-xs">
+                        <div className="flex items-center justify-between mb-4">
+                            <div>
+                                <h3 className="text-base font-bold text-neutral-900">Tren Kunjungan 30 Hari Terakhir</h3>
+                                <p className="text-xs text-neutral-500">Jumlah kunjungan konten publik dari pengunjung asli</p>
+                            </div>
+                            <div className="p-2 rounded-lg bg-primary-50 text-primary-600">
+                                <TrendingUp className="w-5 h-5" />
+                            </div>
+                        </div>
+                        <MiniBarChart data={kunjungan30Hari ?? []} height={180} />
                     </div>
                 </div>
+            )}
 
-                {/* Total Galeri */}
-                <div className="bg-white rounded-xl border border-neutral-200 p-6 flex items-center justify-between shadow-sm">
-                    <div>
-                        <p className="text-sm font-medium text-neutral-500 mb-1">Total Galeri</p>
-                        <p className="text-3xl font-bold text-neutral-900">{totalGaleri}</p>
-                    </div>
-                    <div className="h-12 w-12 rounded-xl bg-indigo-100 flex items-center justify-center">
-                        <Images className="h-6 w-6 text-indigo-600" />
-                    </div>
-                </div>
+            {/* ============================================================== */}
+            {/* 2. EDITOR STATS & ANTREAN REVIEW */}
+            {/* ============================================================== */}
+            {(role === 'editor' || role === 'admin') && editorStats && (
+                <div className="space-y-6 mb-8">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+                        <div className="bg-white rounded-xl border border-neutral-200 p-5 flex items-center justify-between shadow-xs">
+                            <div>
+                                <p className="text-xs font-medium text-neutral-500 mb-1">Menunggu Review</p>
+                                <p className="text-2xl font-bold text-amber-600">{editorStats.pending_review}</p>
+                            </div>
+                            <div className="h-11 w-11 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+                                <Clock className="h-5 w-5" />
+                            </div>
+                        </div>
 
-                {/* Total Pengguna */}
-                <div className="bg-white rounded-xl border border-neutral-200 p-6 flex items-center justify-between shadow-sm">
-                    <div>
-                        <p className="text-sm font-medium text-neutral-500 mb-1">Total Pengguna</p>
-                        <p className="text-3xl font-bold text-neutral-900">{totalPengguna}</p>
-                    </div>
-                    <div className="h-12 w-12 rounded-xl bg-emerald-100 flex items-center justify-center">
-                        <Users className="h-6 w-6 text-emerald-600" />
-                    </div>
-                </div>
+                        <div className="bg-white rounded-xl border border-neutral-200 p-5 flex items-center justify-between shadow-xs">
+                            <div>
+                                <p className="text-xs font-medium text-neutral-500 mb-1">Pengumuman Aktif</p>
+                                <p className="text-2xl font-bold text-neutral-900">{editorStats.pengumuman_aktif}</p>
+                            </div>
+                            <div className="h-11 w-11 rounded-xl bg-primary-50 text-primary-600 flex items-center justify-center">
+                                <Bell className="h-5 w-5" />
+                            </div>
+                        </div>
 
-                {/* Total Jurusan Aktif */}
-                <div className="bg-white rounded-xl border border-neutral-200 p-6 flex items-center justify-between shadow-sm">
-                    <div>
-                        <p className="text-sm font-medium text-neutral-500 mb-1">Total Jurusan Aktif</p>
-                        <p className="text-3xl font-bold text-neutral-900">{totalJurusanAktif}</p>
+                        <div className="bg-white rounded-xl border border-neutral-200 p-5 flex items-center justify-between shadow-xs">
+                            <div>
+                                <p className="text-xs font-medium text-neutral-500 mb-1">Pesan Kontak Baru</p>
+                                <p className="text-2xl font-bold text-emerald-600">{editorStats.pesan_baru}</p>
+                            </div>
+                            <div className="h-11 w-11 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                                <Mail className="h-5 w-5" />
+                            </div>
+                        </div>
                     </div>
-                    <div className="h-12 w-12 rounded-xl bg-amber-100 flex items-center justify-center">
-                        <BookOpen className="h-6 w-6 text-amber-600" />
-                    </div>
-                </div>
-            </div>
 
-            {/* Row 2: Tables & Lists */}
-            <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 mb-8">
-                {/* Left: 60% (3/5) - Artikel Terbaru table */}
-                <div className="col-span-1 lg:col-span-3 bg-white rounded-xl border border-neutral-200 shadow-sm overflow-hidden flex flex-col">
-                    <div className="px-6 py-4 border-b border-neutral-200 bg-neutral-50/50 flex items-center justify-between">
-                        <h3 className="text-lg font-semibold text-neutral-900">Artikel Terbaru</h3>
-                    </div>
-                    <div className="flex-1 overflow-x-auto">
-                        <table className="w-full text-left border-collapse min-w-[600px]">
-                            <thead>
-                                <tr className="border-b border-neutral-200 text-xs text-neutral-500 bg-white uppercase tracking-wider">
-                                    <th className="px-6 py-3 font-medium">Judul</th>
-                                    <th className="px-6 py-3 font-medium">Status</th>
-                                    <th className="hidden md:table-cell px-6 py-3 font-medium">Penulis</th>
-                                    <th className="hidden md:table-cell px-6 py-3 font-medium">Tanggal</th>
-                                    <th className="px-6 py-3 font-medium text-right">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-neutral-100">
-                                {artikelTerbaru.length > 0 ? (
-                                    artikelTerbaru.map((artikel) => (
-                                        <tr key={artikel.id} className="hover:bg-neutral-50 transition-colors">
-                                            <td className="px-6 py-4 text-sm font-medium text-neutral-900 max-w-[200px] truncate">
-                                                {artikel.title}
-                                            </td>
-                                            <td className="px-6 py-4">
-                                                <Badge variant={getArticleStatusVariant(artikel.status) as any}>
-                                                    {artikel.status.charAt(0).toUpperCase() + artikel.status.slice(1)}
-                                                </Badge>
-                                            </td>
-                                            <td className="hidden md:table-cell px-6 py-4 text-sm text-neutral-500">
-                                                {artikel.author}
-                                            </td>
-                                            <td className="hidden md:table-cell px-6 py-4 text-sm text-neutral-500 whitespace-nowrap">
-                                                {artikel.created_at}
-                                            </td>
-                                            <td className="px-6 py-4 text-right">
-                                                <Link
-                                                    href={`/admin/artikel/${artikel.id}/edit`}
-                                                    className="inline-flex items-center justify-center w-8 h-8 rounded-md bg-neutral-100 text-neutral-600 hover:bg-primary-600/10 hover:text-primary-600 transition-colors"
-                                                    title="Edit Artikel"
-                                                >
-                                                    <Edit className="w-4 h-4" />
-                                                </Link>
-                                            </td>
-                                        </tr>
-                                    ))
-                                ) : (
-                                    <tr>
-                                        <td colSpan={5} className="px-6 py-8 text-center text-sm text-neutral-500">
-                                            Belum ada artikel.
-                                        </td>
-                                    </tr>
-                                )}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                {/* Right: 40% (2/5) - AI Jobs Terbaru list */}
-                <div className="col-span-1 lg:col-span-2 bg-white rounded-xl border border-neutral-200 shadow-sm overflow-hidden flex flex-col">
-                    <div className="px-6 py-4 border-b border-neutral-200 bg-neutral-50/50">
-                        <h3 className="text-lg font-semibold text-neutral-900">AI Jobs Terbaru</h3>
-                    </div>
-                    <div className="flex-1 p-0">
-                        <ul className="divide-y divide-neutral-100">
-                            {aiJobsTerbaru.length > 0 ? (
-                                aiJobsTerbaru.map((job) => (
-                                    <li key={job.id} className="px-6 py-4 hover:bg-neutral-50 transition-colors flex items-center justify-between">
-                                        <div className="flex flex-col gap-1">
-                                            <span className="text-sm font-medium text-neutral-900 capitalize">
-                                                {job.job_type.replace(/_/g, ' ')}
-                                            </span>
-                                            <span className="text-xs text-neutral-500">
-                                                {job.created_at}
-                                            </span>
-                                        </div>
-                                        <Badge variant={getAiJobStatusVariant(job.status) as any}>
-                                            {job.status.charAt(0).toUpperCase() + job.status.slice(1)}
-                                        </Badge>
-                                    </li>
-                                ))
+                    {/* Antrean Pending Review */}
+                    <div className="bg-white rounded-xl border border-neutral-200 shadow-xs overflow-hidden">
+                        <div className="p-5 border-b border-neutral-100 flex items-center justify-between">
+                            <div>
+                                <h3 className="text-base font-bold text-neutral-900">Antrean Artikel Menunggu Review</h3>
+                                <p className="text-xs text-neutral-500">Artikel yang diajukan oleh penulis dan perlu ditinjau</p>
+                            </div>
+                            <Link
+                                href="/admin/artikel?status=pending_review"
+                                className="text-xs font-semibold text-primary-600 hover:text-primary-700"
+                            >
+                                Lihat Semua
+                            </Link>
+                        </div>
+                        <div className="divide-y divide-neutral-100">
+                            {!pendingArticles || pendingArticles.length === 0 ? (
+                                <p className="text-xs text-neutral-400 p-5 text-center">Tidak ada artikel yang menunggu review saat ini.</p>
                             ) : (
-                                <li className="px-6 py-8 text-center text-sm text-neutral-500">
-                                    Belum ada history AI Job.
-                                </li>
+                                pendingArticles.map((art) => (
+                                    <div key={art.id} className="p-4 flex items-center justify-between gap-4">
+                                        <div className="min-w-0">
+                                            <p className="text-sm font-semibold text-neutral-900 truncate">{art.title}</p>
+                                            <p className="text-xs text-neutral-500">Oleh: {art.author} • {art.created_at}</p>
+                                        </div>
+                                        <Link
+                                            href={`/admin/artikel/${art.id}/edit`}
+                                            className="px-3 py-1.5 rounded-lg text-xs font-medium bg-primary-50 text-primary-700 hover:bg-primary-100 shrink-0"
+                                        >
+                                            Tinjau
+                                        </Link>
+                                    </div>
+                                ))
                             )}
-                        </ul>
+                        </div>
                     </div>
                 </div>
-            </div>
+            )}
 
-            {/* Row 3: Shortcut CTA */}
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-                <Link
-                    href="/admin/artikel/buat"
-                    className="w-full sm:w-auto inline-flex items-center justify-center font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed bg-primary-600 text-white hover:bg-primary-800 focus:ring-primary-600/50 border border-transparent px-6 py-3 min-h-[44px] text-base rounded-xl"
-                >
-                    <Plus className="w-5 h-5 mr-2" />
-                    Tulis Artikel Baru
-                </Link>
-                <Link
-                    href="/admin/galeri/buat"
-                    className="w-full sm:w-auto inline-flex items-center justify-center font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed border-2 border-primary-600 text-primary-600 hover:bg-primary-50 focus:ring-primary-600/50 px-6 py-3 min-h-[44px] text-base rounded-xl"
-                >
-                    <Images className="w-5 h-5 mr-2" />
-                    Upload Galeri
-                </Link>
-            </div>
+            {/* ============================================================== */}
+            {/* 3. AUTHOR STATS & ARTIKEL SAYA */}
+            {/* ============================================================== */}
+            {authorStats && (
+                <div className="space-y-6 mb-8">
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                        <div className="bg-white rounded-xl border border-neutral-200 p-4 shadow-xs">
+                            <p className="text-xs text-neutral-500">Draft Saya</p>
+                            <p className="text-xl font-bold text-neutral-800 mt-1">{authorStats.draft}</p>
+                        </div>
+                        <div className="bg-white rounded-xl border border-neutral-200 p-4 shadow-xs">
+                            <p className="text-xs text-neutral-500">Menunggu Review</p>
+                            <p className="text-xl font-bold text-amber-600 mt-1">{authorStats.pending}</p>
+                        </div>
+                        <div className="bg-white rounded-xl border border-neutral-200 p-4 shadow-xs">
+                            <p className="text-xs text-neutral-500">Terbit</p>
+                            <p className="text-xl font-bold text-emerald-600 mt-1">{authorStats.published}</p>
+                        </div>
+                        <div className="bg-white rounded-xl border border-neutral-200 p-4 shadow-xs">
+                            <p className="text-xs text-neutral-500">Arsip</p>
+                            <p className="text-xl font-bold text-neutral-500 mt-1">{authorStats.archived}</p>
+                        </div>
+                    </div>
+
+                    <div className="bg-white rounded-xl border border-neutral-200 shadow-xs overflow-hidden">
+                        <div className="p-5 border-b border-neutral-100 flex items-center justify-between">
+                            <div>
+                                <h3 className="text-base font-bold text-neutral-900">Artikel Terbaru Saya</h3>
+                                <p className="text-xs text-neutral-500">Status perkembangan artikel yang Anda tulis</p>
+                            </div>
+                            <Link
+                                href="/admin/artikel/create"
+                                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-primary-600 text-white hover:bg-primary-700"
+                            >
+                                <Plus className="w-3.5 h-3.5" />
+                                Tulis Artikel
+                            </Link>
+                        </div>
+                        <div className="divide-y divide-neutral-100">
+                            {!authorArticles || authorArticles.length === 0 ? (
+                                <p className="text-xs text-neutral-400 p-5 text-center">Belum ada artikel yang ditulis.</p>
+                            ) : (
+                                authorArticles.map((art) => (
+                                    <div key={art.id} className="p-4 flex items-center justify-between gap-4">
+                                        <div className="min-w-0">
+                                            <p className="text-sm font-semibold text-neutral-900 truncate">{art.title}</p>
+                                            <p className="text-xs text-neutral-500">{art.created_at}</p>
+                                        </div>
+                                        <div className="flex items-center gap-3 shrink-0">
+                                            <Badge variant={getArticleStatusVariant(art.status)}>
+                                                {art.status}
+                                            </Badge>
+                                            <Link
+                                                href={`/admin/artikel/${art.id}/edit`}
+                                                className="text-xs font-medium text-primary-600 hover:text-primary-800"
+                                            >
+                                                Edit
+                                            </Link>
+                                        </div>
+                                    </div>
+                                ))
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* ============================================================== */}
+            {/* 4. ADMIN EXTRA: KONTEN TERPOPULER & AI JOBS */}
+            {/* ============================================================== */}
+            {role === 'admin' && (
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    {/* 5 Konten Terpopuler */}
+                    <div className="bg-white rounded-xl border border-neutral-200 shadow-xs overflow-hidden">
+                        <div className="p-5 border-b border-neutral-100 flex items-center justify-between">
+                            <div>
+                                <h3 className="text-base font-bold text-neutral-900">5 Konten Terpopuler</h3>
+                                <p className="text-xs text-neutral-500">Artikel dengan pembaca terbanyak</p>
+                            </div>
+                            <Eye className="w-5 h-5 text-primary-600" />
+                        </div>
+                        <div className="divide-y divide-neutral-100">
+                            {!kontenTerpopuler || kontenTerpopuler.length === 0 ? (
+                                <p className="text-xs text-neutral-400 p-5 text-center">Belum ada data tayangan konten.</p>
+                            ) : (
+                                kontenTerpopuler.map((konten, idx) => (
+                                    <div key={konten.id} className="p-4 flex items-center justify-between gap-3">
+                                        <div className="flex items-center gap-3 min-w-0">
+                                            <span className="w-6 h-6 rounded-full bg-neutral-100 text-neutral-600 text-xs font-bold flex items-center justify-center shrink-0">
+                                                {idx + 1}
+                                            </span>
+                                            <p className="text-sm font-medium text-neutral-800 truncate">{konten.title}</p>
+                                        </div>
+                                        <span className="text-xs font-bold text-primary-700 bg-primary-50 px-2.5 py-1 rounded-full shrink-0">
+                                            {konten.view_count.toLocaleString()} tayangan
+                                        </span>
+                                    </div>
+                                ))
+                            )}
+                        </div>
+                    </div>
+
+                    {/* AI Jobs Terbaru */}
+                    <div className="bg-white rounded-xl border border-neutral-200 shadow-xs overflow-hidden">
+                        <div className="p-5 border-b border-neutral-100 flex items-center justify-between">
+                            <div>
+                                <h3 className="text-base font-bold text-neutral-900">Aktivitas Asisten AI Terbaru</h3>
+                                <p className="text-xs text-neutral-500">Pemrosesan tugas generatif & optimasi konten</p>
+                            </div>
+                            <Sparkles className="w-5 h-5 text-amber-500" />
+                        </div>
+                        <div className="divide-y divide-neutral-100">
+                            {!aiJobsTerbaru || aiJobsTerbaru.length === 0 ? (
+                                <p className="text-xs text-neutral-400 p-5 text-center">Belum ada tugas AI yang dijalankan.</p>
+                            ) : (
+                                aiJobsTerbaru.map((job) => (
+                                    <div key={job.id} className="p-4 flex items-center justify-between gap-3">
+                                        <div>
+                                            <p className="text-sm font-semibold text-neutral-800 uppercase tracking-wide">
+                                                {job.job_type}
+                                            </p>
+                                            <p className="text-xs text-neutral-400">{job.created_at}</p>
+                                        </div>
+                                        <Badge variant={getAiJobStatusVariant(job.status)}>
+                                            {job.status}
+                                        </Badge>
+                                    </div>
+                                ))
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
         </AdminLayout>
     );
 }
