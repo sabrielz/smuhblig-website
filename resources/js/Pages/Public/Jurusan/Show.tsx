@@ -74,15 +74,22 @@ export default function JurusanShow({ jurusan: response, jurusanLain, pengaturan
     const [lightboxOpen, setLightboxOpen] = useState(false);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
+    useEffect(() => {
+        if (lightboxOpen) {
+            document.body.style.overflow = 'hidden';
+            return () => {
+                document.body.style.overflow = 'auto';
+            };
+        }
+    }, [lightboxOpen]);
+
     const openLightbox = (index: number) => {
         setCurrentImageIndex(index);
         setLightboxOpen(true);
-        document.body.style.overflow = 'hidden';
     };
 
     const closeLightbox = () => {
         setLightboxOpen(false);
-        document.body.style.overflow = 'auto';
     };
 
     const nextImage = (e?: React.MouseEvent) => {
@@ -122,7 +129,7 @@ export default function JurusanShow({ jurusan: response, jurusanLain, pengaturan
 
             {/* --- SECTION 1: HERO JURUSAN --- */}
             <section
-                className="relative min-h-[70vh] lg:min-h-screen flex items-end overflow-hidden pb-16 pt-32 lg:pb-24 bg-[#002f5d]"
+                className="relative min-h-[70vh] lg:min-h-screen flex items-end overflow-hidden pb-16 pt-32 lg:pb-24 bg-primary-800"
             >
                 {/* Background Image / Gradient */}
                 <div className="absolute inset-0 z-0">
@@ -182,7 +189,7 @@ export default function JurusanShow({ jurusan: response, jurusanLain, pengaturan
                                     target="_blank"
                                     rel="noreferrer"
                                     className="px-6 py-3 rounded-lg font-semibold border border-transparent shadow-lg text-white hover:-translate-y-1 transition-all"
-                                    style={{ backgroundColor: jurusan.color_start, color: '#ffffff' }}
+                                    style={{ backgroundColor: jurusan.color_start, color: 'white' }}
                                 >
                                     Daftar Sekarang
                                 </a>
@@ -230,14 +237,14 @@ export default function JurusanShow({ jurusan: response, jurusanLain, pengaturan
                                 <motion.span variants={fadeInUp} className="text-sm font-semibold tracking-widest text-neutral-400 uppercase mb-4 block">
                                     Tentang Program
                                 </motion.span>
-                                <motion.h2 variants={fadeInUp} className="text-3xl lg:text-4xl font-serif font-bold text-[#001f4d] mb-8">
+                                <motion.h2 variants={fadeInUp} className="text-3xl lg:text-4xl font-serif font-bold text-primary-900 mb-8">
                                     Apa itu {jurusan.nama}?
                                 </motion.h2>
 
                                 {jurusan.deskripsi_lengkap ? (
                                     <motion.div
                                         variants={fadeInUp}
-                                        className="prose prose-lg prose-neutral max-w-none prose-headings:text-[#001f4d] prose-a:text-[#c9a84c] mb-10"
+                                        className="prose prose-lg prose-neutral max-w-none prose-headings:text-primary-900 prose-a:text-gold-500 mb-10"
                                         dangerouslySetInnerHTML={{ __html: jurusan.deskripsi_lengkap }}
                                     />
                                 ) : (
@@ -306,13 +313,13 @@ export default function JurusanShow({ jurusan: response, jurusanLain, pengaturan
             </section>
 
             {/* --- SECTION 3: KOMPETENSI --- */}
-            <section className="py-20 bg-[#f8f9fa]">
+            <section className="py-20 bg-neutral-50">
                 <div className="container mx-auto px-4 lg:px-8 max-w-7xl">
                     <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }} className="mb-12">
-                        <span className="text-sm font-semibold tracking-widest text-[#c9a84c] uppercase mb-4 block">
+                        <span className="text-sm font-semibold tracking-widest text-gold-500 uppercase mb-4 block">
                             Yang Akan Dipelajari
                         </span>
-                        <h2 className="text-3xl lg:text-4xl font-serif font-bold text-[#001f4d]">
+                        <h2 className="text-3xl lg:text-4xl font-serif font-bold text-primary-900">
                             Kompetensi Keahlian
                         </h2>
                     </motion.div>
@@ -346,7 +353,7 @@ export default function JurusanShow({ jurusan: response, jurusanLain, pengaturan
             </section>
 
             {/* --- SECTION 4: PROSPEK KARIR --- */}
-            <section className="py-24 relative overflow-hidden" style={{ backgroundColor: jurusan.color_start || '#001f4d' }}>
+            <section className="py-24 relative overflow-hidden" style={{ backgroundColor: jurusan.color_start || 'var(--color-primary-900)' }}>
                 <div className="absolute inset-0 bg-black/10"></div>
                 <div className="container mx-auto px-4 lg:px-8 max-w-7xl relative z-10">
                     <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }} className="mb-12">
@@ -372,7 +379,7 @@ export default function JurusanShow({ jurusan: response, jurusanLain, pengaturan
                                     variants={scaleIn}
                                     className="bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-xl px-6 py-5 border border-white/5 transition-all duration-300 flex items-center gap-4"
                                 >
-                                    <div className="w-10 h-10 rounded-full bg-[#c9a84c]/20 text-[#c9a84c] flex items-center justify-center shrink-0">
+                                    <div className="w-10 h-10 rounded-full bg-gold-500/20 text-gold-500 flex items-center justify-center shrink-0">
                                         <Briefcase className="w-5 h-5" />
                                     </div>
                                     <p className="font-semibold text-white leading-tight">{item}</p>
@@ -389,10 +396,10 @@ export default function JurusanShow({ jurusan: response, jurusanLain, pengaturan
             <section className="py-20 bg-white">
                 <div className="container mx-auto px-4 lg:px-8 max-w-7xl">
                     <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }} className="mb-12">
-                        <span className="text-sm font-semibold tracking-widest text-[#c9a84c] uppercase mb-4 block">
+                        <span className="text-sm font-semibold tracking-widest text-gold-500 uppercase mb-4 block">
                             Fasilitas
                         </span>
-                        <h2 className="text-3xl lg:text-4xl font-serif font-bold text-[#001f4d]">
+                        <h2 className="text-3xl lg:text-4xl font-serif font-bold text-primary-900">
                             Sarana & Prasarana Pembelajaran
                         </h2>
                     </motion.div>
@@ -416,13 +423,13 @@ export default function JurusanShow({ jurusan: response, jurusanLain, pengaturan
 
             {/* --- SECTION 6: GALERI FOTO --- */}
             {jurusan.gallery_images && jurusan.gallery_images.length > 0 && (
-                <section className="py-20 bg-[#f8f9fa] border-t border-gray-200">
+                <section className="py-20 bg-neutral-50 border-t border-gray-200">
                     <div className="container mx-auto px-4 lg:px-8 max-w-7xl">
                         <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }} className="mb-12">
-                            <span className="text-sm font-semibold tracking-widest text-[#c9a84c] uppercase mb-4 block">
+                            <span className="text-sm font-semibold tracking-widest text-gold-500 uppercase mb-4 block">
                                 Galeri
                             </span>
-                            <h2 className="text-3xl lg:text-4xl font-serif font-bold text-[#001f4d]">
+                            <h2 className="text-3xl lg:text-4xl font-serif font-bold text-primary-900">
                                 Suasana Pembelajaran
                             </h2>
                         </motion.div>
@@ -449,7 +456,7 @@ export default function JurusanShow({ jurusan: response, jurusanLain, pengaturan
                 <div className="container mx-auto px-4 lg:px-8 max-w-7xl mb-24">
                     <div className="flex justify-between items-end mb-10">
                         <div>
-                            <h2 className="text-2xl lg:text-3xl font-serif font-bold text-[#001f4d]">
+                            <h2 className="text-2xl lg:text-3xl font-serif font-bold text-primary-900">
                                 Program Keahlian Lainnya
                             </h2>
                         </div>
@@ -467,7 +474,7 @@ export default function JurusanShow({ jurusan: response, jurusanLain, pengaturan
                 {/* Final CTA Banner */}
                 <div
                     className="py-24 relative overflow-hidden"
-                    style={{ background: `linear-gradient(135deg, ${jurusan.color_start}, #001f4d)` }}
+                    style={{ background: `linear-gradient(135deg, ${jurusan.color_start}, var(--color-primary-900))` }}
                 >
                     <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full blur-3xl translate-x-1/3 -translate-y-1/3 pointer-events-none"></div>
                     <div className="container mx-auto px-4 lg:px-8 max-w-4xl text-center relative z-10">
@@ -482,7 +489,7 @@ export default function JurusanShow({ jurusan: response, jurusanLain, pengaturan
                                 href={spmbUrl}
                                 target="_blank"
                                 rel="noreferrer"
-                                className="w-full sm:w-auto px-8 py-4 bg-[#c9a84c] hover:bg-[#b89639] text-white text-lg font-bold rounded-xl shadow-xl transition-all hover:-translate-y-1"
+                                className="w-full sm:w-auto px-8 py-4 bg-gold-500 hover:bg-gold-600 text-white text-lg font-bold rounded-xl shadow-xl transition-all hover:-translate-y-1"
                             >
                                 Daftar Sekarang
                             </a>

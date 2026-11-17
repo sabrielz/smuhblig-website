@@ -49,9 +49,9 @@ const GeometricPattern = () => (
 
 // Page Hero (Small)
 const PageHero = () => (
-    <section className="relative bg-[#001f4d] overflow-hidden min-h-[320px] flex items-center">
+    <section className="relative bg-primary-900 overflow-hidden min-h-[320px] flex items-center">
         <GeometricPattern />
-        <div className="absolute inset-0 bg-gradient-to-br from-[#003f87]/60 via-transparent to-[#001f4d]" />
+        <div className="absolute inset-0 bg-gradient-to-br from-primary-600/60 via-transparent to-primary-900" />
         <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl pt-24 pb-16">
             <motion.div
                 variants={staggerContainer}
@@ -61,7 +61,7 @@ const PageHero = () => (
             >
                 <motion.p
                     variants={fadeInUp}
-                    className="text-xs font-bold tracking-[0.25em] uppercase text-[#c9a84c] mb-3"
+                    className="text-xs font-bold tracking-[0.25em] uppercase text-gold-500 mb-3"
                 >
                     AKSES CEPAT
                 </motion.p>
@@ -69,7 +69,7 @@ const PageHero = () => (
                     variants={fadeInUp}
                     className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight mb-4"
                 >
-                    Tautan <span className="text-[#c9a84c]">Penting</span>
+                    Tautan <span className="text-gold-500">Penting</span>
                 </motion.h1>
                 <motion.nav
                     variants={fadeInUp}
@@ -99,7 +99,7 @@ const IconRenderer = ({ iconName, className }: { iconName: string | null; classN
     const formattedName = iconName.charAt(0).toUpperCase() + iconName.slice(1);
 
     // Check if icon exists in LucideIcons
-    // @ts-ignore
+    // @ts-expect-error LucideIcons dynamic lookup
     const Icon = LucideIcons[formattedName] || LucideIcons[iconName] || FallbackIcon;
 
     return <Icon className={className} />;
@@ -115,7 +115,7 @@ export default function Tautan({ pengaturan, groupedLinks }: TautanProps) {
             <section className="py-16 lg:py-24 bg-white min-h-[50vh]">
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
                     {groupedLinks.length === 0 ? (
-                        <div className="text-center text-[#636366] py-16">
+                        <div className="text-center text-neutral-500 py-16">
                             Belum ada tautan tersedia.
                         </div>
                     ) : (
@@ -130,9 +130,9 @@ export default function Tautan({ pengaturan, groupedLinks }: TautanProps) {
                                 >
                                     <motion.h2
                                         variants={fadeInUp}
-                                        className="text-2xl font-serif font-bold text-[#003f87] mb-6 flex items-center gap-3"
+                                        className="text-2xl font-serif font-bold text-primary-600 mb-6 flex items-center gap-3"
                                     >
-                                        <span className="w-8 h-px bg-[#c9a84c] inline-block"></span>
+                                        <span className="w-8 h-px bg-gold-500 inline-block"></span>
                                         {group.category || 'Lainnya'}
                                     </motion.h2>
 
@@ -144,30 +144,30 @@ export default function Tautan({ pengaturan, groupedLinks }: TautanProps) {
                                                 href={item.url}
                                                 target={item.buka_tab_baru ? "_blank" : "_self"}
                                                 rel={item.buka_tab_baru ? "noopener noreferrer" : undefined}
-                                                className="group relative bg-white border border-[#e5e5ea] hover:border-[#003f87] rounded-2xl p-6 transition-all duration-300 hover:shadow-xl hover:shadow-[#003f87]/5 block overflow-hidden"
+                                                className="group relative bg-white border border-neutral-100 hover:border-primary-600 rounded-2xl p-6 transition-all duration-300 hover:shadow-xl hover:shadow-primary-600/5 block overflow-hidden"
                                             >
                                                 {/* Hover line indicator */}
-                                                <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-[#003f87] to-[#c9a84c] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                                                <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-primary-600 to-gold-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
                                                 <div className="flex items-start gap-4 flex-nowrap">
-                                                    <div className="flex-shrink-0 w-12 h-12 rounded-full bg-[#f8f9fa] group-hover:bg-[#003f87]/5 border border-[#e5e5ea] group-hover:border-[#003f87]/20 flex items-center justify-center transition-colors duration-300">
-                                                        <IconRenderer iconName={item.icon_name} className="w-6 h-6 text-[#003f87]" />
+                                                    <div className="flex-shrink-0 w-12 h-12 rounded-full bg-neutral-50 group-hover:bg-primary-600/5 border border-neutral-100 group-hover:border-primary-600/20 flex items-center justify-center transition-colors duration-300">
+                                                        <IconRenderer iconName={item.icon_name} className="w-6 h-6 text-primary-600" />
                                                     </div>
 
                                                     <div className="flex-1 min-w-0 pr-8">
-                                                        <h3 className="text-lg font-bold text-[#111111] group-hover:text-[#003f87] transition-colors truncate mb-1">
+                                                        <h3 className="text-lg font-bold text-neutral-900 group-hover:text-primary-600 transition-colors truncate mb-1">
                                                             {item.label}
                                                         </h3>
                                                         {item.description && (
-                                                            <p className="text-sm text-[#636366] line-clamp-2 leading-relaxed">
+                                                            <p className="text-sm text-neutral-500 line-clamp-2 leading-relaxed">
                                                                 {item.description}
                                                             </p>
                                                         )}
                                                     </div>
                                                 </div>
 
-                                                <div className="absolute right-6 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-[#f8f9fa] group-hover:bg-[#003f87] flex items-center justify-center transition-colors duration-300">
-                                                    <ExternalLink className="w-4 h-4 text-[#636366] group-hover:text-white transition-colors" />
+                                                <div className="absolute right-6 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-neutral-50 group-hover:bg-primary-600 flex items-center justify-center transition-colors duration-300">
+                                                    <ExternalLink className="w-4 h-4 text-neutral-500 group-hover:text-white transition-colors" />
                                                 </div>
                                             </motion.a>
                                         ))}

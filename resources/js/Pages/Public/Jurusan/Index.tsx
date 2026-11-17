@@ -38,17 +38,17 @@ const GeometricPattern = () => (
 // ─── Hero Section ─────────────────────────────────────────────────────────────
 function HeroSection() {
     return (
-        <section className="relative min-h-[52vh] flex items-center bg-[#001f4d] overflow-hidden">
+        <section className="relative min-h-[52vh] flex items-center bg-primary-900 overflow-hidden">
             <GeometricPattern />
 
             {/* Ambient glow */}
             <div
                 aria-hidden="true"
-                className="absolute -top-40 -right-40 w-[600px] h-[600px] bg-[#003f87]/40 rounded-full blur-3xl pointer-events-none"
+                className="absolute -top-40 -right-40 w-[600px] h-[600px] bg-primary-600/40 rounded-full blur-3xl pointer-events-none"
             />
             <div
                 aria-hidden="true"
-                className="absolute -bottom-24 -left-24 w-[400px] h-[400px] bg-[#c9a84c]/10 rounded-full blur-3xl pointer-events-none"
+                className="absolute -bottom-24 -left-24 w-[400px] h-[400px] bg-gold-500/10 rounded-full blur-3xl pointer-events-none"
             />
 
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative py-24 lg:py-32">
@@ -76,8 +76,8 @@ function HeroSection() {
 
                     {/* Eyebrow */}
                     <motion.div variants={fadeInUp} className="flex items-center gap-3 mb-6">
-                        <div className="w-8 h-px bg-[#c9a84c]" />
-                        <span className="text-[#c9a84c] text-sm font-semibold tracking-widest uppercase font-sans">
+                        <div className="w-8 h-px bg-gold-500" />
+                        <span className="text-gold-500 text-sm font-semibold tracking-widest uppercase font-sans">
                             SMK Muhammadiyah Bligo
                         </span>
                     </motion.div>
@@ -110,7 +110,7 @@ interface GridSectionProps {
 
 function GridJurusanSection({ jurusan }: GridSectionProps) {
     return (
-        <section className="py-20 lg:py-28 bg-[#f8f9fa]">
+        <section className="py-20 lg:py-28 bg-neutral-50">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
                 {/* Section header */}
                 <motion.div
@@ -120,13 +120,13 @@ function GridJurusanSection({ jurusan }: GridSectionProps) {
                     viewport={{ once: true }}
                     className="text-center mb-14"
                 >
-                    <span className="inline-block text-[#c9a84c] text-sm font-semibold tracking-widest uppercase mb-4">
+                    <span className="inline-block text-gold-500 text-sm font-semibold tracking-widest uppercase mb-4">
                         Pilihan Program
                     </span>
-                    <h2 className="font-serif text-display-md lg:text-display-lg font-bold text-[#001f4d] mb-4">
+                    <h2 className="font-serif text-display-md lg:text-display-lg font-bold text-primary-900 mb-4">
                         Temukan Keahlian Anda
                     </h2>
-                    <p className="text-[#636366] text-lg max-w-xl mx-auto leading-relaxed">
+                    <p className="text-neutral-500 text-lg max-w-xl mx-auto leading-relaxed">
                         Setiap program dirancang untuk menghasilkan lulusan yang kompeten,
                         siap kerja, dan berakhlak mulia.
                     </p>
@@ -167,11 +167,11 @@ function GridJurusanSection({ jurusan }: GridSectionProps) {
                         className="text-center py-20"
                     >
                         <BookOpen
-                            className="mx-auto mb-4 text-[#aeaeb2]"
+                            className="mx-auto mb-4 text-neutral-300"
                             size={48}
                             strokeWidth={1.5}
                         />
-                        <p className="text-[#636366] text-lg">
+                        <p className="text-neutral-500 text-lg">
                             Program keahlian belum tersedia.
                         </p>
                     </motion.div>
@@ -184,19 +184,19 @@ function GridJurusanSection({ jurusan }: GridSectionProps) {
 // ─── CTA Section ─────────────────────────────────────────────────────────────
 function CTASection() {
     return (
-        <section className="py-20 lg:py-28 bg-[#001f4d] relative overflow-hidden">
+        <section className="py-20 lg:py-28 bg-primary-900 relative overflow-hidden">
             <GeometricPattern />
 
             {/* Glow accents */}
             <div
                 aria-hidden="true"
                 className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[1px]
-                           bg-gradient-to-r from-transparent via-[#c9a84c]/40 to-transparent"
+                           bg-gradient-to-r from-transparent via-gold-500/40 to-transparent"
             />
             <div
                 aria-hidden="true"
                 className="absolute -right-32 top-1/2 -translate-y-1/2 w-64 h-64
-                           bg-[#003f87]/50 rounded-full blur-3xl pointer-events-none"
+                           bg-primary-600/50 rounded-full blur-3xl pointer-events-none"
             />
 
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative">
@@ -208,11 +208,11 @@ function CTASection() {
                     className="text-center max-w-2xl mx-auto"
                 >
                     <motion.div variants={fadeInUp} className="flex items-center justify-center gap-3 mb-6">
-                        <div className="w-8 h-px bg-[#c9a84c]" />
-                        <span className="text-[#c9a84c] text-sm font-semibold tracking-widest uppercase">
+                        <div className="w-8 h-px bg-gold-500" />
+                        <span className="text-gold-500 text-sm font-semibold tracking-widest uppercase">
                             Butuh Bantuan?
                         </span>
-                        <div className="w-8 h-px bg-[#c9a84c]" />
+                        <div className="w-8 h-px bg-gold-500" />
                     </motion.div>
 
                     <motion.h2
@@ -237,9 +237,9 @@ function CTASection() {
                         <Link
                             href="/kontak"
                             id="cta-hubungi-kami"
-                            className="inline-flex justify-center items-center w-full sm:w-auto gap-2 px-8 py-4 bg-[#c9a84c] text-white
-                                       font-semibold rounded-xl hover:bg-[#a8821f] transition-all duration-200
-                                       shadow-lg shadow-[#c9a84c]/20 hover:shadow-[#c9a84c]/30 hover:-translate-y-0.5 min-h-11"
+                            className="inline-flex justify-center items-center w-full sm:w-auto gap-2 px-8 py-4 bg-gold-500 text-white
+                                       font-semibold rounded-xl hover:bg-gold-600 transition-all duration-200
+                                       shadow-lg shadow-gold-500/20 hover:shadow-gold-500/30 hover:-translate-y-0.5 min-h-11"
                         >
                             Hubungi Kami
                             <ArrowRight className="w-5 h-5" strokeWidth={1.5} />

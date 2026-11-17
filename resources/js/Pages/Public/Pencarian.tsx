@@ -115,7 +115,7 @@ export default function Pencarian({
             </Head>
 
             {/* Header Section */}
-            <section className="bg-[#001f4d] pt-32 pb-16 lg:pt-40 lg:pb-24 overflow-hidden relative">
+            <section className="bg-primary-900 pt-32 pb-16 lg:pt-40 lg:pb-24 overflow-hidden relative">
                 {/* Background Pattern */}
                 <div className="absolute inset-0 opacity-10 pointer-events-none">
                     <svg
@@ -126,7 +126,7 @@ export default function Pencarian({
                         <path
                             d="M0,100 L100,0 L100,100 Z"
                             fill="currentColor"
-                            className="text-[#c9a84c]"
+                            className="text-gold-500"
                         />
                     </svg>
                 </div>
@@ -156,11 +156,11 @@ export default function Pencarian({
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                                 placeholder={locale === 'id' ? "Cari informasi, artikel, atau jurusan..." : "Search information, articles, or programs..."}
-                                className="w-full bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl py-4 pl-6 pr-16 text-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-[#c9a84c] focus:border-transparent transition-all shadow-lg"
+                                className="w-full bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl py-4 pl-6 pr-16 text-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-gold-500 focus:border-transparent transition-all shadow-lg"
                             />
                             <button
                                 type="submit"
-                                className="absolute right-2 top-2 bottom-2 bg-[#c9a84c] text-white p-3 rounded-xl hover:bg-[#a8821f] transition-colors shadow-sm"
+                                className="absolute right-2 top-2 bottom-2 bg-gold-500 text-white p-3 rounded-xl hover:bg-gold-600 transition-colors shadow-sm"
                             >
                                 <Search className="w-5 h-5" />
                             </button>
@@ -178,7 +178,7 @@ export default function Pencarian({
                                     className={cn(
                                         'px-5 py-2.5 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-300',
                                         activeTab === tab
-                                            ? 'bg-white text-[#001f4d] shadow-md'
+                                            ? 'bg-white text-primary-900 shadow-md'
                                             : 'bg-white/10 text-white/80 hover:bg-white/20 hover:text-white'
                                     )}
                                 >
@@ -198,7 +198,7 @@ export default function Pencarian({
                         </motion.div>
 
                         <motion.p variants={fadeInUp} className="mt-8 text-white/70 text-sm">
-                            {locale === 'id' ? 'Menampilkan' : 'Showing'} <strong className="text-white">{totalHasil}</strong> {locale === 'id' ? 'hasil untuk' : 'results for'} "<strong className="text-[#c9a84c]">{keyword}</strong>"
+                            {locale === 'id' ? 'Menampilkan' : 'Showing'} <strong className="text-white">{totalHasil}</strong> {locale === 'id' ? 'hasil untuk' : 'results for'} "<strong className="text-gold-500">{keyword}</strong>"
                         </motion.p>
                     </motion.div>
                 </div>
@@ -218,7 +218,7 @@ export default function Pencarian({
                             <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-red-50 text-red-400 mb-6">
                                 <SearchX className="w-10 h-10" />
                             </div>
-                            <h3 className="text-2xl font-bold text-[#111111] mb-3">
+                            <h3 className="text-2xl font-bold text-neutral-900 mb-3">
                                 {locale === 'id' ? 'Tidak ada hasil ditemukan' : 'No results found'}
                             </h3>
                             <p className="text-gray-500 mb-8 max-w-md mx-auto">
@@ -230,14 +230,14 @@ export default function Pencarian({
                             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                                 <button
                                     onClick={() => router.get('/berita')}
-                                    className="px-6 py-3 rounded-xl bg-[#003f87]/5 text-[#003f87] font-semibold hover:bg-[#003f87]/10 transition-colors flex items-center gap-2"
+                                    className="px-6 py-3 rounded-xl bg-primary-600/5 text-primary-600 font-semibold hover:bg-primary-600/10 transition-colors flex items-center gap-2"
                                 >
                                     <BookOpen className="w-5 h-5" />
                                     {locale === 'id' ? 'Lihat Semua Artikel' : 'View All Articles'}
                                 </button>
                                 <button
                                     onClick={() => router.get('/jurusan')}
-                                    className="px-6 py-3 rounded-xl bg-[#c9a84c]/10 text-[#a8821f] font-semibold hover:bg-[#c9a84c]/20 transition-colors flex items-center gap-2"
+                                    className="px-6 py-3 rounded-xl bg-gold-500/10 text-gold-600 font-semibold hover:bg-gold-500/20 transition-colors flex items-center gap-2"
                                 >
                                     <Layers className="w-5 h-5" />
                                     {locale === 'id' ? 'Lihat Program Keahlian' : 'View Programs'}
@@ -256,11 +256,11 @@ export default function Pencarian({
                                     viewport={{ once: true }}
                                 >
                                     <motion.div variants={fadeInUp} className="flex items-center gap-3 mb-8">
-                                        <Layers className="w-6 h-6 text-[#c9a84c]" />
-                                        <h2 className="text-2xl font-bold text-[#111111] font-serif">
+                                        <Layers className="w-6 h-6 text-gold-500" />
+                                        <h2 className="text-2xl font-bold text-neutral-900 font-serif">
                                             {locale === 'id' ? 'Jurusan' : 'Programs'}
                                         </h2>
-                                        <span className="bg-[#003f87]/10 text-[#003f87] font-semibold text-xs py-1 px-3 rounded-full ml-2">
+                                        <span className="bg-primary-600/10 text-primary-600 font-semibold text-xs py-1 px-3 rounded-full ml-2">
                                             {hasil.jurusan.length} {locale === 'id' ? 'Hasil' : 'Results'}
                                         </span>
                                     </motion.div>
@@ -281,11 +281,11 @@ export default function Pencarian({
                                                     />
                                                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                                                     <div className="absolute bottom-4 left-4 right-4">
-                                                        <span className="inline-block bg-[#c9a84c] text-white text-[10px] uppercase font-bold tracking-widest px-2 py-1 rounded mb-2">
+                                                        <span className="inline-block bg-gold-500 text-white text-[10px] uppercase font-bold tracking-widest px-2 py-1 rounded mb-2">
                                                             {j.kode}
                                                         </span>
                                                         <h3
-                                                            className="text-white font-bold text-lg leading-tight line-clamp-1 group-hover:text-[#c9a84c] transition-colors"
+                                                            className="text-white font-bold text-lg leading-tight line-clamp-1 group-hover:text-gold-500 transition-colors"
                                                             dangerouslySetInnerHTML={{ __html: j.nama }}
                                                         />
                                                     </div>
@@ -295,7 +295,7 @@ export default function Pencarian({
                                                         className="text-gray-600 text-sm line-clamp-2 mb-4"
                                                         dangerouslySetInnerHTML={{ __html: j.deskripsi_singkat }}
                                                     />
-                                                    <span className="text-[#003f87] text-sm font-semibold flex items-center gap-1 group-hover:gap-2 transition-all">
+                                                    <span className="text-primary-600 text-sm font-semibold flex items-center gap-1 group-hover:gap-2 transition-all">
                                                         {locale === 'id' ? 'Lihat Detail' : 'View Detail'} <ArrowRight className="w-4 h-4" />
                                                     </span>
                                                 </div>
@@ -319,11 +319,11 @@ export default function Pencarian({
                                     viewport={{ once: true }}
                                 >
                                     <motion.div variants={fadeInUp} className="flex items-center gap-3 mb-6">
-                                        <Bell className="w-6 h-6 text-[#c9a84c]" />
-                                        <h2 className="text-2xl font-bold text-[#111111] font-serif">
+                                        <Bell className="w-6 h-6 text-gold-500" />
+                                        <h2 className="text-2xl font-bold text-neutral-900 font-serif">
                                             {locale === 'id' ? 'Pengumuman' : 'Announcements'}
                                         </h2>
-                                        <span className="bg-[#003f87]/10 text-[#003f87] font-semibold text-xs py-1 px-3 rounded-full ml-2">
+                                        <span className="bg-primary-600/10 text-primary-600 font-semibold text-xs py-1 px-3 rounded-full ml-2">
                                             {hasil.pengumuman.length} {locale === 'id' ? 'Hasil' : 'Results'}
                                         </span>
                                     </motion.div>
@@ -353,7 +353,7 @@ export default function Pencarian({
                                                     )}
                                                 </div>
                                                 <h3
-                                                    className="text-lg font-bold text-[#111111] mb-2"
+                                                    className="text-lg font-bold text-neutral-900 mb-2"
                                                     dangerouslySetInnerHTML={{ __html: item.judul }}
                                                 />
                                                 <p
@@ -380,11 +380,11 @@ export default function Pencarian({
                                     viewport={{ once: true }}
                                 >
                                     <motion.div variants={fadeInUp} className="flex items-center gap-3 mb-6">
-                                        <Calendar className="w-6 h-6 text-[#c9a84c]" />
-                                        <h2 className="text-2xl font-bold text-[#111111] font-serif">
+                                        <Calendar className="w-6 h-6 text-gold-500" />
+                                        <h2 className="text-2xl font-bold text-neutral-900 font-serif">
                                             {locale === 'id' ? 'Agenda & Kegiatan' : 'Agenda & Events'}
                                         </h2>
-                                        <span className="bg-[#003f87]/10 text-[#003f87] font-semibold text-xs py-1 px-3 rounded-full ml-2">
+                                        <span className="bg-primary-600/10 text-primary-600 font-semibold text-xs py-1 px-3 rounded-full ml-2">
                                             {hasil.agenda.length} {locale === 'id' ? 'Hasil' : 'Results'}
                                         </span>
                                     </motion.div>
@@ -401,7 +401,7 @@ export default function Pencarian({
                                                     <div className="flex items-center justify-between gap-2 mb-3">
                                                         <span
                                                             className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded text-white"
-                                                            style={{ backgroundColor: item.warna || '#003f87' }}
+                                                            style={{ backgroundColor: item.warna || 'var(--color-primary-600)' }}
                                                         >
                                                             {item.tipe || 'Agenda'}
                                                         </span>
@@ -412,7 +412,7 @@ export default function Pencarian({
                                                         )}
                                                     </div>
                                                     <h3
-                                                        className="text-lg font-bold text-[#111111] mb-2 group-hover:text-[#003f87] transition-colors"
+                                                        className="text-lg font-bold text-neutral-900 mb-2 group-hover:text-primary-600 transition-colors"
                                                         dangerouslySetInnerHTML={{ __html: item.judul }}
                                                     />
                                                     {item.deskripsi && (
@@ -428,7 +428,7 @@ export default function Pencarian({
                                                         />
                                                     )}
                                                 </div>
-                                                <span className="text-[#003f87] text-sm font-semibold flex items-center gap-1 group-hover:gap-2 transition-all">
+                                                <span className="text-primary-600 text-sm font-semibold flex items-center gap-1 group-hover:gap-2 transition-all">
                                                     {locale === 'id' ? 'Detail Agenda' : 'Event Detail'} <ArrowRight className="w-4 h-4" />
                                                 </span>
                                             </motion.a>
@@ -451,11 +451,11 @@ export default function Pencarian({
                                     viewport={{ once: true }}
                                 >
                                     <motion.div variants={fadeInUp} className="flex items-center gap-3 mb-8">
-                                        <BookOpen className="w-6 h-6 text-[#c9a84c]" />
-                                        <h2 className="text-2xl font-bold text-[#111111] font-serif">
+                                        <BookOpen className="w-6 h-6 text-gold-500" />
+                                        <h2 className="text-2xl font-bold text-neutral-900 font-serif">
                                             {locale === 'id' ? 'Artikel & Berita' : 'Articles & News'}
                                         </h2>
-                                        <span className="bg-[#003f87]/10 text-[#003f87] font-semibold text-xs py-1 px-3 rounded-full ml-2">
+                                        <span className="bg-primary-600/10 text-primary-600 font-semibold text-xs py-1 px-3 rounded-full ml-2">
                                             {hasil.artikel.total} {locale === 'id' ? 'Hasil' : 'Results'}
                                         </span>
                                     </motion.div>
@@ -474,7 +474,7 @@ export default function Pencarian({
                                                         alt={artikel.title}
                                                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                                     />
-                                                    <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm text-[#003f87] text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded">
+                                                    <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm text-primary-600 text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded">
                                                         {artikel.category.name}
                                                     </div>
                                                 </div>
@@ -483,7 +483,7 @@ export default function Pencarian({
                                                         {artikel.published_at}
                                                     </span>
                                                     <h3
-                                                        className="text-xl md:text-2xl font-bold text-[#111111] mb-3 group-hover:text-[#003f87] transition-colors"
+                                                        className="text-xl md:text-2xl font-bold text-neutral-900 mb-3 group-hover:text-primary-600 transition-colors"
                                                         dangerouslySetInnerHTML={{ __html: artikel.title }}
                                                     />
                                                     <p
@@ -491,7 +491,7 @@ export default function Pencarian({
                                                         dangerouslySetInnerHTML={{ __html: artikel.excerpt }}
                                                     />
                                                     <div className="mt-auto">
-                                                        <span className="text-[#c9a84c] text-sm font-semibold flex items-center gap-1 group-hover:gap-2 transition-all">
+                                                        <span className="text-gold-500 text-sm font-semibold flex items-center gap-1 group-hover:gap-2 transition-all">
                                                             {locale === 'id' ? 'Baca Selengkapnya' : 'Read More'} <ArrowRight className="w-4 h-4" />
                                                         </span>
                                                     </div>
