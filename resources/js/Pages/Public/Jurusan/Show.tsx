@@ -56,6 +56,7 @@ interface Props {
     pengaturan: {
         spmb_url: string;
     };
+    jsonLd?: Record<string, any>[];
 }
 
 function resolveIcon(name: string | null, size = 20, className = ''): React.ReactElement {
@@ -75,7 +76,7 @@ function EmptyState({ title, className = '' }: { title: string, className?: stri
     );
 }
 
-export default function JurusanShow({ jurusan: response, jurusanLain, pengaturan }: Props) {
+export default function JurusanShow({ jurusan: response, jurusanLain, pengaturan, jsonLd }: Props) {
     const { t } = useTranslation();
     const { pengaturan: globalSettings } = usePage<SharedProps>().props;
     const jurusan = response.data;
@@ -131,7 +132,7 @@ export default function JurusanShow({ jurusan: response, jurusanLain, pengaturan
     const spmbUrl = pengaturan.spmb_url && pengaturan.spmb_url !== '#' ? pengaturan.spmb_url : '/kontak';
 
     return (
-        <PublicLayout>
+        <PublicLayout jsonLd={jsonLd}>
             <Head>
                 {/* Meta details are dynamically handled by controller SEOTools, but Inertia <Head> overrides if needed */}
                 <title>{`${jurusan.nama} - SMK Muhammadiyah Bligo`}</title>

@@ -5,7 +5,12 @@ namespace App\Http\Controllers\Public;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\AgendaResource;
 use App\Models\Agenda;
+use App\Models\Pengaturan;
 use App\Services\AnalitikService;
+use App\Support\JsonLd;
+use Artesaos\SEOTools\Facades\OpenGraph;
+use Artesaos\SEOTools\Facades\SEOMeta;
+use Artesaos\SEOTools\Facades\TwitterCard;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
@@ -80,8 +85,22 @@ class AgendaPublikController extends Controller
         $agenda->load('translations');
         AnalitikService::catat(request(), 'agenda', $agenda->id);
 
+        $resource = (new AgendaResource($agenda))->resolve();
+
+        $siteLogo = Pengaturan::get('site_logo') ?: url('/images/og-default.jpg');
+        SEOMeta::setTitle(($resource['judul'] ?? 'Agenda').' | SMK Muhammadiyah Bligo');
+        SEOMeta::setDescription(strip_tags(mb_substr($resource['deskripsi'] ?? '', 0, 160)));
+        SEOMeta::setCanonical(route('agenda.show', ['agenda' => $agenda->slug]));
+        OpenGraph::setUrl(request()->url());
+        OpenGraph::addProperty('type', 'article');
+        OpenGraph::addImage($siteLogo);
+        TwitterCard::setImage($siteLogo);
+
+        $jsonLd = JsonLd::event($agenda, $resource);
+
         return Inertia::render('Public/AgendaDetail', [
-            'agenda' => new AgendaResource($agenda),
+            'agenda' => $resource,
+            'jsonLd' => [$jsonLd],
         ]);
     }
 

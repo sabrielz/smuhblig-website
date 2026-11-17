@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Public;
 use App\Http\Controllers\Controller;
 use App\Models\Jurusan;
 use App\Models\Prestasi;
+use App\Support\JsonLd;
 use Artesaos\SEOTools\Facades\OpenGraph;
 use Artesaos\SEOTools\Facades\SEOMeta;
 use Artesaos\SEOTools\Facades\TwitterCard;
@@ -89,15 +90,23 @@ class PrestasiController extends Controller
         $fotoUrl = $prestasi->getFirstMediaUrl('foto') ?: null;
 
         // SEO
-        SEOMeta::setTitle($judul);
+        SEOMeta::setTitle($judul.' | SMK Muhammadiyah Bligo');
         SEOMeta::setDescription(strip_tags(mb_substr($ringkasan ?: $judul, 0, 160)));
+        SEOMeta::setCanonical(route('prestasi.show', ['prestasi' => $prestasi->slug]));
         OpenGraph::setTitle($judul);
         OpenGraph::setDescription(strip_tags(mb_substr($ringkasan ?: $judul, 0, 160)));
-        if ($fotoUrl) {
-            OpenGraph::addImage($fotoUrl);
-        }
+        OpenGraph::setUrl(request()->url());
+        OpenGraph::addProperty('type', 'article');
+        $img = $fotoUrl ?: url('/images/og-default.jpg');
+        OpenGraph::addImage($img);
         TwitterCard::setTitle($judul);
         TwitterCard::setDescription(strip_tags(mb_substr($ringkasan ?: $judul, 0, 160)));
+        TwitterCard::setImage($img);
+
+        $jsonLd = JsonLd::achievement($prestasi, [
+            'judul' => $judul,
+            'ringkasan' => $ringkasan,
+        ]);
 
         return Inertia::render('Public/Prestasi/Show', [
             'prestasi' => [
@@ -118,6 +127,7 @@ class PrestasiController extends Controller
                 'ringkasan' => $ringkasan,
                 'foto_url' => $fotoUrl,
             ],
+            'jsonLd' => [$jsonLd],
         ]);
     }
 }

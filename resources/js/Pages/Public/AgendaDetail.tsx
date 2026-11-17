@@ -9,6 +9,7 @@ import { id as idLocale, enUS as enLocale } from 'date-fns/locale';
 
 interface AgendaDetailProps {
     agenda: any;
+    jsonLd?: Record<string, any>[];
 }
 
 // ---------------------------------------------------------------------------
@@ -85,7 +86,7 @@ const PageHero = ({ title }: { title: string }) => {
     );
 };
 
-export default function AgendaDetail({ agenda }: AgendaDetailProps) {
+export default function AgendaDetail({ agenda, jsonLd }: AgendaDetailProps) {
     const { t, i18n } = useTranslation();
     const currentLocale = (i18n.language || 'id') as 'id' | 'en';
     const dateFnsLocale = currentLocale === 'en' ? enLocale : idLocale;
@@ -100,7 +101,7 @@ export default function AgendaDetail({ agenda }: AgendaDetailProps) {
     const isSingleDay = !endDate || isSameDay(startDate, endDate);
 
     return (
-        <PublicLayout>
+        <PublicLayout jsonLd={jsonLd}>
             <PageHero title={translation.judul || data.judul_id} />
 
             <section className="bg-neutral-50 pb-20 min-h-screen z-2">

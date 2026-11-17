@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\JurusanResource;
 use App\Models\Jurusan;
 use App\Models\Pengaturan;
+use App\Support\JsonLd;
 use Artesaos\SEOTools\Facades\OpenGraph;
 use Artesaos\SEOTools\Facades\SEOMeta;
+use Artesaos\SEOTools\Facades\TwitterCard;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
@@ -63,11 +65,17 @@ class JurusanController extends Controller
 
         SEOMeta::setTitle($translationTitle.' | SMK Muhammadiyah Bligo');
         SEOMeta::setDescription(Str::limit($translationDesc, 155));
+        SEOMeta::setCanonical(route('jurusan.show', ['jurusan' => $jurusan->slug]));
         OpenGraph::setUrl(request()->url());
         OpenGraph::addProperty('type', 'website');
-        if ($data->getFirstMediaUrl('cover')) {
-            OpenGraph::addImage($data->getFirstMediaUrl('cover'));
-        }
+        $coverUrl = $data->getFirstMediaUrl('cover') ?: url('/images/og-default.jpg');
+        OpenGraph::addImage($coverUrl);
+        TwitterCard::setImage($coverUrl);
+
+        $jsonLd = JsonLd::programKeahlian($jurusan, [
+            'nama' => $translationTitle,
+            'deskripsi' => $translationDesc,
+        ]);
 
         // Ambil jurusan lain
         $jurusanLain = Cache::remember("public.jurusan.others.{$jurusan->id}.{$locale}", 3600, function () use ($jurusan) {
@@ -90,6 +98,7 @@ class JurusanController extends Controller
             'pengaturan' => [
                 'spmb_url' => $pengaturan,
             ],
+            'jsonLd' => [$jsonLd],
         ]);
     }
 }

@@ -21,6 +21,7 @@ interface PengumumanDetail {
 
 interface ShowProps {
     pengumuman: PengumumanDetail;
+    jsonLd?: Record<string, any>[];
     isPreview?: boolean;
 }
 
@@ -42,7 +43,7 @@ const GeometricPattern = () => (
     </svg>
 );
 
-export default function PengumumanShow({ pengumuman, isPreview = false }: ShowProps) {
+export default function PengumumanShow({ pengumuman, jsonLd, isPreview = false }: ShowProps) {
     const { t, i18n } = useTranslation();
     const currentLocale = (i18n.language || 'id') as 'id' | 'en';
 
@@ -70,7 +71,7 @@ export default function PengumumanShow({ pengumuman, isPreview = false }: ShowPr
     };
 
     return (
-        <PublicLayout>
+        <PublicLayout jsonLd={jsonLd}>
             {isPreview && (
                 <div className="bg-amber-500 text-white font-medium py-2.5 px-4 text-center text-sm shadow-md sticky top-0 z-50 flex items-center justify-center gap-2">
                     <span className="inline-block w-2 h-2 rounded-full bg-white animate-pulse" />

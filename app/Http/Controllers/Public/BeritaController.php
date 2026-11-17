@@ -9,6 +9,7 @@ use App\Jobs\IncrementArticleViewCount;
 use App\Models\Article;
 use App\Models\Category;
 use App\Services\AnalitikService;
+use App\Support\JsonLd;
 use Artesaos\SEOTools\Facades\OpenGraph;
 use Artesaos\SEOTools\Facades\SEOMeta;
 use Artesaos\SEOTools\Facades\TwitterCard;
@@ -143,15 +144,19 @@ class BeritaController extends Controller
 
         SEOMeta::setTitle(($formattedArticle['title'] ?? 'Berita').' | SMK Muhammadiyah Bligo');
         SEOMeta::setDescription($formattedArticle['excerpt'] ?? '');
+        SEOMeta::setCanonical(route('berita.show', ['article' => $article->slug]));
         OpenGraph::setUrl(request()->url());
         OpenGraph::addProperty('type', 'article');
-        OpenGraph::addImage($formattedArticle['thumbnail']);
-        TwitterCard::setImage($formattedArticle['thumbnail']);
+        OpenGraph::addImage($formattedArticle['thumbnail'] ?: url('/images/og-default.jpg'));
+        TwitterCard::setImage($formattedArticle['thumbnail'] ?: url('/images/og-default.jpg'));
+
+        $jsonLd = JsonLd::newsArticle($article, $formattedArticle);
 
         return Inertia::render('Public/Berita/Show', [
             'article' => $formattedArticle,
             'relatedArticles' => $relatedArticles,
             'categories' => $categories,
+            'jsonLd' => [$jsonLd],
         ]);
     }
 }

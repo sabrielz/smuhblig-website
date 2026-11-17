@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Public\PengumumanResource;
+use App\Models\Pengaturan;
 use App\Models\Pengumuman;
 use App\Services\AnalitikService;
 use Artesaos\SEOTools\Facades\OpenGraph;
 use Artesaos\SEOTools\Facades\SEOMeta;
+use Artesaos\SEOTools\Facades\TwitterCard;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
@@ -68,13 +70,30 @@ class PengumumanController extends Controller
         AnalitikService::catat(request(), 'pengumuman', $pengumuman->id);
         $resource = (new PengumumanResource($pengumuman))->resolve();
 
+        $siteLogo = Pengaturan::get('site_logo') ?: url('/images/og-default.jpg');
         SEOMeta::setTitle(($resource['judul'] ?? 'Pengumuman').' | SMK Muhammadiyah Bligo');
         SEOMeta::setDescription(strip_tags(mb_substr($resource['konten'] ?? '', 0, 160)));
+        SEOMeta::setCanonical(route('pengumuman.show', ['pengumuman' => $pengumuman->slug]));
         OpenGraph::setUrl(request()->url());
         OpenGraph::addProperty('type', 'article');
+        OpenGraph::addImage($siteLogo);
+        TwitterCard::setImage($siteLogo);
+
+        $jsonLd = [
+            '@context' => 'https://schema.org',
+            '@type' => 'NewsArticle',
+            'headline' => $resource['judul'] ?? 'Pengumuman',
+            'description' => strip_tags(mb_substr($resource['konten'] ?? '', 0, 160)),
+            'datePublished' => $pengumuman->created_at ? $pengumuman->created_at->toIso8601String() : null,
+            'mainEntityOfPage' => [
+                '@type' => 'WebPage',
+                '@id' => route('pengumuman.show', ['pengumuman' => $pengumuman->slug]),
+            ],
+        ];
 
         return Inertia::render('Public/Pengumuman/Show', [
             'pengumuman' => $resource,
+            'jsonLd' => [$jsonLd],
         ]);
     }
 }

@@ -40,6 +40,7 @@ interface ShowProps {
         slug: string;
         articles_count: number;
     }[];
+    jsonLd?: Record<string, any>[];
     isPreview?: boolean;
 }
 
@@ -64,7 +65,7 @@ const GeometricPattern = () => (
     </svg>
 );
 
-export default function BeritaShow({ article, relatedArticles, categories, isPreview = false }: ShowProps) {
+export default function BeritaShow({ article, relatedArticles, categories, jsonLd, isPreview = false }: ShowProps) {
     const { t } = useTranslation();
 
     // Estimasi waktu baca dari jumlah kata konten (asumsi 200 kata/menit)
@@ -76,7 +77,7 @@ export default function BeritaShow({ article, relatedArticles, categories, isPre
     };
 
     return (
-        <PublicLayout>
+        <PublicLayout jsonLd={jsonLd}>
             {isPreview && (
                 <div className="bg-amber-500 text-white font-medium py-2.5 px-4 text-center text-sm shadow-md sticky top-0 z-50 flex items-center justify-center gap-2">
                     <span className="inline-block w-2 h-2 rounded-full bg-white animate-pulse" />

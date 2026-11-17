@@ -27,6 +27,7 @@ interface PrestasiDetail {
 
 interface Props {
     prestasi: PrestasiDetail;
+    jsonLd?: Record<string, any>[];
 }
 
 const TINGKAT_BADGE_VARIANTS: Record<string, 'gold' | 'primary' | 'success' | 'warning' | 'neutral'> = {
@@ -53,11 +54,11 @@ const GeometricPattern = () => (
     </svg>
 );
 
-export default function PrestasiShow({ prestasi }: Props) {
+export default function PrestasiShow({ prestasi, jsonLd }: Props) {
     const { t } = useTranslation();
 
     return (
-        <PublicLayout>
+        <PublicLayout jsonLd={jsonLd}>
             <Head>
                 <title>{`${prestasi.judul} - SMK Muhammadiyah Bligo`}</title>
             </Head>

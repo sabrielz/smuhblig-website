@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Galeri;
 use App\Models\Video;
 use App\Services\AnalitikService;
+use App\Support\JsonLd;
 use Artesaos\SEOTools\Facades\OpenGraph;
 use Artesaos\SEOTools\Facades\SEOMeta;
 use Artesaos\SEOTools\Facades\TwitterCard;
@@ -122,13 +123,17 @@ class GaleriController extends Controller
 
         SEOMeta::setTitle($album['title'].' | Galeri SMK Muhammadiyah Bligo');
         SEOMeta::setDescription($album['description'] ?: 'Dokumentasi foto kegiatan '.$album['title']);
+        SEOMeta::setCanonical(route('galeri.show', ['galeri' => $galeri->slug]));
         OpenGraph::setUrl(request()->url());
         OpenGraph::addProperty('type', 'article');
-        OpenGraph::addImage($thumbnailUrl);
-        TwitterCard::setImage($thumbnailUrl);
+        OpenGraph::addImage($thumbnailUrl ?: url('/images/og-default.jpg'));
+        TwitterCard::setImage($thumbnailUrl ?: url('/images/og-default.jpg'));
+
+        $jsonLd = JsonLd::imageGallery($galeri, $album);
 
         return Inertia::render('Public/GaleriDetail', [
             'album' => $album,
+            'jsonLd' => [$jsonLd],
         ]);
     }
 }

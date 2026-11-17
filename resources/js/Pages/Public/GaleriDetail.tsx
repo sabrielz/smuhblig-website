@@ -21,6 +21,7 @@ interface AlbumDetail {
 
 interface DetailProps {
     album: AlbumDetail;
+    jsonLd?: Record<string, any>[];
 }
 
 const GeometricPattern = () => (
@@ -41,7 +42,7 @@ const GeometricPattern = () => (
     </svg>
 );
 
-export default function GaleriDetail({ album }: DetailProps) {
+export default function GaleriDetail({ album, jsonLd }: DetailProps) {
     const { t } = useTranslation();
     const [lightboxOpen, setLightboxOpen] = useState(false);
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -52,7 +53,7 @@ export default function GaleriDetail({ album }: DetailProps) {
     };
 
     return (
-        <PublicLayout>
+        <PublicLayout jsonLd={jsonLd}>
             <Head title={`${album.title} | ${t('galeri.detail_page_title')}`} />
 
             {/* HERO SECTION */}
