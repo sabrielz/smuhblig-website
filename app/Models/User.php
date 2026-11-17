@@ -20,6 +20,9 @@ use Spatie\Permission\Traits\HasRoles;
  * @property string|null $avatar
  * @property bool $is_active
  * @property Carbon|null $last_login_at
+ * @property string|null $two_factor_secret
+ * @property array<string>|null $two_factor_recovery_codes
+ * @property Carbon|null $two_factor_confirmed_at
  * @property string|null $remember_token
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -42,6 +45,9 @@ class User extends Authenticatable
         'avatar',
         'is_active',
         'last_login_at',
+        'two_factor_secret',
+        'two_factor_recovery_codes',
+        'two_factor_confirmed_at',
     ];
 
     /**
@@ -52,6 +58,8 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'two_factor_secret',
+        'two_factor_recovery_codes',
     ];
 
     /**
@@ -65,6 +73,9 @@ class User extends Authenticatable
             'is_active' => 'boolean',
             'last_login_at' => 'datetime',
             'password' => 'hashed',
+            'two_factor_secret' => 'encrypted',
+            'two_factor_recovery_codes' => 'encrypted:array',
+            'two_factor_confirmed_at' => 'datetime',
         ];
     }
 
@@ -86,6 +97,14 @@ class User extends Authenticatable
     public function articles(): HasMany
     {
         return $this->hasMany(Article::class, 'user_id');
+    }
+
+    /**
+     * Mengetahui apakah pengguna telah mengaktifkan 2FA secara penuh.
+     */
+    public function hasTwoFactorEnabled(): bool
+    {
+        return ! empty($this->two_factor_secret) && $this->two_factor_confirmed_at !== null;
     }
 
     // -------------------------------------------------------------------------

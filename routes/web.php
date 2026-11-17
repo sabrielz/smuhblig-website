@@ -74,6 +74,8 @@ use App\Http\Controllers\Admin\PengumumanController;
 use App\Http\Controllers\Admin\PesanKontakController;
 use App\Http\Controllers\Admin\StatistikController;
 use App\Http\Controllers\Admin\StrukturOrganisasiController;
+use App\Http\Controllers\Admin\TwoFactorController;
+use App\Http\Controllers\Auth\TwoFactorChallengeController;
 use App\Http\Controllers\Public\AgendaPublikController;
 use App\Http\Middleware\EnsureAiEnabled;
 use App\Http\Middleware\EnsureHasCmsRole;
@@ -142,6 +144,10 @@ Route::middleware('guest')->group(function () {
     Route::post('/lupa-password', [LoginController::class, 'sendResetLink'])->middleware('throttle:password-reset')->name('password.email');
     Route::get('/reset-password/{token}', [LoginController::class, 'showResetForm'])->name('password.reset');
     Route::post('/reset-password', [LoginController::class, 'resetPassword'])->middleware('throttle:password-reset')->name('password.update');
+
+    // 2FA Challenge (Sesi 6-08)
+    Route::get('/two-factor-challenge', [TwoFactorChallengeController::class, 'create'])->name('two-factor.challenge');
+    Route::post('/two-factor-challenge', [TwoFactorChallengeController::class, 'store'])->middleware('throttle:5,1')->name('two-factor.login');
 });
 
 Route::post('/logout', [LoginController::class, 'destroy'])
@@ -154,7 +160,7 @@ Route::post('/logout', [LoginController::class, 'destroy'])
 |--------------------------------------------------------------------------
 */
 
-Route::middleware(['auth', EnsureHasCmsRole::class])
+Route::middleware(['auth', EnsureHasCmsRole::class, 'ensure.2fa'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
@@ -313,6 +319,12 @@ Route::middleware(['auth', EnsureHasCmsRole::class])
             Route::put('/', [ProfilController::class, 'update'])->name('update');
             Route::put('/password', [ProfilController::class, 'updatePassword'])->name('password');
             Route::post('/logout-others', [ProfilController::class, 'logoutOtherDevices'])->name('logout-others');
+
+            // 2FA Routes (Sesi 6-08)
+            Route::post('/two-factor/enable', [TwoFactorController::class, 'enable'])->name('two-factor.enable');
+            Route::post('/two-factor/confirm', [TwoFactorController::class, 'confirm'])->name('two-factor.confirm');
+            Route::post('/two-factor/disable', [TwoFactorController::class, 'disable'])->name('two-factor.disable');
+            Route::post('/two-factor/recovery-codes', [TwoFactorController::class, 'regenerateRecoveryCodes'])->name('two-factor.recovery-codes');
         });
 
         // Pesan Kontak (CMS Inbox)

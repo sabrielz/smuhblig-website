@@ -38,6 +38,21 @@ class LoginController extends Controller
     {
         $request->authenticate();
 
+        $user = $request->user();
+
+        // Cek apakah user telah mengaktifkan 2FA
+        if ($user && $user->hasTwoFactorEnabled()) {
+            $userId = $user->id;
+            $remember = $request->boolean('remember');
+
+            Auth::guard('web')->logout();
+
+            $request->session()->put('login.id', $userId);
+            $request->session()->put('login.remember', $remember);
+
+            return redirect()->route('two-factor.challenge');
+        }
+
         $request->session()->regenerate();
 
         // Update last_login_at timestamp
