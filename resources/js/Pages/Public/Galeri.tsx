@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { usePage } from '@inertiajs/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight, Eye, X, ChevronLeft } from 'lucide-react';
@@ -48,9 +48,9 @@ const GeometricPattern = () => (
 
 // Page Hero
 const PageHero = () => (
-    <section className="relative bg-[#001f4d] overflow-hidden min-h-[360px] flex items-center">
+    <section className="relative bg-primary-900 overflow-hidden min-h-[360px] flex items-center">
         <GeometricPattern />
-        <div className="absolute inset-0 bg-gradient-to-br from-[#003f87]/60 via-transparent to-[#001f4d]" />
+        <div className="absolute inset-0 bg-gradient-to-br from-primary-600/60 via-transparent to-primary-900" />
         <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-24 lg:py-32">
             <motion.div
                 variants={staggerContainer}
@@ -60,7 +60,7 @@ const PageHero = () => (
             >
                 <motion.p
                     variants={fadeInUp}
-                    className="text-xs font-bold tracking-[0.25em] uppercase text-[#c9a84c] mb-4"
+                    className="text-xs font-bold tracking-[0.25em] uppercase text-gold-500 mb-4"
                 >
                     GALERI KAMI
                 </motion.p>
@@ -68,7 +68,7 @@ const PageHero = () => (
                     variants={fadeInUp}
                     className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6"
                 >
-                    Momen &amp; Kegiatan <span className="text-[#c9a84c]">Berkesan</span>
+                    Momen &amp; Kegiatan <span className="text-gold-500">Berkesan</span>
                 </motion.h1>
                 <motion.nav
                     variants={fadeInUp}
@@ -92,15 +92,22 @@ const GaleriSection = ({ galleries }: { galleries: GalleryItem[] }) => {
     const [selectedAlbum, setSelectedAlbum] = useState<GalleryItem | null>(null);
     const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
 
+    useEffect(() => {
+        if (selectedAlbum) {
+            document.body.style.overflow = 'hidden';
+            return () => {
+                document.body.style.overflow = 'auto';
+            };
+        }
+    }, [selectedAlbum]);
+
     const openModal = (album: GalleryItem) => {
         setSelectedAlbum(album);
         setCurrentPhotoIndex(0);
-        document.body.style.overflow = 'hidden';
     };
 
     const closeModal = () => {
         setSelectedAlbum(null);
-        document.body.style.overflow = 'auto';
     };
 
     const nextPhoto = (e: React.MouseEvent) => {
@@ -121,7 +128,7 @@ const GaleriSection = ({ galleries }: { galleries: GalleryItem[] }) => {
         <section className="py-20 lg:py-28 bg-white min-h-[50vh]">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
                 {galleries.length === 0 ? (
-                    <div className="text-center text-[#636366] py-16">
+                    <div className="text-center text-neutral-500 py-16">
                         Belum ada album galeri.
                     </div>
                 ) : (
@@ -144,10 +151,10 @@ const GaleriSection = ({ galleries }: { galleries: GalleryItem[] }) => {
                                 />
 
                                 {/* Overlay hover */}
-                                <div className="absolute inset-0 bg-gradient-to-t from-[#001f4d]/90 via-[#001f4d]/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                                <div className="absolute inset-0 bg-gradient-to-t from-primary-900/90 via-primary-900/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
                                     <div className="translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
                                         <div className="flex items-center justify-between mb-2">
-                                            <span className="text-xs font-semibold text-[#c9a84c] uppercase tracking-wider">
+                                            <span className="text-xs font-semibold text-gold-500 uppercase tracking-wider">
                                                 {album.formatted_date || 'Tanpa Tanggal'}
                                             </span>
                                             <span className="flex items-center gap-1.5 text-xs text-white/80 bg-black/30 backdrop-blur-sm px-2.5 py-1 rounded-full">
@@ -161,7 +168,7 @@ const GaleriSection = ({ galleries }: { galleries: GalleryItem[] }) => {
                                     </div>
 
                                     {/* Center Icon */}
-                                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-[#c9a84c] rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 scale-50 group-hover:scale-100 transition-all duration-300 shadow-lg">
+                                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-gold-500 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 scale-50 group-hover:scale-100 transition-all duration-300 shadow-lg">
                                         <Eye size={20} className="text-white" />
                                     </div>
                                 </div>
@@ -225,14 +232,14 @@ const GaleriSection = ({ galleries }: { galleries: GalleryItem[] }) => {
                                     <button
                                         type="button"
                                         onClick={prevPhoto}
-                                        className="absolute left-[-20px] sm:left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-black/50 hover:bg-[#c9a84c] text-white rounded-full flex items-center justify-center backdrop-blur-sm transition-all shadow-lg"
+                                        className="absolute left-[-20px] sm:left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-black/50 hover:bg-gold-500 text-white rounded-full flex items-center justify-center backdrop-blur-sm transition-all shadow-lg"
                                     >
                                         <ChevronLeft size={24} />
                                     </button>
                                     <button
                                         type="button"
                                         onClick={nextPhoto}
-                                        className="absolute right-[-20px] sm:right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-black/50 hover:bg-[#c9a84c] text-white rounded-full flex items-center justify-center backdrop-blur-sm transition-all shadow-lg"
+                                        className="absolute right-[-20px] sm:right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-black/50 hover:bg-gold-500 text-white rounded-full flex items-center justify-center backdrop-blur-sm transition-all shadow-lg"
                                     >
                                         <ChevronRight size={24} />
                                     </button>
@@ -248,7 +255,7 @@ const GaleriSection = ({ galleries }: { galleries: GalleryItem[] }) => {
                                     type="button"
                                     onClick={() => setCurrentPhotoIndex(i)}
                                     className={`relative flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden snap-center transition-all ${
-                                        currentPhotoIndex === i ? 'ring-2 ring-[#c9a84c] opacity-100 scale-105' : 'opacity-50 hover:opacity-100'
+                                        currentPhotoIndex === i ? 'ring-2 ring-gold-500 opacity-100 scale-105' : 'opacity-50 hover:opacity-100'
                                     }`}
                                 >
                                     <img src={photo} alt="" className="w-full h-full object-cover" />

@@ -131,7 +131,7 @@ function HeroMeshPattern({ className }: { className?: string }) {
                     x2="100%"
                     y2="100%"
                 >
-                    <stop offset="0%" stopColor="#c9a84c" stopOpacity="0.3" />
+                    <stop offset="0%" stopColor="var(--color-gold-500)" stopOpacity="0.3" />
                     <stop
                         offset="100%"
                         stopColor="transparent"
@@ -145,7 +145,7 @@ function HeroMeshPattern({ className }: { className?: string }) {
                     x2="0%"
                     y2="100%"
                 >
-                    <stop offset="0%" stopColor="#ffffff" stopOpacity="0.15" />
+                    <stop offset="0%" stopColor="white" stopOpacity="0.15" />
                     <stop
                         offset="100%"
                         stopColor="transparent"
@@ -166,28 +166,28 @@ function HeroMeshPattern({ className }: { className?: string }) {
             <path
                 d="M0,200 C400,350 800,50 1440,250"
                 fill="none"
-                stroke="#c9a84c"
+                stroke="var(--color-gold-500)"
                 strokeWidth="1"
                 strokeOpacity="0.2"
             />
             <path
                 d="M0,220 C400,370 800,70 1440,270"
                 fill="none"
-                stroke="#c9a84c"
+                stroke="var(--color-gold-500)"
                 strokeWidth="1"
                 strokeOpacity="0.1"
             />
             <path
                 d="M0,500 C500,300 900,600 1440,400"
                 fill="none"
-                stroke="#ffffff"
+                stroke="white"
                 strokeWidth="1"
                 strokeOpacity="0.15"
             />
             <path
                 d="M0,520 C500,320 900,620 1440,420"
                 fill="none"
-                stroke="#ffffff"
+                stroke="white"
                 strokeWidth="1"
                 strokeOpacity="0.05"
             />
@@ -269,7 +269,7 @@ function StatItem({
             className="flex flex-col items-center text-center px-6 py-8"
         >
             <div className="mb-4 w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center border border-white/20">
-                <Icon className="w-6 h-6 text-[#c9a84c]" strokeWidth={1.5} />
+                <Icon className="w-6 h-6 text-gold-500" strokeWidth={1.5} />
             </div>
             <div
                 className="font-serif text-5xl lg:text-6xl font-bold text-white tracking-tight mb-2"
@@ -307,13 +307,13 @@ function SectionHeader({
         >
             <motion.span
                 variants={fadeInUp}
-                className={`inline-block font-mono text-xs tracking-[0.3em] uppercase mb-4 ${light ? "text-[#c9a84c]" : "text-[#003f87]"}`}
+                className={`inline-block font-mono text-xs tracking-[0.3em] uppercase mb-4 ${light ? "text-gold-500" : "text-primary-600"}`}
             >
                 {label}
             </motion.span>
             <motion.h2
                 variants={fadeInUp}
-                className={`font-serif text-4xl lg:text-5xl font-bold tracking-tight ${light ? "text-white" : "text-[#111111]"}`}
+                className={`font-serif text-4xl lg:text-5xl font-bold tracking-tight ${light ? "text-white" : "text-neutral-900"}`}
                 style={{ fontFamily: "Playfair Display, Georgia, serif" }}
             >
                 {title}
@@ -321,7 +321,7 @@ function SectionHeader({
             {subtitle && (
                 <motion.p
                     variants={fadeInUp}
-                    className={`mt-4 text-lg max-w-2xl mx-auto ${light ? "text-white/70" : "text-[#636366]"}`}
+                    className={`mt-4 text-lg max-w-2xl mx-auto ${light ? "text-white/70" : "text-neutral-500"}`}
                 >
                     {subtitle}
                 </motion.p>
@@ -335,14 +335,14 @@ function SectionHeader({
 function SectionDivider() {
     return (
         <div className="relative flex items-center justify-center py-0">
-            <div className="absolute inset-x-0 top-1/2 border-t border-[#c9a84c]/20" />
+            <div className="absolute inset-x-0 top-1/2 border-t border-gold-500/20" />
             <div className="relative z-10 bg-inherit px-3">
                 <svg
                     width="16"
                     height="16"
                     viewBox="0 0 16 16"
                     fill="none"
-                    className="text-[#c9a84c]/40"
+                    className="text-gold-500/40"
                 >
                     <path
                         d="M8 0L9.5 5.5H16L10.8 8.9L12.7 14.5L8 11.1L3.3 14.5L5.2 8.9L0 5.5H6.5L8 0Z"
@@ -425,8 +425,7 @@ export default function Beranda({
                         {/* Eyebrow */}
                         <motion.div variants={fadeInUp} className="mb-6">
                             <span
-                                className="font-mono text-xs tracking-[0.3em] uppercase"
-                                style={{ color: "#c9a84c" }}
+                                className="font-mono text-xs tracking-[0.3em] uppercase text-gold-500"
                             >
                                 {kontenHero?.eyebrow || "-"}
                             </span>
@@ -450,8 +449,7 @@ export default function Beranda({
                         {/* Subheadline */}
                         <motion.p
                             variants={fadeInUp}
-                            className="text-lg max-w-lg mb-10 leading-relaxed"
-                            style={{ color: "rgba(255,255,255,0.80)" }}
+                            className="text-lg max-w-lg mb-10 leading-relaxed text-white/80"
                             dangerouslySetInnerHTML={{
                                 __html: kontenHero?.subheadline || "",
                             }}
@@ -468,11 +466,7 @@ export default function Beranda({
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     id="hero-cta-daftar"
-                                    className="inline-flex flex-1 sm:flex-none justify-center w-full sm:w-auto items-center gap-2 font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 px-8 py-4 text-lg rounded-xl text-white hover:opacity-90 focus:ring-[#c9a84c]/50 shadow-lg hover:shadow-xl min-h-11"
-                                    style={{
-                                        background:
-                                            "linear-gradient(135deg, #c9a84c 0%, #a8821f 100%)",
-                                    }}
+                                    className="inline-flex flex-1 sm:flex-none justify-center w-full sm:w-auto items-center gap-2 font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 px-8 py-4 text-lg rounded-xl text-white hover:opacity-90 focus:ring-gold-500/50 shadow-lg hover:shadow-xl min-h-11 bg-gradient-to-br from-gold-500 to-gold-600"
                                 >
                                     {kontenHero?.cta_primer_label || "-"}
                                     <ArrowRight
@@ -496,7 +490,7 @@ export default function Beranda({
                             variants={fadeIn}
                             className="mt-12 flex items-center gap-4"
                         >
-                            <div className="h-px w-12 bg-[#c9a84c]/60" />
+                            <div className="h-px w-12 bg-gold-500/60" />
                             <span
                                 className="text-xs text-white/40 tracking-widest uppercase"
                                 dangerouslySetInnerHTML={{
@@ -540,8 +534,7 @@ export default function Beranda({
             <section
                 id="beranda-statistik"
                 aria-label="Statistik sekolah"
-                className="relative"
-                style={{ background: "#003f87" }}
+                className="relative bg-primary-600"
             >
                 {/* Fullsize Subtle pattern overlay */}
                 <GeometricPattern />
@@ -550,8 +543,7 @@ export default function Beranda({
                     <svg
                         viewBox="0 0 1440 64"
                         preserveAspectRatio="none"
-                        className="absolute bottom-0 w-full h-full"
-                        style={{ fill: "#003f87" }}
+                        className="absolute bottom-0 w-full h-full fill-primary-600"
                     >
                         <path d="M0,64 L0,32 Q360,0 720,32 Q1080,64 1440,32 L1440,64 Z" />
                     </svg>
@@ -581,14 +573,12 @@ export default function Beranda({
 
                 {/* Bottom separator */}
                 <div
-                    className="relative h-16 overflow-hidden"
-                    style={{ background: "#f8f9fa" }}
+                    className="relative h-16 overflow-hidden bg-neutral-50"
                 >
                     <svg
                         viewBox="0 0 1440 64"
                         preserveAspectRatio="none"
-                        className="absolute top-0 w-full h-full"
-                        style={{ fill: "#003f87" }}
+                        className="absolute top-0 w-full h-full fill-primary-600"
                     >
                         <path d="M0,0 L0,32 Q360,64 720,32 Q1080,0 1440,32 L1440,0 Z" />
                     </svg>
@@ -600,8 +590,7 @@ export default function Beranda({
             ══════════════════════════════════════════════════════════════ */}
             <section
                 id="beranda-jurusan"
-                className="py-20 lg:py-28"
-                style={{ background: "#f8f9fa" }}
+                className="py-20 lg:py-28 bg-neutral-50"
                 aria-label="Program keahlian"
             >
                 <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-16">
@@ -654,7 +643,7 @@ export default function Beranda({
                             )}
                         </motion.div>
                     ) : (
-                        <div className="text-center py-20 text-[#636366]">
+                        <div className="text-center py-20 text-neutral-500">
                             <GraduationCap className="w-12 h-12 mx-auto mb-4 opacity-30" />
                             <p>Jurusan belum tersedia.</p>
                         </div>
@@ -671,7 +660,7 @@ export default function Beranda({
                         <Link
                             href="/jurusan"
                             id="jurusan-lihat-semua"
-                            className="inline-flex items-center gap-2 font-semibold text-[#003f87] hover:text-[#001f4d] transition-colors group"
+                            className="inline-flex items-center gap-2 font-semibold text-primary-600 hover:text-primary-900 transition-colors group"
                         >
                             Lihat Semua Program Keahlian
                             <ArrowRight
@@ -721,7 +710,7 @@ export default function Beranda({
                             ))}
                         </motion.div>
                     ) : (
-                        <div className="text-center py-16 text-[#636366]">
+                        <div className="text-center py-16 text-neutral-500">
                             <BookOpen className="w-12 h-12 mx-auto mb-4 opacity-30" />
                             <p>Belum ada berita yang dipublikasikan.</p>
                         </div>
@@ -757,38 +746,23 @@ export default function Beranda({
             ══════════════════════════════════════════════════════════════ */}
             <section
                 id="beranda-cta"
-                className="relative overflow-hidden py-28 lg:py-36"
+                className="relative overflow-hidden py-28 lg:py-36 bg-gradient-to-br from-primary-900 via-primary-600 to-primary-800"
                 aria-label="Call to action pendaftaran"
             >
-                {/* Gradient background */}
-                <div
-                    className="absolute inset-0 z-0"
-                    style={{
-                        background:
-                            "linear-gradient(135deg, #001f4d 0%, #003f87 50%, #002d6b 100%)",
-                    }}
-                />
-
                 {/* Geometric pattern overlay */}
                 <GeometricPattern />
 
                 {/* Decorative orbs */}
                 <div
-                    className="absolute -top-24 -right-24 w-96 h-96 rounded-full blur-3xl z-10 pointer-events-none"
-                    style={{ background: "rgba(201,168,76,0.12)" }}
+                    className="absolute -top-24 -right-24 w-96 h-96 rounded-full blur-3xl z-10 pointer-events-none bg-gold-500/10"
                 />
                 <div
-                    className="absolute -bottom-24 -left-24 w-96 h-96 rounded-full blur-3xl z-10 pointer-events-none"
-                    style={{ background: "rgba(0,80,168,0.25)" }}
+                    className="absolute -bottom-24 -left-24 w-96 h-96 rounded-full blur-3xl z-10 pointer-events-none bg-primary-500/25"
                 />
 
                 {/* Gold top line */}
                 <div
-                    className="absolute top-0 left-0 right-0 h-1 z-20"
-                    style={{
-                        background:
-                            "linear-gradient(to right, transparent, #c9a84c, transparent)",
-                    }}
+                    className="absolute top-0 left-0 right-0 h-1 z-20 bg-gradient-to-r from-transparent via-gold-500 to-transparent"
                 />
 
                 <div className="relative z-20 max-w-4xl mx-auto px-6 sm:px-8 lg:px-16 text-center">
@@ -801,8 +775,7 @@ export default function Beranda({
                         {/* Label */}
                         <motion.span
                             variants={fadeInUp}
-                            className="inline-block font-mono text-xs tracking-[0.3em] uppercase mb-6"
-                            style={{ color: "#c9a84c" }}
+                            className="inline-block font-mono text-xs tracking-[0.3em] uppercase mb-6 text-gold-500"
                         >
                             {kontenCtaAkhir?.label || "-"}
                         </motion.span>
@@ -825,8 +798,7 @@ export default function Beranda({
                         {/* Subheadline */}
                         <motion.p
                             variants={fadeInUp}
-                            className="text-lg max-w-2xl mx-auto mb-12 leading-relaxed"
-                            style={{ color: "rgba(255,255,255,0.75)" }}
+                            className="text-lg max-w-2xl mx-auto mb-12 leading-relaxed text-white/75"
                             dangerouslySetInnerHTML={{
                                 __html: kontenCtaAkhir?.subheadline || "",
                             }}
@@ -843,11 +815,7 @@ export default function Beranda({
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     id="cta-mulai-pendaftaran"
-                                    className="inline-flex items-center justify-center w-full sm:w-auto gap-3 font-semibold transition-all duration-200 px-10 py-5 text-xl rounded-2xl text-white shadow-2xl hover:shadow-[#c9a84c]/30 hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-[#c9a84c]/50 focus:ring-offset-2 focus:ring-offset-transparent min-h-11"
-                                    style={{
-                                        background:
-                                            "linear-gradient(135deg, #c9a84c 0%, #a8821f 100%)",
-                                    }}
+                                    className="inline-flex items-center justify-center w-full sm:w-auto gap-3 font-semibold transition-all duration-200 px-10 py-5 text-xl rounded-2xl text-white shadow-2xl hover:shadow-gold-500/30 hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-gold-500/50 focus:ring-offset-2 focus:ring-offset-transparent min-h-11 bg-gradient-to-br from-gold-500 to-gold-600"
                                 >
                                     {kontenCtaAkhir?.cta_primary ||
                                         "Mulai Pendaftaran"}
@@ -861,10 +829,7 @@ export default function Beranda({
                             <Link
                                 href="/tentang"
                                 id="cta-pelajari-lebih"
-                                className="inline-flex items-center justify-center w-full sm:w-auto gap-2 font-semibold transition-all duration-200 px-10 py-5 text-xl rounded-2xl text-white border-2 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/50 min-h-11"
-                                style={{
-                                    borderColor: "rgba(255,255,255,0.45)",
-                                }}
+                                className="inline-flex items-center justify-center w-full sm:w-auto gap-2 font-semibold transition-all duration-200 px-10 py-5 text-xl rounded-2xl text-white border-2 border-white/45 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/50 min-h-11"
                             >
                                 {kontenCtaAkhir?.cta_secondary ||
                                     "Pelajari Lebih Lanjut"}
@@ -885,7 +850,7 @@ export default function Beranda({
                                     key={value}
                                     className="flex items-center gap-3"
                                 >
-                                    <div className="w-2 h-2 rounded-full bg-[#c9a84c]" />
+                                    <div className="w-2 h-2 rounded-full bg-gold-500" />
                                     <span className="text-white font-semibold">
                                         {value}
                                     </span>
@@ -900,11 +865,7 @@ export default function Beranda({
 
                 {/* Gold bottom line */}
                 <div
-                    className="absolute bottom-0 left-0 right-0 h-1 z-20"
-                    style={{
-                        background:
-                            "linear-gradient(to right, transparent, #c9a84c, transparent)",
-                    }}
+                    className="absolute bottom-0 left-0 right-0 h-1 z-20 bg-gradient-to-r from-transparent via-gold-500 to-transparent"
                 />
             </section>
         </PublicLayout>

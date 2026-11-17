@@ -84,13 +84,13 @@ export default function BeritaIndex({ articles, categories, filters }: IndexProp
             <Head title="Berita & Informasi" />
 
             {/* SECTION 1: Page Hero */}
-            <section className="relative bg-[#001f4d] overflow-hidden min-h-[360px] flex items-center">
+            <section className="relative bg-primary-900 overflow-hidden min-h-[360px] flex items-center">
                 <div className="absolute inset-0 bg-gradient-to-br from-primary-900 via-primary-dark to-primary-900" />
                 <GeometricPattern />
-                <div className="absolute inset-0 bg-gradient-to-br from-[#003f87]/60 via-transparent to-[#001f4d]" />
+                <div className="absolute inset-0 bg-gradient-to-br from-primary-600/60 via-transparent to-primary-900" />
 
                 {/* Decorative Elements */}
-                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary-gold/20 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2" />
+                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gold-500/20 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2" />
 
                 <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-24 lg:py-32">
                     <motion.div
@@ -101,7 +101,7 @@ export default function BeritaIndex({ articles, categories, filters }: IndexProp
                     >
                         <motion.p
                             variants={fadeInUp}
-                            className="text-xs font-bold tracking-[0.25em] uppercase text-[#c9a84c] mb-4"
+                            className="text-xs font-bold tracking-[0.25em] uppercase text-gold-500 mb-4"
                         >
                             INFO KAMPUS
                         </motion.p>
@@ -109,7 +109,7 @@ export default function BeritaIndex({ articles, categories, filters }: IndexProp
                             variants={fadeInUp}
                             className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6"
                         >
-                            Berita &amp; <span className="text-[#c9a84c]">Informasi</span>
+                            Berita &amp; <span className="text-gold-500">Informasi</span>
                         </motion.h1>
                         <motion.nav
                             variants={fadeInUp}
@@ -135,7 +135,7 @@ export default function BeritaIndex({ articles, categories, filters }: IndexProp
                                 className="w-full pl-14 pr-32 py-5 rounded-full bg-white/10 border-white/20 text-white placeholder:text-white/50 focus:bg-white focus:text-neutral-900 focus:border-white transition-all backdrop-blur-md text-base"
                             />
                             <Search className={cn("absolute left-5 w-6 h-6", searchQuery ? 'text-primary-600' : 'text-white/50')} />
-                            <Button type="submit" variant="primary" className="absolute right-2 rounded-full px-8 py-3 bg-[#c9a84c] hover:bg-[#a8821f] text-white border-none font-semibold transition-all">
+                            <Button type="submit" variant="primary" className="absolute right-2 rounded-full px-8 py-3 bg-gold-500 hover:bg-gold-600 text-white border-none font-semibold transition-all">
                                 Cari
                             </Button>
                         </motion.form>
@@ -154,7 +154,7 @@ export default function BeritaIndex({ articles, categories, filters }: IndexProp
                             className={cn(
                                 "whitespace-nowrap flex-shrink-0 px-6 py-2.5 rounded-full text-sm font-medium transition-colors border",
                                 !filters.category
-                                    ? "bg-[#003f87] text-white border-primary-navy shadow-sm"
+                                    ? "bg-primary-600 text-white border-primary-navy shadow-sm"
                                     : "bg-white text-neutral-600 border-neutral-200 hover:border-primary-navy hover:text-primary-navy"
                             )}
                         >
@@ -168,7 +168,7 @@ export default function BeritaIndex({ articles, categories, filters }: IndexProp
                                 className={cn(
                                     "whitespace-nowrap flex-shrink-0 px-6 py-2.5 rounded-full text-sm font-medium transition-colors border",
                                     filters.category == category.id.toString()
-                                        ? "bg-[#003f87] text-white border-primary-navy shadow-sm"
+                                        ? "bg-primary-600 text-white border-primary-navy shadow-sm"
                                         : "bg-white text-neutral-600 border-neutral-200 hover:border-primary-navy hover:text-primary-navy"
                                 )}
                             >

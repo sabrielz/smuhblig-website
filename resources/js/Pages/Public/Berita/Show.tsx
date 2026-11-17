@@ -87,10 +87,10 @@ export default function BeritaShow({ article, relatedArticles, categories }: Sho
             <section className="relative min-h-[60vh] flex flex-col justify-center overflow-hidden bg-primary-dark">
                 <div className="absolute inset-0 bg-gradient-to-br from-primary-900 via-primary-dark to-primary-900" />
                 <GeometricPattern />
-                <div className="absolute inset-0 bg-gradient-to-br from-[#003f87]/60 via-transparent to-[#001f4d]" />
+                <div className="absolute inset-0 bg-gradient-to-br from-primary-600/60 via-transparent to-primary-900" />
 
                 {/* Decorative Elements */}
-                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary-gold/20 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2" />
+                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gold-500/20 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2" />
 
                 <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl pt-24 pb-32">
                     <motion.div
@@ -101,7 +101,7 @@ export default function BeritaShow({ article, relatedArticles, categories }: Sho
                     >
                         <motion.p
                             variants={fadeInUp}
-                            className="text-xs font-bold tracking-[0.25em] uppercase text-[#c9a84c] mb-4"
+                            className="text-xs font-bold tracking-[0.25em] uppercase text-gold-500 mb-4"
                         >
                             JENDELA INFORMASI
                         </motion.p>
@@ -109,7 +109,7 @@ export default function BeritaShow({ article, relatedArticles, categories }: Sho
                             variants={fadeInUp}
                             className="font-serif text-4xl sm:text-5xl lg:text-5xl font-bold text-white leading-tight mb-6"
                         >
-                            Dinamika &amp; <span className="text-[#c9a84c]">Wawasan</span>
+                            Dinamika &amp; <span className="text-gold-500">Wawasan</span>
                         </motion.h1>
                         <motion.nav
                             variants={fadeInUp}
@@ -213,7 +213,7 @@ export default function BeritaShow({ article, relatedArticles, categories }: Sho
                                         </button>
                                         <button
                                             onClick={handleShareWA}
-                                            className="flex-1 sm:flex-none justify-center inline-flex items-center px-4 py-2.5 bg-[#25D366]/10 hover:bg-[#25D366]/20 text-[#25D366] rounded-full text-xs sm:text-sm font-medium transition-colors min-h-11"
+                                            className="flex-1 sm:flex-none justify-center inline-flex items-center px-4 py-2.5 bg-brand-whatsapp/10 hover:bg-brand-whatsapp/20 text-brand-whatsapp rounded-full text-xs sm:text-sm font-medium transition-colors min-h-11"
                                         >
                                             <MessageCircle className="w-4 h-4 mr-1 sm:mr-2" />
                                             WhatsApp
@@ -222,7 +222,7 @@ export default function BeritaShow({ article, relatedArticles, categories }: Sho
                                             href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="flex-1 sm:flex-none justify-center inline-flex items-center px-4 py-2.5 bg-[#1877F2]/10 hover:bg-[#1877F2]/20 text-[#1877F2] rounded-full text-xs sm:text-sm font-medium transition-colors min-h-11"
+                                            className="flex-1 sm:flex-none justify-center inline-flex items-center px-4 py-2.5 bg-brand-facebook/10 hover:bg-brand-facebook/20 text-brand-facebook rounded-full text-xs sm:text-sm font-medium transition-colors min-h-11"
                                         >
                                             <Facebook className="w-4 h-4 mr-1 sm:mr-2" />
                                             Facebook
@@ -231,7 +231,7 @@ export default function BeritaShow({ article, relatedArticles, categories }: Sho
                                             href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(article.title)}`}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="flex-1 sm:flex-none justify-center inline-flex items-center px-4 py-2.5 bg-[#1DA1F2]/10 hover:bg-[#1DA1F2]/20 text-[#1DA1F2] rounded-full text-xs sm:text-sm font-medium transition-colors min-h-11"
+                                            className="flex-1 sm:flex-none justify-center inline-flex items-center px-4 py-2.5 bg-brand-twitter/10 hover:bg-brand-twitter/20 text-brand-twitter rounded-full text-xs sm:text-sm font-medium transition-colors min-h-11"
                                         >
                                             <Twitter className="w-4 h-4 mr-1 sm:mr-2" />
                                             Twitter
@@ -263,7 +263,7 @@ export default function BeritaShow({ article, relatedArticles, categories }: Sho
                             {/* Box: Kategori */}
                             <div className="bg-white rounded-3xl p-6 lg:p-8 shadow-sm border border-neutral-100 sticky top-28">
                                 <h3 className="font-serif text-2xl font-bold text-neutral-900 mb-6 flex items-center">
-                                    <div className="w-1.5 h-6 bg-[#003f87] rounded-full mr-3"></div>
+                                    <div className="w-1.5 h-6 bg-primary-600 rounded-full mr-3"></div>
                                     Kategori
                                 </h3>
                                 <ul className="space-y-3">
@@ -276,7 +276,7 @@ export default function BeritaShow({ article, relatedArticles, categories }: Sho
                                                 <span className="font-medium text-neutral-700 group-hover:text-primary-navy">
                                                     {category.name}
                                                 </span>
-                                                <span className="bg-neutral-100 group-hover:bg-[#003f87] group-hover:text-white text-neutral-600 text-xs font-bold px-2.5 py-1 rounded-full transition-colors">
+                                                <span className="bg-neutral-100 group-hover:bg-primary-600 group-hover:text-white text-neutral-600 text-xs font-bold px-2.5 py-1 rounded-full transition-colors">
                                                     {category.articles_count}
                                                 </span>
                                             </Link>

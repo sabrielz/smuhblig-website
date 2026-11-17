@@ -54,9 +54,9 @@ const GeometricPattern = () => (
 );
 
 const PageHero = ({ t }: { t: any }) => (
-    <section className="relative bg-[#001f4d] overflow-hidden min-h-[360px] flex items-center">
+    <section className="relative bg-primary-900 overflow-hidden min-h-[360px] flex items-center">
         <GeometricPattern />
-        <div className="absolute inset-0 bg-gradient-to-br from-[#003f87]/60 via-transparent to-[#001f4d]" />
+        <div className="absolute inset-0 bg-gradient-to-br from-primary-600/60 via-transparent to-primary-900" />
         <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-24 lg:py-32">
             <motion.div
                 variants={staggerContainer}
@@ -66,7 +66,7 @@ const PageHero = ({ t }: { t: any }) => (
             >
                 <motion.p
                     variants={fadeInUp}
-                    className="text-xs font-bold tracking-[0.25em] uppercase text-[#c9a84c] mb-4"
+                    className="text-xs font-bold tracking-[0.25em] uppercase text-gold-500 mb-4"
                 >
                     {t.hero_subtitle}
                 </motion.p>
@@ -74,7 +74,7 @@ const PageHero = ({ t }: { t: any }) => (
                     variants={fadeInUp}
                     className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6"
                 >
-                    {t.hero_title_1} <span className="text-[#c9a84c]">{t.hero_title_2}</span>
+                    {t.hero_title_1} <span className="text-gold-500">{t.hero_title_2}</span>
                 </motion.h1>
                 <motion.nav
                     variants={fadeInUp}
@@ -168,7 +168,7 @@ export default function Agenda({ agendasGrouped, filterOptions, activeFilter }: 
                                 className={cn(
                                     "px-5 py-2.5 rounded-full text-sm font-semibold whitespace-nowrap transition-all flex-shrink-0",
                                     !activeFilter
-                                        ? "bg-[#003f87] text-white shadow-md shadow-[#003f87]/20"
+                                        ? "bg-primary-600 text-white shadow-md shadow-primary-600/20"
                                         : "bg-neutral-100 text-neutral-600 hover:bg-neutral-200"
                                 )}
                             >
@@ -182,7 +182,7 @@ export default function Agenda({ agendasGrouped, filterOptions, activeFilter }: 
                                     className={cn(
                                         "px-5 py-2.5 rounded-full text-sm font-semibold whitespace-nowrap transition-all flex-shrink-0",
                                         activeFilter === opt.value
-                                            ? "bg-[#003f87] text-white shadow-md shadow-[#003f87]/20"
+                                            ? "bg-primary-600 text-white shadow-md shadow-primary-600/20"
                                             : "bg-neutral-100 text-neutral-600 hover:bg-neutral-200"
                                     )}
                                 >
@@ -219,7 +219,7 @@ export default function Agenda({ agendasGrouped, filterOptions, activeFilter }: 
                                         className="relative"
                                     >
                                         <h3 className="text-xl md:text-2xl font-bold text-neutral-900 mb-6 flex items-center gap-3">
-                                            <span className="w-8 h-1 rounded-full bg-[#c9a84c] inline-block"></span>
+                                            <span className="w-8 h-1 rounded-full bg-gold-500 inline-block"></span>
                                             {monthLabel}
                                         </h3>
 
@@ -271,7 +271,7 @@ export default function Agenda({ agendasGrouped, filterOptions, activeFilter }: 
                                                                 )}
                                                             </div>
 
-                                                            <h4 className="font-bold text-neutral-900 text-base sm:text-lg mb-2 leading-tight group-hover:text-[#003f87] transition-colors line-clamp-2">
+                                                            <h4 className="font-bold text-neutral-900 text-base sm:text-lg mb-2 leading-tight group-hover:text-primary-600 transition-colors line-clamp-2">
                                                                 {translation.judul || agenda.judul_id || 'Untitled Event'}
                                                             </h4>
 

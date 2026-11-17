@@ -48,12 +48,15 @@
     --color-neutral-50: #f2f2f7;
     --color-neutral-0: #ffffff;
 
-    /* Semantic */
+    /* Semantic & Social */
     --color-success: #30d158;
     --color-warning: #ffd60a;
     --color-error: #ff453a;
     --color-error-light: #fff0ef;
     --color-info: #0a84ff;
+    --color-brand-whatsapp: #25D366;
+    --color-brand-facebook: #1877F2;
+    --color-brand-twitter: #1DA1F2;
 
     /* Typography */
     --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
@@ -90,6 +93,9 @@
     --color-error: #ff453a;
     --color-error-light: #fff0ef;
     --color-info: #0a84ff;
+    --color-brand-whatsapp: #25D366;
+    --color-brand-facebook: #1877F2;
+    --color-brand-twitter: #1DA1F2;
 
     /* Font families */
     --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
