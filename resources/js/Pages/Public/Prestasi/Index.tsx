@@ -1,13 +1,13 @@
 import React, { useState, useMemo } from 'react';
-import { Head, Link, usePage } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
+import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
-import { ChevronRight, Trophy, Search, ArrowRight, Calendar, ImageIcon } from 'lucide-react';
+import { ChevronRight, Trophy, Search, ArrowRight, Calendar } from 'lucide-react';
 import PublicLayout from '@/Layouts/PublicLayout';
 import { Badge } from '@/Components/UI/Badge';
 import { Input } from '@/Components/UI/Input';
 import { Select } from '@/Components/UI/Select';
 import { fadeInUp, staggerContainer, cardHover } from '@/lib/motion';
-import type { SharedProps } from '@/types';
 
 interface PrestasiItem {
     id: number;
@@ -57,8 +57,7 @@ const GeometricPattern = () => (
 );
 
 export default function PrestasiIndex({ prestasiList }: Props) {
-    const { locale } = usePage<SharedProps>().props;
-    const isId = locale === 'id';
+    const { t } = useTranslation();
 
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedTingkat, setSelectedTingkat] = useState('');
@@ -87,29 +86,29 @@ export default function PrestasiIndex({ prestasiList }: Props) {
     }, [prestasiList, selectedTingkat, selectedKategori, selectedTahun, searchQuery]);
 
     const tingkatOptions = [
-        { value: '', label: isId ? 'Semua Tingkat' : 'All Levels' },
-        { value: 'internasional', label: isId ? 'Tingkat Internasional' : 'International' },
-        { value: 'nasional', label: isId ? 'Tingkat Nasional' : 'National' },
-        { value: 'provinsi', label: isId ? 'Tingkat Provinsi' : 'Provincial' },
-        { value: 'kabupaten', label: isId ? 'Tingkat Kabupaten/Kota' : 'Regency/City' },
-        { value: 'sekolah', label: isId ? 'Tingkat Sekolah' : 'School Level' },
+        { value: '', label: t('prestasi.filter_semua_tingkat') },
+        { value: 'internasional', label: t('prestasi.tingkat_internasional') },
+        { value: 'nasional', label: t('prestasi.tingkat_nasional') },
+        { value: 'provinsi', label: t('prestasi.tingkat_provinsi') },
+        { value: 'kabupaten', label: t('prestasi.tingkat_kabupaten') },
+        { value: 'sekolah', label: t('prestasi.tingkat_sekolah') },
     ];
 
     const kategoriOptions = [
-        { value: '', label: isId ? 'Semua Kategori' : 'All Categories' },
-        { value: 'akademik', label: isId ? 'Akademik' : 'Academic' },
-        { value: 'non_akademik', label: isId ? 'Non-Akademik' : 'Non-Academic' },
+        { value: '', label: t('prestasi.filter_semua_kategori') },
+        { value: 'akademik', label: t('prestasi.kategori_akademik') },
+        { value: 'non_akademik', label: t('prestasi.kategori_non_akademik') },
     ];
 
     const tahunOptions = [
-        { value: '', label: isId ? 'Semua Tahun' : 'All Years' },
+        { value: '', label: t('prestasi.filter_semua_tahun') },
         ...years.map((y) => ({ value: y.toString(), label: y.toString() })),
     ];
 
     return (
         <PublicLayout>
             <Head>
-                <title>{isId ? 'Prestasi & Kejuaraan - SMK Muhammadiyah Bligo' : 'Achievements & Honors - SMK Muhammadiyah Bligo'}</title>
+                <title>{t('prestasi.meta_title')}</title>
             </Head>
 
             {/* Hero Section */}
@@ -119,26 +118,24 @@ export default function PrestasiIndex({ prestasiList }: Props) {
                     {/* Breadcrumbs */}
                     <nav className="flex items-center gap-2 text-sm text-neutral-300 mb-6" aria-label="Breadcrumb">
                         <Link href="/" className="hover:text-gold-400 transition-colors">
-                            {isId ? 'Beranda' : 'Home'}
+                            {t('prestasi.breadcrumb_beranda')}
                         </Link>
                         <ChevronRight className="w-4 h-4 text-neutral-400" />
                         <span className="text-gold-400 font-medium">
-                            {isId ? 'Prestasi' : 'Achievements'}
+                            {t('prestasi.breadcrumb_prestasi')}
                         </span>
                     </nav>
 
                     <div className="max-w-3xl">
                         <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-primary-800 text-gold-400 border border-gold-500/20 mb-4">
                             <Trophy className="w-3.5 h-3.5" />
-                            {isId ? 'Tradisi Juara & Berprestasi' : 'Excellence & Honors'}
+                            {t('prestasi.badge_subtitle')}
                         </span>
                         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight font-display text-white">
-                            {isId ? 'Prestasi & Penghargaan' : 'Student Achievements'}
+                            {t('prestasi.hero_title')}
                         </h1>
                         <p className="mt-4 text-base sm:text-lg text-neutral-300 leading-relaxed">
-                            {isId
-                                ? 'Bukti nyata dedikasi dan keunggulan kompetensi siswa SMK Muhammadiyah Bligo dalam berbagai kompetisi akademik, teknologi, kejuruan, dan seni olahraga.'
-                                : 'A testament to the dedication and vocational excellence of our students across academic, technological, and athletic competitions.'}
+                            {t('prestasi.hero_desc')}
                         </p>
                     </div>
                 </div>
@@ -153,7 +150,7 @@ export default function PrestasiIndex({ prestasiList }: Props) {
                             <div className="relative">
                                 <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" />
                                 <Input
-                                    placeholder={isId ? 'Cari judul prestasi...' : 'Search achievement...'}
+                                    placeholder={t('prestasi.search_placeholder')}
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
                                     className="pl-9 h-10 text-sm"
@@ -191,7 +188,7 @@ export default function PrestasiIndex({ prestasiList }: Props) {
                                     }}
                                     className="text-xs font-semibold text-primary-600 hover:text-primary-800 transition-colors"
                                 >
-                                    {isId ? 'Reset Semua Filter' : 'Reset All Filters'}
+                                    {t('prestasi.reset_filter')}
                                 </button>
                             </div>
                         )}
@@ -202,12 +199,10 @@ export default function PrestasiIndex({ prestasiList }: Props) {
                         <div className="text-center py-20 bg-white rounded-2xl border border-neutral-200/80 p-8">
                             <Trophy className="w-12 h-12 text-neutral-300 mx-auto mb-3" />
                             <h3 className="text-lg font-semibold text-neutral-800">
-                                {isId ? 'Prestasi tidak ditemukan' : 'No achievements found'}
+                                {t('prestasi.kosong_title')}
                             </h3>
                             <p className="text-sm text-neutral-500 mt-1">
-                                {isId
-                                    ? 'Coba ubah kata kunci atau kombinasi filter Anda.'
-                                    : 'Try adjusting your search keywords or filter criteria.'}
+                                {t('prestasi.kosong_desc')}
                             </p>
                         </div>
                     ) : (
@@ -228,7 +223,7 @@ export default function PrestasiIndex({ prestasiList }: Props) {
                                     {/* Cover Image */}
                                     <Link href={route('prestasi.show', { prestasi: item.slug })} className="block relative aspect-16/10 bg-neutral-100 overflow-hidden">
                                         {item.foto_url ? (
-                                            <img
+                                             <img
                                                 src={item.foto_url}
                                                 alt={item.judul}
                                                 loading="lazy"
@@ -237,7 +232,7 @@ export default function PrestasiIndex({ prestasiList }: Props) {
                                         ) : (
                                             <div className="w-full h-full flex flex-col items-center justify-center text-neutral-400 gap-2">
                                                 <Trophy className="w-8 h-8 text-gold-500/60" />
-                                                <span className="text-xs">Foto Prestasi</span>
+                                                <span className="text-xs">{t('prestasi.foto_placeholder')}</span>
                                             </div>
                                         )}
                                         <div className="absolute top-3 left-3 flex gap-1.5">
@@ -268,13 +263,13 @@ export default function PrestasiIndex({ prestasiList }: Props) {
                                         <div className="mt-4 pt-4 border-t border-neutral-100 flex items-center justify-between text-xs text-neutral-500">
                                             <div className="flex items-center gap-1.5">
                                                 <Calendar className="w-3.5 h-3.5 text-neutral-400" />
-                                                <span>{item.tanggal || `Tahun ${item.tahun}`}</span>
+                                                <span>{item.tanggal || `${t('prestasi.tahun_prefix')} ${item.tahun}`}</span>
                                             </div>
                                             <Link
                                                 href={route('prestasi.show', { prestasi: item.slug })}
                                                 className="inline-flex items-center gap-1 text-primary-600 font-semibold group-hover:text-primary-700 transition-colors"
                                             >
-                                                {isId ? 'Detail' : 'Details'}
+                                                {t('prestasi.detail_btn')}
                                                 <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
                                             </Link>
                                         </div>

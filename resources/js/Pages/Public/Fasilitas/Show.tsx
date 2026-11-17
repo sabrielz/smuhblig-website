@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Head, Link, usePage } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
+import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { ChevronRight, ArrowLeft, Building2, ImageIcon, Maximize2 } from 'lucide-react';
 import PublicLayout from '@/Layouts/PublicLayout';
@@ -7,7 +8,6 @@ import { Badge } from '@/Components/UI/Badge';
 import { Button } from '@/Components/UI/Button';
 import { Lightbox } from '@/Components/UI/Lightbox';
 import { fadeInUp, staggerContainer } from '@/lib/motion';
-import type { SharedProps } from '@/types';
 
 interface FasilitasPhoto {
     id: number;
@@ -60,8 +60,8 @@ const GeometricPattern = () => (
 );
 
 export default function FasilitasShow({ fasilitas }: Props) {
-    const { locale } = usePage<SharedProps>().props;
-    const isId = locale === 'id';
+    const { t, i18n } = useTranslation();
+    const currentLocale = (i18n.language || 'id') as 'id' | 'en';
 
     const [lightboxOpen, setLightboxOpen] = useState(false);
     const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
@@ -86,11 +86,11 @@ export default function FasilitasShow({ fasilitas }: Props) {
                     {/* Breadcrumbs */}
                     <nav className="flex items-center gap-2 text-sm text-neutral-300 mb-6" aria-label="Breadcrumb">
                         <Link href="/" className="hover:text-gold-400 transition-colors">
-                            {isId ? 'Beranda' : 'Home'}
+                            {t('nav.home')}
                         </Link>
                         <ChevronRight className="w-4 h-4 text-neutral-400" />
                         <Link href={route('fasilitas.index')} className="hover:text-gold-400 transition-colors">
-                            {isId ? 'Fasilitas' : 'Facilities'}
+                            {t('fasilitas.breadcrumb')}
                         </Link>
                         <ChevronRight className="w-4 h-4 text-neutral-400" />
                         <span className="text-gold-400 font-medium truncate max-w-xs sm:max-w-md">
@@ -101,7 +101,7 @@ export default function FasilitasShow({ fasilitas }: Props) {
                     <div className="max-w-3xl">
                         <div className="mb-3">
                             <Badge variant={KATEGORI_BADGE_VARIANTS[fasilitas.kategori] || 'neutral'}>
-                                {KATEGORI_LABELS[fasilitas.kategori]?.[locale === 'en' ? 'en' : 'id'] || fasilitas.kategori}
+                                {KATEGORI_LABELS[fasilitas.kategori]?.[currentLocale] || fasilitas.kategori}
                             </Badge>
                         </div>
                         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight font-display text-white">
@@ -120,7 +120,7 @@ export default function FasilitasShow({ fasilitas }: Props) {
                             <div className="bg-white p-6 sm:p-8 rounded-2xl border border-neutral-200/80 shadow-xs">
                                 <h2 className="text-xl font-bold text-neutral-900 mb-4 pb-3 border-b border-neutral-100 flex items-center gap-2">
                                     <Building2 className="w-5 h-5 text-primary-600" />
-                                    {isId ? 'Informasi Fasilitas' : 'Facility Details'}
+                                    {t('fasilitas.specs_title')}
                                 </h2>
 
                                 {fasilitas.deskripsi ? (
@@ -130,9 +130,9 @@ export default function FasilitasShow({ fasilitas }: Props) {
                                     />
                                 ) : (
                                     <p className="text-neutral-500 italic">
-                                        {isId
-                                            ? 'Belum ada penjelasan detail untuk fasilitas ini.'
-                                            : 'No detailed description available for this facility yet.'}
+                                        {currentLocale === 'en'
+                                            ? 'No detailed description available for this facility yet.'
+                                            : 'Belum ada penjelasan detail untuk fasilitas ini.'}
                                     </p>
                                 )}
                             </div>
@@ -142,10 +142,10 @@ export default function FasilitasShow({ fasilitas }: Props) {
                                 <div className="flex items-center justify-between mb-6 pb-3 border-b border-neutral-100">
                                     <h2 className="text-xl font-bold text-neutral-900 flex items-center gap-2">
                                         <ImageIcon className="w-5 h-5 text-primary-600" />
-                                        {isId ? 'Dokumentasi Foto' : 'Photo Gallery'}
+                                        {t('galeri.hero_title_1')}
                                     </h2>
                                     <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-neutral-100 text-neutral-700">
-                                        {fasilitas.photos.length} {isId ? 'Foto' : 'Photos'}
+                                        {fasilitas.photos.length} {t('galeri.photos_count')}
                                     </span>
                                 </div>
 
@@ -153,7 +153,7 @@ export default function FasilitasShow({ fasilitas }: Props) {
                                     <div className="text-center py-12 text-neutral-400 flex flex-col items-center gap-2">
                                         <ImageIcon className="w-10 h-10 stroke-1" />
                                         <p className="text-sm">
-                                            {isId ? 'Belum ada foto yang diunggah.' : 'No photos uploaded yet.'}
+                                            {currentLocale === 'en' ? 'No photos uploaded yet.' : 'Belum ada foto yang diunggah.'}
                                         </p>
                                     </div>
                                 ) : (
@@ -191,24 +191,24 @@ export default function FasilitasShow({ fasilitas }: Props) {
                         <div className="space-y-6">
                             <div className="bg-white p-6 rounded-2xl border border-neutral-200/80 shadow-xs space-y-4">
                                 <h3 className="text-base font-bold text-neutral-900 border-b border-neutral-100 pb-3">
-                                    {isId ? 'Ringkasan Fasilitas' : 'Facility Summary'}
+                                    {t('fasilitas.specs_title')}
                                 </h3>
 
                                 <div className="space-y-3 text-sm">
                                     <div>
                                         <span className="text-xs text-neutral-400 uppercase tracking-wider block">
-                                            {isId ? 'Kategori' : 'Category'}
+                                            {t('fasilitas.category_label')}
                                         </span>
                                         <span className="font-semibold text-neutral-800">
-                                            {KATEGORI_LABELS[fasilitas.kategori]?.[locale === 'en' ? 'en' : 'id'] || fasilitas.kategori}
+                                            {KATEGORI_LABELS[fasilitas.kategori]?.[currentLocale] || fasilitas.kategori}
                                         </span>
                                     </div>
                                     <div>
                                         <span className="text-xs text-neutral-400 uppercase tracking-wider block">
-                                            {isId ? 'Jumlah Foto' : 'Total Photos'}
+                                            {t('fasilitas.location_label')}
                                         </span>
                                         <span className="font-semibold text-neutral-800">
-                                            {fasilitas.photos.length} {isId ? 'Dokumentasi' : 'Images'}
+                                            {fasilitas.photos.length} {t('galeri.photos_count')}
                                         </span>
                                     </div>
                                 </div>
@@ -217,7 +217,7 @@ export default function FasilitasShow({ fasilitas }: Props) {
                                     <Link href={route('fasilitas.index')}>
                                         <Button variant="outline" className="w-full">
                                             <ArrowLeft className="w-4 h-4 mr-2" />
-                                            {isId ? 'Kembali ke Daftar Fasilitas' : 'Back to Facilities'}
+                                            {t('fasilitas.back_to_all')}
                                         </Button>
                                     </Link>
                                 </div>

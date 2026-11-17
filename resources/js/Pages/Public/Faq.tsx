@@ -1,13 +1,10 @@
 import React, { useState, useMemo } from 'react';
-import { Head, Link, usePage } from '@inertiajs/react';
-import { motion } from 'framer-motion';
+import { Head, Link } from '@inertiajs/react';
+import { useTranslation } from 'react-i18next';
 import { ChevronRight, HelpCircle, Search, MessageSquare, ArrowRight } from 'lucide-react';
 import PublicLayout from '@/Layouts/PublicLayout';
-import { Badge } from '@/Components/UI/Badge';
 import { Input } from '@/Components/UI/Input';
 import Accordion from '@/Components/UI/Accordion';
-import { fadeInUp, staggerContainer } from '@/lib/motion';
-import type { SharedProps } from '@/types';
 
 interface FaqItem {
     id: number;
@@ -21,20 +18,6 @@ interface Props {
     faqs: FaqItem[];
     faqJsonLd: Record<string, any>;
 }
-
-const KATEGORI_LABELS_ID: Record<string, string> = {
-    umum: 'Umum & Profil',
-    pendaftaran: 'Pendaftaran Siswa Baru (SPMB)',
-    akademik: 'Akademik & Jurusan',
-    fasilitas: 'Fasilitas & Sarana',
-};
-
-const KATEGORI_LABELS_EN: Record<string, string> = {
-    umum: 'General & Overview',
-    pendaftaran: 'Admissions & Enrollment',
-    akademik: 'Academics & Programs',
-    fasilitas: 'Facilities & Campus',
-};
 
 const GeometricPattern = () => (
     <svg
@@ -53,13 +36,17 @@ const GeometricPattern = () => (
 );
 
 export default function FaqIndex({ faqs, faqJsonLd }: Props) {
-    const { locale } = usePage<SharedProps>().props;
-    const isEn = locale === 'en';
+    const { t } = useTranslation();
 
     const [search, setSearch] = useState('');
     const [selectedCategory, setSelectedCategory] = useState<string>('all');
 
-    const kategoriLabels = isEn ? KATEGORI_LABELS_EN : KATEGORI_LABELS_ID;
+    const kategoriLabels: Record<string, string> = {
+        umum: t('faq.kategori_umum'),
+        pendaftaran: t('faq.kategori_pendaftaran'),
+        akademik: t('faq.kategori_akademik'),
+        fasilitas: t('faq.kategori_fasilitas'),
+    };
 
     const categories = ['umum', 'pendaftaran', 'akademik', 'fasilitas'] as const;
 
@@ -92,11 +79,7 @@ export default function FaqIndex({ faqs, faqJsonLd }: Props) {
     return (
         <PublicLayout jsonLd={[faqJsonLd]}>
             <Head
-                title={
-                    isEn
-                        ? 'Frequently Asked Questions (FAQ) | SMK Muhammadiyah Bligo'
-                        : 'Tanya Jawab (FAQ) | SMK Muhammadiyah Bligo'
-                }
+                title={t('faq.meta_title')}
             />
 
             {/* Hero Header */}
@@ -106,24 +89,22 @@ export default function FaqIndex({ faqs, faqJsonLd }: Props) {
                     {/* Breadcrumbs */}
                     <nav className="flex items-center gap-2 text-xs sm:text-sm text-neutral-300 mb-6" aria-label="Breadcrumb">
                         <Link href="/" className="hover:text-white transition-colors">
-                            {isEn ? 'Home' : 'Beranda'}
+                            {t('faq.breadcrumb_beranda')}
                         </Link>
                         <ChevronRight className="w-3.5 h-3.5 text-neutral-400" />
-                        <span className="text-white font-medium">FAQ</span>
+                        <span className="text-white font-medium">{t('faq.breadcrumb_faq')}</span>
                     </nav>
 
                     <div className="max-w-3xl">
                         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-gold-400 text-xs font-semibold uppercase tracking-wider mb-4 border border-white/10">
                             <HelpCircle className="w-3.5 h-3.5" />
-                            <span>{isEn ? 'Help & Answers' : 'Pusat Bantuan & Tanya Jawab'}</span>
+                            <span>{t('faq.badge_subtitle')}</span>
                         </div>
                         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-serif tracking-tight text-white mb-4">
-                            {isEn ? 'Frequently Asked Questions' : 'Pertanyaan yang Sering Diajukan'}
+                            {t('faq.hero_title')}
                         </h1>
                         <p className="text-base sm:text-lg text-neutral-300 leading-relaxed">
-                            {isEn
-                                ? 'Find clear and fast answers regarding registration, academic programs, and school facilities.'
-                                : 'Temukan jawaban cepat dan jelas mengenai pendaftaran peserta didik baru, kurikulum kejuruan, dan fasilitas sekolah kami.'}
+                            {t('faq.hero_desc')}
                         </p>
                     </div>
                 </div>
@@ -138,11 +119,7 @@ export default function FaqIndex({ faqs, faqJsonLd }: Props) {
                             <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400" />
                             <Input
                                 type="text"
-                                placeholder={
-                                    isEn
-                                        ? 'Search questions or keywords...'
-                                        : 'Cari pertanyaan atau kata kunci tertentu...'
-                                }
+                                placeholder={t('faq.search_placeholder')}
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
                                 className="pl-10"
@@ -159,7 +136,7 @@ export default function FaqIndex({ faqs, faqJsonLd }: Props) {
                                         : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
                                 }`}
                             >
-                                {isEn ? 'All Categories' : 'Semua Kategori'}
+                                {t('faq.filter_semua')}
                             </button>
                             {categories.map((cat) => (
                                 <button
@@ -183,12 +160,10 @@ export default function FaqIndex({ faqs, faqJsonLd }: Props) {
                         <div className="text-center py-16 bg-white rounded-2xl border border-neutral-200/80 p-8">
                             <HelpCircle className="w-12 h-12 text-neutral-400 mx-auto mb-3" />
                             <h3 className="text-base font-semibold text-neutral-800 mb-1">
-                                {isEn ? 'No questions found' : 'Pertanyaan tidak ditemukan'}
+                                {t('faq.kosong_title')}
                             </h3>
                             <p className="text-xs text-neutral-500 max-w-sm mx-auto">
-                                {isEn
-                                    ? 'Try adjusting your search terms or view all categories.'
-                                    : 'Coba gunakan kata kunci lain atau hubungi langsung posko informasi kami.'}
+                                {t('faq.kosong_desc')}
                             </p>
                         </div>
                     ) : (
@@ -223,12 +198,10 @@ export default function FaqIndex({ faqs, faqJsonLd }: Props) {
                             </div>
                             <div>
                                 <h3 className="text-base font-bold text-neutral-900 mb-1">
-                                    {isEn ? 'Have more questions?' : 'Punya pertanyaan lain?'}
+                                    {t('faq.callout_title')}
                                 </h3>
                                 <p className="text-xs sm:text-sm text-neutral-500 max-w-md">
-                                    {isEn
-                                        ? 'If you cannot find the answer above, feel free to submit an inquiry through our contact form.'
-                                        : 'Bila pertanyaan Anda belum terjawab di sini, kirimkan pesan langsung melalui form kontak sekolah.'}
+                                    {t('faq.callout_desc')}
                                 </p>
                             </div>
                         </div>
@@ -236,7 +209,7 @@ export default function FaqIndex({ faqs, faqJsonLd }: Props) {
                             href="/kontak"
                             className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-primary-600 hover:bg-primary-700 text-white text-xs sm:text-sm font-semibold shadow-xs hover:shadow transition-all shrink-0"
                         >
-                            <span>{isEn ? 'Contact Us' : 'Hubungi Kami'}</span>
+                            <span>{t('faq.callout_btn')}</span>
                             <ArrowRight className="w-4 h-4" />
                         </Link>
                     </div>

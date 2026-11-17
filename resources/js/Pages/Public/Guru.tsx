@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
-import { Head, Link, usePage } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
+import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { ChevronRight, GraduationCap, Briefcase, BookOpen, Search } from 'lucide-react';
 import PublicLayout from '@/Layouts/PublicLayout';
@@ -7,7 +8,6 @@ import { Badge } from '@/Components/UI/Badge';
 import { Input } from '@/Components/UI/Input';
 import { fadeInUp, staggerContainer } from '@/lib/motion';
 import { cn } from '@/lib/utils';
-import type { SharedProps } from '@/types';
 
 interface GuruItem {
     id: number;
@@ -53,8 +53,7 @@ const GeometricPattern = () => (
 );
 
 export default function GuruPublik({ guruList, jurusans }: Props) {
-    const { locale } = usePage<SharedProps>().props;
-    const isId = locale === 'id';
+    const { t } = useTranslation();
 
     const [activeTab, setActiveTab] = useState<'semua' | 'guru' | 'tendik'>('semua');
     const [selectedJurusan, setSelectedJurusan] = useState<string>('semua');
@@ -89,10 +88,8 @@ export default function GuruPublik({ guruList, jurusans }: Props) {
         });
     }, [guruList, activeTab, selectedJurusan, searchQuery]);
 
-    const titleText = isId ? 'Guru & Tenaga Kependidikan' : 'Teachers & Staff';
-    const subtitleText = isId
-        ? 'Mengenal para pendidik berdedikasi dan tenaga kependidikan profesional di SMK Muhammadiyah Bligo.'
-        : 'Meet our dedicated educators and professional staff members at SMK Muhammadiyah Bligo.';
+    const titleText = t('guru.title');
+    const subtitleText = t('guru.subtitle');
 
     return (
         <PublicLayout>
@@ -106,7 +103,7 @@ export default function GuruPublik({ guruList, jurusans }: Props) {
                     {/* Breadcrumbs */}
                     <div className="flex items-center gap-2 text-xs md:text-sm text-primary-200 mb-4">
                         <Link href="/" className="hover:text-white transition-colors">
-                            {isId ? 'Beranda' : 'Home'}
+                            {t('nav.home')}
                         </Link>
                         <ChevronRight className="w-3.5 h-3.5" />
                         <span className="text-white font-medium">{titleText}</span>
@@ -137,7 +134,7 @@ export default function GuruPublik({ guruList, jurusans }: Props) {
                                         : 'text-neutral-600 hover:text-neutral-900'
                                 )}
                             >
-                                {isId ? 'Semua' : 'All'}
+                                {t('guru.tab_all')}
                             </button>
                             <button
                                 type="button"
@@ -149,7 +146,7 @@ export default function GuruPublik({ guruList, jurusans }: Props) {
                                         : 'text-neutral-600 hover:text-neutral-900'
                                 )}
                             >
-                                {isId ? 'Guru' : 'Teachers'}
+                                {t('guru.tab_guru')}
                             </button>
                             <button
                                 type="button"
@@ -161,7 +158,7 @@ export default function GuruPublik({ guruList, jurusans }: Props) {
                                         : 'text-neutral-600 hover:text-neutral-900'
                                 )}
                             >
-                                {isId ? 'Tenaga Kependidikan' : 'Staff'}
+                                {t('guru.tab_tendik')}
                             </button>
                         </div>
 
@@ -169,7 +166,7 @@ export default function GuruPublik({ guruList, jurusans }: Props) {
                         <div className="relative w-full md:w-72">
                             <Search className="w-4 h-4 text-neutral-400 absolute left-3 top-1/2 -translate-y-1/2" />
                             <Input
-                                placeholder={isId ? 'Cari nama atau mapel...' : 'Search name or subject...'}
+                                placeholder={t('guru.search_placeholder')}
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                                 className="pl-9 bg-white"
@@ -181,7 +178,7 @@ export default function GuruPublik({ guruList, jurusans }: Props) {
                     {activeTab !== 'tendik' && jurusans.length > 0 && (
                         <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
                             <span className="text-xs font-semibold text-neutral-500 whitespace-nowrap mr-1">
-                                {isId ? 'Jurusan:' : 'Program:'}
+                                {t('guru.program_label')}
                             </span>
                             <button
                                 type="button"
@@ -193,7 +190,7 @@ export default function GuruPublik({ guruList, jurusans }: Props) {
                                         : 'bg-white text-neutral-600 border border-neutral-200 hover:bg-neutral-100'
                                 )}
                             >
-                                {isId ? 'Semua Jurusan' : 'All Programs'}
+                                {t('guru.all_programs')}
                             </button>
                             {jurusans.map((j) => (
                                 <button
@@ -222,12 +219,10 @@ export default function GuruPublik({ guruList, jurusans }: Props) {
                         <div className="text-center py-20 bg-neutral-50 rounded-2xl border border-dashed border-neutral-300">
                             <GraduationCap className="w-12 h-12 text-neutral-400 mx-auto mb-3" />
                             <h3 className="text-lg font-semibold text-neutral-900">
-                                {isId ? 'Tidak ada data ditemukan' : 'No staff members found'}
+                                {t('guru.not_found')}
                             </h3>
                             <p className="text-sm text-neutral-500 mt-1 max-w-sm mx-auto">
-                                {isId
-                                    ? 'Coba ganti kata kunci pencarian atau sesuaikan pilihan filter.'
-                                    : 'Try searching with different keywords or reset your filters.'}
+                                {t('pencarian.not_found_desc', { keyword: searchQuery })}
                             </p>
                         </div>
                     ) : (
@@ -256,7 +251,7 @@ export default function GuruPublik({ guruList, jurusans }: Props) {
                                             <div className="w-full h-full flex flex-col items-center justify-center text-neutral-400 p-6 bg-gradient-to-b from-neutral-100 to-neutral-200">
                                                 <GraduationCap className="w-16 h-16 stroke-1 mb-2 opacity-60" />
                                                 <span className="text-xs uppercase tracking-wider font-semibold opacity-75">
-                                                    {item.kelompok === 'guru' ? 'Pendidik' : 'Tendik'}
+                                                    {item.kelompok === 'guru' ? t('guru.label_guru') : t('guru.label_tendik')}
                                                 </span>
                                             </div>
                                         )}
@@ -267,7 +262,7 @@ export default function GuruPublik({ guruList, jurusans }: Props) {
                                                 size="sm"
                                                 className="shadow-xs backdrop-blur-xs"
                                             >
-                                                {item.kelompok === 'guru' ? (isId ? 'Guru' : 'Teacher') : (isId ? 'Tendik' : 'Staff')}
+                                                {item.kelompok === 'guru' ? t('guru.label_guru') : t('guru.label_tendik')}
                                             </Badge>
                                         </div>
                                     </div>

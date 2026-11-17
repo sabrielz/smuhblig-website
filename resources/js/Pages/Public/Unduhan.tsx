@@ -1,13 +1,13 @@
 import React, { useState, useMemo } from 'react';
-import { Head, Link, usePage } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
+import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
-import { ChevronRight, FileDown, Search, Download, Calendar, FileText, CheckCircle2 } from 'lucide-react';
+import { ChevronRight, FileDown, Search, Download, Calendar, FileText } from 'lucide-react';
 import PublicLayout from '@/Layouts/PublicLayout';
 import { Badge } from '@/Components/UI/Badge';
 import { Input } from '@/Components/UI/Input';
 import { Select } from '@/Components/UI/Select';
-import { fadeInUp, staggerContainer, cardHover } from '@/lib/motion';
-import type { SharedProps } from '@/types';
+import { fadeInUp, staggerContainer } from '@/lib/motion';
 
 interface UnduhanPublicItem {
     id: number;
@@ -29,22 +29,6 @@ interface UnduhanPublicItem {
 interface Props {
     unduhanList: UnduhanPublicItem[];
 }
-
-const KATEGORI_LABELS_ID: Record<string, string> = {
-    brosur: 'Brosur & Info Sekolah',
-    kalender: 'Kalender Akademik',
-    formulir: 'Formulir & Dokumen',
-    sk: 'Surat Keputusan (SK)',
-    lainnya: 'Dokumen Lainnya',
-};
-
-const KATEGORI_LABELS_EN: Record<string, string> = {
-    brosur: 'Brochures & Info',
-    kalender: 'Academic Calendar',
-    formulir: 'Forms & Documents',
-    sk: 'Official Decrees (SK)',
-    lainnya: 'Other Documents',
-};
 
 const KATEGORI_BADGE_VARIANTS: Record<string, 'gold' | 'primary' | 'success' | 'warning' | 'neutral'> = {
     brosur: 'primary',
@@ -71,16 +55,21 @@ const GeometricPattern = () => (
 );
 
 export default function UnduhanIndex({ unduhanList }: Props) {
-    const { locale } = usePage<SharedProps>().props;
-    const isEn = locale === 'en';
+    const { t } = useTranslation();
 
     const [search, setSearch] = useState('');
     const [selectedKategori, setSelectedKategori] = useState('all');
 
-    const kategoriLabels = isEn ? KATEGORI_LABELS_EN : KATEGORI_LABELS_ID;
+    const kategoriLabels: Record<string, string> = {
+        brosur: t('unduhan.kategori_brosur'),
+        kalender: t('unduhan.kategori_kalender'),
+        formulir: t('unduhan.kategori_formulir'),
+        sk: t('unduhan.kategori_sk'),
+        lainnya: t('unduhan.kategori_lainnya'),
+    };
 
     const kategoriOptions = [
-        { value: 'all', label: isEn ? 'All Categories' : 'Semua Kategori' },
+        { value: 'all', label: t('unduhan.filter_semua') },
         { value: 'brosur', label: kategoriLabels.brosur },
         { value: 'kalender', label: kategoriLabels.kalender },
         { value: 'formulir', label: kategoriLabels.formulir },
@@ -103,11 +92,7 @@ export default function UnduhanIndex({ unduhanList }: Props) {
     return (
         <PublicLayout>
             <Head
-                title={
-                    isEn
-                        ? 'Document Downloads | SMK Muhammadiyah Bligo'
-                        : 'Unduhan Dokumen Resmi | SMK Muhammadiyah Bligo'
-                }
+                title={t('unduhan.meta_title')}
             />
 
             {/* Hero Header */}
@@ -117,26 +102,24 @@ export default function UnduhanIndex({ unduhanList }: Props) {
                     {/* Breadcrumbs */}
                     <nav className="flex items-center gap-2 text-xs sm:text-sm text-neutral-300 mb-6" aria-label="Breadcrumb">
                         <Link href="/" className="hover:text-white transition-colors">
-                            {isEn ? 'Home' : 'Beranda'}
+                            {t('unduhan.breadcrumb_beranda')}
                         </Link>
                         <ChevronRight className="w-3.5 h-3.5 text-neutral-400" />
                         <span className="text-white font-medium">
-                            {isEn ? 'Downloads' : 'Unduhan'}
+                            {t('unduhan.breadcrumb_unduhan')}
                         </span>
                     </nav>
 
                     <div className="max-w-3xl">
                         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-gold-400 text-xs font-semibold uppercase tracking-wider mb-4 border border-white/10">
                             <FileDown className="w-3.5 h-3.5" />
-                            <span>{isEn ? 'Official Center' : 'Pusat Berkas Resmi'}</span>
+                            <span>{t('unduhan.badge_subtitle')}</span>
                         </div>
                         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-serif tracking-tight text-white mb-4">
-                            {isEn ? 'Document Downloads' : 'Pusat Unduhan Dokumen'}
+                            {t('unduhan.hero_title')}
                         </h1>
                         <p className="text-base sm:text-lg text-neutral-300 leading-relaxed">
-                            {isEn
-                                ? 'Access official documents, brochures, academic calendars, and school registration forms.'
-                                : 'Unduh berkas resmi sekolah, brosur penerimaan siswa, kalender akademik, dan formulir administratif dengan mudah dan aman.'}
+                            {t('unduhan.hero_desc')}
                         </p>
                     </div>
                 </div>
@@ -152,9 +135,7 @@ export default function UnduhanIndex({ unduhanList }: Props) {
                                 <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400" />
                                 <Input
                                     type="text"
-                                    placeholder={
-                                        isEn ? 'Search document title or keywords...' : 'Cari judul dokumen atau kata kunci...'
-                                    }
+                                    placeholder={t('unduhan.search_placeholder')}
                                     value={search}
                                     onChange={(e) => setSearch(e.target.value)}
                                     className="pl-10"
@@ -176,12 +157,10 @@ export default function UnduhanIndex({ unduhanList }: Props) {
                                 <FileText className="w-8 h-8" />
                             </div>
                             <h3 className="text-lg font-semibold text-neutral-800 mb-2">
-                                {isEn ? 'No documents found' : 'Tidak ada dokumen yang ditemukan'}
+                                {t('unduhan.kosong_title')}
                             </h3>
                             <p className="text-sm text-neutral-500 max-w-md mx-auto">
-                                {isEn
-                                    ? 'Try resetting the category filter or searching with different keywords.'
-                                    : 'Coba pilih kategori lain atau gunakan kata kunci pencarian yang berbeda.'}
+                                {t('unduhan.kosong_desc')}
                             </p>
                         </div>
                     ) : (
@@ -230,11 +209,11 @@ export default function UnduhanIndex({ unduhanList }: Props) {
                                                     {item.file.extension} • {item.file.human_size}
                                                 </span>
                                             ) : (
-                                                <span className="italic">{isEn ? 'File unavailable' : 'Berkas belum tersedia'}</span>
+                                                <span className="italic">{t('unduhan.berkas_tidak_tersedia')}</span>
                                             )}
                                             <span className="mx-1.5 text-neutral-300">•</span>
                                             <span>
-                                                {item.jumlah_unduh.toLocaleString('id-ID')} {isEn ? 'downloads' : 'diunduh'}
+                                                {item.jumlah_unduh.toLocaleString('id-ID')} {t('unduhan.diunduh_count')}
                                             </span>
                                         </div>
 
@@ -242,10 +221,10 @@ export default function UnduhanIndex({ unduhanList }: Props) {
                                             <a
                                                 href={item.download_url}
                                                 className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-primary-600 hover:bg-primary-700 text-white text-xs font-semibold shadow-xs hover:shadow transition-all"
-                                                title={isEn ? 'Download file' : 'Unduh berkas'}
+                                                title={t('unduhan.download_btn')}
                                             >
                                                 <Download className="w-3.5 h-3.5" />
-                                                <span>{isEn ? 'Download' : 'Unduh'}</span>
+                                                <span>{t('unduhan.download_btn')}</span>
                                             </a>
                                         )}
                                     </div>

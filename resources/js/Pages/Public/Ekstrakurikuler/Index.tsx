@@ -1,11 +1,11 @@
 import React, { useState, useMemo } from 'react';
-import { Head, Link, usePage } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
+import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { ChevronRight, Activity, Search, ArrowRight, Clock, User, ImageIcon } from 'lucide-react';
 import PublicLayout from '@/Layouts/PublicLayout';
 import { Input } from '@/Components/UI/Input';
 import { fadeInUp, staggerContainer, cardHover } from '@/lib/motion';
-import type { SharedProps } from '@/types';
 
 interface EkskulItem {
     id: number;
@@ -41,8 +41,8 @@ const GeometricPattern = () => (
 );
 
 export default function EkstrakurikulerIndex({ ekskulList }: Props) {
-    const { locale } = usePage<SharedProps>().props;
-    const isId = locale === 'id';
+    const { t, i18n } = useTranslation();
+    const currentLocale = (i18n.language || 'id') as 'id' | 'en';
 
     const [searchQuery, setSearchQuery] = useState('');
 
@@ -60,7 +60,7 @@ export default function EkstrakurikulerIndex({ ekskulList }: Props) {
     return (
         <PublicLayout>
             <Head>
-                <title>{isId ? 'Ekstrakurikuler - SMK Muhammadiyah Bligo' : 'Extracurricular Activities - SMK Muhammadiyah Bligo'}</title>
+                <title>{t('ekskul.page_title')} - SMK Muhammadiyah Bligo</title>
             </Head>
 
             {/* Hero Section */}
@@ -70,26 +70,26 @@ export default function EkstrakurikulerIndex({ ekskulList }: Props) {
                     {/* Breadcrumbs */}
                     <nav className="flex items-center gap-2 text-sm text-neutral-300 mb-6" aria-label="Breadcrumb">
                         <Link href="/" className="hover:text-gold-400 transition-colors">
-                            {isId ? 'Beranda' : 'Home'}
+                            {t('nav.home')}
                         </Link>
                         <ChevronRight className="w-4 h-4 text-neutral-400" />
                         <span className="text-gold-400 font-medium">
-                            {isId ? 'Ekstrakurikuler' : 'Extracurricular'}
+                            {t('ekskul.breadcrumb')}
                         </span>
                     </nav>
 
                     <div className="max-w-3xl">
                         <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-primary-800 text-gold-400 border border-gold-500/20 mb-4">
                             <Activity className="w-3.5 h-3.5" />
-                            {isId ? 'Pengembangan Bakat & Minat' : 'Talent & Character Building'}
+                            {t('ekskul.eyebrow')}
                         </span>
                         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight font-display text-white">
-                            {isId ? 'Kegiatan Ekstrakurikuler' : 'Extracurricular Activities'}
+                            {t('ekskul.headline')}
                         </h1>
                         <p className="mt-4 text-base sm:text-lg text-neutral-300 leading-relaxed">
-                            {isId
-                                ? 'Wadah eksplorasi potensi kepemimpinan, kepanduan Hizbul Wathan, seni beladiri Tapak Suci, sains robotika, hingga olahraga prestasi.'
-                                : 'A platform to explore leadership, Hizbul Wathan scouting, martial arts, robotics, and competitive sports for character development.'}
+                            {currentLocale === 'en'
+                                ? 'A platform to explore leadership, Hizbul Wathan scouting, martial arts, robotics, and competitive sports for character development.'
+                                : 'Wadah eksplorasi potensi kepemimpinan, kepanduan Hizbul Wathan, seni beladiri Tapak Suci, sains robotika, hingga olahraga prestasi.'}
                         </p>
                     </div>
                 </div>
@@ -101,14 +101,14 @@ export default function EkstrakurikulerIndex({ ekskulList }: Props) {
                     {/* Controls Bar */}
                     <div className="bg-white p-4 rounded-2xl border border-neutral-200/80 shadow-xs mb-8 flex flex-col sm:flex-row gap-4 justify-between items-center">
                         <p className="text-sm font-medium text-neutral-600">
-                            {isId ? `Menampilkan ${filteredList.length} ekstrakurikuler aktif` : `Showing ${filteredList.length} active activities`}
+                            {t('ekskul.showing_count', { count: filteredList.length })}
                         </p>
 
                         {/* Search Input */}
                         <div className="relative w-full sm:w-80">
                             <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" />
                             <Input
-                                placeholder={isId ? 'Cari nama kegiatan atau pembina...' : 'Search activity or mentor...'}
+                                placeholder={t('ekskul.search_placeholder')}
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                                 className="pl-9 h-10 text-sm"
@@ -121,12 +121,10 @@ export default function EkstrakurikulerIndex({ ekskulList }: Props) {
                         <div className="text-center py-20 bg-white rounded-2xl border border-neutral-200/80 p-8">
                             <Activity className="w-12 h-12 text-neutral-300 mx-auto mb-3" />
                             <h3 className="text-lg font-semibold text-neutral-800">
-                                {isId ? 'Ekstrakurikuler tidak ditemukan' : 'No activities found'}
+                                {t('ekskul.not_found')}
                             </h3>
                             <p className="text-sm text-neutral-500 mt-1">
-                                {isId
-                                    ? 'Coba ubah kata kunci pencarian Anda.'
-                                    : 'Try adjusting your search query.'}
+                                {t('pencarian.not_found_desc', { keyword: searchQuery })}
                             </p>
                         </div>
                     ) : (
@@ -194,7 +192,7 @@ export default function EkstrakurikulerIndex({ ekskulList }: Props) {
                                                     href={route('ekstrakurikuler.show', { ekstrakurikuler: item.slug })}
                                                     className="inline-flex items-center gap-1 text-xs text-primary-600 font-semibold group-hover:text-primary-700 transition-colors"
                                                 >
-                                                    {isId ? 'Lihat Profil Lengkap' : 'View Full Details'}
+                                                    {t('ekskul.view_detail')}
                                                     <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
                                                 </Link>
                                             </div>

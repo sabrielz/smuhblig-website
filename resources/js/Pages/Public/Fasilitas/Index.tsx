@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
-import { Head, Link, usePage } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
+import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { ChevronRight, Building2, Search, ArrowRight, ImageIcon } from 'lucide-react';
 import PublicLayout from '@/Layouts/PublicLayout';
@@ -7,7 +8,6 @@ import { Badge } from '@/Components/UI/Badge';
 import { Input } from '@/Components/UI/Input';
 import { fadeInUp, staggerContainer, cardHover } from '@/lib/motion';
 import { cn } from '@/lib/utils';
-import type { SharedProps } from '@/types';
 
 interface FasilitasItem {
     id: number;
@@ -54,8 +54,8 @@ const GeometricPattern = () => (
 );
 
 export default function FasilitasIndex({ fasilitas }: Props) {
-    const { locale } = usePage<SharedProps>().props;
-    const isId = locale === 'id';
+    const { t, i18n } = useTranslation();
+    const currentLocale = (i18n.language || 'id') as 'id' | 'en';
 
     const [activeKategori, setActiveKategori] = useState<string>('semua');
     const [searchQuery, setSearchQuery] = useState('');
@@ -70,17 +70,17 @@ export default function FasilitasIndex({ fasilitas }: Props) {
     }, [fasilitas, activeKategori, searchQuery]);
 
     const categories = [
-        { key: 'semua', label: isId ? 'Semua Fasilitas' : 'All Facilities' },
-        { key: 'ruang_praktik', label: isId ? 'Ruang Praktik' : 'Workshops' },
-        { key: 'umum', label: isId ? 'Fasilitas Umum' : 'General' },
-        { key: 'olahraga', label: isId ? 'Olahraga' : 'Sports' },
-        { key: 'ibadah', label: isId ? 'Ibadah' : 'Worship' },
+        { key: 'semua', labelKey: 'fasilitas.cat_all' },
+        { key: 'ruang_praktik', labelKey: 'fasilitas.cat_ruang_praktik' },
+        { key: 'umum', labelKey: 'fasilitas.cat_umum' },
+        { key: 'olahraga', labelKey: 'fasilitas.cat_olahraga' },
+        { key: 'ibadah', labelKey: 'fasilitas.cat_ibadah' },
     ];
 
     return (
         <PublicLayout>
             <Head>
-                <title>{isId ? 'Fasilitas & Sarana Prasarana - SMK Muhammadiyah Bligo' : 'Facilities & Infrastructure - SMK Muhammadiyah Bligo'}</title>
+                <title>{t('fasilitas.page_title')} - SMK Muhammadiyah Bligo</title>
             </Head>
 
             {/* Hero Section */}
@@ -90,26 +90,26 @@ export default function FasilitasIndex({ fasilitas }: Props) {
                     {/* Breadcrumbs */}
                     <nav className="flex items-center gap-2 text-sm text-neutral-300 mb-6" aria-label="Breadcrumb">
                         <Link href="/" className="hover:text-gold-400 transition-colors">
-                            {isId ? 'Beranda' : 'Home'}
+                            {t('nav.home')}
                         </Link>
                         <ChevronRight className="w-4 h-4 text-neutral-400" />
                         <span className="text-gold-400 font-medium">
-                            {isId ? 'Fasilitas' : 'Facilities'}
+                            {t('fasilitas.breadcrumb')}
                         </span>
                     </nav>
 
                     <div className="max-w-3xl">
                         <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-primary-800 text-gold-400 border border-gold-500/20 mb-4">
                             <Building2 className="w-3.5 h-3.5" />
-                            {isId ? 'Sarana & Prasarana Modern' : 'Modern Infrastructure'}
+                            {t('fasilitas.eyebrow')}
                         </span>
                         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight font-display text-white">
-                            {isId ? 'Fasilitas Kampus Sekolah' : 'School Campus Facilities'}
+                            {t('fasilitas.headline')}
                         </h1>
                         <p className="mt-4 text-base sm:text-lg text-neutral-300 leading-relaxed">
-                            {isId
-                                ? 'Didukung dengan sarana prasarana standar industri dan fasilitas lengkap untuk kenyamanan dan keunggulan kompetensi seluruh peserta didik.'
-                                : 'Equipped with industry-standard infrastructure and comprehensive facilities to cultivate high-performing vocational students.'}
+                            {currentLocale === 'en'
+                                ? 'Equipped with industry-standard infrastructure and comprehensive facilities to cultivate high-performing vocational students.'
+                                : 'Didukung dengan sarana prasarana standar industri dan fasilitas lengkap untuk kenyamanan dan keunggulan kompetensi seluruh peserta didik.'}
                         </p>
                     </div>
                 </div>
@@ -134,7 +134,7 @@ export default function FasilitasIndex({ fasilitas }: Props) {
                                             : 'text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100'
                                     )}
                                 >
-                                    {cat.label}
+                                    {t(cat.labelKey)}
                                 </button>
                             ))}
                         </div>
@@ -143,7 +143,7 @@ export default function FasilitasIndex({ fasilitas }: Props) {
                         <div className="relative w-full md:w-72">
                             <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" />
                             <Input
-                                placeholder={isId ? 'Cari fasilitas...' : 'Search facilities...'}
+                                placeholder={t('fasilitas.search_placeholder')}
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                                 className="pl-9 h-10 text-sm"
@@ -156,12 +156,10 @@ export default function FasilitasIndex({ fasilitas }: Props) {
                         <div className="text-center py-20 bg-white rounded-2xl border border-neutral-200/80 p-8">
                             <Building2 className="w-12 h-12 text-neutral-300 mx-auto mb-3" />
                             <h3 className="text-lg font-semibold text-neutral-800">
-                                {isId ? 'Fasilitas tidak ditemukan' : 'No facilities found'}
+                                {t('fasilitas.not_found')}
                             </h3>
                             <p className="text-sm text-neutral-500 mt-1">
-                                {isId
-                                    ? 'Coba ubah kata kunci pencarian atau kategori filter Anda.'
-                                    : 'Try adjusting your search query or category filters.'}
+                                {t('pencarian.not_found_desc', { keyword: searchQuery })}
                             </p>
                         </div>
                     ) : (
@@ -196,13 +194,13 @@ export default function FasilitasIndex({ fasilitas }: Props) {
                                         )}
                                         <div className="absolute top-3 left-3">
                                             <Badge variant={KATEGORI_BADGE_VARIANTS[item.kategori] || 'neutral'}>
-                                                {KATEGORI_LABELS[item.kategori]?.[locale === 'en' ? 'en' : 'id'] || item.kategori}
+                                                {KATEGORI_LABELS[item.kategori]?.[currentLocale] || item.kategori}
                                             </Badge>
                                         </div>
                                         {item.foto_count > 0 && (
                                             <div className="absolute bottom-3 right-3 px-2 py-0.5 rounded-md bg-black/60 backdrop-blur-xs text-white text-[11px] font-medium flex items-center gap-1">
                                                 <ImageIcon className="w-3 h-3" />
-                                                {item.foto_count} Foto
+                                                {item.foto_count} {t('galeri.photos_count')}
                                             </div>
                                         )}
                                     </Link>
@@ -227,7 +225,7 @@ export default function FasilitasIndex({ fasilitas }: Props) {
                                                 href={route('fasilitas.show', { fasilitas: item.slug })}
                                                 className="inline-flex items-center gap-1 text-primary-600 font-semibold group-hover:text-primary-700 transition-colors"
                                             >
-                                                {isId ? 'Lihat Detail & Foto' : 'View Details & Photos'}
+                                                {t('fasilitas.view_detail')}
                                                 <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
                                             </Link>
                                         </div>

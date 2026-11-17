@@ -1,10 +1,10 @@
 import React from 'react';
-import { Head, Link, usePage } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
+import { useTranslation } from 'react-i18next';
 import { ChevronRight, ArrowLeft, Trophy, Calendar, BookOpen } from 'lucide-react';
 import PublicLayout from '@/Layouts/PublicLayout';
 import { Badge } from '@/Components/UI/Badge';
 import { Button } from '@/Components/UI/Button';
-import type { SharedProps } from '@/types';
 
 interface PrestasiDetail {
     id: number;
@@ -54,8 +54,7 @@ const GeometricPattern = () => (
 );
 
 export default function PrestasiShow({ prestasi }: Props) {
-    const { locale } = usePage<SharedProps>().props;
-    const isId = locale === 'id';
+    const { t } = useTranslation();
 
     return (
         <PublicLayout>
@@ -70,11 +69,11 @@ export default function PrestasiShow({ prestasi }: Props) {
                     {/* Breadcrumbs */}
                     <nav className="flex items-center gap-2 text-sm text-neutral-300 mb-6" aria-label="Breadcrumb">
                         <Link href="/" className="hover:text-gold-400 transition-colors">
-                            {isId ? 'Beranda' : 'Home'}
+                            {t('prestasi.breadcrumb_beranda')}
                         </Link>
                         <ChevronRight className="w-4 h-4 text-neutral-400" />
                         <Link href={route('prestasi.index')} className="hover:text-gold-400 transition-colors">
-                            {isId ? 'Prestasi' : 'Achievements'}
+                            {t('prestasi.breadcrumb_prestasi')}
                         </Link>
                         <ChevronRight className="w-4 h-4 text-neutral-400" />
                         <span className="text-gold-400 font-medium truncate max-w-xs sm:max-w-md">
@@ -91,7 +90,7 @@ export default function PrestasiShow({ prestasi }: Props) {
                                 {prestasi.kategori_label}
                             </span>
                             <span className="px-3 py-1 rounded-full text-xs font-semibold bg-gold-500/20 text-gold-300 border border-gold-500/30">
-                                {isId ? `Tahun ${prestasi.tahun}` : `Year ${prestasi.tahun}`}
+                                {`${t('prestasi.tahun_prefix')} ${prestasi.tahun}`}
                             </span>
                         </div>
                         <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight font-display text-white leading-snug">
@@ -122,7 +121,7 @@ export default function PrestasiShow({ prestasi }: Props) {
                             <div className="bg-white p-6 sm:p-8 rounded-2xl border border-neutral-200/80 shadow-xs">
                                 <h2 className="text-xl font-bold text-neutral-900 mb-4 pb-3 border-b border-neutral-100 flex items-center gap-2">
                                     <Trophy className="w-5 h-5 text-gold-500" />
-                                    {isId ? 'Keterangan & Riwayat Prestasi' : 'Achievement Summary & Details'}
+                                    {t('prestasi.detail_ringkasan_title')}
                                 </h2>
 
                                 {prestasi.ringkasan ? (
@@ -132,9 +131,7 @@ export default function PrestasiShow({ prestasi }: Props) {
                                     />
                                 ) : (
                                     <p className="text-neutral-500 italic">
-                                        {isId
-                                            ? 'Belum ada ringkasan detail untuk prestasi ini.'
-                                            : 'No detailed description available for this achievement yet.'}
+                                        {t('prestasi.detail_ringkasan_kosong')}
                                     </p>
                                 )}
                             </div>
@@ -144,13 +141,13 @@ export default function PrestasiShow({ prestasi }: Props) {
                         <div className="space-y-6">
                             <div className="bg-white p-6 rounded-2xl border border-neutral-200/80 shadow-xs space-y-5">
                                 <h3 className="text-base font-bold text-neutral-900 border-b border-neutral-100 pb-3">
-                                    {isId ? 'Informasi Penghargaan' : 'Award Details'}
+                                    {t('prestasi.sidebar_info_title')}
                                 </h3>
 
                                 <div className="space-y-4 text-sm">
                                     <div>
                                         <span className="text-xs text-neutral-400 uppercase tracking-wider block mb-1">
-                                            {isId ? 'Tingkat Kejuaraan' : 'Level'}
+                                            {t('prestasi.sidebar_tingkat')}
                                         </span>
                                         <span className="font-semibold text-neutral-800">
                                             {prestasi.tingkat_label}
@@ -159,7 +156,7 @@ export default function PrestasiShow({ prestasi }: Props) {
 
                                     <div>
                                         <span className="text-xs text-neutral-400 uppercase tracking-wider block mb-1">
-                                            {isId ? 'Bidang / Kategori' : 'Field / Category'}
+                                            {t('prestasi.sidebar_kategori')}
                                         </span>
                                         <span className="font-semibold text-neutral-800">
                                             {prestasi.kategori_label}
@@ -168,7 +165,7 @@ export default function PrestasiShow({ prestasi }: Props) {
 
                                     <div>
                                         <span className="text-xs text-neutral-400 uppercase tracking-wider block mb-1">
-                                            {isId ? 'Tahun Perolehan' : 'Year'}
+                                            {t('prestasi.sidebar_tahun')}
                                         </span>
                                         <div className="flex items-center gap-1.5 font-semibold text-neutral-800">
                                             <Calendar className="w-4 h-4 text-primary-600" />
@@ -179,7 +176,7 @@ export default function PrestasiShow({ prestasi }: Props) {
                                     {prestasi.jurusan && (
                                         <div>
                                             <span className="text-xs text-neutral-400 uppercase tracking-wider block mb-1">
-                                                {isId ? 'Program Keahlian Terkait' : 'Vocational Program'}
+                                                {t('prestasi.sidebar_jurusan')}
                                             </span>
                                             <Link
                                                 href={route('jurusan.show', { jurusan: prestasi.jurusan.slug })}
@@ -196,7 +193,7 @@ export default function PrestasiShow({ prestasi }: Props) {
                                     <Link href={route('prestasi.index')}>
                                         <Button variant="outline" className="w-full">
                                             <ArrowLeft className="w-4 h-4 mr-2" />
-                                            {isId ? 'Semua Prestasi' : 'All Achievements'}
+                                            {t('prestasi.sidebar_semua_btn')}
                                         </Button>
                                     </Link>
                                 </div>

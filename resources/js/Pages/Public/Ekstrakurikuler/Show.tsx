@@ -1,9 +1,9 @@
 import React from 'react';
-import { Head, Link, usePage } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
+import { useTranslation } from 'react-i18next';
 import { ChevronRight, ArrowLeft, Activity, Clock, User, ImageIcon } from 'lucide-react';
 import PublicLayout from '@/Layouts/PublicLayout';
 import { Button } from '@/Components/UI/Button';
-import type { SharedProps } from '@/types';
 
 interface EkskulDetail {
     id: number;
@@ -41,8 +41,8 @@ const GeometricPattern = () => (
 );
 
 export default function EkstrakurikulerShow({ ekskul }: Props) {
-    const { locale } = usePage<SharedProps>().props;
-    const isId = locale === 'id';
+    const { t, i18n } = useTranslation();
+    const currentLocale = (i18n.language || 'id') as 'id' | 'en';
 
     return (
         <PublicLayout>
@@ -57,11 +57,11 @@ export default function EkstrakurikulerShow({ ekskul }: Props) {
                     {/* Breadcrumbs */}
                     <nav className="flex items-center gap-2 text-sm text-neutral-300 mb-6" aria-label="Breadcrumb">
                         <Link href="/" className="hover:text-gold-400 transition-colors">
-                            {isId ? 'Beranda' : 'Home'}
+                            {t('nav.home')}
                         </Link>
                         <ChevronRight className="w-4 h-4 text-neutral-400" />
                         <Link href={route('ekstrakurikuler.index')} className="hover:text-gold-400 transition-colors">
-                            {isId ? 'Ekstrakurikuler' : 'Extracurricular'}
+                            {t('ekskul.breadcrumb')}
                         </Link>
                         <ChevronRight className="w-4 h-4 text-neutral-400" />
                         <span className="text-gold-400 font-medium truncate max-w-xs sm:max-w-md">
@@ -72,7 +72,7 @@ export default function EkstrakurikulerShow({ ekskul }: Props) {
                     <div className="max-w-3xl">
                         <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-primary-800 text-gold-400 border border-gold-500/20 mb-3">
                             <Activity className="w-3.5 h-3.5" />
-                            {isId ? 'Profil Ekstrakurikuler' : 'Extracurricular Profile'}
+                            {t('ekskul.detail_eyebrow')}
                         </span>
                         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight font-display text-white">
                             {ekskul.nama}
@@ -102,7 +102,7 @@ export default function EkstrakurikulerShow({ ekskul }: Props) {
                             <div className="bg-white p-6 sm:p-8 rounded-2xl border border-neutral-200/80 shadow-xs">
                                 <h2 className="text-xl font-bold text-neutral-900 mb-4 pb-3 border-b border-neutral-100 flex items-center gap-2">
                                     <Activity className="w-5 h-5 text-primary-600" />
-                                    {isId ? 'Tentang Kegiatan' : 'About the Activity'}
+                                    {t('ekskul.about_title')}
                                 </h2>
 
                                 {ekskul.deskripsi ? (
@@ -112,9 +112,9 @@ export default function EkstrakurikulerShow({ ekskul }: Props) {
                                     />
                                 ) : (
                                     <p className="text-neutral-500 italic">
-                                        {isId
-                                            ? 'Belum ada penjelasan detail untuk kegiatan ini.'
-                                            : 'No detailed description available yet.'}
+                                        {currentLocale === 'en'
+                                            ? 'No detailed description available yet.'
+                                            : 'Belum ada penjelasan detail untuk kegiatan ini.'}
                                     </p>
                                 )}
                             </div>
@@ -125,24 +125,24 @@ export default function EkstrakurikulerShow({ ekskul }: Props) {
                             {/* Card Jadwal & Pembina */}
                             <div className="bg-white p-6 rounded-2xl border border-neutral-200/80 shadow-xs space-y-5">
                                 <h3 className="text-base font-bold text-neutral-900 border-b border-neutral-100 pb-3">
-                                    {isId ? 'Informasi Kegiatan' : 'Activity Information'}
+                                    {t('ekskul.info_title')}
                                 </h3>
 
                                 {/* Jadwal */}
                                 <div>
                                     <span className="text-xs text-neutral-400 uppercase tracking-wider block mb-1.5">
-                                        {isId ? 'Jadwal Pertemuan' : 'Schedule'}
+                                        {t('ekskul.schedule_label')}
                                     </span>
                                     <div className="flex items-center gap-2 text-sm font-semibold text-neutral-800">
                                         <Clock className="w-4 h-4 text-primary-600 shrink-0" />
-                                        <span>{ekskul.jadwal || (isId ? 'Menyesuaikan jadwal' : 'To be announced')}</span>
+                                        <span>{ekskul.jadwal || t('ekskul.schedule_flexible')}</span>
                                     </div>
                                 </div>
 
                                 {/* Pembina */}
                                 <div className="pt-2 border-t border-neutral-100">
                                     <span className="text-xs text-neutral-400 uppercase tracking-wider block mb-2">
-                                        {isId ? 'Guru Pembina' : 'Mentor / Advisor'}
+                                        {t('ekskul.mentor_label')}
                                     </span>
                                     {ekskul.pembina ? (
                                         <div className="flex items-center gap-3">
@@ -170,7 +170,7 @@ export default function EkstrakurikulerShow({ ekskul }: Props) {
                                         </div>
                                     ) : (
                                         <p className="text-sm text-neutral-500 italic">
-                                            {isId ? 'Pembina belum ditentukan' : 'Mentor not assigned'}
+                                            {t('ekskul.mentor_unassigned')}
                                         </p>
                                     )}
                                 </div>
@@ -179,7 +179,7 @@ export default function EkstrakurikulerShow({ ekskul }: Props) {
                                     <Link href={route('ekstrakurikuler.index')}>
                                         <Button variant="outline" className="w-full">
                                             <ArrowLeft className="w-4 h-4 mr-2" />
-                                            {isId ? 'Semua Ekstrakurikuler' : 'All Extracurriculars'}
+                                            {t('ekskul.back_to_all')}
                                         </Button>
                                     </Link>
                                 </div>

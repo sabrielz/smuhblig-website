@@ -1,5 +1,6 @@
 import { useState, FormEvent } from 'react';
 import { Head, router } from '@inertiajs/react';
+import { useTranslation, Trans } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Search, SearchX, ArrowRight, BookOpen, Layers, Bell, Calendar } from 'lucide-react';
 import PublicLayout from '@/Layouts/PublicLayout';
@@ -75,8 +76,8 @@ export default function Pencarian({
     type,
     hasil,
     totalHasil,
-    locale,
 }: PencarianProps) {
+    const { t } = useTranslation();
     const [searchQuery, setSearchQuery] = useState(keyword);
     const [activeTab, setActiveTab] = useState<'semua' | 'artikel' | 'jurusan' | 'pengumuman' | 'agenda'>(type);
 
@@ -142,7 +143,7 @@ export default function Pencarian({
                             variants={fadeInUp}
                             className="text-3xl md:text-5xl font-bold text-white mb-8 tracking-tight"
                         >
-                            {locale === 'id' ? 'Pencarian' : 'Search'}
+                            {t('pencarian.headline')}
                         </motion.h1>
 
                         {/* Search Input Box */}
@@ -155,7 +156,7 @@ export default function Pencarian({
                                 type="text"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                placeholder={locale === 'id' ? "Cari informasi, artikel, atau jurusan..." : "Search information, articles, or programs..."}
+                                placeholder={t('pencarian.search_placeholder')}
                                 className="w-full bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl py-4 pl-6 pr-16 text-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-gold-500 focus:border-transparent transition-all shadow-lg"
                             />
                             <button
@@ -182,23 +183,24 @@ export default function Pencarian({
                                             : 'bg-white/10 text-white/80 hover:bg-white/20 hover:text-white'
                                     )}
                                 >
-                                    {locale === 'id'
-                                        ? tab.charAt(0).toUpperCase() + tab.slice(1)
-                                        : tab === 'semua'
-                                            ? 'All'
-                                            : tab === 'artikel'
-                                                ? 'Articles'
-                                                : tab === 'jurusan'
-                                                    ? 'Programs'
-                                                    : tab === 'pengumuman'
-                                                        ? 'Announcements'
-                                                        : 'Agenda'}
+                                    {tab === 'semua' ? t('pencarian.tab_all')
+                                        : tab === 'artikel' ? t('pencarian.tab_article')
+                                            : tab === 'jurusan' ? t('pencarian.tab_program')
+                                                : tab === 'pengumuman' ? t('pencarian.tab_announcement')
+                                                    : t('pencarian.tab_event')}
                                 </button>
                             ))}
                         </motion.div>
 
                         <motion.p variants={fadeInUp} className="mt-8 text-white/70 text-sm">
-                            {locale === 'id' ? 'Menampilkan' : 'Showing'} <strong className="text-white">{totalHasil}</strong> {locale === 'id' ? 'hasil untuk' : 'results for'} "<strong className="text-gold-500">{keyword}</strong>"
+                            <Trans
+                                i18nKey="pencarian.showing_results"
+                                values={{ total: totalHasil, keyword }}
+                                components={{
+                                    1: <strong className="text-white" />,
+                                    3: <strong className="text-gold-500" />
+                                }}
+                            />
                         </motion.p>
                     </motion.div>
                 </div>
@@ -219,12 +221,10 @@ export default function Pencarian({
                                 <SearchX className="w-10 h-10" />
                             </div>
                             <h3 className="text-2xl font-bold text-neutral-900 mb-3">
-                                {locale === 'id' ? 'Tidak ada hasil ditemukan' : 'No results found'}
+                                {t('pencarian.not_found_title')}
                             </h3>
                             <p className="text-gray-500 mb-8 max-w-md mx-auto">
-                                {locale === 'id'
-                                    ? `Kami tidak menemukan data apa pun untuk kata kunci "${keyword}". Coba gunakan kata kunci yang berbeda atau periksa ejaan Anda.`
-                                    : `We couldn't find any data matching the keyword "${keyword}". Try using a different keyword or check your spelling.`}
+                                {t('pencarian.not_found_desc', { keyword })}
                             </p>
 
                             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -233,14 +233,14 @@ export default function Pencarian({
                                     className="px-6 py-3 rounded-xl bg-primary-600/5 text-primary-600 font-semibold hover:bg-primary-600/10 transition-colors flex items-center gap-2"
                                 >
                                     <BookOpen className="w-5 h-5" />
-                                    {locale === 'id' ? 'Lihat Semua Artikel' : 'View All Articles'}
+                                    {t('pencarian.view_all_articles')}
                                 </button>
                                 <button
                                     onClick={() => router.get('/jurusan')}
                                     className="px-6 py-3 rounded-xl bg-gold-500/10 text-gold-600 font-semibold hover:bg-gold-500/20 transition-colors flex items-center gap-2"
                                 >
                                     <Layers className="w-5 h-5" />
-                                    {locale === 'id' ? 'Lihat Program Keahlian' : 'View Programs'}
+                                    {t('pencarian.view_all_programs')}
                                 </button>
                             </div>
                         </motion.div>
@@ -258,10 +258,10 @@ export default function Pencarian({
                                     <motion.div variants={fadeInUp} className="flex items-center gap-3 mb-8">
                                         <Layers className="w-6 h-6 text-gold-500" />
                                         <h2 className="text-2xl font-bold text-neutral-900 font-serif">
-                                            {locale === 'id' ? 'Jurusan' : 'Programs'}
+                                            {t('pencarian.heading_programs')}
                                         </h2>
                                         <span className="bg-primary-600/10 text-primary-600 font-semibold text-xs py-1 px-3 rounded-full ml-2">
-                                            {hasil.jurusan.length} {locale === 'id' ? 'Hasil' : 'Results'}
+                                            {hasil.jurusan.length} {t('pencarian.results_count')}
                                         </span>
                                     </motion.div>
 
@@ -296,7 +296,7 @@ export default function Pencarian({
                                                         dangerouslySetInnerHTML={{ __html: j.deskripsi_singkat }}
                                                     />
                                                     <span className="text-primary-600 text-sm font-semibold flex items-center gap-1 group-hover:gap-2 transition-all">
-                                                        {locale === 'id' ? 'Lihat Detail' : 'View Detail'} <ArrowRight className="w-4 h-4" />
+                                                        {t('pencarian.view_detail')} <ArrowRight className="w-4 h-4" />
                                                     </span>
                                                 </div>
                                             </motion.a>
@@ -321,10 +321,10 @@ export default function Pencarian({
                                     <motion.div variants={fadeInUp} className="flex items-center gap-3 mb-6">
                                         <Bell className="w-6 h-6 text-gold-500" />
                                         <h2 className="text-2xl font-bold text-neutral-900 font-serif">
-                                            {locale === 'id' ? 'Pengumuman' : 'Announcements'}
+                                            {t('pencarian.heading_announcements')}
                                         </h2>
                                         <span className="bg-primary-600/10 text-primary-600 font-semibold text-xs py-1 px-3 rounded-full ml-2">
-                                            {hasil.pengumuman.length} {locale === 'id' ? 'Hasil' : 'Results'}
+                                            {hasil.pengumuman.length} {t('pencarian.results_count')}
                                         </span>
                                     </motion.div>
 
@@ -382,10 +382,10 @@ export default function Pencarian({
                                     <motion.div variants={fadeInUp} className="flex items-center gap-3 mb-6">
                                         <Calendar className="w-6 h-6 text-gold-500" />
                                         <h2 className="text-2xl font-bold text-neutral-900 font-serif">
-                                            {locale === 'id' ? 'Agenda & Kegiatan' : 'Agenda & Events'}
+                                            {t('pencarian.heading_events')}
                                         </h2>
                                         <span className="bg-primary-600/10 text-primary-600 font-semibold text-xs py-1 px-3 rounded-full ml-2">
-                                            {hasil.agenda.length} {locale === 'id' ? 'Hasil' : 'Results'}
+                                            {hasil.agenda.length} {t('pencarian.results_count')}
                                         </span>
                                     </motion.div>
 
@@ -429,7 +429,7 @@ export default function Pencarian({
                                                     )}
                                                 </div>
                                                 <span className="text-primary-600 text-sm font-semibold flex items-center gap-1 group-hover:gap-2 transition-all">
-                                                    {locale === 'id' ? 'Detail Agenda' : 'Event Detail'} <ArrowRight className="w-4 h-4" />
+                                                    {t('pencarian.event_detail')} <ArrowRight className="w-4 h-4" />
                                                 </span>
                                             </motion.a>
                                         ))}
@@ -453,10 +453,10 @@ export default function Pencarian({
                                     <motion.div variants={fadeInUp} className="flex items-center gap-3 mb-8">
                                         <BookOpen className="w-6 h-6 text-gold-500" />
                                         <h2 className="text-2xl font-bold text-neutral-900 font-serif">
-                                            {locale === 'id' ? 'Artikel & Berita' : 'Articles & News'}
+                                            {t('pencarian.heading_articles')}
                                         </h2>
                                         <span className="bg-primary-600/10 text-primary-600 font-semibold text-xs py-1 px-3 rounded-full ml-2">
-                                            {hasil.artikel.total} {locale === 'id' ? 'Hasil' : 'Results'}
+                                            {hasil.artikel.total} {t('pencarian.results_count')}
                                         </span>
                                     </motion.div>
 
@@ -492,7 +492,7 @@ export default function Pencarian({
                                                     />
                                                     <div className="mt-auto">
                                                         <span className="text-gold-500 text-sm font-semibold flex items-center gap-1 group-hover:gap-2 transition-all">
-                                                            {locale === 'id' ? 'Baca Selengkapnya' : 'Read More'} <ArrowRight className="w-4 h-4" />
+                                                            {t('pencarian.read_more')} <ArrowRight className="w-4 h-4" />
                                                         </span>
                                                     </div>
                                                 </div>
