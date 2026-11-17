@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import AdminLayout from '@/Layouts/AdminLayout';
 import { Head, useForm, router } from '@inertiajs/react';
 import { Input } from '@/Components/UI/Input';
 import { Button } from '@/Components/UI/Button';
 import { ImageUpload } from '@/Components/UI/ImageUpload';
-import { UserCircle, KeyRound, LogOut, Save, ShieldAlert, Check } from 'lucide-react';
+import { UserCircle, KeyRound, LogOut, Save, ShieldAlert, Check, ShieldCheck, QrCode, Copy, RefreshCw } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 interface UserProfileData {
@@ -14,13 +14,86 @@ interface UserProfileData {
     avatar_url: string;
     roles: string[];
     created_at?: string;
+    two_factor_enabled?: boolean;
+    two_factor_qr_svg?: string | null;
+    two_factor_secret?: string | null;
 }
 
 interface EditProps {
     user: UserProfileData;
+    recoveryCodes?: string[] | null;
 }
 
-export default function ProfilEdit({ user }: EditProps) {
+export default function ProfilEdit({ user, recoveryCodes }: EditProps) {
+    const [copiedRecovery, setCopiedRecovery] = useState(false);
+
+    /* ── 2FA State & Forms ── */
+    const {
+        data: confirm2FaData,
+        setData: setConfirm2FaData,
+        post: postConfirm2Fa,
+        processing: confirm2FaProcessing,
+        errors: confirm2FaErrors,
+        reset: resetConfirm2Fa,
+    } = useForm({
+        code: '',
+    });
+
+    const {
+        data: disable2FaData,
+        setData: setDisable2FaData,
+        post: postDisable2Fa,
+        processing: disable2FaProcessing,
+        errors: disable2FaErrors,
+        reset: resetDisable2Fa,
+    } = useForm({
+        password: '',
+    });
+
+    const handleEnable2Fa = () => {
+        router.post(route('admin.profil.two-factor.enable'), {}, {
+            preserveScroll: true,
+            onSuccess: () => toast.success('Silakan pindai kode QR untuk melanjutkan aktivasi.'),
+        });
+    };
+
+    const handleConfirm2FaSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        postConfirm2Fa(route('admin.profil.two-factor.confirm'), {
+            preserveScroll: true,
+            onSuccess: () => {
+                toast.success('Autentikasi dua faktor berhasil diaktifkan!');
+                resetConfirm2Fa();
+            },
+        });
+    };
+
+    const handleDisable2FaSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        postDisable2Fa(route('admin.profil.two-factor.disable'), {
+            preserveScroll: true,
+            onSuccess: () => {
+                toast.success('Autentikasi dua faktor berhasil dinonaktifkan.');
+                resetDisable2Fa();
+            },
+        });
+    };
+
+    const handleRegenerateRecoveryCodes = () => {
+        router.post(route('admin.profil.two-factor.recovery-codes'), {}, {
+            preserveScroll: true,
+            onSuccess: () => toast.success('Kode pemulihan baru berhasil dibuat.'),
+        });
+    };
+
+    const handleCopyRecoveryCodes = () => {
+        if (!recoveryCodes || recoveryCodes.length === 0) return;
+        navigator.clipboard.writeText(recoveryCodes.join('\n'));
+        setCopiedRecovery(true);
+        toast.success('Kode pemulihan disalin ke clipboard');
+        setTimeout(() => setCopiedRecovery(false), 3000);
+    };
+
     /* ── Form 1: Data Diri & Avatar ── */
     const {
         data: profileData,
@@ -197,6 +270,164 @@ export default function ProfilEdit({ user }: EditProps) {
                             </Button>
                         </div>
                     </form>
+                </div>
+
+                {/* KARTU 2FA (Autentikasi Dua Faktor) */}
+                <div id="2fa" className="bg-white rounded-2xl border border-neutral-200 shadow-sm p-6 sm:p-8">
+                    <div className="flex items-center gap-3 pb-5 border-b border-neutral-100 mb-6">
+                        <div className="p-2.5 rounded-xl bg-primary-50 text-primary-600">
+                            <ShieldCheck className="w-5 h-5" />
+                        </div>
+                        <div>
+                            <h2 className="text-lg font-bold text-neutral-900">Autentikasi Dua Faktor (2FA)</h2>
+                            <p className="text-xs text-neutral-500">
+                                Tingkatkan keamanan akun CMS Anda menggunakan aplikasi TOTP (Google Authenticator, dsb).
+                            </p>
+                        </div>
+                    </div>
+
+                    {user.two_factor_enabled ? (
+                        <div className="space-y-6">
+                            <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-3 h-3 rounded-full bg-emerald-500 animate-pulse" />
+                                    <div>
+                                        <p className="text-sm font-semibold text-emerald-900">2FA Aktif</p>
+                                        <p className="text-xs text-emerald-700">Akun Anda dilindungi oleh verifikasi dua langkah.</p>
+                                    </div>
+                                </div>
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={handleRegenerateRecoveryCodes}
+                                    className="gap-1.5 self-start sm:self-auto"
+                                >
+                                    <RefreshCw className="w-3.5 h-3.5" />
+                                    Buat Ulang Kode Pemulihan
+                                </Button>
+                            </div>
+
+                            {recoveryCodes && recoveryCodes.length > 0 && (
+                                <div className="p-5 rounded-xl bg-neutral-900 text-neutral-100 space-y-3">
+                                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                                        <div>
+                                            <p className="text-sm font-semibold text-amber-400">Simpan Kode Pemulihan Ini!</p>
+                                            <p className="text-xs text-neutral-400">Kode ini hanya ditampilkan sekali. Simpan di tempat yang aman jika Anda kehilangan akses perangkat TOTP.</p>
+                                        </div>
+                                        <Button
+                                            type="button"
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={handleCopyRecoveryCodes}
+                                            className="bg-neutral-800 text-white border-neutral-700 hover:bg-neutral-700 gap-1.5 self-start sm:self-auto"
+                                        >
+                                            {copiedRecovery ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                                            {copiedRecovery ? 'Tersalin' : 'Salin Semua'}
+                                        </Button>
+                                    </div>
+                                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2">
+                                        {recoveryCodes.map((rc, idx) => (
+                                            <div key={idx} className="font-mono text-xs bg-neutral-800 p-2 rounded text-center border border-neutral-700">
+                                                {rc}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            <div className="pt-4 border-t border-neutral-100">
+                                <h3 className="text-sm font-semibold text-neutral-900 mb-1">Nonaktifkan 2FA</h3>
+                                <p className="text-xs text-neutral-500 mb-4">
+                                    Masukkan kata sandi akun Anda untuk menonaktifkan autentikasi dua faktor.
+                                </p>
+                                <form onSubmit={handleDisable2FaSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md">
+                                    <div className="flex-1">
+                                        <Input
+                                            type="password"
+                                            placeholder="Kata sandi saat ini..."
+                                            value={disable2FaData.password}
+                                            onChange={(e) => setDisable2FaData('password', e.target.value)}
+                                            error={disable2FaErrors.password}
+                                            required
+                                        />
+                                    </div>
+                                    <Button
+                                        type="submit"
+                                        variant="danger"
+                                        disabled={disable2FaProcessing || !disable2FaData.password}
+                                        className="shrink-0"
+                                    >
+                                        Nonaktifkan
+                                    </Button>
+                                </form>
+                            </div>
+                        </div>
+                    ) : user.two_factor_qr_svg ? (
+                        <div className="space-y-6">
+                            <div className="p-4 rounded-xl bg-amber-50 border border-amber-200">
+                                <p className="text-sm font-semibold text-amber-900 mb-1">Pindai Kode QR</p>
+                                <p className="text-xs text-amber-800">
+                                    Pindai gambar kode QR di bawah dengan aplikasi autentikator Anda (seperti Google Authenticator, Authy, dsb), lalu masukkan kode OTP 6 digit untuk menyelesaikan aktivasi.
+                                </p>
+                            </div>
+
+                            <div className="flex flex-col sm:flex-row items-center gap-6 p-4 bg-neutral-50 rounded-xl border border-neutral-200">
+                                <div
+                                    className="w-48 h-48 bg-white p-2 rounded-lg shadow-xs flex items-center justify-center shrink-0"
+                                    dangerouslySetInnerHTML={{ __html: user.two_factor_qr_svg }}
+                                />
+                                <div className="space-y-3 flex-1 w-full">
+                                    <div>
+                                        <p className="text-xs text-neutral-500">Atau masukkan kunci rahasia ini secara manual:</p>
+                                        <p className="font-mono text-xs sm:text-sm font-bold text-neutral-900 select-all bg-white p-2 rounded border border-neutral-200 inline-block mt-1">
+                                            {user.two_factor_secret}
+                                        </p>
+                                    </div>
+
+                                    <form onSubmit={handleConfirm2FaSubmit} className="space-y-3 pt-2">
+                                        <div>
+                                            <label className="block text-xs font-semibold text-neutral-700 mb-1">
+                                                Kode OTP 6 Digit <span className="text-red-500">*</span>
+                                            </label>
+                                            <Input
+                                                type="text"
+                                                maxLength={6}
+                                                placeholder="Contoh: 123456"
+                                                value={confirm2FaData.code}
+                                                onChange={(e) => setConfirm2FaData('code', e.target.value)}
+                                                error={confirm2FaErrors.code}
+                                                required
+                                                className="font-mono text-center tracking-widest text-lg max-w-xs"
+                                            />
+                                        </div>
+                                        <Button
+                                            type="submit"
+                                            variant="primary"
+                                            disabled={confirm2FaProcessing || confirm2FaData.code.length < 6}
+                                        >
+                                            Konfirmasi & Aktifkan 2FA
+                                        </Button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="space-y-4">
+                            <p className="text-sm text-neutral-600">
+                                Autentikasi dua faktor menambahkan lapisan keamanan ekstra pada akun Anda saat login.
+                            </p>
+                            <Button
+                                type="button"
+                                variant="primary"
+                                onClick={handleEnable2Fa}
+                                className="gap-2"
+                            >
+                                <QrCode className="w-4 h-4" />
+                                Aktifkan 2FA Sekarang
+                            </Button>
+                        </div>
+                    )}
                 </div>
 
                 {/* KARTU 2: GANTI PASSWORD */}

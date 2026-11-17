@@ -23,6 +23,19 @@ class ProfilController extends Controller
         /** @var User $user */
         $user = $request->user();
 
+        $twoFactorEnabled = $user->hasTwoFactorEnabled();
+        $twoFactorQrSvg = null;
+        $twoFactorSecret = null;
+
+        if (! $twoFactorEnabled && ! empty($user->two_factor_secret)) {
+            $twoFactorSecret = $user->two_factor_secret;
+            $twoFactorQrSvg = TwoFactorController::generateQrSvg(
+                config('app.name', 'SMK Muhammadiyah Bligo'),
+                $user->email,
+                $user->two_factor_secret
+            );
+        }
+
         return Inertia::render('Admin/Profil/Edit', [
             'user' => [
                 'id' => $user->id,
@@ -31,7 +44,11 @@ class ProfilController extends Controller
                 'avatar_url' => $user->avatar_url,
                 'roles' => $user->getRoleNames(),
                 'created_at' => $user->created_at?->format('d M Y'),
+                'two_factor_enabled' => $twoFactorEnabled,
+                'two_factor_qr_svg' => $twoFactorQrSvg,
+                'two_factor_secret' => $twoFactorSecret,
             ],
+            'recoveryCodes' => session('recovery_codes'),
         ]);
     }
 
