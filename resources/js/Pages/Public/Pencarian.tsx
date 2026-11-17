@@ -275,7 +275,7 @@ export default function Pencarian({
                             )}
 
                             {/* Divider if both exist */}
-                            {hasil.jurusan?.length > 0 && hasil.artikel?.data?.length > 0 && (
+                            {hasil.jurusan?.length > 0 && (hasil.artikel?.data?.length ?? 0) > 0 && (
                                 <hr className="border-gray-200" />
                             )}
 

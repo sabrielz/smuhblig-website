@@ -96,7 +96,7 @@ const PageHero = ({ t }: { t: any }) => (
 export default function Agenda({ agendasGrouped, filterOptions, activeFilter }: AgendaProps) {
     const { locale } = usePage<SharedProps>().props;
 
-    const t = {
+    const TEXT = {
         id: {
             hero_subtitle: 'KALENDER AKADEMIK',
             hero_title_1: 'Agenda &',
@@ -127,7 +127,9 @@ export default function Agenda({ agendasGrouped, filterOptions, activeFilter }: 
             tipe_ujian: 'Exam',
             tipe_penerimaan: 'Admission',
         }
-    }[locale];
+    };
+
+    const t = (TEXT as Record<string, typeof TEXT.id>)[locale] ?? TEXT.id;
 
     const getTipeBadge = (tipe: string) => {
         let label = t.tipe_kegiatan;

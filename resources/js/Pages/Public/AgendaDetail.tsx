@@ -86,7 +86,7 @@ export default function AgendaDetail({ agenda }: AgendaDetailProps) {
     const { locale } = usePage<SharedProps>().props;
     const data = agenda.data || agenda; // From API Resource
 
-    const t = {
+    const TEXT = {
         id: {
             kembali: 'Kembali ke Agenda',
             detail_kegiatan: 'Detail Kegiatan',
@@ -109,7 +109,9 @@ export default function AgendaDetail({ agenda }: AgendaDetailProps) {
             beranda: 'Home',
             agenda: 'Events'
         }
-    }[locale];
+    };
+
+    const t = (TEXT as Record<string, typeof TEXT.id>)[locale] ?? TEXT.id;
 
     const translation = locale === 'en' && data.translations?.en
         ? data.translations.en
