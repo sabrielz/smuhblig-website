@@ -64,8 +64,8 @@ export default function AdminSidebar({ isOpen, setIsOpen }: SidebarProps) {
             label: 'Konten',
             items: [
                 { label: 'Artikel', href: '/admin/artikel', icon: FileText, badge: null },
-                { label: 'Galeri', href: '/admin/galeri', icon: ImageIcon, badge: null },
-                { label: 'Pengumuman', href: '/admin/pengumuman', icon: Bell, badge: null },
+                ...(user?.can?.kelola_galeri ? [{ label: 'Galeri', href: '/admin/galeri', icon: ImageIcon, badge: null }] : []),
+                ...(user?.can?.kelola_pengumuman ? [{ label: 'Pengumuman', href: '/admin/pengumuman', icon: Bell, badge: null }] : []),
                 { label: 'Konten Halaman', href: '/admin/konten/beranda', icon: PencilLine, badge: null },
                 {
                     label: 'Pesan Masuk',
@@ -81,7 +81,7 @@ export default function AdminSidebar({ isOpen, setIsOpen }: SidebarProps) {
                 { label: "Jurusan", href: "/admin/jurusan", icon: BookOpen, badge: null },
                 { label: "Struktur Organisasi", href: "/admin/struktur-organisasi", icon: Network, badge: null },
                 { label: "Statistik Beranda", href: "/admin/statistik", icon: BarChart3, badge: null },
-                { label: "Agenda", href: "/admin/agenda", icon: CalendarDays, badge: null },
+                ...(user?.can?.kelola_agenda ? [{ label: "Agenda", href: "/admin/agenda", icon: CalendarDays, badge: null }] : []),
                 { label: "Tautan", href: "/admin/tautan", icon: LinkIcon, badge: null },
             ],
         },

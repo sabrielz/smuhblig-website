@@ -2,12 +2,17 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Agenda;
+use App\Models\Galeri;
 use App\Models\NotifikasiAdmin;
 use App\Models\Pengaturan;
+use App\Models\Pengumuman;
 use App\Models\PesanKontak;
+use App\Support\ArticleWorkflow;
 use Artesaos\SEOTools\Facades\SEOTools;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Schema;
 use Inertia\Middleware;
 
@@ -52,6 +57,14 @@ class HandleInertiaRequests extends Middleware
                     'is_admin' => $request->user()->isAdmin(),
                     'is_editor' => $request->user()->isEditor(),
                     'is_author' => $request->user()->isAuthor(),
+                    'can' => [
+                        'kelola_galeri' => Gate::forUser($request->user())->allows('viewAny', Galeri::class),
+                        'kelola_pengumuman' => Gate::forUser($request->user())->allows('viewAny', Pengumuman::class),
+                        'kelola_agenda' => Gate::forUser($request->user())->allows('viewAny', Agenda::class),
+                        'publish_artikel' => $request->user()->isAdmin() || $request->user()->isEditor() || ! Pengaturan::bool('artikel_approval'),
+                        'hapus_artikel' => $request->user()->isAdmin() || $request->user()->isEditor(),
+                    ],
+                    'artikel_status_options' => ArticleWorkflow::allowedStatuses($request->user()),
                 ] : null,
             ],
 

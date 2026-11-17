@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useRef } from 'react';
-import { Head, Link, useForm, router } from '@inertiajs/react';
+import { Head, Link, useForm, router, usePage } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
 import { Input } from '@/Components/UI/Input';
 import { Textarea } from '@/Components/UI/Textarea';
@@ -20,6 +20,7 @@ import type { GenerateDraftParams } from '@/Components/Editor/AiToolbar';
 import type { AiPanelMode } from '@/Components/Editor/AiPanel';
 import type { SeoAnalysisResult } from '@/Components/Editor/SeoPanel';
 import type { TranslationStatus } from '@/Components/Editor/AiStatusBadge';
+import { SharedProps } from '@/types';
 
 /* ─────────────────────────────────────────────
    CSRF helper
@@ -79,6 +80,8 @@ interface Props {
    Component
    ───────────────────────────────────────────── */
 export default function Form({ article, categories }: Props) {
+    const { auth } = usePage<SharedProps>().props;
+    const allowedStatuses = auth.user?.artikel_status_options ?? ['draft', 'pending_review'];
     const isEdit = !!article;
     const [activeTab, setActiveTab] = useState<'id' | 'en'>('id');
 
@@ -632,7 +635,7 @@ export default function Form({ article, categories }: Props) {
                                 { value: 'pending_review', label: 'Pending Review' },
                                 { value: 'published', label: 'Published' },
                                 { value: 'archived', label: 'Archived' },
-                            ]}
+                            ].filter((opt) => allowedStatuses.includes(opt.value))}
                             error={errors.status}
                         />
 

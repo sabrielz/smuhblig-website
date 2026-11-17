@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Head, Link, router } from '@inertiajs/react';
+import { Head, Link, router, usePage } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
 import { Table, Column } from '@/Components/UI/Table';
 import { Badge } from '@/Components/UI/Badge';
@@ -9,6 +9,7 @@ import { Select } from '@/Components/UI/Select';
 import { Pagination } from '@/Components/UI/Pagination';
 import { ConfirmDialog } from '@/Components/UI/ConfirmDialog';
 import { Search, Plus, Edit, Trash2, CheckCircle } from 'lucide-react';
+import { SharedProps } from '@/types';
 
 interface Article {
     id: number;
@@ -43,6 +44,8 @@ interface Props {
 }
 
 export default function Index({ articles, categories, filters }: Props) {
+    const { auth } = usePage<SharedProps>().props;
+    const can = auth.user?.can;
     const [search, setSearch] = useState(filters.search || '');
     const [status, setStatus] = useState(filters.status || '');
     const [categoryId, setCategoryId] = useState(filters.category_id || '');
@@ -149,7 +152,7 @@ export default function Index({ articles, categories, filters }: Props) {
             label: 'Aksi',
             render: (article) => (
                 <div className="flex items-center justify-end gap-2">
-                    {(article.status === 'draft' || article.status === 'pending_review') && (
+                    {can?.publish_artikel && (article.status === 'draft' || article.status === 'pending_review') && (
                         <Button
                             variant="ghost"
                             size="sm"
@@ -160,19 +163,21 @@ export default function Index({ articles, categories, filters }: Props) {
                             <CheckCircle className="w-4 h-4" />
                         </Button>
                     )}
-                    <Link href={route('admin.artikel.edit', article.id as any)}>
+                    <Link href={route('admin.artikel.edit', { artikel: article.id })}>
                         <Button variant="ghost" size="sm" className="text-info hover:text-info hover:bg-info/10">
                             <Edit className="w-4 h-4" />
                         </Button>
                     </Link>
-                    <Button
-                        variant="ghost"
-                        size="sm"
-                        className="text-error hover:text-error hover:bg-error/10"
-                        onClick={() => confirmDelete(article.id)}
-                    >
-                        <Trash2 className="w-4 h-4" />
-                    </Button>
+                    {can?.hapus_artikel && (
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-error hover:text-error hover:bg-error/10"
+                            onClick={() => confirmDelete(article.id)}
+                        >
+                            <Trash2 className="w-4 h-4" />
+                        </Button>
+                    )}
                 </div>
             )
         }

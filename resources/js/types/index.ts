@@ -1,3 +1,11 @@
+export interface UserCan {
+    kelola_galeri: boolean;
+    kelola_pengumuman: boolean;
+    kelola_agenda: boolean;
+    publish_artikel: boolean;
+    hapus_artikel: boolean;
+}
+
 export interface User {
     id: number;
     name: string;
@@ -12,6 +20,8 @@ export interface User {
     is_admin: boolean;
     is_editor: boolean;
     is_author: boolean;
+    can: UserCan;
+    artikel_status_options: string[];
     created_at: string;
     updated_at: string;
 }
