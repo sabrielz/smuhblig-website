@@ -633,6 +633,13 @@ Setiap usulan fitur baru wajib lolos 3 pertanyaan berikut:
     7. Testimoni (`#beranda-testimoni`)
     8. Mitra Industri (`#beranda-mitra`)
     9. CTA Akhir (`#beranda-cta`)
+- **`BR-030` Media Terpakai** *(Status: menunggu persetujuan)*:
+  - Media dianggap terpakai bila:
+    (a) Melekat pada model yang masih ada di collection selain unggahan inline editor, atau
+    (b) URL-nya muncul di konten HTML artikel/pengumuman/agenda/konten halaman/FAQ.
+  - Hanya media tidak terpakai yang boleh dihapus.
+- **`BR-031` Alt Text** *(Status: menunggu persetujuan)*:
+  - Wajib untuk setiap gambar konten baru, panjang maksimal 150 karakter.
 
 ---
 
@@ -645,6 +652,12 @@ Setiap usulan fitur baru wajib lolos 3 pertanyaan berikut:
 - **`ADR-005` Larangan Test PHP Selama Mode Override**: Mengacu pada §0, dilarang menjalankan suite test PHP/Pest/PHPUnit. Penjaminan mutu backend dilakukan dengan `vendor/bin/pint` dan analisis statis `vendor/bin/phpstan`, frontend diverifikasi via TypeScript compiler `tsc` dan `vitest`.
 - **`ADR-006` Video Galeri & Integrasi YouTube** *(Status: disetujui)*:
   - Menggunakan opsi (a): thumbnail `i.ytimg.com` dengan tautan keluar ke YouTube resmi (lebih ringan, ramah privasi, dan tidak membebani performa browser pengguna dengan iframe besar).
+- **`ADR-007` Paket Log Aktivitas** *(Status: menunggu persetujuan)*:
+  - Usulan: Menggunakan paket `spatie/laravel-activitylog` untuk mencatat audit trail perubahan konten dan riwayat otentikasi operator secara terstruktur.
+  - Alternatif: Membuat tabel migrasi dan model `activity_logs` mandiri.
+- **`ADR-008` Autentikasi Dua Faktor (2FA TOTP)** *(Status: menunggu persetujuan)*:
+  - Usulan: Menggunakan kombinasi `pragmarx/google2fa` + `bacon/bacon-qr-code` untuk implementasi TOTP 2FA ringan yang disematkan langsung pada alur otentikasi login CMS.
+  - Alternatif: Menggunakan paket `laravel/fortify` (lebih besar dan memerlukan penyesuaian arsitektur auth Inertia).
 
 ---
 
