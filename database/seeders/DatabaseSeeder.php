@@ -35,6 +35,7 @@ class DatabaseSeeder extends Seeder
                 UnduhanContohSeeder::class,
                 FaqContohSeeder::class,
                 TestimoniContohSeeder::class,
+                MitraContohSeeder::class,
             ]);
         }
     }

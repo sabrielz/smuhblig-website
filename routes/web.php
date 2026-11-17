@@ -90,6 +90,7 @@ use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\FasilitasController;
 use App\Http\Controllers\Admin\GuruController;
 use App\Http\Controllers\Admin\KategoriController;
+use App\Http\Controllers\Admin\MitraController;
 use App\Http\Controllers\Admin\PrestasiController;
 use App\Http\Controllers\Admin\ProfilController;
 use App\Http\Controllers\Admin\TagController;
@@ -220,6 +221,10 @@ Route::middleware(['auth', EnsureHasCmsRole::class])
 
         // Testimoni
         Route::resource('testimoni', TestimoniController::class)->except(['show']);
+
+        // Mitra Industri
+        Route::post('/mitra/reorder', [MitraController::class, 'reorder'])->name('mitra.reorder');
+        Route::resource('mitra', MitraController::class)->except(['show']);
 
         // Jurusan (Edit 5 existing only)
         Route::get('/jurusan', [App\Http\Controllers\Admin\JurusanController::class, 'index'])->name('jurusan.index');

@@ -418,3 +418,21 @@ export interface Testimoni {
     created_at?: string;
     updated_at?: string;
 }
+
+export interface Mitra {
+    id: number;
+    nama: string;
+    bidang: string;
+    url: string | null;
+    urutan: number;
+    is_active: boolean;
+    logo_url: string | null;
+    jurusan_ids?: number[];
+    jurusans?: Array<{
+        id: number;
+        kode: string;
+        nama: string;
+    }>;
+    created_at?: string;
+    updated_at?: string;
+}

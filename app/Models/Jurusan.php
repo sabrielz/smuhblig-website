@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -37,6 +38,17 @@ class Jurusan extends Model implements HasMedia
     public function translations(): HasMany
     {
         return $this->hasMany(JurusanTranslation::class);
+    }
+
+    /**
+     * Get mitra industri yang bekerja sama dengan jurusan ini.
+     *
+     * @return BelongsToMany<Mitra, $this>
+     */
+    public function mitras(): BelongsToMany
+    {
+        return $this->belongsToMany(Mitra::class, 'jurusan_mitra', 'jurusan_id', 'mitra_id')
+            ->withTimestamps();
     }
 
     /**
