@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\HealthController;
 use App\Http\Controllers\Public\BerandaController;
 use App\Http\Controllers\Public\GaleriController;
 use App\Http\Controllers\Public\JurusanController;
@@ -63,7 +64,6 @@ use App\Http\Controllers\Admin\PengumumanController;
 use App\Http\Controllers\Admin\PesanKontakController;
 use App\Http\Controllers\Admin\StatistikController;
 use App\Http\Controllers\Admin\StrukturOrganisasiController;
-use App\Http\Controllers\HealthController;
 use App\Http\Controllers\Public\AgendaPublikController;
 use App\Http\Middleware\EnsureAiEnabled;
 use App\Http\Middleware\EnsureHasCmsRole;
