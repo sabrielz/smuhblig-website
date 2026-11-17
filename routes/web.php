@@ -85,6 +85,7 @@ Route::get('/agenda/{agenda:slug}', [AgendaPublikController::class, 'show'])->na
 Route::get('/agenda/{agenda:slug}/ics', [AgendaPublikController::class, 'ics'])->name('agenda.ics');
 
 use App\Http\Controllers\Admin\EkstrakurikulerController;
+use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\FasilitasController;
 use App\Http\Controllers\Admin\GuruController;
 use App\Http\Controllers\Admin\KategoriController;
@@ -210,6 +211,10 @@ Route::middleware(['auth', EnsureHasCmsRole::class])
 
         // Unduhan Dokumen
         Route::resource('unduhan', UnduhanController::class)->except(['show']);
+
+        // FAQ (Tanya Jawab)
+        Route::post('/faq/reorder', [FaqController::class, 'reorder'])->name('faq.reorder');
+        Route::resource('faq', FaqController::class)->except(['show']);
 
         // Jurusan (Edit 5 existing only)
         Route::get('/jurusan', [App\Http\Controllers\Admin\JurusanController::class, 'index'])->name('jurusan.index');

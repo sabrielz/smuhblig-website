@@ -23,6 +23,7 @@ import {
     Activity,
     Trophy,
     FileDown,
+    HelpCircle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SharedProps } from "@/types";
@@ -104,6 +105,7 @@ export default function AdminSidebar({ isOpen, setIsOpen }: SidebarProps) {
                 { label: "Struktur Organisasi", href: "/admin/struktur-organisasi", icon: Network, badge: null },
                 { label: "Statistik Beranda", href: "/admin/statistik", icon: BarChart3, badge: null },
                 { label: "Unduhan Dokumen", href: "/admin/unduhan", icon: FileDown, badge: null },
+                { label: "FAQ (Tanya Jawab)", href: "/admin/faq", icon: HelpCircle, badge: null },
                 ...(user?.can?.kelola_agenda ? [{ label: "Agenda", href: "/admin/agenda", icon: CalendarDays, badge: null }] : []),
                 { label: "Tautan", href: "/admin/tautan", icon: LinkIcon, badge: null },
             ],

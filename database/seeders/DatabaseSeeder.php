@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
                 EkstrakurikulerContohSeeder::class,
                 PrestasiContohSeeder::class,
                 UnduhanContohSeeder::class,
+                FaqContohSeeder::class,
             ]);
         }
     }

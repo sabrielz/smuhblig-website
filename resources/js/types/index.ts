@@ -375,3 +375,24 @@ export interface Unduhan {
     created_at?: string;
     updated_at?: string;
 }
+
+export interface Faq {
+    id: number;
+    kategori: 'umum' | 'pendaftaran' | 'akademik' | 'fasilitas';
+    urutan: number;
+    is_active: boolean;
+    translations: {
+        id: {
+            pertanyaan: string;
+            jawaban: string;
+        };
+        en: {
+            pertanyaan: string | null;
+            jawaban: string | null;
+        };
+    };
+    pertanyaan?: string;
+    jawaban?: string;
+    created_at?: string;
+    updated_at?: string;
+}
