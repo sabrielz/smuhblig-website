@@ -431,10 +431,10 @@ php artisan queue:listen   # Queue worker
 
 ### Seeding Order (via `DatabaseSeeder`)
 
+Saat ini `DatabaseSeeder` memanggil 8 seeder (target 11 seeder akan diselaraskan di Phase 2):
 ```
-RoleSeeder → AdminUserSeeder → CategorySeeder → PengaturanSeeder →
-JurusanSeeder → HalamanKontenSeeder → StatistikSeeder →
-StrukturOrganisasiSeeder → TautanSeeder → ArticleSeeder → GaleriSeeder
+RoleSeeder → AdminUserSeeder → CategorySeeder → JurusanSeeder →
+TautanSeeder → GaleriSeeder → ArticleSeeder → PengaturanSeeder
 ```
 
 ---
@@ -450,7 +450,7 @@ StrukturOrganisasiSeeder → TautanSeeder → ArticleSeeder → GaleriSeeder
 
 ---
 
-## 14. SEO
+## 14. SEO & Security
 
 - Backend: `artesaos/seotools` generates `<meta>` tags per page
 - Frontend: `PublicLayout.tsx` parses and injects SEO tags via `<Head>`
@@ -458,6 +458,7 @@ StrukturOrganisasiSeeder → TautanSeeder → ArticleSeeder → GaleriSeeder
 - `hreflang` alternate links for `id` and `en`
 - Sitemap auto-generated at `/sitemap.xml` via `spatie/laravel-sitemap`
 - Semantic HTML5 elements throughout
+- **Security Note:** CSP middleware saat ini sedang nonaktif (dinonaktifkan sementara dan dijadwalkan aktif kembali di Phase 1). Tags & i18next terpasang tapi belum dipakai penuh di frontend. Fitur pencarian saat ini mencakup Jurusan + Artikel.
 
 ---
 
@@ -484,3 +485,85 @@ StrukturOrganisasiSeeder → TautanSeeder → ArticleSeeder → GaleriSeeder
 4. **React page** — `resources/js/Pages/Public/Xxx.tsx`
 5. **Layout** — wrap with `<PublicLayout>` and add Framer Motion reveals
 6. **Navbar** — add link to `Navbar.tsx` if needed
+
+---
+
+## 16. Batas Cakupan
+
+### 16.1 Masuk Cakupan
+- Halaman informasi publik yang dikelola via CMS (Beranda, Profil/Tentang, Jurusan, Berita/Artikel, Agenda, Galeri, Kontak, Pencarian).
+- Fitur CMS untuk operator (pengelolaan artikel, agenda, galeri, pengumuman, jurusan, tautan, statistik, struktur organisasi, pesan kontak, pengguna, pengaturan).
+- Form kontak publik sebagai satu-satunya sarana input/interaksi dari pengunjung umum.
+- Tautan keluar ke Portal Sekolah & `spmb_url` (PPDB).
+- Fondasi non-fungsional: SEO, dwibahasa (ID/EN), performa, aksesibilitas, keamanan dasar, dan skema backup.
+- Asisten penulisan AI berbasis antrean (queue-backed).
+
+### 16.2 Di Luar Cakupan (Out of Scope)
+- Sistem PPDB / SPMB mandiri.
+- Sistem BKK, bursa kerja, lowongan kerja, atau tracer study alumni mandiri.
+- Sistem keuangan, pembayaran SPP, atau integrasi payment gateway.
+- Pengelolaan sarana & prasarana (sarpras) / inventaris internal.
+- Sistem akademik, LMS (Learning Management System), presensi siswa/guru, e-rapor.
+- Akun login publik bagi siswa, calon siswa, atau wali murid.
+- Jurnal kegiatan harian siswa/prakerin/PKL, jurnal ekskul.
+- E-voting atau pemilihan ketua OSIS/organisasi.
+- Sistem perpustakaan digital / OPAC mandiri.
+
+*Semua modul di luar cakupan di atas dialihkan sebagai tautan eksternal ke Portal Sekolah.*
+
+### 16.3 Uji 3 Pertanyaan (Scope Filter)
+Setiap usulan fitur baru wajib lolos 3 pertanyaan berikut:
+1. Apakah tujuannya murni menyampaikan informasi sekolah kepada masyarakat/publik?
+2. Apakah pengelolaannya cukup dilakukan oleh operator sekolah melalui antarmuka CMS?
+3. Apakah fitur dapat berjalan tanpa memerlukan registrasi akun, otentikasi login, transaksi data, atau unggahan berkas dari masyarakat/publik (selain formulir kontak)?
+
+> **Aturan:** 3× Ya = Fitur diizinkan untuk diusulkan ke dalam web ini. 1× Tidak = Fitur dialihkan ke Portal Sekolah / sistem terpisah.
+
+---
+
+## 17. Aturan Bisnis (Business Rules)
+
+- **`BR-001` Matriks Peran (Role Matrix)** *(Status: disetujui)*:
+  - **Author**: Membuat artikel baru; mengubah artikel milik sendiri yang berstatus `draft` atau `pending_review`; mengajukan review; tidak berhak mempublikasikan, mengarsipkan, atau menghapus artikel milik orang lain.
+  - **Editor**: Semua kewenangan Author ditambah hak mengedit seluruh artikel, mengelola galeri, pengumuman, agenda, dan mengedit data jurusan serta melakukan publikasi.
+  - **Admin**: Semua kewenangan Editor ditambah hak penuh mengelola pengguna, pengaturan sistem, tautan penting, statistik, struktur organisasi, konten halaman dinamis, serta menghapus riwayat pesan kontak.
+- **`BR-002` Transisi Status Artikel**:
+  - Author hanya dapat mengubah status ke `draft` dan `pending_review` (atau langsung `published` hanya bila opsi pengaturan `artikel_approval` dimatikan).
+  - Editor dan Admin berhak mengubah artikel ke semua status (`draft`, `pending_review`, `published`, `archived`).
+- **`BR-003` Pengumuman Aktif**:
+  - Sebuah pengumuman dianggap aktif jika dan hanya jika `is_active = true` **dan** (`tanggal_mulai` null atau ≤ tanggal hari ini) **dan** (`tanggal_selesai` null atau ≥ tanggal hari ini).
+- **`BR-004` Validasi Unggahan Gambar**:
+  - Format yang diizinkan: `jpg`, `jpeg`, `png`, `webp`.
+  - Ukuran berkas maksimum: **2 MB** untuk thumbnail artikel, avatar pengguna, logo sekolah, dan foto struktur organisasi; **20 MB** khusus untuk foto galeri/album kegiatan.
+  - Penamaan berkas fisik di server wajib menggunakan nama acak berbasis UUID unik.
+- **`BR-005` Dukungan Bahasa (i18n)**:
+  - Konten Bahasa Indonesia (`id`) bersifat wajib pada seluruh entitas multibahasa.
+  - Konten Bahasa Inggris (`en`) bersifat opsional. Jika entitas tidak memiliki terjemahan EN, sistem wajib menampilkan fallback konten versi `id`.
+
+---
+
+## 18. Keputusan Arsitektur (ADR)
+
+- **`ADR-001` Database Engine**: Menggunakan MySQL 8 untuk lingkungan lokal dev maupun server produksi (konsisten, tidak menggunakan variasi engine seperti PostgreSQL di produksi).
+- **`ADR-002` Pendaftaran Siswa (PPDB/SPMB)**: Tidak membangun aplikasi penerimaan siswa baru di dalam repositori ini. Tombol pendaftaran publik mengarah langsung ke tautan luar sesuai konfigurasi pengaturan `spmb_url`.
+- **`ADR-003` Pemisahan CMS dan Portal Sekolah**: Repositori ini didedikasikan secara eksklusif sebagai portal profil publik (landing page) dan CMS pengelola konten. Modul layanan internal sekolah disediakan terpisah lewat halaman Portal tautan cepat.
+- **`ADR-004` Notifikasi Dashboard Operator**: Pembaruan notifikasi admin dan jumlah pesan baru menggunakan mekanisme interval polling yang efisien, tanpa server WebSocket/SSE eksternal.
+- **`ADR-005` Larangan Test PHP Selama Mode Override**: Mengacu pada §0, dilarang menjalankan suite test PHP/Pest/PHPUnit. Penjaminan mutu backend dilakukan dengan `vendor/bin/pint` dan analisis statis `vendor/bin/phpstan`, frontend diverifikasi via TypeScript compiler `tsc` dan `vitest`.
+
+---
+
+## 19. Roadmap Pengerjaan & Aturan Gerbang
+
+Rangkaian pengerjaan sistem terbagi ke dalam fase berurutan:
+- `docs/phase-0.md`: Fondasi, standarisasi dokumen acuan, pembersihan repo, eliminasi tsc error, pasang lint & CI.
+- `docs/phase-1.md`: Keamanan dasar & audit surface.
+- `docs/phase-2.md`: Standarisasi database & seeder lengkap.
+- `docs/phase-3.md`: Otorisasi peran (BR-001) & kebijakan akses.
+- `docs/phase-4.md`: Pembersihan & optimasi modul CMS Admin.
+- `docs/phase-5.md`: Standardisasi komponen publik & SEO.
+- `docs/phase-6.md`: Fitur AI writing assistant & observer antrean.
+- `docs/phase-7.md`: Audit performa, aset WebP, dan cache layer.
+- `docs/phase-8.md`: Kesiapan rilis v1.0, dokumentasi panduan, dan final audit.
+
+> **Aturan Gerbang (Gate Rule):** Hanya ada satu fase aktif dalam satu waktu. Seluruh item Definition of Done (DoD) pada dokumen fase yang sedang aktif wajib terpenuhi dan terverifikasi sebelum berpindah ke fase berikutnya.
+
