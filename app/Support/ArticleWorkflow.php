@@ -2,6 +2,7 @@
 
 namespace App\Support;
 
+use App\Enums\ArticleStatus;
 use App\Models\Article;
 use App\Models\Pengaturan;
 use App\Models\User;
@@ -21,22 +22,30 @@ class ArticleWorkflow
     public static function allowedStatuses(User $user, ?Article $article = null): array
     {
         if ($user->isAdmin() || $user->isEditor()) {
-            return ['draft', 'pending_review', 'published', 'archived'];
+            return [
+                ArticleStatus::Draft->value,
+                ArticleStatus::PendingReview->value,
+                ArticleStatus::Published->value,
+                ArticleStatus::Archived->value,
+            ];
         }
 
         if ($user->isAuthor()) {
-            $statuses = ['draft', 'pending_review'];
+            $statuses = [
+                ArticleStatus::Draft->value,
+                ArticleStatus::PendingReview->value,
+            ];
 
             $isOwnOrNew = $article === null || (int) $article->user_id === (int) $user->id;
             $approvalDisabled = ! Pengaturan::bool('artikel_approval');
 
             if ($approvalDisabled && $isOwnOrNew) {
-                $statuses[] = 'published';
+                $statuses[] = ArticleStatus::Published->value;
             }
 
             return $statuses;
         }
 
-        return ['draft'];
+        return [ArticleStatus::Draft->value];
     }
 }

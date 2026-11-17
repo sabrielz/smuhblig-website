@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\ArticleStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreArtikelRequest;
 use App\Http\Requests\Admin\UpdateArtikelRequest;
@@ -266,7 +267,7 @@ class ArtikelController extends Controller
         DB::beginTransaction();
         try {
             $artikel->update([
-                'status' => 'published',
+                'status' => ArticleStatus::Published->value,
                 'published_at' => now(),
             ]);
             DB::commit();

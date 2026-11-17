@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\ArticleStatus;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -31,6 +32,7 @@ class Article extends Model implements HasMedia
     ];
 
     protected $casts = [
+        'status' => ArticleStatus::class,
         'is_featured' => 'boolean',
         'view_count' => 'integer',
         'published_at' => 'datetime',
@@ -87,7 +89,7 @@ class Article extends Model implements HasMedia
 
     public function scopePublished(Builder $query): Builder
     {
-        return $query->where('status', 'published')
+        return $query->where('status', ArticleStatus::Published->value)
             ->whereNotNull('published_at')
             ->where('published_at', '<=', now());
     }

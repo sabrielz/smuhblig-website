@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Public;
 
+use App\Enums\ArticleStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Article;
 use App\Models\Jurusan;
@@ -81,7 +82,7 @@ class PencarianController extends Controller
             $operator = config('database.default') === 'pgsql' ? 'ilike' : 'like';
 
             $artikelQuery = Article::query()
-                ->where('status', 'published')
+                ->where('status', ArticleStatus::Published->value)
                 ->join('article_translations', function ($join) use ($locale) {
                     $join->on('articles.id', '=', 'article_translations.article_id')
                         ->where('article_translations.locale', '=', $locale);
@@ -162,7 +163,7 @@ class PencarianController extends Controller
 
         // Limit Artikel 5
         $artikel = Article::query()
-            ->where('status', 'published')
+            ->where('status', ArticleStatus::Published->value)
             ->join('article_translations', function ($join) use ($locale) {
                 $join->on('articles.id', '=', 'article_translations.article_id')
                     ->where('article_translations.locale', '=', $locale);

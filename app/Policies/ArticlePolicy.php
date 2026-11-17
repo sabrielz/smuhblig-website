@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enums\ArticleStatus;
 use App\Models\Article;
 use App\Models\User;
 use App\Support\ArticleWorkflow;
@@ -47,7 +48,7 @@ class ArticlePolicy
 
         if ($user->isAuthor()) {
             return (int) $article->user_id === (int) $user->id
-                && in_array($article->status, ['draft', 'pending_review'], true);
+                && in_array($article->status->value, [ArticleStatus::Draft->value, ArticleStatus::PendingReview->value], true);
         }
 
         return false;
@@ -71,7 +72,7 @@ class ArticlePolicy
         }
 
         if ($user->isAuthor()) {
-            return in_array('published', ArticleWorkflow::allowedStatuses($user, $article), true);
+            return in_array(ArticleStatus::Published->value, ArticleWorkflow::allowedStatuses($user, $article), true);
         }
 
         return false;

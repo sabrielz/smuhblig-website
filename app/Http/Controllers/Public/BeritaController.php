@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Public;
 
+use App\Enums\ArticleStatus;
 use App\Http\Controllers\Controller;
 use App\Jobs\IncrementArticleViewCount;
 use App\Models\Article;
@@ -76,7 +77,7 @@ class BeritaController extends Controller
     public function show(Article $article): Response
     {
         // Ensure article is published
-        if ($article->status !== 'published') {
+        if ($article->status !== ArticleStatus::Published) {
             abort(404);
         }
 

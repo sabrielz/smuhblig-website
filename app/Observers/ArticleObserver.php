@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Enums\ArticleStatus;
 use App\Jobs\GenerateSitemapJob;
 use App\Models\Article;
 use App\Services\NotifikasiService;
@@ -16,16 +17,17 @@ class ArticleObserver
     {
         if ($article->wasChanged('status')) {
             $oldStatus = $article->getOriginal('status');
-            $newStatus = $article->status;
+            $oldStatusVal = $oldStatus instanceof ArticleStatus ? $oldStatus->value : (string) $oldStatus;
+            $newStatusVal = $article->status->value;
 
             // Dispatch update sitemap jika status melibatkan published
-            if ($oldStatus === 'published' || $newStatus === 'published') {
+            if ($oldStatusVal === ArticleStatus::Published->value || $newStatusVal === ArticleStatus::Published->value) {
                 GenerateSitemapJob::dispatch();
             }
         }
 
         // Hanya trigger jika status berubah ke pending_review
-        if ($article->wasChanged('status') && $article->status === 'pending_review') {
+        if ($article->wasChanged('status') && $article->status === ArticleStatus::PendingReview) {
             $adminAndEditorIds = NotifikasiService::getAdminAndEditorIds();
 
             if (! empty($adminAndEditorIds)) {

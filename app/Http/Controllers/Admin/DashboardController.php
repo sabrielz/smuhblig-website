@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\ArticleStatus;
 use App\Http\Controllers\Controller;
 use App\Models\AiJob;
 use App\Models\Article;
@@ -19,10 +20,10 @@ class DashboardController extends Controller
     public function index(): Response
     {
         $totalArtikel = [
-            'draft' => Article::where('status', 'draft')->count(),
-            'pending' => Article::where('status', 'pending')->count(),
-            'published' => Article::where('status', 'published')->count(),
-            'archived' => Article::where('status', 'archived')->count(),
+            'draft' => Article::where('status', ArticleStatus::Draft->value)->count(),
+            'pending' => Article::where('status', ArticleStatus::PendingReview->value)->count(),
+            'published' => Article::where('status', ArticleStatus::Published->value)->count(),
+            'archived' => Article::where('status', ArticleStatus::Archived->value)->count(),
             'total' => Article::count(),
         ];
 
