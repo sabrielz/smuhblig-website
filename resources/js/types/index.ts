@@ -396,3 +396,25 @@ export interface Faq {
     created_at?: string;
     updated_at?: string;
 }
+
+export interface Testimoni {
+    id: number;
+    nama: string;
+    peran: 'alumni' | 'orang_tua' | 'mitra';
+    keterangan: string;
+    persetujuan_tampil: boolean;
+    is_active: boolean;
+    urutan: number;
+    foto_url: string | null;
+    translations: {
+        id: {
+            kutipan: string;
+        };
+        en: {
+            kutipan: string | null;
+        };
+    };
+    kutipan?: string;
+    created_at?: string;
+    updated_at?: string;
+}

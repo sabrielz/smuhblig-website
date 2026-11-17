@@ -93,6 +93,7 @@ use App\Http\Controllers\Admin\KategoriController;
 use App\Http\Controllers\Admin\PrestasiController;
 use App\Http\Controllers\Admin\ProfilController;
 use App\Http\Controllers\Admin\TagController;
+use App\Http\Controllers\Admin\TestimoniController;
 use App\Http\Controllers\Admin\UnduhanController;
 use App\Http\Controllers\Public\PengumumanController as PublicPengumumanController;
 
@@ -216,6 +217,9 @@ Route::middleware(['auth', EnsureHasCmsRole::class])
         // FAQ (Tanya Jawab)
         Route::post('/faq/reorder', [FaqController::class, 'reorder'])->name('faq.reorder');
         Route::resource('faq', FaqController::class)->except(['show']);
+
+        // Testimoni
+        Route::resource('testimoni', TestimoniController::class)->except(['show']);
 
         // Jurusan (Edit 5 existing only)
         Route::get('/jurusan', [App\Http\Controllers\Admin\JurusanController::class, 'index'])->name('jurusan.index');
