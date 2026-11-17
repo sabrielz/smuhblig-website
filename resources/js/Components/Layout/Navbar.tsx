@@ -51,7 +51,7 @@ function LanguageToggle({ locale, isScrolled, isDark = false }: LanguageTogglePr
     return (
         <div className={cn(
             'flex items-center gap-0.5 rounded-lg border p-0.5',
-            isDark || !isScrolled ? 'border-white/20' : 'border-[#e5e5ea]',
+            isDark || !isScrolled ? 'border-white/20' : 'border-neutral-100',
         )}>
             {(['id', 'en'] as const).map((lang) => (
                 <button
@@ -62,11 +62,11 @@ function LanguageToggle({ locale, isScrolled, isDark = false }: LanguageTogglePr
                         'rounded-md px-2.5 py-1 text-xs font-semibold tracking-widest uppercase transition-all duration-200',
                         locale === lang
                             ? isDark || !isScrolled
-                                ? 'bg-white text-[#003f87]'
-                                : 'bg-[#003f87] text-white'
+                                ? 'bg-white text-primary-600'
+                                : 'bg-primary-600 text-white'
                             : isDark || !isScrolled
                                 ? 'text-white/60 hover:text-white'
-                                : 'text-[#636366] hover:text-[#111111]',
+                                : 'text-neutral-500 hover:text-neutral-900',
                     )}
                 >
                     {lang.toUpperCase()}
@@ -94,8 +94,8 @@ function DesktopNavLink({ href, label, isScrolled, isActive }: DesktopNavLinkPro
                 'group relative px-1 py-2 text-sm font-medium transition-colors duration-200',
                 isScrolled
                     ? isActive
-                        ? 'text-[#003f87]'
-                        : 'text-[#111111] hover:text-[#003f87]'
+                        ? 'text-primary-600'
+                        : 'text-neutral-900 hover:text-primary-600'
                     : isActive
                         ? 'text-white'
                         : 'text-white/80 hover:text-white',
@@ -105,7 +105,7 @@ function DesktopNavLink({ href, label, isScrolled, isActive }: DesktopNavLinkPro
             {/* Underline slide from left */}
             <span
                 className={cn(
-                    'absolute bottom-0 left-0 h-0.5 bg-[#c9a84c] transition-all duration-300 ease-out',
+                    'absolute bottom-0 left-0 h-0.5 bg-gold-500 transition-all duration-300 ease-out',
                     isActive ? 'w-full' : 'w-0 group-hover:w-full',
                 )}
             />
@@ -178,12 +178,12 @@ function MobileMenu({ isOpen, onClose, locale, navLinks, currentPath, pengaturan
                         initial="hidden"
                         animate="visible"
                         exit="exit"
-                        className="fixed inset-y-0 right-0 z-50 flex w-full max-w-sm flex-col bg-[#001f4d] shadow-2xl lg:hidden"
+                        className="fixed inset-y-0 right-0 z-50 flex w-full max-w-sm flex-col bg-primary-900 shadow-2xl lg:hidden"
                     >
                         {/* Header */}
                         <div className="flex items-center justify-between border-b border-white/10 px-6 py-5">
                             <div className="flex items-center gap-3">
-                                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#c9a84c]">
+                                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gold-500">
                                     <GraduationCap className="h-5 w-5 text-white" strokeWidth={1.5} />
                                 </div>
                                 <span className="text-sm font-semibold text-white/90">{pengaturanName}</span>
@@ -227,7 +227,7 @@ function MobileMenu({ isOpen, onClose, locale, navLinks, currentPath, pengaturan
                                             </span>
                                             {isActive && (
                                                 <ChevronRight
-                                                    className="h-4 w-4 text-[#c9a84c]"
+                                                    className="h-4 w-4 text-gold-500"
                                                     strokeWidth={1.5}
                                                 />
                                             )}
@@ -252,7 +252,7 @@ function MobileMenu({ isOpen, onClose, locale, navLinks, currentPath, pengaturan
                                     rel="noopener noreferrer"
                                     onClick={onClose}
                                     id="mobile-cta-daftar"
-                                    className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#c9a84c] px-6 py-4 text-base font-semibold text-white transition-all duration-200 hover:bg-[#a8821f] active:scale-[0.98]"
+                                    className="flex w-full items-center justify-center gap-2 rounded-xl bg-gold-500 px-6 py-4 text-base font-semibold text-white transition-all duration-200 hover:bg-gold-600 active:scale-[0.98]"
                                 >
                                     {locale === 'id' ? 'Daftar Sekarang' : 'Register Now'}
                                 </a>
@@ -356,7 +356,7 @@ function SearchOverlay({ isOpen, onClose, locale }: SearchOverlayProps) {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.2 }}
-                        className="absolute inset-0 bg-[#001f4d]/80 backdrop-blur-md"
+                        className="absolute inset-0 bg-primary-900/80 backdrop-blur-md"
                         onClick={onClose}
                     />
 
@@ -381,7 +381,7 @@ function SearchOverlay({ isOpen, onClose, locale }: SearchOverlayProps) {
                                 />
                             </form>
                             {loading ? (
-                                <Loader2 className="h-5 w-5 text-[#003f87] animate-spin ml-3" />
+                                <Loader2 className="h-5 w-5 text-primary-600 animate-spin ml-3" />
                             ) : (
                                 <button onClick={onClose} className="p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100 transition-colors ml-1">
                                     <X className="h-5 w-5" />
@@ -413,8 +413,8 @@ function SearchOverlay({ isOpen, onClose, locale }: SearchOverlayProps) {
                                                     className="block p-3 rounded-xl hover:bg-gray-50 transition-colors group"
                                                 >
                                                     <div className="flex items-center justify-between">
-                                                        <span dangerouslySetInnerHTML={{ __html: j.title }} className="text-[#003f87] font-semibold text-sm" />
-                                                        <ArrowRight className="h-4 w-4 text-gray-300 group-hover:text-[#c9a84c] transition-colors" />
+                                                        <span dangerouslySetInnerHTML={{ __html: j.title }} className="text-primary-600 font-semibold text-sm" />
+                                                        <ArrowRight className="h-4 w-4 text-gray-300 group-hover:text-gold-500 transition-colors" />
                                                     </div>
                                                 </Link>
                                             ))}
@@ -433,8 +433,8 @@ function SearchOverlay({ isOpen, onClose, locale }: SearchOverlayProps) {
                                                     onClick={onClose}
                                                     className="flex items-center justify-between p-3 rounded-xl hover:bg-gray-50 transition-colors group"
                                                 >
-                                                    <span dangerouslySetInnerHTML={{ __html: a.title }} className="text-gray-700 text-sm line-clamp-1 group-hover:text-[#003f87] transition-colors" />
-                                                    <ArrowRight className="h-4 w-4 text-gray-300 group-hover:text-[#c9a84c] transition-colors ml-4 flex-shrink-0" />
+                                                    <span dangerouslySetInnerHTML={{ __html: a.title }} className="text-gray-700 text-sm line-clamp-1 group-hover:text-primary-600 transition-colors" />
+                                                    <ArrowRight className="h-4 w-4 text-gray-300 group-hover:text-gold-500 transition-colors ml-4 flex-shrink-0" />
                                                 </Link>
                                             ))}
                                         </div>
@@ -445,7 +445,7 @@ function SearchOverlay({ isOpen, onClose, locale }: SearchOverlayProps) {
                                     <div className="mt-4 pt-4 border-t text-center">
                                         <button
                                             onClick={handleSubmit}
-                                            className="text-sm font-medium text-[#003f87] hover:text-[#001f4d] inline-flex items-center gap-1"
+                                            className="text-sm font-medium text-primary-600 hover:text-primary-900 inline-flex items-center gap-1"
                                         >
                                             {locale === 'id' ? 'Lihat semua hasil pencarian' : 'See all search results'}
                                             <ArrowRight className="h-4 w-4" />
@@ -567,7 +567,7 @@ export default function Navbar() {
                         {multibahasaEnabled && (
                             <div className={cn(
                                 'hidden lg:flex transition-colors duration-300',
-                                isScrolled ? 'text-[#636366]' : 'text-white',
+                                isScrolled ? 'text-neutral-500' : 'text-white',
                             )}>
                                 <LanguageToggle locale={locale} isScrolled={isScrolled} />
                             </div>
@@ -580,7 +580,7 @@ export default function Navbar() {
                             className={cn(
                                 'flex h-10 w-10 items-center justify-center rounded-xl transition-all duration-200 border bg-transparent hover:scale-105 active:scale-95',
                                 isScrolled
-                                    ? 'border-gray-200 text-[#111111] hover:bg-neutral-50 hover:border-gray-300'
+                                    ? 'border-gray-200 text-neutral-900 hover:bg-neutral-50 hover:border-gray-300'
                                     : 'border-white/20 text-white hover:bg-white/10 hover:border-white/40'
                             )}
                         >
@@ -591,7 +591,7 @@ export default function Navbar() {
                         <Link
                             href="https://portal.smkmuhbligo.sch.id/"
                             id="navbar-cta-daftar"
-                            className="hidden lg:inline-flex items-center gap-2 rounded-xl bg-white px-5 py-2.5 text-sm font-semibold text-[#003f87] shadow-sm transition-all duration-200 hover:bg-[#cccccc] hover:shadow-md active:scale-[0.97]"
+                            className="hidden lg:inline-flex items-center gap-2 rounded-xl bg-white px-5 py-2.5 text-sm font-semibold text-primary-600 shadow-sm transition-all duration-200 hover:bg-neutral-200 hover:shadow-md active:scale-[0.97]"
                         >
                             {locale === 'id' ? 'Portal' : 'Portal'}
                         </Link>
@@ -605,7 +605,7 @@ export default function Navbar() {
                             className={cn(
                                 'flex h-9 w-9 items-center justify-center rounded-lg transition-all duration-200 lg:hidden',
                                 isScrolled
-                                    ? 'text-[#111111] hover:bg-neutral-100'
+                                    ? 'text-neutral-900 hover:bg-neutral-100'
                                     : 'text-white hover:bg-white/10',
                             )}
                         >

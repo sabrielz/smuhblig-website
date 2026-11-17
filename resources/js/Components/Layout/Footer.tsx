@@ -42,7 +42,7 @@ function IslamicDivider() {
         <div className="flex items-center gap-3 my-6" aria-hidden="true">
             <div className="flex-1 h-px bg-white/15" />
             {/* Diamond ornament */}
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="text-[#c9a84c]/50 flex-shrink-0">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="text-gold-500/50 flex-shrink-0">
                 <rect x="6" y="0" width="4" height="4" transform="rotate(45 8 2)" fill="currentColor" />
                 <rect x="6" y="10" width="4" height="4" transform="rotate(45 8 12)" fill="currentColor" opacity="0.5" />
             </svg>
@@ -70,7 +70,7 @@ function SocialButton({ href, label, id, children }: SocialButtonProps) {
             target="_blank"
             rel="noopener noreferrer"
             aria-label={label}
-            className="group flex h-10 w-10 items-center justify-center rounded-full border border-white/30 text-white/70 transition-all duration-250 hover:border-transparent hover:bg-white hover:text-[#003f87] hover:scale-110"
+            className="group flex h-10 w-10 items-center justify-center rounded-full border border-white/30 text-white/70 transition-all duration-250 hover:border-transparent hover:bg-white hover:text-primary-600 hover:scale-110"
         >
             {children}
         </a>
@@ -93,7 +93,7 @@ export default function Footer() {
     const hasSocial = instagram || youtube || facebook || tiktok;
 
     return (
-        <footer id="site-footer" className="bg-[#001f4d]" aria-label="Footer">
+        <footer id="site-footer" className="bg-primary-900" aria-label="Footer">
             <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
                 {/* ── Main footer grid ── */}
@@ -118,7 +118,7 @@ export default function Footer() {
                                     className="h-12 w-auto max-w-[48px] object-contain flex-shrink-0 bg-white rounded-lg p-1"
                                 />
                             ) : (
-                                <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl bg-[#c9a84c]">
+                                <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl bg-gold-500">
                                     <svg
                                         viewBox="0 0 24 24"
                                         fill="none"
@@ -136,7 +136,7 @@ export default function Footer() {
                             )}
                             <div>
                                 <p className="text-base font-bold text-white leading-tight">{siteName}</p>
-                                <p className="text-xs text-[#c9a84c] font-medium mt-0.5">Sapugarut Gg. 7, Kab. Pekalongan, Jawa Tengah</p>
+                                <p className="text-xs text-gold-500 font-medium mt-0.5">Sapugarut Gg. 7, Kab. Pekalongan, Jawa Tengah</p>
                             </div>
                         </div>
 
@@ -161,7 +161,7 @@ export default function Footer() {
                         variants={fadeInUp}
                         className="col-span-1 md:col-span-1 lg:col-span-3 space-y-5 flex flex-col items-center md:items-start text-center md:text-left"
                     >
-                        <h3 className="text-xs font-bold tracking-widest uppercase text-[#c9a84c]">
+                        <h3 className="text-xs font-bold tracking-widest uppercase text-gold-500">
                             {locale === 'id' ? 'Navigasi' : 'Navigation'}
                         </h3>
                         <ul className="space-y-3">
@@ -172,7 +172,7 @@ export default function Footer() {
                                         className="group flex items-center gap-2 text-sm text-white/55 transition-colors duration-200 hover:text-white"
                                     >
                                         <span
-                                            className="inline-block h-px w-4 bg-white/25 transition-all duration-200 group-hover:w-6 group-hover:bg-[#c9a84c]"
+                                            className="inline-block h-px w-4 bg-white/25 transition-all duration-200 group-hover:w-6 group-hover:bg-gold-500"
                                             aria-hidden="true"
                                         />
                                         {locale === 'id' ? link.label.id : link.label.en}
@@ -187,7 +187,7 @@ export default function Footer() {
                         variants={fadeInUp}
                         className="col-span-1 md:col-span-1 lg:col-span-4 space-y-5 flex flex-col items-center md:items-start text-center md:text-left"
                     >
-                        <h3 className="text-xs font-bold tracking-widest uppercase text-[#c9a84c]">
+                        <h3 className="text-xs font-bold tracking-widest uppercase text-gold-500">
                             {locale === 'id' ? 'Tautan Penting' : 'Important Links'}
                         </h3>
 
@@ -200,7 +200,7 @@ export default function Footer() {
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         id="footer-link-daftar"
-                                        className="group inline-flex items-center gap-2 rounded-lg border border-[#c9a84c]/40 px-4 py-2.5 text-sm font-semibold text-[#c9a84c] transition-all duration-200 hover:border-[#c9a84c] hover:bg-[#c9a84c] hover:text-white"
+                                        className="group inline-flex items-center gap-2 rounded-lg border border-gold-500/40 px-4 py-2.5 text-sm font-semibold text-gold-500 transition-all duration-200 hover:border-gold-500 hover:bg-gold-500 hover:text-white"
                                     >
                                         <span>
                                             {locale === 'id' ? '🎓 Daftar Sekarang' : '🎓 Register Now'}
@@ -215,7 +215,7 @@ export default function Footer() {
                                     className="group flex items-center gap-2 text-sm text-white/55 transition-colors duration-200 hover:text-white"
                                 >
                                     <span
-                                        className="inline-block h-px w-4 bg-white/25 transition-all duration-200 group-hover:w-6 group-hover:bg-[#c9a84c]"
+                                        className="inline-block h-px w-4 bg-white/25 transition-all duration-200 group-hover:w-6 group-hover:bg-gold-500"
                                         aria-hidden="true"
                                     />
                                     {locale === 'id' ? 'Portal' : 'Portal'}
@@ -228,7 +228,7 @@ export default function Footer() {
                                     className="group flex items-center gap-2 text-sm text-white/55 transition-colors duration-200 hover:text-white"
                                 >
                                     <span
-                                        className="inline-block h-px w-4 bg-white/25 transition-all duration-200 group-hover:w-6 group-hover:bg-[#c9a84c]"
+                                        className="inline-block h-px w-4 bg-white/25 transition-all duration-200 group-hover:w-6 group-hover:bg-gold-500"
                                         aria-hidden="true"
                                     />
                                     {locale === 'id' ? 'Berita Terbaru' : 'Latest News'}
@@ -241,7 +241,7 @@ export default function Footer() {
                                     className="group flex items-center gap-2 text-sm text-white/55 transition-colors duration-200 hover:text-white"
                                 >
                                     <span
-                                        className="inline-block h-px w-4 bg-white/25 transition-all duration-200 group-hover:w-6 group-hover:bg-[#c9a84c]"
+                                        className="inline-block h-px w-4 bg-white/25 transition-all duration-200 group-hover:w-6 group-hover:bg-gold-500"
                                         aria-hidden="true"
                                     />
                                     {locale === 'id' ? 'Hubungi Kami' : 'Contact Us'}
@@ -307,9 +307,9 @@ export default function Footer() {
                             : 'Part of Persyarikatan Muhammadiyah.'}
                     </p>
                     <p className={cn(
-                        'flex items-center gap-1.5 text-xs italic text-[#c9a84c]/60',
+                        'flex items-center gap-1.5 text-xs italic text-gold-500/60',
                     )}>
-                        <Heart className="h-3 w-3 text-[#c9a84c]/40" strokeWidth={1.5} />
+                        <Heart className="h-3 w-3 text-gold-500/40" strokeWidth={1.5} />
                         <span className="font-playfair font-medium">Fastabiqul Khairat</span>
                     </p>
                 </div>

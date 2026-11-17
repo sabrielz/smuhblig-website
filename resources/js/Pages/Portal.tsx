@@ -13,11 +13,11 @@ const GeometricPattern = () => (
     >
         <defs>
             <pattern id="geo-pattern-portal" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
-                <path d="M50 0 L100 25 L100 75 L50 100 L0 75 L0 25 Z" fill="none" stroke="#ffffff" strokeWidth="1" />
-                <path d="M50 25 L75 37.5 L75 62.5 L50 75 L25 62.5 L25 37.5 Z" fill="none" stroke="#c9a84c" strokeWidth="0.5" />
-                <circle cx="50" cy="50" r="5" fill="none" stroke="#ffffff" strokeWidth="0.5" />
-                <line x1="50" y1="0" x2="50" y2="100" stroke="#ffffff" strokeWidth="0.2" />
-                <line x1="0" y1="50" x2="100" y2="50" stroke="#ffffff" strokeWidth="0.2" />
+                <path d="M50 0 L100 25 L100 75 L50 100 L0 75 L0 25 Z" fill="none" stroke="currentColor" strokeWidth="1" className="text-white" />
+                <path d="M50 25 L75 37.5 L75 62.5 L50 75 L25 62.5 L25 37.5 Z" fill="none" stroke="currentColor" strokeWidth="0.5" className="text-gold-500" />
+                <circle cx="50" cy="50" r="5" fill="none" stroke="currentColor" strokeWidth="0.5" className="text-white" />
+                <line x1="50" y1="0" x2="50" y2="100" stroke="currentColor" strokeWidth="0.2" className="text-white" />
+                <line x1="0" y1="50" x2="100" y2="50" stroke="currentColor" strokeWidth="0.2" className="text-white" />
             </pattern>
         </defs>
         <rect width="100%" height="100%" fill="url(#geo-pattern-portal)" />
@@ -34,16 +34,16 @@ export default function Portal() {
     ];
 
     return (
-        <div className="min-h-screen bg-[#001f4d] relative overflow-hidden flex flex-col items-center justify-center p-4 selection:bg-[#c9a84c] selection:text-[#001f4d]">
+        <div className="min-h-screen bg-primary-900 relative overflow-hidden flex flex-col items-center justify-center p-4 selection:bg-gold-500 selection:text-primary-900">
             <Head title={`Portal Siswa - ${pengaturan.site_name}`} />
 
             {/* Background elements */}
             <GeometricPattern />
-            <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-[#003f87]/40 via-[#001f4d]/80 to-[#111111]/90" />
+            <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-primary-600/40 via-primary-900/80 to-neutral-900/90" />
 
             {/* Glowing orbs */}
-            <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#003f87] rounded-full mix-blend-screen filter blur-[128px] opacity-40 animate-pulse" />
-            <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#c9a84c] rounded-full mix-blend-screen filter blur-[128px] opacity-10 animate-pulse" style={{ animationDelay: '2s' }} />
+            <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary-600 rounded-full mix-blend-screen filter blur-[128px] opacity-40 animate-pulse" />
+            <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gold-500 rounded-full mix-blend-screen filter blur-[128px] opacity-10 animate-pulse" style={{ animationDelay: '2s' }} />
 
             <div className="relative z-10 w-full max-w-2xl mx-auto">
                 <motion.div
@@ -67,17 +67,17 @@ export default function Portal() {
                                 ease: "easeInOut",
                             },
                         }}
-                        className="w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-gradient-to-br from-[#c9a84c] to-[#a38533] p-1 flex items-center justify-center mb-8 shadow-2xl shadow-[#c9a84c]/20"
+                        className="w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-gradient-to-br from-gold-500 to-gold-650 p-1 flex items-center justify-center mb-8 shadow-2xl shadow-gold-500/20"
                     >
-                        <div className="w-full h-full rounded-full bg-[#001f4d] flex items-center justify-center border-4 border-[#c9a84c]/30">
-                            <ShieldCheck size={48} strokeWidth={1.5} className="text-[#c9a84c]" />
+                        <div className="w-full h-full rounded-full bg-primary-900 flex items-center justify-center border-4 border-gold-500/30">
+                            <ShieldCheck size={48} strokeWidth={1.5} className="text-gold-500" />
                         </div>
                     </motion.div>
 
                     {/* Texts */}
                     <motion.p
                         variants={fadeInUp}
-                        className="text-xs sm:text-sm font-bold tracking-[0.3em] uppercase text-[#c9a84c] mb-4"
+                        className="text-xs sm:text-sm font-bold tracking-[0.3em] uppercase text-gold-500 mb-4"
                     >
                         SEGERA HADIR
                     </motion.p>
@@ -138,7 +138,7 @@ export default function Portal() {
             </div>
 
             {/* Very bottom border line */}
-            <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-[#003f87] via-[#c9a84c] to-[#003f87]" />
+            <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-primary-600 via-gold-500 to-primary-600" />
         </div>
     );
 }

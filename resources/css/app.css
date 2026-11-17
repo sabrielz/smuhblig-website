@@ -27,6 +27,7 @@
 
     /* Gold — Aksen Prestisius */
     --color-gold-700: #8a6a1c;
+    --color-gold-650: #a38533;
     --color-gold-600: #a8821f;
     --color-gold-500: #c9a84c;
     --color-gold-400: #d9bc78;
@@ -80,6 +81,7 @@
     --color-gold-400: #d9bc78;
     --color-gold-500: #c9a84c;
     --color-gold-600: #a8821f;
+    --color-gold-650: #a38533;
     --color-gold-700: #8a6a1c;
 
     --color-success: #30d158;
