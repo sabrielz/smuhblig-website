@@ -35,12 +35,24 @@ class ContentSecurityPolicy
         /** @var Response $response */
         $response = $next($request);
 
+        // Jika CSP dinonaktifkan via config/env, lewati penambahan header CSP
+        if (! config('csp.enabled', false)) {
+            // Tetap tambahkan security headers standar
+            $response->headers->set('X-Content-Type-Options', 'nosniff');
+            $response->headers->set('X-Frame-Options', 'SAMEORIGIN');
+            $response->headers->set('X-XSS-Protection', '1; mode=block');
+            $response->headers->set('Referrer-Policy', 'strict-origin-when-cross-origin');
+            $response->headers->set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+
+            return $response;
+        }
+
         // Tentukan apakah ini rute AI yang butuh Anthropic API access
         $isAiRoute = str_starts_with($request->path(), 'admin/ai');
 
         $csp = $this->buildCspHeader($nonce, $isAiRoute);
 
-        $isReportOnly = config('csp.report_only', true);
+        $isReportOnly = config('csp.report_only', false);
         $headerName = $isReportOnly ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy';
 
         $response->headers->set($headerName, $csp);
