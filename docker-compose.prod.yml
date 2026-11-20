@@ -1,0 +1,110 @@
+services:
+  app:
+    image: ${IMAGE:-ghcr.io/sabrielz/smkmuhbligo-app:latest}
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-8000}:8000"
+    environment:
+      APP_NAME: "${APP_NAME:-SMK Muhammadiyah Bligo}"
+      APP_ENV: production
+      APP_KEY: "${APP_KEY}"
+      APP_DEBUG: "${APP_DEBUG:-false}"
+      APP_URL: "${APP_URL:-https://smkmuhbligo.sch.id}"
+      DB_CONNECTION: mysql
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_DATABASE: "${DB_DATABASE:-smkmuhbligo}"
+      DB_USERNAME: "${DB_USERNAME:-smkuser}"
+      DB_PASSWORD: "${DB_PASSWORD}"
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: "${REDIS_PASSWORD:-}"
+      CACHE_STORE: redis
+      QUEUE_CONNECTION: redis
+      SESSION_DRIVER: redis
+      SESSION_SECURE_COOKIE: "true"
+      RUN_MIGRATIONS: "true"
+      APP_OPTIMIZE: "true"
+    volumes:
+      - storage-data:/app/storage/app
+    networks:
+      - smk-network
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  queue:
+    image: ${IMAGE:-ghcr.io/sabrielz/smkmuhbligo-app:latest}
+    restart: unless-stopped
+    command: ["php", "artisan", "queue:work", "--tries=3", "--timeout=90"]
+    environment:
+      APP_NAME: "${APP_NAME:-SMK Muhammadiyah Bligo}"
+      APP_ENV: production
+      APP_KEY: "${APP_KEY}"
+      APP_DEBUG: "false"
+      DB_CONNECTION: mysql
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_DATABASE: "${DB_DATABASE:-smkmuhbligo}"
+      DB_USERNAME: "${DB_USERNAME:-smkuser}"
+      DB_PASSWORD: "${DB_PASSWORD}"
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: "${REDIS_PASSWORD:-}"
+      CACHE_STORE: redis
+      QUEUE_CONNECTION: redis
+      RUN_MIGRATIONS: "false"
+      APP_OPTIMIZE: "false"
+    volumes:
+      - storage-data:/app/storage/app
+    networks:
+      - smk-network
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  db:
+    image: mysql:8.0
+    restart: unless-stopped
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_DATABASE: "${DB_DATABASE:-smkmuhbligo}"
+      MYSQL_USER: "${DB_USERNAME:-smkuser}"
+      MYSQL_PASSWORD: "${DB_PASSWORD}"
+      MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD:-${DB_PASSWORD}}"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - smk-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-p${DB_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:alpine
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    volumes:
+      - redis-data:/data
+    networks:
+      - smk-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  storage-data:
+  mysql-data:
+  redis-data:
+
+networks:
+  smk-network:
+    driver: bridge
