@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
-      IMAGE: ghcr.io/${{ github.repository_owner }}/ristopjeans-app
+      IMAGE: ghcr.io/${{ github.repository_owner }}/smkmuhbligo-app
     steps:
       - uses: actions/checkout@v5
         with:
@@ -46,13 +46,8 @@ jobs:
             ${{ env.IMAGE }}:${{ steps.meta.outputs.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          # VITE_* tertanam saat build; harus sama dengan REVERB_APP_KEY dan APP_DOMAIN produksi.
           build-args: |
-            VITE_APP_NAME=${{ vars.VITE_APP_NAME || 'WMS Pakaian' }}
-            VITE_REVERB_APP_KEY=${{ secrets.REVERB_APP_KEY }}
-            VITE_REVERB_HOST=${{ vars.APP_DOMAIN }}
-            VITE_REVERB_PORT=443
-            VITE_REVERB_SCHEME=https
+            VITE_APP_NAME=${{ vars.VITE_APP_NAME || 'SMK Muhammadiyah Bligo' }}
 
       - name: Deploy stack lewat Komodo
         env:
