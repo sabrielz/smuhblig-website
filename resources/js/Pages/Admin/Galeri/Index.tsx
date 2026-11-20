@@ -17,11 +17,12 @@ interface Galeri {
 }
 
 interface Props {
-    galeris: Galeri[];
+    galeris: Galeri[] | { data: Galeri[] };
 }
 
 export default function Index({ galeris }: Props) {
     const [deleteId, setDeleteId] = useState<number | null>(null);
+    const galeriList = Array.isArray(galeris) ? galeris : (galeris?.data || []);
 
     const handleDelete = () => {
         if (!deleteId) return;
@@ -47,7 +48,7 @@ export default function Index({ galeris }: Props) {
                 </Link>
             </div>
 
-            {galeris.length === 0 ? (
+            {galeriList.length === 0 ? (
                 <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-12 text-center flex flex-col items-center justify-center">
                     <div className="w-16 h-16 bg-blue-50 text-blue-500 rounded-full flex items-center justify-center mb-4">
                         <FolderOpen className="w-8 h-8" />
@@ -65,7 +66,7 @@ export default function Index({ galeris }: Props) {
                 </div>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                    {galeris.map((album) => (
+                    {galeriList.map((album) => (
                         <div key={album.id} className="bg-white rounded-xl border border-neutral-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow group">
                             <Link href={route('admin.galeri.show', { galeri: album.id } as any)} className="block relative aspect-video bg-neutral-100 overflow-hidden">
                                 {album.thumbnail ? (

@@ -19,7 +19,7 @@ class PenggunaController extends Controller
             ->get();
 
         return Inertia::render('Admin/Pengguna/Index', [
-            'penggunas' => PenggunaResource::collection($penggunas),
+            'penggunas' => PenggunaResource::collection($penggunas)->resolve(),
         ]);
     }
 

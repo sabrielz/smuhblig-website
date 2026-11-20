@@ -27,7 +27,7 @@ class GaleriController extends Controller
             ->get();
 
         return Inertia::render('Admin/Galeri/Index', [
-            'galeris' => GaleriResource::collection($galeris),
+            'galeris' => GaleriResource::collection($galeris)->resolve(),
         ]);
     }
 

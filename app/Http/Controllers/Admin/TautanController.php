@@ -18,7 +18,7 @@ class TautanController extends Controller
         $tautans = Tautan::ordered()->get();
 
         return Inertia::render('Admin/Tautan/Index', [
-            'tautans' => TautanResource::collection($tautans),
+            'tautans' => TautanResource::collection($tautans)->resolve(),
         ]);
     }
 
