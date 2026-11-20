@@ -1,110 +1,161 @@
+# SMK Muhammadiyah Bligo: Stack untuk Komodo di VPS
+# FrankenPHP di belakang Traefik (network eksternal "proxy")
+# Database memakai MariaDB global (network eksternal "backend", DB_HOST=mariadb)
+# Redis independen per stack (network internal)
+# Image dibangun oleh GitHub Actions (deploy.yml) dan ditarik dari GHCR
+
+x-logging: &default-logging
+  driver: "json-file"
+  options:
+    max-size: "10m"
+    max-file: "3"
+
 services:
-  app:
-    image: ${IMAGE:-ghcr.io/sabrielz/smkmuhbligo-app:latest}
+  smkmuhbligo-redis:
+    image: redis:7.4-alpine
+    container_name: smkmuhbligo-redis
     restart: unless-stopped
-    ports:
-      - "${APP_PORT:-8000}:8000"
+    logging: *default-logging
+    command: redis-server --appendonly yes --maxmemory ${REDIS_MAXMEMORY:-256mb} --maxmemory-policy volatile-lru
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep -q PONG"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - internal
+
+  app:
+    image: ${APP_IMAGE:-ghcr.io/sabrielz/smkmuhbligo-app:latest}
+    pull_policy: always
+    container_name: smkmuhbligo-app
+    restart: unless-stopped
+    logging: *default-logging
+    env_file:
+      - .env
     environment:
-      APP_NAME: "${APP_NAME:-SMK Muhammadiyah Bligo}"
+      TZ: Asia/Jakarta
       APP_ENV: production
-      APP_KEY: "${APP_KEY}"
-      APP_DEBUG: "${APP_DEBUG:-false}"
-      APP_URL: "${APP_URL:-https://smkmuhbligo.sch.id}"
+      APP_DEBUG: ${APP_DEBUG:-false}
+      APP_URL: ${APP_URL:-https://smkmuhbligo.sch.id}
+      TRUSTED_PROXIES: ${TRUSTED_PROXIES:-*}
       DB_CONNECTION: mysql
-      DB_HOST: db
-      DB_PORT: 3306
-      DB_DATABASE: "${DB_DATABASE:-smkmuhbligo}"
-      DB_USERNAME: "${DB_USERNAME:-smkuser}"
-      DB_PASSWORD: "${DB_PASSWORD}"
-      REDIS_HOST: redis
+      DB_HOST: ${DB_HOST:-mariadb}
+      DB_PORT: ${DB_PORT:-3306}
+      REDIS_CLIENT: phpredis
+      REDIS_HOST: smkmuhbligo-redis
       REDIS_PORT: 6379
-      REDIS_PASSWORD: "${REDIS_PASSWORD:-}"
-      CACHE_STORE: redis
       QUEUE_CONNECTION: redis
+      CACHE_STORE: redis
       SESSION_DRIVER: redis
       SESSION_SECURE_COOKIE: "true"
-      RUN_MIGRATIONS: "true"
-      APP_OPTIMIZE: "true"
+      RUN_MIGRATIONS: ${RUN_MIGRATIONS:-true}
+      APP_OPTIMIZE: ${APP_OPTIMIZE:-true}
     volumes:
-      - storage-data:/app/storage/app
-    networks:
-      - smk-network
+      - storage-app:/app/storage/app
+      - storage-logs:/app/storage/logs
     depends_on:
-      db:
+      smkmuhbligo-redis:
         condition: service_healthy
-      redis:
-        condition: service_healthy
+    healthcheck:
+      disable: true
+    networks:
+      - internal
+      - backend
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.smkmuhbligo.rule=Host(`${APP_DOMAIN}`) || Host(`${APP_DOMAIN_ALT:-${APP_DOMAIN}}`)"
+      - "traefik.http.routers.smkmuhbligo.entrypoints=websecure"
+      - "traefik.http.routers.smkmuhbligo.tls=true"
+      - "traefik.http.routers.smkmuhbligo.service=smkmuhbligo"
+      - "traefik.http.services.smkmuhbligo.loadbalancer.server.port=8000"
 
   queue:
-    image: ${IMAGE:-ghcr.io/sabrielz/smkmuhbligo-app:latest}
+    image: ${APP_IMAGE:-ghcr.io/sabrielz/smkmuhbligo-app:latest}
+    container_name: smkmuhbligo-queue
+    pull_policy: always
+    stop_grace_period: 130s
     restart: unless-stopped
-    command: ["php", "artisan", "queue:work", "--tries=3", "--timeout=90"]
+    logging: *default-logging
+    env_file:
+      - .env
     environment:
-      APP_NAME: "${APP_NAME:-SMK Muhammadiyah Bligo}"
+      TZ: Asia/Jakarta
       APP_ENV: production
-      APP_KEY: "${APP_KEY}"
-      APP_DEBUG: "false"
+      APP_DEBUG: ${APP_DEBUG:-false}
       DB_CONNECTION: mysql
-      DB_HOST: db
-      DB_PORT: 3306
-      DB_DATABASE: "${DB_DATABASE:-smkmuhbligo}"
-      DB_USERNAME: "${DB_USERNAME:-smkuser}"
-      DB_PASSWORD: "${DB_PASSWORD}"
-      REDIS_HOST: redis
+      DB_HOST: ${DB_HOST:-mariadb}
+      DB_PORT: ${DB_PORT:-3306}
+      REDIS_CLIENT: phpredis
+      REDIS_HOST: smkmuhbligo-redis
       REDIS_PORT: 6379
-      REDIS_PASSWORD: "${REDIS_PASSWORD:-}"
-      CACHE_STORE: redis
       QUEUE_CONNECTION: redis
+      CACHE_STORE: redis
+      SESSION_DRIVER: redis
       RUN_MIGRATIONS: "false"
       APP_OPTIMIZE: "false"
     volumes:
-      - storage-data:/app/storage/app
-    networks:
-      - smk-network
+      - storage-app:/app/storage/app
+      - storage-logs:/app/storage/logs
+    command: ["php", "artisan", "queue:work", "--tries=3", "--timeout=90"]
     depends_on:
-      db:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
+      app:
+        condition: service_started
+    healthcheck:
+      disable: true
+    networks:
+      - internal
+      - backend
 
-  db:
-    image: mysql:8.0
+  scheduler:
+    image: ${APP_IMAGE:-ghcr.io/sabrielz/smkmuhbligo-app:latest}
+    container_name: smkmuhbligo-scheduler
+    pull_policy: always
     restart: unless-stopped
-    command: --default-authentication-plugin=mysql_native_password
+    logging: *default-logging
+    env_file:
+      - .env
     environment:
-      MYSQL_DATABASE: "${DB_DATABASE:-smkmuhbligo}"
-      MYSQL_USER: "${DB_USERNAME:-smkuser}"
-      MYSQL_PASSWORD: "${DB_PASSWORD}"
-      MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD:-${DB_PASSWORD}}"
+      TZ: Asia/Jakarta
+      APP_ENV: production
+      APP_DEBUG: ${APP_DEBUG:-false}
+      DB_CONNECTION: mysql
+      DB_HOST: ${DB_HOST:-mariadb}
+      DB_PORT: ${DB_PORT:-3306}
+      REDIS_CLIENT: phpredis
+      REDIS_HOST: smkmuhbligo-redis
+      REDIS_PORT: 6379
+      QUEUE_CONNECTION: redis
+      CACHE_STORE: redis
+      SESSION_DRIVER: redis
+      RUN_MIGRATIONS: "false"
+      APP_OPTIMIZE: "false"
     volumes:
-      - mysql-data:/var/lib/mysql
-    networks:
-      - smk-network
+      - storage-app:/app/storage/app
+      - storage-logs:/app/storage/logs
+    command: ["php", "artisan", "schedule:work"]
+    depends_on:
+      app:
+        condition: service_started
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-p${DB_PASSWORD}"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-  redis:
-    image: redis:alpine
-    restart: unless-stopped
-    command: redis-server --appendonly yes
-    volumes:
-      - redis-data:/data
+      disable: true
     networks:
-      - smk-network
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+      - internal
+      - backend
 
 volumes:
-  storage-data:
-  mysql-data:
   redis-data:
+  storage-app:
+  storage-logs:
 
 networks:
-  smk-network:
+  internal:
     driver: bridge
+  proxy:
+    external: true
+  backend:
+    external: true
