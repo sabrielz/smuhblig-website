@@ -16,6 +16,7 @@ RUN install-php-extensions \
     bcmath \
     intl \
     gd \
+    exif \
     pcntl \
     zip \
     redis \
@@ -74,6 +75,7 @@ RUN install-php-extensions \
     bcmath \
     intl \
     gd \
+    exif \
     pcntl \
     zip \
     redis \
