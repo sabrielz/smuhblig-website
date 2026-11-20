@@ -80,7 +80,7 @@ class DashboardController extends Controller
                 ]);
 
             $activePengumuman = Pengumuman::aktif()->count();
-            $pesanBaruCount = PesanKontak::where('sudah_dibaca', false)->count();
+            $pesanBaruCount = PesanKontak::baru()->count();
 
             $editorStats = [
                 'pending_review' => Article::where('status', ArticleStatus::PendingReview->value)->count(),

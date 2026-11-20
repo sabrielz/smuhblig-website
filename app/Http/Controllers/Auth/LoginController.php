@@ -40,8 +40,8 @@ class LoginController extends Controller
 
         $user = $request->user();
 
-        // Cek apakah user telah mengaktifkan 2FA
-        if ($user && $user->hasTwoFactorEnabled()) {
+        // Cek apakah user telah mengaktifkan 2FA (hanya jika fitur 2FA aktif secara global)
+        if (config('auth.two_factor_enabled', false) && $user && $user->hasTwoFactorEnabled()) {
             $userId = $user->id;
             $remember = $request->boolean('remember');
 

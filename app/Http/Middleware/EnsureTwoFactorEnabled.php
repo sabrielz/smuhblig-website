@@ -15,6 +15,11 @@ class EnsureTwoFactorEnabled
      */
     public function handle(Request $request, Closure $next): Response
     {
+        // Jika fitur 2FA dinonaktifkan secara global
+        if (! config('auth.two_factor_enabled', false)) {
+            return $next($request);
+        }
+
         $user = $request->user();
 
         // Admin wajib mengaktifkan 2FA

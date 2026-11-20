@@ -44,6 +44,8 @@ return [
         ],
     ],
 
+    'two_factor_enabled' => env('TWO_FACTOR_ENABLED', false),
+
     /*
     |--------------------------------------------------------------------------
     | User Providers
